@@ -1,0 +1,41 @@
+{
+  "name": "stacking-web",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.10.4",
+    "@emotion/styled": "^11.10.4",
+    "@stacks/transactions": "1.4.1",
+    "@stacks/ui": "^7.10.0",
+    "@tabler/icons": "^1.101.0",
+    "bignumber.js": "^9.1.0",
+    "bitcoin-address-validation": "^2.2.1",
+    "bitcoinjs-lib": "^6.0.2",
+    "bn.js": "^5.2.1",
+    "react": "17.0.2",
+    "react-card-flip": "^1.1.5",
+    "react-dom": "17.0.2",
+    "react-icons": "^4.4.0",
+    "react-router-dom": "^6.4.1",
+    "url-join": "^5.0.0",
+    "valid-url": "^1.0.9",
+    "yup": "^0.32.11"
+  },
+  "devDependencies": {
+    "@types/bn.js": "^5.1.1",
+    "@types/jest": "^29.0.3",
+    "@types/react": "^18.0.17",
+    "@types/react-dom": "^18.0.6",
+    "@types/valid-url": "^1.0.3",
+    "@vitejs/plugin-react": "^2.1.0",
+    "typescript": "^4.6.4",
+    "vite": "^3.1.0",
+    "vite-tsconfig-paths": "^3.5.1"
+  }
+}
