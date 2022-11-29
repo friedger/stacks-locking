@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { CSSReset, ThemeProvider } from "@stacks/ui";
+import { loadFonts } from "@utils/load-fonts";
+import { useEffect, useState } from "react";
 
 import "./App.css";
 import { StartStackingLayout } from "./pages/start-stacking/components/start-stacking-layout";
@@ -6,12 +8,13 @@ import { ChooseStackingMethod } from "./pages/start-stacking/start-stacking";
 
 function App() {
   const [count, setCount] = useState(0);
+  useEffect(() => void loadFonts(), []);
 
   return (
-    <>
-      sd
+    <ThemeProvider>
       <ChooseStackingMethod />
-    </>
+      {CSSReset}
+    </ThemeProvider>
     // <div className="App">
     //   <div>
     //     <a href="https://vitejs.dev" target="_blank">
