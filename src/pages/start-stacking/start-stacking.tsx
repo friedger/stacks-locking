@@ -22,7 +22,7 @@ import {
   StackingOptionCardBenefit as OptionBenefit,
   StackingOptionCardBenefitContainer as OptionBenefitContainer,
   InsufficientStackingBalanceWarning,
-} from "./components/start-stacking-layout";
+} from "./components/start-stacking.layout";
 import { ExplainerTooltip } from "@components/tooltip";
 
 import divingBoardIllustration from "@assets/images/stack-in-a-pool.svg";
@@ -39,7 +39,7 @@ import { StepsIcon } from "@components/icons/steps";
 // import { useCalculateFee } from "@hooks/use-calculate-fee";
 
 export const ChooseStackingMethod: FC = () => {
-  // const history = useNavigate();
+  const navigate = useNavigate();
   // useBackButton(routes.HOME);
   // const [columnBreakpoint] = useMediaQuery("(min-width: 991px)");
 
@@ -74,7 +74,7 @@ export const ChooseStackingMethod: FC = () => {
           <Title>Stack in a pool</Title>
           <Description>
             Team up with other stackers in a pool, enabling you to stack even if
-            you don’t meet the minimum. You have to trust a pool with the
+            you don't meet the minimum. You have to trust a pool with the
             payment of your rewards.
           </Description>
 
@@ -100,10 +100,10 @@ export const ChooseStackingMethod: FC = () => {
 
           <Flex alignItems="center">
             <OptionButton
-            // onClick={() => history.push(routes.DELEGATED_STACKING)}
-            // isDisabled={
-            //   !hasSufficientBalanceToCoverPoolingTxFee && !holdingAltKey
-            // }
+              onClick={() => navigate("../pooled-stacking")}
+              // isDisabled={
+              //   !hasSufficientBalanceToCoverPoolingTxFee && !holdingAltKey
+              // }
             >
               Stack in a pool
             </OptionButton>

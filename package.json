@@ -11,23 +11,32 @@
   "dependencies": {
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
+    "@noble/hashes": "1.1.3",
+    "@stacks/connect-react": "^20.0.0",
     "@stacks/transactions": "1.4.1",
     "@stacks/ui": "^7.10.0",
     "@tabler/icons": "^1.101.0",
+    "@tanstack/react-query": "4.18.0",
     "bignumber.js": "^9.1.0",
     "bitcoin-address-validation": "^2.2.1",
-    "bitcoinjs-lib": "^6.0.2",
     "bn.js": "^5.2.1",
+    "buffer": "6.0.3",
+    "crypto-browserify": "3.12.0",
+    "dayjs": "1.11.6",
+    "formik": "2.2.9",
     "react": "18.2.0",
     "react-card-flip": "^1.1.5",
     "react-dom": "18.2.0",
     "react-icons": "^4.4.0",
     "react-router-dom": "6.4.3",
+    "rollup-plugin-polyfill-node": "0.11.0",
     "url-join": "^5.0.0",
     "valid-url": "^1.0.9",
+    "vite-plugin-node-stdlib-browser": "0.1.1",
     "yup": "^0.32.11"
   },
   "devDependencies": {
+    "@esbuild-plugins/node-globals-polyfill": "0.1.1",
     "@types/bn.js": "^5.1.1",
     "@types/jest": "^29.0.3",
     "@types/react": "18.0.25",
@@ -36,6 +45,7 @@
     "@vitejs/plugin-react": "2.2.0",
     "typescript": "^4.6.4",
     "vite": "^3.1.0",
+    "vite-compatible-readable-stream": "3.6.1",
     "vite-tsconfig-paths": "^3.5.1"
   }
 }
