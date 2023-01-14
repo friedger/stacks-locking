@@ -1,9 +1,8 @@
 import { Navigate } from 'react-router-dom';
 
 import { useAuth } from '@components/auth-provider/auth-provider';
-import { Button, Text, color } from '@stacks/ui';
 
-import { SignInLayout } from './sign-in.layout';
+import { Button, Card, Center, Container, Stack, Text, Title } from '@mantine/core';
 
 export function SignIn() {
   const { isSignedIn, signIn, isSigningIn } = useAuth();
@@ -12,13 +11,17 @@ export function SignIn() {
   }
 
   return (
-    <SignInLayout>
-      <Text as="h1" color={color('text-title')} fontSize="28px" mb="extra-loose">
-        Get stacking
-      </Text>
-      <Button alignSelf="center" onClick={signIn} isDisabled={isSigningIn}>
-        Connect your wallet
-      </Button>
-    </SignInLayout>
+    <Center w="100vw" h="100vh">
+      <Card w="350px" h="200px" withBorder>
+        <Center h="100%">
+          <Stack>
+            <Title>Get stacking</Title>
+            <Button onClick={signIn} loading={isSigningIn}>
+              Connect your wallet
+            </Button>
+          </Stack>
+        </Center>
+      </Card>
+    </Center>
   );
 }

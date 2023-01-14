@@ -1,39 +1,34 @@
-import React, { FC } from 'react';
-import { color, Flex, FlexProps, Text } from '@stacks/ui';
 import { ClockIcon } from '@components/icons/clock';
+import { Avatar, Text, Flex, Stack, Title, Box } from '@mantine/core';
 
-interface NextCycleStartTimeProps extends FlexProps {
+interface NextCycleStartTimeProps {
   nextCycleStartsIn: string;
 }
 
-export const NextCycleStartTime: FC<NextCycleStartTimeProps> = props => {
-  const { nextCycleStartsIn, ...rest } = props;
+export function NextCycleStartTime(props: NextCycleStartTimeProps) {
+  const { nextCycleStartsIn } = props;
   return (
-    <Flex {...rest}>
-      <Flex
-        width="44px"
-        height="44px"
-        background={color('bg-4')}
-        borderRadius="50%"
-        alignItems="center"
-        justifyContent="center"
-      >
+    <Flex gap="sm">
+      <Avatar radius="xl">
         <ClockIcon size="14px" />
-      </Flex>
-      <Flex ml="base" flexDirection="column">
-        <Text as="h4" display="block" textStyle="body.large.medium" lineHeight="20px">
+      </Avatar>
+      <Box>
+        <Title
+          order={4}
+          /* as="h4" display="block" textStyle="body.large.medium" lineHeight="20px" */
+        >
           Next cycle starts in
-        </Text>
+        </Title>
         <Text
-          display="block"
-          textStyle="body.large"
-          color={color('text-caption')}
-          lineHeight="20px"
-          mt="extra-tight"
+        /* display="block" */
+        /* textStyle="body.large" */
+        /* color={color('text-caption')} */
+        /* lineHeight="20px" */
+        /* mt="extra-tight" */
         >
           {nextCycleStartsIn}
         </Text>
-      </Flex>
+      </Box>
     </Flex>
   );
-};
+}

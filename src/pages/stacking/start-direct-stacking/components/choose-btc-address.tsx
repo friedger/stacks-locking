@@ -10,7 +10,7 @@ import {
   Step as Step,
   Description as Description,
 } from '../../components/stacking-form-step';
-import { CryptoAddressInput } from '../../components/crypto-address-form';
+import { AddressField } from '../../components/fields/address-field';
 import { ExplainerLabel } from '@components/tooltip';
 
 const StackingAddressErrorExplainer = memo(() => (
@@ -53,9 +53,9 @@ export const ChooseBtcAddressField: FC = () => {
   return (
     <Step title="Bitcoin address">
       <Description>Choose the address where you’d like to receive bitcoin.</Description>
-      <CryptoAddressInput fieldName="btcAddress" placeholder="Bitcoin address" {...field}>
+      <AddressField fieldName="btcAddress" placeholder="Bitcoin address" {...field}>
         {meta.touched && errors}
-      </CryptoAddressInput>
+      </AddressField>
     </Step>
   );
 };

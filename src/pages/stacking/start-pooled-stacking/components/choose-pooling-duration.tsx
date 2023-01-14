@@ -1,8 +1,6 @@
 import { useField } from 'formik';
-import { Stack, Text } from '@stacks/ui';
 
-import { ErrorLabel } from '@components/error-label';
-import { ErrorText } from '@components/error-text';
+import { Text, Stack } from '@mantine/core';
 
 import { Step, Description } from '../../components/stacking-form-step';
 import { DurationSelectItem } from './duration-select-item';
@@ -11,22 +9,22 @@ import { LimitedStackingIcon } from './limited-stacking-icon';
 import { IndefiniteStackingIcon } from './indefinite-stacking-icon';
 import { OneCycleDescriptor } from '../../components/one-cycle-descriptor';
 
-export function ChoosePoolingDurationField() {
+export function ChoosePoolingDuration() {
   const [fieldNumberOfCycles] = useField('numberOfCycles');
   const [fieldDelegationDurationType, metaDelegationDurationType, helpersDelegationDurationType] =
     useField('delegationDurationType');
 
   return (
     <Step title="Duration">
-      <Description>
-        <Text>
-          Choose whether you want to pool with a limited duration, or give the pool indefinite
-          permission. If you set a limit, make sure you don’t set it lower than the number of cycles
-          your pool intends to stack.
-        </Text>
-      </Description>
+      <Stack>
+        <Description>
+          <Text>
+            Choose whether you want to pool with a limited duration, or give the pool indefinite
+            permission. If you set a limit, make sure you don’t set it lower than the number of
+            cycles your pool intends to stack.
+          </Text>
+        </Description>
 
-      <Stack spacing="base" mt="extra-loose">
         <DurationSelectItem
           title="Limited"
           delegationType="limited"
@@ -48,13 +46,13 @@ export function ChoosePoolingDurationField() {
           The pool has indefinite permission to lock your STX for up to 12 cycles at a time. Revoke
           manually at any time to prevent further locks.
         </DurationSelectItem>
+        <OneCycleDescriptor mt="loose" />
+        {metaDelegationDurationType.touched && metaDelegationDurationType.error && (
+          <Text c="red" fz="xs" mt="-12px">
+            {metaDelegationDurationType.error}
+          </Text>
+        )}
       </Stack>
-      <OneCycleDescriptor mt="loose" />
-      {metaDelegationDurationType.touched && metaDelegationDurationType.error && (
-        <ErrorLabel mt="base-loose">
-          <ErrorText>{metaDelegationDurationType.error}</ErrorText>
-        </ErrorLabel>
-      )}
     </Step>
   );
 }

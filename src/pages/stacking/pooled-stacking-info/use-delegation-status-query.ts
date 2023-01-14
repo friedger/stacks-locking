@@ -24,6 +24,16 @@ const smartContractsApi = new SmartContractsApi(
   })
 );
 
+/* interface TIsDelegating { isDelegating: false; } as const; */
+/* type Data = */
+/*   | { isDelegating: false } */
+/*   | { */
+/*       isDelegating: true; */
+/*       isExpired: boolean; */
+/*       amountMicroStx: bigint; */
+/*       delegatedTo: string; */
+/*       untilBurnHeight: bigint | null; */
+/*     }; */
 export function useDelegationStatusQuery() {
   const { client } = useStackingClient();
   if (!client) {
@@ -50,7 +60,7 @@ export function useDelegationStatusQuery() {
     const dataCV = hexToCV(res.data);
 
     if (dataCV.type === ClarityType.OptionalNone) {
-      return null;
+      return { isDelegating: false } as const;
     }
 
     if (dataCV.type !== ClarityType.OptionalSome || dataCV.value.type !== ClarityType.Tuple) {
@@ -86,10 +96,11 @@ export function useDelegationStatusQuery() {
     const delegatedTo = cvToString(tupleCVData['delegated-to']);
 
     return {
+      isDelegating: true,
       isExpired,
       amountMicroStx,
       delegatedTo,
       untilBurnHeight,
-    };
+    } as const;
   });
 }

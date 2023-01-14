@@ -93,7 +93,7 @@ export function shortenHex(hex: string, length = 4) {
  * @param {string} input - the string to truncate
  * @param {number} offset - the number of chars to keep on either end
  */
-export const truncateMiddle = (input: string, offset = 5): string => {
+export function truncateMiddle(input: string, offset = 5): string {
   if (!input) return '';
   // hashes
   if (input.startsWith('0x')) {
@@ -111,4 +111,4 @@ export const truncateMiddle = (input: string, offset = 5): string => {
     const end = input?.substr(input.length - offset, input.length);
     return `${start}…${end}`;
   }
-};
+}

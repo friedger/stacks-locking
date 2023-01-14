@@ -1,11 +1,12 @@
-import React, { FC, ReactElement, ReactNode } from 'react';
+import { ReactElement, ReactNode } from 'react';
 
-import { Title } from '@components/title';
-import { Box, Button, ButtonProps, Flex, FlexProps, Stack } from '@stacks/ui';
-import { ForwardRefExoticComponentWithAs, forwardRefWithAs } from '@stacks/ui-core';
+/* import { Title } from '@components/title'; */
+import { Box, Title } from '@mantine/core';
+import { Button, ButtonProps, Container, Stack } from '@mantine/core';
 
-interface StepProps extends FlexProps {
+interface StepProps {
   title: string;
+  children?: ReactNode;
 }
 
 /**
@@ -25,17 +26,15 @@ interface StepProps extends FlexProps {
  * }
  * ```
  */
-export const Step: FC<StepProps> = props => {
+export function Step(props: StepProps) {
   const { title, children, ...rest } = props;
   return (
-    <Flex flexDirection="column" mt="extra-loose" {...rest}>
-      <Title fontSize="24px" mt="extra-tight" mr="tight">
-        {title}
-      </Title>
+    <Stack mt="extra-loose" {...rest}>
+      <Title order={2}>{title}</Title>
       <Box>{children}</Box>
-    </Flex>
+    </Stack>
   );
-};
+}
 
 interface DescriptionProps {
   /**
@@ -64,16 +63,14 @@ interface DescriptionProps {
  * }
  * ```
  */
-export const Description = ({ children }: DescriptionProps) => (
-  <Stack display="block" textStyle="body.large" spacing="base">
-    {children}
-  </Stack>
-);
+export function Description({ children }: DescriptionProps) {
+  return <Stack>{children}</Stack>;
+}
 
-export const Action: ForwardRefExoticComponentWithAs<ButtonProps, 'button'> = forwardRefWithAs(
-  ({ children, ...props }, ref) => (
-    <Button size="md" mt="loose" ref={ref} {...props}>
+export function Action({ children, ...rest }: ButtonProps) {
+  return (
+    <Button size="md" mt="md" {...rest}>
       {children}
     </Button>
-  )
-);
+  );
+}

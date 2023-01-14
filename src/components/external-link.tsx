@@ -1,33 +1,17 @@
-import React, { FC } from 'react';
-import { Box, Text, BoxProps, color } from '@stacks/ui';
-import { openExternalLink } from '@utils/external-links';
 import { LegalDisclaimerTooltip } from './legal-disclaimer-tooltip';
+import { Anchor, AnchorProps } from '@mantine/core';
+import { ReactNode } from 'react';
 
-interface ExternalLinkProps extends BoxProps {
+interface ExternalLinkProps extends AnchorProps {
+  children: ReactNode;
   href: string;
 }
-
-export const ExternalLink: FC<ExternalLinkProps> = ({ href, children, ...props }) => {
-  const openUrl = () => openExternalLink(href);
+export function ExternalLink({ children, href }: ExternalLinkProps) {
   return (
-    <LegalDisclaimerTooltip display="inline-block">
-      <Text
-        onClick={openUrl}
-        as="button"
-        type="button"
-        cursor="pointer"
-        display="block"
-        outline={0}
-        color={color('brand')}
-        _hover={{ textDecoration: 'underline' }}
-        _focus={{ textDecoration: 'underline' }}
-        {...props}
-      >
-        {children}
-        <Box display="inline-block" ml="extra-tight" mb="1px">
-          ↗
-        </Box>
-      </Text>
+    <LegalDisclaimerTooltip>
+      <Anchor href={href} target="_blank">
+        {children} ↗
+      </Anchor>
     </LegalDisclaimerTooltip>
   );
-};
+}

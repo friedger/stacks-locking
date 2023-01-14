@@ -3,16 +3,17 @@ import { Box, BoxProps, color, Flex, FlexProps, Stack, StackProps, Text } from '
 import { ExplainerTooltip } from '@components/tooltip';
 import { Hr } from '@components/hr';
 
-export const InfoCard: FC<FlexProps> = props => (
-  <Flex
-    flexDirection="column"
-    boxShadow="low"
-    border={`1px solid ${color('border')}`}
-    borderRadius="8px"
-    minHeight="84px"
-    {...props}
-  />
-);
+export function InfoCard() {
+  return (
+    <Flex
+      flexDirection="column"
+      boxShadow="low"
+      border={`1px solid ${color('border')}`}
+      borderRadius="8px"
+      minHeight="84px"
+    />
+  );
+}
 
 export const InfoCardGroup: FC<BoxProps> = ({ children, ...props }) => {
   const parsedChildren = Array.isArray(children) ? children : [children];

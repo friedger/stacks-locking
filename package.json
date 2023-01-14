@@ -13,6 +13,9 @@
   "dependencies": {
     "@emotion/react": "11.10.5",
     "@emotion/styled": "11.10.5",
+    "@mantine/core": "5.10.0",
+    "@mantine/hooks": "5.10.0",
+    "@mantine/modals": "5.10.0",
     "@noble/hashes": "1.1.5",
     "@scure/base": "1.1.1",
     "@stacks/auth": "6.1.0",
@@ -37,6 +40,7 @@
     "date-fns": "2.29.3",
     "dayjs": "1.11.7",
     "formik": "2.2.9",
+    "punycode": "2.2.0",
     "react": "18.2.0",
     "react-card-flip": "1.2.0",
     "react-dom": "18.2.0",

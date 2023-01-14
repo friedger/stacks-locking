@@ -1,11 +1,9 @@
-import React, { FC } from 'react';
-import { Box, BoxProps } from '@stacks/ui';
-
-interface LimitedStackingIconProps extends BoxProps {
+import { Box } from '@mantine/core';
+interface LimitedStackingIconProps {
   cycles: number;
 }
 
-export const LimitedStackingIcon: FC<LimitedStackingIconProps> = ({ cycles }) => {
+export function LimitedStackingIcon({ cycles }: LimitedStackingIconProps) {
   return (
     <Box>
       <svg
@@ -31,4 +29,4 @@ export const LimitedStackingIcon: FC<LimitedStackingIconProps> = ({ cycles }) =>
       </svg>
     </Box>
   );
-};
+}

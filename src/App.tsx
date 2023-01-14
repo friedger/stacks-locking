@@ -1,49 +1,72 @@
 import { useEffect } from 'react';
 import { Navigate, Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom';
-
+import { Button, Container, Flex, Text, Group, MantineProvider, Title } from '@mantine/core';
 import { StackingClientProvider } from '@components/stacking-client-provider/stacking-client-provider';
-import { Button, CSSReset, Flex, ThemeProvider, color } from '@stacks/ui';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import { loadFonts } from '@utils/load-fonts';
-
+import { ModalsProvider } from '@mantine/modals';
 import { AuthProvider, useAuth } from './components/auth-provider/auth-provider';
-import { ChooseStackingMethod } from './pages/choose-stacking-method/choose-stacking-method';
 import { SignIn } from './pages/sign-in/sign-in';
-import { DelegatedStacking } from './pages/stacking/delegated-stacking/pooled-stacking';
-import { DelegationAndLockingInfo } from './pages/stacking/delegation-and-stacking-info/delegation-and-stacking-info';
+import { ChooseStackingMethod } from './pages/choose-stacking-method/choose-stacking-method';
+import { StartPooledStacking } from './pages/stacking/start-pooled-stacking/start-pooled-stacking';
+import { PooledStackingInfo } from './pages/stacking/pooled-stacking-info/pooled-stacking-info';
+import { truncateMiddle } from '@utils/tx-utils';
+import { ErrorAlert } from '@components/error-alert';
+import { Configuration, NamesApi } from '@stacks/blockchain-api-client';
+import { NETWORK } from './constants';
+import { toUnicode } from 'punycode';
 
-import { theme as uiTheme } from '@stacks/ui-theme';
+function Profile() {
+  const { address } = useAuth();
+  const q = useQuery(['bns'], () => {
+    const basePath =
+      NETWORK === 'testnet'
+        ? 'https://stacks-node-api.testnet.stacks.co'
+        : 'https://stacks-node-api.mainnet.stacks.co';
+    const client = new NamesApi(new Configuration({ basePath }));
+    return client.getNamesOwnedByAddress({
+      address: address ?? '',
+      blockchain: 'stacks',
+    });
+  });
 
-export const theme = {
-  ...uiTheme,
-  colors: {
-    ...uiTheme.colors,
-    ink: {
-      ...uiTheme.colors.ink,
-      400: '#9C9CA2',
-      1000: '#141416',
-    },
-  },
-  fonts: {
-    ...uiTheme.fonts,
-    heading:
-      '"Open Sauce One", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
-  },
-};
+  if (!address) {
+    const msg = 'Expected `address` to be defined.';
+    console.error(msg);
+    return <ErrorAlert id="71582283-38b4-497d-b7ce-b8d524699653">{msg}</ErrorAlert>;
+  }
 
-function Container() {
+  const parseIfValidPunycode = (s: string) => {
+    try {
+      return toUnicode(s);
+    } catch {
+      return s;
+    }
+  };
+  const bnsName = parseIfValidPunycode(q.data?.names[0] ?? '');
+  return (
+    <Group position="right">
+      {bnsName && <Text>{bnsName}</Text>}
+      <Text>{truncateMiddle(address)}</Text>
+    </Group>
+  );
+}
+
+function Layout() {
   const { isSignedIn, signOut } = useAuth();
+
   return (
     <>
-      <Flex flexDirection="column" flexGrow={1} background={color('bg')}>
+      <Flex h="100vh" direction="column">
         {isSignedIn && (
-          <Flex justifyContent="flex-end">
+          <Group p="sm" position="right">
+            <Profile />
             <Button onClick={() => signOut()}>Sign out</Button>
-          </Flex>
+          </Group>
         )}
-        <Flex flexGrow={1} position="relative">
+        <Container h="100%" fluid>
           <Outlet />
-        </Flex>
+        </Container>
       </Flex>
     </>
   );
@@ -53,14 +76,15 @@ function Root() {
   useEffect(() => void loadFonts(), []);
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={theme}>
-        {CSSReset}
-        <AuthProvider>
-          <StackingClientProvider>
-            <Outlet />
-          </StackingClientProvider>
-        </AuthProvider>
-      </ThemeProvider>
+      <AuthProvider>
+        <StackingClientProvider>
+          <MantineProvider withGlobalStyles withNormalizeCSS theme={{ primaryColor: 'violet' }}>
+            <ModalsProvider>
+              <Outlet />
+            </ModalsProvider>
+          </MantineProvider>
+        </StackingClientProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }
@@ -92,19 +116,23 @@ const router = createBrowserRouter([
         element: <AuthGuard />,
         children: [
           {
-            element: <Container />,
+            element: <Layout />,
             children: [
               {
                 path: 'choose-stacking-method',
                 element: <ChooseStackingMethod />,
               },
               {
-                path: 'pooled-stacking',
-                element: <DelegatedStacking />,
+                path: 'start-pooled-stacking',
+                element: <StartPooledStacking />,
               },
               {
-                path: 'pooling-and-stacking-info',
-                element: <DelegationAndLockingInfo />,
+                path: 'pooled-stacking-info',
+                element: <PooledStackingInfo />,
+              },
+              {
+                path: 'direct-stacking-info',
+                element: <Title>Direct Stacking Info</Title>,
               },
             ],
           },

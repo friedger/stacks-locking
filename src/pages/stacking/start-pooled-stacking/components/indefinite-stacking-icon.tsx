@@ -1,9 +1,8 @@
-import React, { FC } from 'react';
-import { Box, BoxProps } from '@stacks/ui';
+import { Box } from '@mantine/core';
 
-export const IndefiniteStackingIcon: FC<BoxProps> = props => {
+export function IndefiniteStackingIcon() {
   return (
-    <Box {...props}>
+    <Box>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="48"
@@ -31,4 +30,4 @@ export const IndefiniteStackingIcon: FC<BoxProps> = props => {
       </svg>
     </Box>
   );
-};
+}

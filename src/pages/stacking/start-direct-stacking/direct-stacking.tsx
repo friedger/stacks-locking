@@ -26,7 +26,7 @@ import * as yup from 'yup';
 import { StackingFormContainer } from '../components/stacking-form-container';
 import { StackingFormInfoPanel } from '../components/stacking-form-info-panel';
 import { StackingGuideCard } from '../components/stacking-guide-card';
-import { StackingLayout } from '../components/stacking-layout';
+import { StartStackingLayout } from '../components/stacking-layout';
 import { ChooseBtcAddressField } from './components/choose-btc-address';
 import { ChooseCycleField } from './components/choose-cycles';
 import { ChooseDirectStackingAmountField } from './components/choose-direct-stacking-amount';
@@ -139,7 +139,7 @@ export const DirectStacking: FC = () => {
       >
         {({ values }) => {
           return (
-            <StackingLayout
+            <StartStackingLayout
               intro={stackingIntro}
               stackingInfoPanel={
                 <StackingFormInfoPanel>

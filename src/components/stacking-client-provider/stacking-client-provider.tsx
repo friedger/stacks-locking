@@ -46,12 +46,29 @@ export function useGetStatusQuery() {
   return useQuery(['getStatus'], () => client?.getStatus());
 }
 
+export function useGetAccountBalanceLocked() {
+  const { client } = useStackingClient();
+  return useQuery(['getAccountBalanceLocked'], () => client?.getAccountBalanceLocked());
+}
+
 export function useGetCoreInfoQuery() {
   const { client } = useStackingClient();
   return useQuery(['getCoreInfo'], () => client?.getCoreInfo());
 }
 
-export function useGetAccountExtendedBalances() {
+export function useGetAccountExtendedBalancesQuery() {
   const { client } = useStackingClient();
   return useQuery(['getAccountExtendedBalances'], () => client?.getAccountExtendedBalances());
+}
+
+export function useGetSecondsUntilNextCycleQuery() {
+  const { client } = useStackingClient();
+  return useQuery(['getSecondsUntilNextCycle'], () => client?.getSecondsUntilNextCycle(), {
+    refetchInterval: 60_000,
+  });
+}
+
+export function useGetPoxInfoQuery() {
+  const { client } = useStackingClient();
+  return useQuery(['getPoxInfo'], () => client?.getPoxInfo());
 }

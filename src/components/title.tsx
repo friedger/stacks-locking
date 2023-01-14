@@ -1,22 +1,14 @@
-import React, { FC } from "react";
-import { Text, BoxProps, color } from "@stacks/ui";
-
-type TitleProps = BoxProps;
-
-export const Title: FC<TitleProps> = ({ children, ...props }) => {
+import { Title as MantineTitle, TitleProps } from '@mantine/core';
+export function Title(props: TitleProps) {
   return (
-    <Text
-      as="h1"
-      fontSize="40px"
-      lineHeight="56px"
-      display="block"
-      fontWeight={500}
-      fontFamily="Open Sauce"
-      letterSpacing="-0.02em"
-      color={color("text-title")}
+    <MantineTitle
       {...props}
-    >
-      {children}
-    </Text>
+      sx={{
+        fontSize: '40px',
+        lineHeight: '56px',
+        display: 'block',
+        fontWeight: 500,
+      }}
+    ></MantineTitle>
   );
-};
+}
