@@ -45,12 +45,13 @@ export function ChooseStackingMethod() {
 
   // Checking for delegation first ensures user can be correctly redirected to appropriate page when
   // later checking for a locked balance.
-  if (q1.data?.isDelegating) {
-    return <Navigate to="../pooled-stacking-info" />;
-  }
-  if (q2.data !== 0n) {
-    return <Navigate to="../direct-stacking-info" />;
-  }
+  // TODO: temporarily removing redirects
+  /* if (q1.data?.isDelegating) { */
+  /*   return <Navigate to="../pooled-stacking-info" />; */
+  /* } */
+  /* if (q2.data !== 0n) { */
+  /*   return <Navigate to="../direct-stacking-info" />; */
+  /* } */
 
   return <ChooseStackingMethodInner />;
 }

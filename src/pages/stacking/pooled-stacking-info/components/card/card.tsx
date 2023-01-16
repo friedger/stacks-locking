@@ -26,7 +26,7 @@ import {
 import { useDelegationStatusQuery } from '../../use-delegation-status-query';
 import { useState } from 'react';
 import { ContractCallRegularOptions, openContractCall } from '@stacks/connect';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { StackingClient } from '@stacks/stacking';
 import { ErrorAlert } from '@components/error-alert';
 import { modalId, openStopPoolingModal } from './open-stop-pooling-modal';
@@ -97,9 +97,10 @@ function CardLayout({ client }: CardLayoutProps) {
     );
   }
 
+  console.log('ARY isDelegating', delegationStatusQuery.data.isDelegating);
+
   if (!delegationStatusQuery.data.isDelegating) {
-    navigate('../choose-stacking-method');
-    return null;
+    return <Navigate to="../choose-stacking-method" />;
   }
 
   let lockingProgressPercentString = '0';
