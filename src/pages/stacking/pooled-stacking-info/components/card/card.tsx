@@ -1,6 +1,7 @@
 import { openConfirmModal, closeModal } from '@mantine/modals';
 import {
   Alert,
+  Anchor,
   Box,
   Button,
   Card,
@@ -26,7 +27,7 @@ import {
 import { useDelegationStatusQuery } from '../../use-delegation-status-query';
 import { useState } from 'react';
 import { ContractCallRegularOptions, openContractCall } from '@stacks/connect';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { StackingClient } from '@stacks/stacking';
 import { ErrorAlert } from '@components/error-alert';
 import { modalId, openStopPoolingModal } from './open-stop-pooling-modal';
@@ -97,10 +98,30 @@ function CardLayout({ client }: CardLayoutProps) {
     );
   }
 
-  console.log('ARY isDelegating', delegationStatusQuery.data.isDelegating);
-
   if (!delegationStatusQuery.data.isDelegating) {
-    return <Navigate to="../choose-stacking-method" />;
+    return (
+      <Card withBorder w="400px">
+        <Alert icon={<IconInfoCircle />}>
+          <Stack>
+            <Text>
+              It appears that you're not pooling yet. If you recently started to pool, your pooling
+              info will appear here in a few seconds.
+            </Text>
+            <Text>
+              You may want to{' '}
+              <Anchor to="../start-pooled-stacking" component={Link}>
+                start pooling
+              </Anchor>{' '}
+              or{' '}
+              <Anchor to="../choose-stacking-method" component={Link}>
+                choose your stacking method
+              </Anchor>
+              .
+            </Text>
+          </Stack>
+        </Alert>
+      </Card>
+    );
   }
 
   let lockingProgressPercentString = '0';

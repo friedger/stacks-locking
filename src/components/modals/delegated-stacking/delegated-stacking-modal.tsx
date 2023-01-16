@@ -55,7 +55,6 @@ export const DelegatedStackingModal: FC<StackingModalProps> = props => {
 
   const delegationTxOptions = useMemo((): ContractCallOptions => {
     if (!poxInfo) throw new Error('`poxInfo` undefined');
-    console.log(amountToStack.toString());
     return {
       ...stackingClient.getDelegateOptions({
         amountMicroStx: amountToStack.toString(),
