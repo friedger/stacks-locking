@@ -27,6 +27,7 @@ import { NETWORK } from './constants';
 import { toUnicode } from 'punycode';
 import { IconCopy } from '@tabler/icons';
 import { Address } from '@components/address';
+import { DirectStackingInfo } from './pages/stacking/direct-stacking-info/direct-stacking-info';
 
 function Profile() {
   const { address } = useAuth();
@@ -144,7 +145,7 @@ const router = createBrowserRouter([
               },
               {
                 path: 'direct-stacking-info',
-                element: <Title>Direct Stacking Info</Title>,
+                element: <DirectStackingInfo />,
               },
             ],
           },
