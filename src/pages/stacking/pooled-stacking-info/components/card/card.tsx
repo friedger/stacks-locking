@@ -1,4 +1,5 @@
-import { openConfirmModal, closeModal } from '@mantine/modals';
+import { intToBigInt } from '@stacks/common';
+import { closeModal } from '@mantine/modals';
 import {
   Alert,
   Anchor,
@@ -27,11 +28,12 @@ import {
 import { useDelegationStatusQuery } from '../../use-delegation-status-query';
 import { useState } from 'react';
 import { ContractCallRegularOptions, openContractCall } from '@stacks/connect';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { StackingClient } from '@stacks/stacking';
 import { ErrorAlert } from '@components/error-alert';
-import { modalId, openStopPoolingModal } from './open-stop-pooling-modal';
+import { modalId } from './open-stop-pooling-modal';
 import { RevokeDelegationModal } from './components/modal';
+import { useGetPoolAddress } from '../../use-get-pool-address-query';
 
 export function PooledStackingInfoCard() {
   const { client } = useStackingClient();
@@ -55,12 +57,14 @@ function CardLayout({ client }: CardLayoutProps) {
   const getStatusQuery = useGetStatusQuery();
   const getAccountExtendedBalancesQuery = useGetAccountExtendedBalancesQuery();
   const getCoreInfoQuery = useGetCoreInfoQuery();
+  const getPoolAddressQuery = useGetPoolAddress();
 
   if (
     delegationStatusQuery.isLoading ||
     getStatusQuery.isLoading ||
     getAccountExtendedBalancesQuery.isLoading ||
-    getCoreInfoQuery.isLoading
+    getCoreInfoQuery.isLoading ||
+    getPoolAddressQuery.isLoading
   ) {
     return <Loader />;
   }
@@ -72,6 +76,8 @@ function CardLayout({ client }: CardLayoutProps) {
     !getStatusQuery.data ||
     getAccountExtendedBalancesQuery.isError ||
     !getAccountExtendedBalancesQuery.data ||
+    getPoolAddressQuery.isError ||
+    !getPoolAddressQuery.data ||
     getCoreInfoQuery.isError ||
     !getCoreInfoQuery.data
   ) {
@@ -98,7 +104,9 @@ function CardLayout({ client }: CardLayoutProps) {
     );
   }
 
-  if (!delegationStatusQuery.data.isDelegating) {
+  const isStacking = getStatusQuery.data.stacked;
+
+  if (!delegationStatusQuery.data.isDelegating && !isStacking) {
     return (
       <Card withBorder w="400px">
         <Alert icon={<IconInfoCircle />}>
@@ -139,7 +147,6 @@ function CardLayout({ client }: CardLayoutProps) {
       100
     ).toFixed(2);
   }
-  const isStacking = getStatusQuery.data.stacked;
 
   async function handleStopPoolingClick() {
     const stackingContract = await client.getStackingContract();
@@ -167,7 +174,7 @@ function CardLayout({ client }: CardLayoutProps) {
   }
   return (
     <>
-      <Card withBorder miw="400px">
+      <Card withBorder w="400px">
         <Stack>
           <Image
             fit="contain"
@@ -177,7 +184,7 @@ function CardLayout({ client }: CardLayoutProps) {
             alt="Colourful illustration of a diving board protruding out of a blue hole"
           />
 
-          {!delegationStatusQuery.data.isExpired && (
+          {delegationStatusQuery.data.isDelegating && !delegationStatusQuery.data.isExpired && (
             <>
               <Stack>
                 <Box>
@@ -221,7 +228,6 @@ function CardLayout({ client }: CardLayoutProps) {
                     variant="light"
                     disabled={isContractCallExtensionPageOpen}
                     onClick={() => {
-                      /* openStopPoolingModal({ isStacking, handleStopPoolingClick }); */
                       setIsModalOpen(true);
                     }}
                   >
@@ -232,7 +238,7 @@ function CardLayout({ client }: CardLayoutProps) {
             </>
           )}
 
-          {delegationStatusQuery.data.isExpired && (
+          {delegationStatusQuery.data.isDelegating && delegationStatusQuery.data.isExpired && (
             <Box>
               <Title>You've finished pooling</Title>
               <Text>
@@ -242,7 +248,6 @@ function CardLayout({ client }: CardLayoutProps) {
                 <Button
                   disabled={isContractCallExtensionPageOpen}
                   onClick={() => {
-                    /* openStopPoolingModal({ isStacking, handleStopPoolingClick }); */
                     setIsModalOpen(true);
                   }}
                 >
@@ -250,6 +255,55 @@ function CardLayout({ client }: CardLayoutProps) {
                 </Button>
               </Box>
             </Box>
+          )}
+
+          {!delegationStatusQuery.data.isDelegating && (
+            <>
+              <Stack>
+                <Box>
+                  <Title order={4}>You're pooling</Title>
+                  <Text fz="34px">
+                    {toHumanReadableStx(
+                      intToBigInt(getAccountExtendedBalancesQuery.data.stx.locked, false)
+                    )}
+                  </Text>
+                </Box>
+
+                <Divider />
+
+                <Stack>
+                  <Group position="apart">
+                    <Text>Status</Text>
+                    <Text c={isStacking ? 'green' : undefined}>
+                      {isStacking ? 'Active' : 'Waiting on pool'}
+                    </Text>
+                  </Group>
+                  <Group position="apart">
+                    <Text>Type</Text>
+                    <Text>
+                      {delegationStatusQuery.data.untilBurnHeight ? 'One time' : 'Indefinite'}
+                    </Text>
+                  </Group>
+                  <Group position="apart">
+                    <Text>Progress</Text>
+                    <Text>{lockingProgressPercentString}%</Text>
+                  </Group>
+
+                  <Divider />
+                  <Group position="apart">
+                    <Text>Pool address</Text>
+                    <Text>{truncateMiddle(getPoolAddressQuery.data)}</Text>
+                  </Group>
+
+                  <Divider />
+
+                  <Alert icon={<IconInfoCircle />}>
+                    You've revoked the pool's delegation. You'll be able to pool again when the
+                    locking period finishes.
+                  </Alert>
+                </Stack>
+              </Stack>
+            </>
           )}
         </Stack>
       </Card>

@@ -32,7 +32,7 @@ function getDelegationStatusFromTransaction(transaction: any, burnBlockHeight: n
   } else {
     const [amountMicroStxCV, delegatedToCV, untilBurnHeightCV, _poxAddressCV] =
       transaction.contract_call.function_args.map((arg: any) => hexToCV(arg.hex));
-    let untilBurnHeight = null;
+    let untilBurnHeight: null | bigint = null;
     if (
       untilBurnHeightCV.type === ClarityType.OptionalSome &&
       untilBurnHeightCV.value.type === ClarityType.UInt
@@ -45,13 +45,12 @@ function getDelegationStatusFromTransaction(transaction: any, burnBlockHeight: n
     if (!amountMicroStxCV || amountMicroStxCV.type !== ClarityType.UInt) {
       throw new Error('Expected `amount-ustx` to be defined.');
     }
-    const amountMicroStx = amountMicroStxCV.value;
+    const amountMicroStx: bigint = amountMicroStxCV.value;
 
     if (!delegatedToCV || delegatedToCV.type !== ClarityType.PrincipalStandard) {
       throw new Error('Expected `amount-ustx` to be defined.');
     }
     const delegatedTo = cvToString(delegatedToCV);
-
     return {
       isDelegating: true,
       isExpired,

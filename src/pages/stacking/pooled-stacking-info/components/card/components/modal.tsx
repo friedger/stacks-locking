@@ -1,4 +1,4 @@
-import { Modal, Text, Alert, Box, Group, Button } from '@mantine/core';
+import { Modal, Text, Alert, Box, Group, Button, Stack } from '@mantine/core';
 import { IconInfoCircle } from '@tabler/icons';
 
 interface Props {
@@ -19,13 +19,15 @@ export function RevokeDelegationModal({
   return (
     <Modal title="Stop pooling" opened={isOpen} onClose={onClose}>
       <Box mb="16px">
-        <Text>Are you sure you want to stop pooling?</Text>
-        {isStacking && (
-          <Alert icon={<IconInfoCircle size="16" />}>
-            Your STX are currently active in a cycle, they will not be unlocked until the end of the
-            full locking period.
-          </Alert>
-        )}
+        <Stack>
+          <Text>Are you sure you want to stop pooling?</Text>
+          {isStacking && (
+            <Alert icon={<IconInfoCircle size="16" />}>
+              Your STX are currently active in a cycle, they will not be unlocked until the end of
+              the full locking period.
+            </Alert>
+          )}
+        </Stack>
       </Box>
 
       <Group position="right">
