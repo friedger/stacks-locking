@@ -4,14 +4,9 @@ import {
   useStackingClient,
 } from '@components/stacking-client-provider/stacking-client-provider';
 import { NETWORK } from '@constants/index';
-import {
-  SmartContractsApi,
-  Configuration,
-  AccountsApi,
-  TransactionsApi,
-} from '@stacks/blockchain-api-client';
+import { Configuration, TransactionsApi } from '@stacks/blockchain-api-client';
 import { useQuery } from '@tanstack/react-query';
-import { getDelegationStatus } from './get-delegation-status';
+import { useDelegationStatusQuery } from './use-delegation-status-query';
 
 // NOTE: the package `@stacks/stacking` does not yet provide a way to read the
 // PoX contract's delegation map. Therefore, this data must be fetched by other
@@ -21,11 +16,28 @@ const basePath =
     ? 'https://stacks-node-api.testnet.stacks.co'
     : 'https://stacks-node-api.mainnet.stacks.co';
 const config = new Configuration({ basePath });
-const smartContractsApi = new SmartContractsApi(config);
-const accountsApi = new AccountsApi(config);
 const transactionsApi = new TransactionsApi(config);
 
+/**
+ * Fetches the address of the delegator the currently active account has delegated to or is stacking with if any.
+ */
 export function useGetPoolAddress() {
+  // The pool address is fetched from two locations as there is no one place where this information
+  // is always available.
+  //
+  // - When the user is delegating, the pool's address can be fetched from the delegation state map.
+  // - When the pool is stacking the user's funds, the pool's address can be fetched from the
+  //   transaction data that initiated stacking.
+  //
+  // This means that after a user has delegated to a pool, but before the pool has started stacking,
+  // the pool's address can only be fetched from the delegation state map. If the user is both
+  // delegating and stacking, the pool address will be available in both locations. However, if the
+  // user is still stacking and they have revoked the delegation, the pool address can only be
+  // obtained from the stacking transaction data.
+  //
+  // Regardless of which at which point in the pooling lifecycle the user is in, this data should
+  // always be available from at least one source.
+
   const { client } = useStackingClient();
   const { address } = useAuth();
   if (!client) {
@@ -39,18 +51,25 @@ export function useGetPoolAddress() {
   }
 
   const q = useGetAccountExtendedBalancesQuery();
+  const q2 = useDelegationStatusQuery();
 
-  const txId = (q.data?.stx as any)?.lock_tx_id as string;
+  const txId = (q.data?.stx as any)?.lock_tx_id as string | undefined;
 
   return useQuery(
-    ['stacker'],
-    async () => {
-      // todo
+    ['stacker', { txId, address: q2.data?.delegatedTo }] as const,
+    async ({ queryKey }) => {
+      const { txId, address } = queryKey[1];
+      if (address) {
+        return { address };
+      }
+      if (!txId) {
+        return { address: null };
+      }
       const res = await transactionsApi.getTransactionById({
         txId,
       });
-      return (res as any).sender_address;
+      return { address: (res as any).sender_address as string };
     },
-    { enabled: Boolean(txId) }
+    { enabled: !q.isLoading && !q2.isLoading }
   );
 }

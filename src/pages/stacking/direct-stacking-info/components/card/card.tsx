@@ -34,6 +34,7 @@ import { ErrorAlert } from '@components/error-alert';
 import { modalId } from './open-stop-pooling-modal';
 import { RevokeDelegationModal } from './components/modal';
 import { useGetPoolAddress } from '../../use-get-pool-address-query';
+import { Address } from '@components/address';
 
 export function PooledStackingInfoCard() {
   const { client } = useStackingClient();
@@ -64,7 +65,8 @@ function CardLayout({ client }: CardLayoutProps) {
     getStatusQuery.isLoading ||
     getAccountExtendedBalancesQuery.isLoading ||
     getCoreInfoQuery.isLoading ||
-    getPoolAddressQuery.isLoading
+    getPoolAddressQuery.isLoading ||
+    getPoolAddressQuery.isFetching
   ) {
     return <Loader />;
   }
@@ -94,6 +96,7 @@ function CardLayout({ client }: CardLayoutProps) {
                 getStatusQuery,
                 getAccountExtendedBalancesQuery,
                 getCoreInfoQuery,
+                getPoolAddressQuery,
               },
               null,
               2
@@ -105,8 +108,9 @@ function CardLayout({ client }: CardLayoutProps) {
   }
 
   const isStacking = getStatusQuery.data.stacked;
+  const poolAddress = getPoolAddressQuery.data.address;
 
-  if (!delegationStatusQuery.data.isDelegating && !isStacking) {
+  if ((!delegationStatusQuery.data.isDelegating && !isStacking) || !poolAddress) {
     return (
       <Card withBorder w="400px">
         <Alert icon={<IconInfoCircle />}>
@@ -142,9 +146,9 @@ function CardLayout({ client }: CardLayoutProps) {
       getAccountExtendedBalancesQuery.data.stx.burnchain_unlock_height -
       getCoreInfoQuery.data.burn_block_height;
 
-    lockingProgressPercentString = (
-      ((cycleLengthInBlocks - blocksUntilUnlocked) / cycleLengthInBlocks) *
-      100
+    lockingProgressPercentString = Math.max(
+      ((cycleLengthInBlocks - blocksUntilUnlocked) / cycleLengthInBlocks) * 100,
+      0
     ).toFixed(2);
   }
 
@@ -218,7 +222,7 @@ function CardLayout({ client }: CardLayoutProps) {
 
                   <Group position="apart">
                     <Text>Pool address</Text>
-                    <Text>{truncateMiddle(delegationStatusQuery.data.delegatedTo, 6)}</Text>
+                    <Address address={poolAddress} />
                   </Group>
 
                   <Divider />
@@ -290,10 +294,13 @@ function CardLayout({ client }: CardLayoutProps) {
                   </Group>
 
                   <Divider />
-                  <Group position="apart">
-                    <Text>Pool address</Text>
-                    <Text>{truncateMiddle(getPoolAddressQuery.data)}</Text>
-                  </Group>
+
+                  {getPoolAddressQuery.data.address && (
+                    <Group position="apart">
+                      <Text>Pool address</Text>
+                      <Address address={getPoolAddressQuery.data.address} />
+                    </Group>
+                  )}
 
                   <Divider />
 

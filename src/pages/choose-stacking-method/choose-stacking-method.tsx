@@ -29,39 +29,63 @@ import {
 import { ErrorAlert } from '@components/error-alert';
 import { StackingClient } from '@stacks/stacking';
 import { useDelegationStatusQuery } from '../stacking/pooled-stacking-info/use-delegation-status-query';
+import { useStackingInitiatedByQuery } from './use-stacking-initiated-by';
+import { useAuth } from '@components/auth-provider/auth-provider';
 
 export function ChooseStackingMethod() {
+  const { address } = useAuth();
   const q1 = useDelegationStatusQuery();
   const q2 = useGetAccountBalanceLocked();
+  const q3 = useStackingInitiatedByQuery();
 
-  if (q1.isLoading || q2.isLoading) {
+  if (q1.isLoading || q2.isLoading || q3.isLoading) {
     return <Loader />;
   }
 
-  if (q1.isError || !q1.data || q2.isError || typeof q2.data !== 'bigint') {
+  if (
+    q1.isError ||
+    !q1.data ||
+    q2.isError ||
+    typeof q2.data !== 'bigint' ||
+    q3.isError ||
+    !q3.data
+  ) {
     const msg = 'Error retrieving stacking or delegation info.';
     const id = 'beae38f3-59fb-4e0f-abdc-b837e2b6ebde';
-    console.error(id, msg, q1, q2);
+    console.error(id, msg, q1, q2, q3);
     return <ErrorAlert id={id}>{msg}</ErrorAlert>;
   }
 
+  const isStacking = q2.data !== 0n;
+  const hasExistingDelegation = q1.data.isDelegating;
+  const hasExistingDelegatedStacking = isStacking && address !== q3.data.address;
+  const hasExistingDirectStacking = isStacking && address === q3.data.address;
   return (
-    <ChooseStackingMethodInner isDelegating={q1.data.isDelegating} isStacking={q2.data !== 0n} />
+    <ChooseStackingMethodInner
+      hasExistingDelegation={hasExistingDelegation}
+      hasExistingDelegatedStacking={hasExistingDelegatedStacking}
+      hasExistingDirectStacking={hasExistingDirectStacking}
+    />
   );
 }
 interface ChooseStackingMethodInnerProps {
-  isDelegating: boolean;
-  isStacking: boolean;
+  hasExistingDelegation: boolean;
+  hasExistingDelegatedStacking: boolean;
+  hasExistingDirectStacking: boolean;
 }
 export function ChooseStackingMethodInner({
-  isDelegating,
-  isStacking,
+  hasExistingDelegation,
+  hasExistingDelegatedStacking,
+  hasExistingDirectStacking,
 }: ChooseStackingMethodInnerProps) {
   const navigate = useNavigate();
+  const hasExistingCommitment =
+    hasExistingDelegation || hasExistingDelegatedStacking || hasExistingDirectStacking;
+
   return (
     <Container size="lg">
       <Stack>
-        {isDelegating && (
+        {(hasExistingDelegation || hasExistingDelegatedStacking) && (
           <Alert icon={<IconInfoCircle />}>
             <Stack>
               <Text>
@@ -77,7 +101,7 @@ export function ChooseStackingMethodInner({
             </Stack>
           </Alert>
         )}
-        {!isDelegating && isStacking && (
+        {hasExistingDirectStacking && (
           <Alert icon={<IconInfoCircle />}>
             <Stack>
               <Text>
@@ -125,7 +149,7 @@ export function ChooseStackingMethodInner({
 
                 <Button
                   onClick={() => navigate('../start-pooled-stacking')}
-                  disabled={isDelegating || isStacking}
+                  disabled={hasExistingCommitment}
                 >
                   Stack in a pool
                 </Button>
