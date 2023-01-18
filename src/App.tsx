@@ -28,6 +28,8 @@ import { toUnicode } from 'punycode';
 import { IconCopy } from '@tabler/icons';
 import { Address } from '@components/address';
 import { DirectStackingInfo } from './pages/stacking/direct-stacking-info/direct-stacking-info';
+import { NetworkProvider } from '@components/network-provider';
+import { BlockchainApiClientProvider } from '@components/blockchain-api-client-provider';
 
 function Profile() {
   const { address } = useAuth();
@@ -60,7 +62,7 @@ function Profile() {
   return (
     <Group position="right">
       {bnsName && <Text>{bnsName}</Text>}
-      <Address address={address} />
+      <Address address={address} />j{' '}
     </Group>
   );
 }
@@ -90,13 +92,17 @@ function Root() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <StackingClientProvider>
-          <MantineProvider withGlobalStyles withNormalizeCSS theme={{ primaryColor: 'violet' }}>
-            <ModalsProvider>
-              <Outlet />
-            </ModalsProvider>
-          </MantineProvider>
-        </StackingClientProvider>
+        <NetworkProvider>
+          <StackingClientProvider>
+            <BlockchainApiClientProvider>
+              <MantineProvider withGlobalStyles withNormalizeCSS theme={{ primaryColor: 'violet' }}>
+                <ModalsProvider>
+                  <Outlet />
+                </ModalsProvider>
+              </MantineProvider>
+            </BlockchainApiClientProvider>
+          </StackingClientProvider>
+        </NetworkProvider>
       </AuthProvider>
     </QueryClientProvider>
   );

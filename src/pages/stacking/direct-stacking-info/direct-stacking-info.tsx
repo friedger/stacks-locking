@@ -13,18 +13,23 @@ import {
   Title,
 } from '@mantine/core';
 import stackByYourselfImg from '@assets/images/stack-by-yourself.svg';
-import { IconInfoCircle } from '@tabler/icons';
+import { IconClockHour4, IconInfoCircle } from '@tabler/icons';
 import {
+  useGetAccountBalanceLocked,
   useGetAccountExtendedBalancesQuery,
   useGetCoreInfoQuery,
+  useGetPoxInfoQuery,
   useGetStatusQuery,
   useStackingClient,
 } from '@components/stacking-client-provider/stacking-client-provider';
-import { useState } from 'react';
-import { ContractCallRegularOptions, openContractCall } from '@stacks/connect';
 import { Link, useNavigate } from 'react-router-dom';
 import { StackingClient } from '@stacks/stacking';
 import { ErrorAlert } from '@components/error-alert';
+import { toHumanReadableStx } from '@utils/unit-convert';
+import { ExternalLink } from '@components/external-link';
+import { formatPoxAddressToNetwork } from '@utils/stacking';
+import { truncateMiddle } from '@utils/tx-utils';
+import { Address } from '@components/address';
 
 export function DirectStackingInfo() {
   const { client } = useStackingClient();
@@ -45,11 +50,15 @@ function DirectStackingInfoLayout({ client }: CardLayoutProps) {
   const getStatusQuery = useGetStatusQuery();
   const getAccountExtendedBalancesQuery = useGetAccountExtendedBalancesQuery();
   const getCoreInfoQuery = useGetCoreInfoQuery();
+  const getAccountBalanceLockedQuery = useGetAccountBalanceLocked();
+  const getPoxInfoQuery = useGetPoxInfoQuery();
 
   if (
     getStatusQuery.isLoading ||
     getAccountExtendedBalancesQuery.isLoading ||
-    getCoreInfoQuery.isLoading
+    getCoreInfoQuery.isLoading ||
+    getPoxInfoQuery.isLoading ||
+    getAccountBalanceLockedQuery.isLoading
   ) {
     return <Loader />;
   }
@@ -59,8 +68,12 @@ function DirectStackingInfoLayout({ client }: CardLayoutProps) {
     !getStatusQuery.data ||
     getAccountExtendedBalancesQuery.isError ||
     !getAccountExtendedBalancesQuery.data ||
+    getAccountBalanceLockedQuery.isError ||
+    !getAccountBalanceLockedQuery.data ||
     getCoreInfoQuery.isError ||
-    !getCoreInfoQuery.data
+    !getCoreInfoQuery.data ||
+    getPoxInfoQuery.isError ||
+    !getPoxInfoQuery.data
   ) {
     const msg = 'Error while loading data, try reloading the page.';
     console.error(msg);
@@ -73,7 +86,9 @@ function DirectStackingInfoLayout({ client }: CardLayoutProps) {
               {
                 getStatusQuery,
                 getAccountExtendedBalancesQuery,
+                getAccountBalanceLockedQuery,
                 getCoreInfoQuery,
+                getPoxInfoQuery,
               },
               null,
               2
@@ -128,6 +143,20 @@ function DirectStackingInfoLayout({ client }: CardLayoutProps) {
     ).toFixed(2);
   }
 
+  const elapsedCyclesSinceStackingStart = Math.max(
+    getPoxInfoQuery.data.reward_cycle_id - getStatusQuery.data.details.first_reward_cycle,
+    0
+  );
+  const elapsedStackingCycles = Math.min(
+    elapsedCyclesSinceStackingStart,
+    getStatusQuery.data.details.lock_period
+  );
+
+  const isBeforeFirstRewardCycle =
+    getPoxInfoQuery.data.reward_cycle_id < getStatusQuery.data.details.first_reward_cycle;
+
+  const poxAddress = formatPoxAddressToNetwork(getStatusQuery.data.details.pox_address);
+
   return (
     <>
       <Card withBorder w="400px">
@@ -142,27 +171,62 @@ function DirectStackingInfoLayout({ client }: CardLayoutProps) {
 
           <Stack>
             <Box>
-              <Title order={4}>WIP: Direct Stacking</Title>
-              <Text fz="34px">
-                {/* {toHumanReadableStx(delegationStatusQuery.data.amountMicroStx)} */}
-                TODO
-              </Text>
+              <Title order={4}>You're stacking</Title>
+              <Text fz="34px">{toHumanReadableStx(getAccountBalanceLockedQuery.data)}</Text>
             </Box>
+
+            {isBeforeFirstRewardCycle && (
+              <Alert icon={<IconClockHour4 />} title="Waiting for the cycle to start">
+                Your STX are ready for stacking. Once the next cycle starts the network will
+                determine if and how many slots are claimed.
+              </Alert>
+            )}
 
             <Divider />
 
             <Stack>
               <Group position="apart">
-                <Text>Status</Text>
-                {/* <Text c={isStacking ? 'green' : undefined}> */}
-                {/*   {isStacking ? 'Active' : 'Waiting on pool'} */}
-                {/* </Text> */}
-                <Text>TODO</Text>
+                <Text>Duration</Text>
+                <Text>
+                  {elapsedStackingCycles} / {getStatusQuery.data.details.lock_period}
+                </Text>
               </Group>
               <Group position="apart">
-                <Text>Progress</Text>
-                <Text>{lockingProgressPercentString}%</Text>
+                <Text>Start</Text>
+                <Text>Cycle {getStatusQuery.data.details.first_reward_cycle} ~ TODO:DATE</Text>
               </Group>
+              <Group position="apart">
+                <Text>End</Text>
+                <Text>
+                  Cycle{' '}
+                  {getStatusQuery.data.details.first_reward_cycle +
+                    getStatusQuery.data.details.lock_period}{' '}
+                  ~ TODO:DATE
+                </Text>
+              </Group>
+
+              <Divider />
+
+              <Group position="apart">
+                <Text>Reward slots</Text>
+                <Text>TODO</Text>
+              </Group>
+              {poxAddress && (
+                <Group position="apart">
+                  <Text>Bitcoin address</Text>
+                  <Address address={poxAddress} />
+                </Group>
+              )}
+
+              <Divider />
+
+              <ExternalLink
+                href={`https://stacking.club/reward-address/${String(
+                  formatPoxAddressToNetwork(getStatusQuery.data.details.pox_address)
+                )}`}
+              >
+                🥞 View on stacking.club
+              </ExternalLink>
             </Stack>
           </Stack>
 

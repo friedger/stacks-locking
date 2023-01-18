@@ -1,18 +1,10 @@
 import { ReactNode, createContext, useContext } from 'react';
 
 import { useAuth } from '@components/auth-provider/auth-provider';
-import { NETWORK } from '@constants/index';
-import { StacksMainnet, StacksTestnet } from '@stacks/network';
 import { StackingClient } from '@stacks/stacking';
 import { validateStacksAddress as isValidStacksAddress } from '@stacks/transactions';
 import { useQuery } from '@tanstack/react-query';
-
-let network: StacksTestnet | StacksMainnet;
-if (NETWORK === 'mainnet') {
-  network = new StacksMainnet();
-} else if (NETWORK === 'testnet') {
-  network = new StacksTestnet();
-}
+import { useNetwork } from '@components/network-provider';
 
 interface StackingClientContext {
   client: null | StackingClient;
@@ -24,6 +16,8 @@ interface Props {
 }
 export function StackingClientProvider({ children }: Props) {
   const { address } = useAuth();
+  const { network } = useNetwork();
+
   let client: StackingClient | null = null;
 
   if (address !== null && isValidStacksAddress(address)) {
