@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "tsc && vite build",
+    "build": "vite build",
     "check:packagejson": "ts-node-esm ./scripts/packageJsonChecks.ts",
     "check:types": "tsc",
     "dev": "vite",

@@ -62,7 +62,7 @@ function Profile() {
   return (
     <Group position="right">
       {bnsName && <Text>{bnsName}</Text>}
-      <Address address={address} />j{' '}
+      <Address address={address} />
     </Group>
   );
 }
