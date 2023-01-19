@@ -30,6 +30,7 @@ import { Address } from '@components/address';
 import { DirectStackingInfo } from './pages/stacking/direct-stacking-info/direct-stacking-info';
 import { NetworkProvider } from '@components/network-provider';
 import { BlockchainApiClientProvider } from '@components/blockchain-api-client-provider';
+import { StartDirectStacking } from './pages/stacking/start-direct-stacking/start-direct-stacking';
 
 function Profile() {
   const { address } = useAuth();
@@ -148,6 +149,11 @@ const router = createBrowserRouter([
               {
                 path: 'pooled-stacking-info',
                 element: <PooledStackingInfo />,
+              },
+
+              {
+                path: 'start-direct-stacking',
+                element: <StartDirectStacking />,
               },
               {
                 path: 'direct-stacking-info',

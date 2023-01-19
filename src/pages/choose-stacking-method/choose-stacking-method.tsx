@@ -1,4 +1,4 @@
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import fishBowlIllustration from '@assets/images/stack-by-yourself.svg';
 import divingBoardIllustration from '@assets/images/stack-in-a-pool.svg';
@@ -15,19 +15,12 @@ import {
   List,
   Image,
   Loader,
-  Box,
-  Code,
   Alert,
   Anchor,
 } from '@mantine/core';
 import { IconChartLine, IconInfoCircle, IconLock, IconUser, IconUserMinus } from '@tabler/icons';
-import {
-  useGetAccountBalanceLocked,
-  useGetStatusQuery,
-  useStackingClient,
-} from '@components/stacking-client-provider/stacking-client-provider';
+import { useGetAccountBalanceLocked } from '@components/stacking-client-provider/stacking-client-provider';
 import { ErrorAlert } from '@components/error-alert';
-import { StackingClient } from '@stacks/stacking';
 import { useDelegationStatusQuery } from '../stacking/pooled-stacking-info/use-delegation-status-query';
 import { useStackingInitiatedByQuery } from './use-stacking-initiated-by';
 import { useAuth } from '@components/auth-provider/auth-provider';
@@ -136,16 +129,6 @@ export function ChooseStackingMethodInner({
                   <List.Item icon={<IconUser />}>A pool stacks on your behalf</List.Item>
                   <List.Item icon={<IconChartLine />}>More predictable returns</List.Item>
                 </List>
-                {/* <OptionBenefit icon={StepsIcon}> */}
-                {/*     <Flex> */}
-                {/*       No minimum required */}
-                {/*       <Box ml="extra-tight" alignSelf="center"> */}
-                {/*         <ExplainerTooltip> */}
-                {/*           Your chosen pool may set their own minimum amount to participate */}
-                {/*         </ExplainerTooltip> */}
-                {/*       </Box> */}
-                {/*     </Flex> */}
-                {/*   </OptionBenefit> */}
 
                 <Button
                   onClick={() => navigate('../start-pooled-stacking')}
@@ -153,9 +136,6 @@ export function ChooseStackingMethodInner({
                 >
                   Stack in a pool
                 </Button>
-                {/* {!hasSufficientBalanceToCoverPoolingTxFee && (
-              <InsufficientStackingBalanceWarning />
-            )} */}
               </Stack>
             </Card>
           </Grid.Col>
@@ -188,11 +168,10 @@ export function ChooseStackingMethodInner({
                 {/*   </OptionBenefit> */}
 
                 <Button
-                  disabled
-                  // onClick={() => history.push(routes.STACKING)}
-                  // isDisabled={!meetsMinThresholdForDirectStacking && !holdingAltKey}
+                  onClick={() => navigate('../start-direct-stacking')}
+                  disabled={hasExistingCommitment}
                 >
-                  Stack by yourself (coming soon)
+                  Stack by yourself
                 </Button>
                 {/* {!meetsMinThresholdForDirectStacking && (
               <InsufficientStackingBalanceWarning />
