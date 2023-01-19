@@ -107,13 +107,13 @@ function DirectStackingInfoLayout({ client }: CardLayoutProps) {
         <Alert icon={<IconInfoCircle />}>
           <Stack>
             <Text>
-              It appears that you're not pooling yet. If you recently started to pool, your pooling
-              info will appear here in a few seconds.
+              It appears that you're not stacking yet. If you recently started to stack, your
+              stacking info will appear here in a few seconds.
             </Text>
             <Text>
               You may want to{' '}
-              <Anchor to="../start-pooled-stacking" component={Link}>
-                start pooling
+              <Anchor to="../start-stacking" component={Link}>
+                start stacking
               </Anchor>{' '}
               or{' '}
               <Anchor to="../choose-stacking-method" component={Link}>
@@ -193,7 +193,7 @@ function DirectStackingInfoLayout({ client }: CardLayoutProps) {
               </Group>
               <Group position="apart">
                 <Text>Start</Text>
-                <Text>Cycle {getStatusQuery.data.details.first_reward_cycle} ~ TODO:DATE</Text>
+                <Text>Cycle {getStatusQuery.data.details.first_reward_cycle}</Text>
               </Group>
               <Group position="apart">
                 <Text>End</Text>
@@ -201,16 +201,15 @@ function DirectStackingInfoLayout({ client }: CardLayoutProps) {
                   Cycle{' '}
                   {getStatusQuery.data.details.first_reward_cycle +
                     getStatusQuery.data.details.lock_period}{' '}
-                  ~ TODO:DATE
                 </Text>
               </Group>
 
               <Divider />
 
-              <Group position="apart">
-                <Text>Reward slots</Text>
-                <Text>TODO</Text>
-              </Group>
+              {/* <Group position="apart"> */}
+              {/*   <Text>Reward slots</Text> */}
+              {/*   <Text>TODO</Text> */}
+              {/* </Group> */}
               {poxAddress && (
                 <Group position="apart">
                   <Text>Bitcoin address</Text>
@@ -229,8 +228,6 @@ function DirectStackingInfoLayout({ client }: CardLayoutProps) {
               </ExternalLink>
             </Stack>
           </Stack>
-
-          <Alert icon={<IconInfoCircle />}>TODO</Alert>
         </Stack>
       </Card>
     </>

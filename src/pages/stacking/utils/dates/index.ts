@@ -18,5 +18,6 @@ export async function burnHeight(height: number, currentBurnBlockHeight: number)
 
 export function firstCycleStart() {}
 export function lastCycleEnd() {}
+
 export function cycleStart(id: string) {}
 export function cycleEnd(id: string) {}
