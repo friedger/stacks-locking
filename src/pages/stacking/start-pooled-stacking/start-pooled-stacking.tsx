@@ -24,7 +24,7 @@ import { ErrorAlert } from '@components/error-alert';
 import { PoolingInfoCard } from './components/delegated-stacking-info-card';
 
 const initialDelegatingFormValues: Partial<EditingFormValues> = {
-  amountStx: '',
+  amount: '',
   poolAddress: '',
   delegationDurationType: undefined,
   numberOfCycles: 1,
@@ -67,8 +67,6 @@ function StartPooledStackingLayout({ client, currentAccountAddress }: StartPoole
   if (typeof data !== 'number') return null;
   if (typeof queryGetAccountBalance.data !== 'bigint') return null;
 
-  const timeUntilNextCycle = formatDistanceToNow(addSeconds(new Date(), data));
-
   return (
     <>
       <Formik
@@ -77,7 +75,7 @@ function StartPooledStackingLayout({ client, currentAccountAddress }: StartPoole
         validationSchema={validationSchema}
       >
         <StartStackingLayout
-          intro={<PooledStackingIntro timeUntilNextCycle={timeUntilNextCycle} />}
+          intro={<PooledStackingIntro timeUntilNextCycle={data} />}
           stackingInfoPanel={<PoolingInfoCard />}
           stackingForm={
             <Form>

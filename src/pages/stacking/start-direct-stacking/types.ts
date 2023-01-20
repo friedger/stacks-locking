@@ -2,9 +2,10 @@ export interface DirectStackingFormValues {
   /**
    * The amount of STX to lock up. Note that this amount is expressed in STX, while the PoX contract uses uSTX,
    * https://github.com/stacks-network/stacks-blockchain/blob/cc3eb0f5011f63ae00cf2afc7a32a32c830fb1c6/src/chainstate/stacks/boot/pox-2.clar#L583.
-   * The amount is later converted from STX to uSTX during the form submission.
+   *
+   * The amount is converted from STX to uSTX during form submission.
    */
-  amountStx: string;
+  amount: string;
 
   /**
    * The PoX rewards address. The address where rewards are paid into,

@@ -20,7 +20,7 @@ export function PoolingInfoCard() {
   const f = useFormikContext<EditingFormValues>();
   const poxInfoQuery = useGetPoxInfoQuery();
 
-  const amount = f.values.amountStx;
+  const amount = f.values.amount;
   const delegationType = f.values.delegationDurationType;
   const poolStxAddress = f.values.poolAddress;
   const durationInCycles =

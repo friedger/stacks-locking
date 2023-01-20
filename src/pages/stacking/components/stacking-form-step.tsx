@@ -1,6 +1,5 @@
 import { ReactElement, ReactNode } from 'react';
 
-/* import { Title } from '@components/title'; */
 import { Box, Title } from '@mantine/core';
 import { Button, ButtonProps, Container, Stack } from '@mantine/core';
 

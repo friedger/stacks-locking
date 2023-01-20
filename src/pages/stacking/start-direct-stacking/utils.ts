@@ -1,20 +1,13 @@
 import * as yup from 'yup';
-import {
-  MIN_DELEGATED_STACKING_AMOUNT_USTX,
-  UI_IMPOSED_MAX_STACKING_AMOUNT_USTX,
-} from '@constants/index';
 import { toHumanReadableStx, stxToMicroStx } from '@utils/unit-convert';
-import { stxAddressSchema } from '@utils/validators/stx-address-validator';
 import { stxAmountSchema } from '@utils/validators/stx-amount-validator';
 import { openContractCall, ContractCallRegularOptions } from '@stacks/connect';
-import { cyclesToBurnChainHeight } from '@utils/calculate-burn-height';
 import { StackingClient } from '@stacks/stacking';
 import { Dispatch, SetStateAction } from 'react';
 import { NavigateFunction } from 'react-router-dom';
 import { validateDecimalPrecision } from '@utils/form/validate-decimals';
-import { btcAddressSchema } from '@utils/validators/btc-address-validator';
+import { createBtcAddressSchema } from '@utils/validators/btc-address-validator';
 import BigNumber from 'bignumber.js';
-import { EditingFormValues } from '../start-pooled-stacking/types';
 import { stxBalanceValidator } from '@utils/validators/stx-balance-validator';
 import { DirectStackingFormValues } from './types';
 
@@ -33,11 +26,17 @@ interface CreateValidationSchemaArgs {
    * The minimum stacking amount, in ustx, required by the PoX contract.
    */
   minimumAmountUStx: bigint;
+
+  /**
+   * The name of the network the app is live on, e.g., mainnet or testnet.
+   */
+  network: string;
 }
 export function createValidationSchema({
   availableBalanceUStx,
   transactionFeeUStx,
   minimumAmountUStx,
+  network,
 }: CreateValidationSchemaArgs) {
   return yup.object().shape({
     amount: stxAmountSchema()
@@ -68,7 +67,11 @@ export function createValidationSchema({
         },
       }),
     cycles: yup.number().defined(),
-    btcAddress: btcAddressSchema(),
+    poxAddress: createBtcAddressSchema({
+      network,
+      // TODO
+      isPostPeriod1: true,
+    }),
   });
 }
 
@@ -88,19 +91,13 @@ export function createHandleSubmit({
       client.getPoxInfo(),
       client.getStackingContract(),
     ]);
-    const delegateStxOptions = client.getDelegateOptions({
+    const stackOptions = client.getStackOptions({
       contract: stackingContract,
-      amountMicroStx: stxToMicroStx(values.amountStx).toString(),
-      delegateTo: values.poolAddress,
-      untilBurnBlockHeight:
-        values.delegationDurationType === 'limited'
-          ? cyclesToBurnChainHeight({
-              cycles: values.numberOfCycles,
-              rewardCycleLength: poxInfo.reward_cycle_length,
-              currentCycleId: poxInfo.current_cycle.id,
-              firstBurnchainBlockHeight: poxInfo.first_burnchain_block_height,
-            })
-          : undefined,
+      amountMicroStx: stxToMicroStx(values.amount).toString(),
+      cycles: values.lockPeriod,
+      poxAddress: values.poxAddress,
+      // TODO
+      burnBlockHeight: 0,
     });
 
     openContractCall({
@@ -111,7 +108,7 @@ export function createHandleSubmit({
       //
       // See
       // https://github.com/hirosystems/stacks.js/blob/0e1f9f19dfa45788236c9e481f9a476d9948d86d/packages/stacking/src/index.ts#L1054
-      ...(delegateStxOptions as ContractCallRegularOptions),
+      ...(stackOptions as ContractCallRegularOptions),
       onFinish() {
         setIsContractCallExtensionPageOpen(false);
         navigate('../pooled-stacking-info');

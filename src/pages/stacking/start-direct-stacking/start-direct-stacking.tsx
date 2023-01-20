@@ -1,34 +1,32 @@
 import { useState } from 'react';
 
 import {
+  useGetAccountBalance,
   useGetPoxInfoQuery,
   useGetSecondsUntilNextCycleQuery,
   useStackingClient,
 } from '@components/stacking-client-provider/stacking-client-provider';
 import { StackingClient } from '@stacks/stacking';
-import { useQuery } from '@tanstack/react-query';
-import { addSeconds, formatDistanceToNow } from 'date-fns';
 import { Form, Formik } from 'formik';
 
 import { StartStackingLayout } from '../components/stacking-layout';
-/* import { ChoosePoolAddress } from './components/choose-pool-stx-address'; */
-/* import { ChoosePoolingAmount } from './components/choose-pooling-amount'; */
-/* import { ChoosePoolingDuration } from './components/choose-pooling-duration'; */
-/* import { ConfirmAndSubmit } from './components/confirm-and-pool'; */
-/* import { PooledStackingIntro } from './components/pooled-stacking-intro'; */
+import { DirectStackingIntro } from './components/direct-stacking-intro';
 import { useNavigate } from 'react-router-dom';
 import { createHandleSubmit, createValidationSchema } from './utils';
 import { Box, Divider, Loader, Stack, Title } from '@mantine/core';
 import { ErrorAlert } from '@components/error-alert';
-/* import { PoolingInfoCard } from './components/delegated-stacking-info-card'; */
 import { DirectStackingFormValues } from './types';
 import { useCalculateFee } from '@hooks/use-calculate-fee';
 import { STACKING_CONTRACT_CALL_TX_BYTES } from '@constants/index';
+import { Amount } from './components/choose-amount';
+import { Duration } from './components/duration';
+import { PoxAddress } from './components/pox-address/pox-address';
+import { useNetwork } from '@components/network-provider';
 
 const initialFormValues: DirectStackingFormValues = {
-  amountStx: '',
-  poxAddress: '',
+  amount: '',
   lockPeriod: 1,
+  poxAddress: '',
 };
 
 export function StartDirectStacking() {
@@ -49,11 +47,11 @@ interface StartDirectStackingLayoutProps {
 }
 function StartDirectStackingLayout({ client }: StartDirectStackingLayoutProps) {
   const [isContractCallExtensionPageOpen, setIsContractCallExtensionPageOpen] = useState(false);
+  const { networkName } = useNetwork();
 
   const getSecondsUntilNextCycleQuery = useGetSecondsUntilNextCycleQuery();
   const getPoxInfoQuery = useGetPoxInfoQuery();
-  // TODO: move this inside ChoosePoolingAmount, not being used elsewhere
-  const getAccountBalanceQuery = useQuery(['getAccountBalance'], () => client.getAccountBalance());
+  const getAccountBalanceQuery = useGetAccountBalance();
 
   const navigate = useNavigate();
   const calcFee = useCalculateFee();
@@ -61,23 +59,32 @@ function StartDirectStackingLayout({ client }: StartDirectStackingLayoutProps) {
 
   if (
     getSecondsUntilNextCycleQuery.isLoading ||
-    typeof getSecondsUntilNextCycleQuery.data !== 'number' ||
     getPoxInfoQuery.isLoading ||
-    !getPoxInfoQuery.data ||
-    getAccountBalanceQuery.isLoading ||
-    typeof getAccountBalanceQuery.data !== 'bigint'
+    getAccountBalanceQuery.isLoading
   )
     return <Loader />;
+
+  if (
+    getSecondsUntilNextCycleQuery.isError ||
+    typeof getSecondsUntilNextCycleQuery.data !== 'number' ||
+    getPoxInfoQuery.isError ||
+    !getPoxInfoQuery.data ||
+    getAccountBalanceQuery.isError ||
+    typeof getAccountBalanceQuery.data !== 'bigint'
+  ) {
+    const msg = 'Failed to load necessary data.';
+    const id = '8c12f6b2-c839-4813-8471-b0fd542b845f';
+    console.error(id, msg);
+    return <ErrorAlert id={id}>{msg}</ErrorAlert>;
+  }
 
   const validationSchema = createValidationSchema({
     minimumAmountUStx: BigInt(getPoxInfoQuery.data.min_amount_ustx),
     transactionFeeUStx,
     availableBalanceUStx: getAccountBalanceQuery.data,
+    network: networkName,
   });
   const handleSubmit = createHandleSubmit({ client, navigate, setIsContractCallExtensionPageOpen });
-  const timeUntilNextCycle = formatDistanceToNow(
-    addSeconds(new Date(), getSecondsUntilNextCycleQuery.data)
-  );
 
   return (
     <>
@@ -86,24 +93,31 @@ function StartDirectStackingLayout({ client }: StartDirectStackingLayoutProps) {
         onSubmit={handleSubmit}
         validationSchema={validationSchema}
       >
-        <Title>Start Direct Stacking</Title>
-        {/* <StartStackingLayout */}
-        {/*   intro={<PooledStackingIntro timeUntilNextCycle={timeUntilNextCycle} />} */}
-        {/*   stackingInfoPanel={<PoolingInfoCard />} */}
-        {/*   stackingForm={ */}
-        {/*     <Form> */}
-        {/*       <Stack> */}
-        {/*         <ChoosePoolAddress /> */}
-        {/*         <Divider /> */}
-        {/*         <ChoosePoolingAmount availableBalance={getAccountBalanceQuery.data} /> */}
-        {/*         <Divider /> */}
-        {/*         <ChoosePoolingDuration /> */}
-        {/*         <Divider /> */}
-        {/*         <ConfirmAndSubmit isLoading={isContractCallExtensionPageOpen} /> */}
-        {/*       </Stack> */}
-        {/*     </Form> */}
-        {/*   } */}
-        {/* /> */}
+        <StartStackingLayout
+          intro={
+            <DirectStackingIntro
+              estimatedStackingMinimum={BigInt(getPoxInfoQuery.data.min_amount_ustx)}
+              timeUntilNextCycle={getSecondsUntilNextCycleQuery.data}
+            />
+          }
+          stackingInfoPanel={
+            <>
+              <Title>Info Panel</Title>
+            </>
+          }
+          stackingForm={
+            <Form>
+              <Stack>
+                <Amount />
+                <Divider />
+                <Duration />
+                <Divider />
+                <PoxAddress />
+                {/* <ConfirmAndSubmit isLoading={isContractCallExtensionPageOpen} /> */}
+              </Stack>
+            </Form>
+          }
+        />
       </Formik>
       <Box pb="25vh" />
     </>

@@ -1,33 +1,24 @@
 import { ClockIcon } from '@components/icons/clock';
-import { Avatar, Text, Flex, Stack, Title, Box } from '@mantine/core';
+import { Avatar, Text, Flex, Title, Box } from '@mantine/core';
+import { formatDistanceToNow, addSeconds } from 'date-fns';
 
 interface NextCycleStartTimeProps {
-  nextCycleStartsIn: string;
+  /**
+   * Time, in seconds, until the start of the next cycle.
+   */
+  timeUntilNextCycle: number;
 }
 
-export function NextCycleStartTime(props: NextCycleStartTimeProps) {
-  const { nextCycleStartsIn } = props;
+export function NextCycleStartTime({ timeUntilNextCycle }: NextCycleStartTimeProps) {
+  const timeUntilNextCycleText = formatDistanceToNow(addSeconds(new Date(), timeUntilNextCycle));
   return (
     <Flex gap="sm">
       <Avatar radius="xl">
         <ClockIcon size="14px" />
       </Avatar>
       <Box>
-        <Title
-          order={4}
-          /* as="h4" display="block" textStyle="body.large.medium" lineHeight="20px" */
-        >
-          Next cycle starts in
-        </Title>
-        <Text
-        /* display="block" */
-        /* textStyle="body.large" */
-        /* color={color('text-caption')} */
-        /* lineHeight="20px" */
-        /* mt="extra-tight" */
-        >
-          {nextCycleStartsIn}
-        </Text>
+        <Title order={4}>Next cycle starts in</Title>
+        <Text>{timeUntilNextCycleText}</Text>
       </Box>
     </Flex>
   );

@@ -75,7 +75,7 @@ export function createHandleSubmit({
     ]);
     const delegateStxOptions = client.getDelegateOptions({
       contract: stackingContract,
-      amountMicroStx: stxToMicroStx(values.amountStx).toString(),
+      amountMicroStx: stxToMicroStx(values.amount).toString(),
       delegateTo: values.poolAddress,
       untilBurnBlockHeight:
         values.delegationDurationType === 'limited'

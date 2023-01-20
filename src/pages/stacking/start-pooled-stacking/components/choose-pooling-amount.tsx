@@ -9,7 +9,7 @@ interface Props {
   availableBalance: bigint;
 }
 export function ChoosePoolingAmount({ availableBalance }: Props) {
-  const helpers = useField('amountStx')[2];
+  const helpers = useField('amount')[2];
   return (
     <Step title="Amount">
       <Stack>

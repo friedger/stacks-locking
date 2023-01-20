@@ -35,34 +35,58 @@ export function useStackingClient() {
   return useContext(StackingClientContext);
 }
 
+export function useGetCycleDurationQuery() {
+  const { client } = useStackingClient();
+  if (!client) throw new Error('Expected client to be defined.');
+  return useQuery(['getCycleDuration'], () => client.getCycleDuration());
+}
+
 export function useGetStatusQuery() {
   const { client } = useStackingClient();
-  return useQuery(['getStatus'], () => client?.getStatus());
+  if (!client) throw new Error('Expected client to be defined.');
+  return useQuery(['getStatus'], () => client.getStatus());
+}
+
+export function useGetPoxOperationInfo() {
+  const { client } = useStackingClient();
+  if (!client) throw new Error('Expected client to be defined.');
+  return useQuery(['getPoxOperationInfo'], () => client.getPoxOperationInfo());
+}
+
+export function useGetAccountBalance() {
+  const { client } = useStackingClient();
+  if (!client) throw new Error('Expected client to be defined.');
+  return useQuery(['getAccountBalance'], () => client.getAccountBalance());
 }
 
 export function useGetAccountBalanceLocked() {
   const { client } = useStackingClient();
-  return useQuery(['getAccountBalanceLocked'], () => client?.getAccountBalanceLocked());
+  if (!client) throw new Error('Expected client to be defined.');
+  return useQuery(['getAccountBalanceLocked'], () => client.getAccountBalanceLocked());
 }
 
 export function useGetCoreInfoQuery() {
   const { client } = useStackingClient();
-  return useQuery(['getCoreInfo'], () => client?.getCoreInfo());
+  if (!client) throw new Error('Expected client to be defined.');
+  return useQuery(['getCoreInfo'], () => client.getCoreInfo());
 }
 
 export function useGetAccountExtendedBalancesQuery() {
   const { client } = useStackingClient();
-  return useQuery(['getAccountExtendedBalances'], () => client?.getAccountExtendedBalances());
+  if (!client) throw new Error('Expected client to be defined.');
+  return useQuery(['getAccountExtendedBalances'], () => client.getAccountExtendedBalances());
 }
 
 export function useGetSecondsUntilNextCycleQuery() {
   const { client } = useStackingClient();
-  return useQuery(['getSecondsUntilNextCycle'], () => client?.getSecondsUntilNextCycle(), {
+  if (!client) throw new Error('Expected client to be defined.');
+  return useQuery(['getSecondsUntilNextCycle'], () => client.getSecondsUntilNextCycle(), {
     refetchInterval: 60_000,
   });
 }
 
 export function useGetPoxInfoQuery() {
   const { client } = useStackingClient();
-  return useQuery(['getPoxInfo'], () => client?.getPoxInfo());
+  if (!client) throw new Error('Expected client to be defined.');
+  return useQuery(['getPoxInfo'], () => client.getPoxInfo());
 }

@@ -9,7 +9,7 @@ interface ExternalLinkProps extends AnchorProps {
 export function ExternalLink({ children, href }: ExternalLinkProps) {
   return (
     <LegalDisclaimerTooltip>
-      <Anchor href={href} target="_blank">
+      <Anchor href={href} target="_blank" sx={{ whiteSpace: 'nowrap' }}>
         {children} ↗
       </Anchor>
     </LegalDisclaimerTooltip>

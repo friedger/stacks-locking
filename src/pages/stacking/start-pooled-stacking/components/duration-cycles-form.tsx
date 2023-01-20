@@ -5,7 +5,10 @@ import { CircleButton } from '@components/circle-button';
 import { decrement, increment } from '@utils/mutate-numbers';
 import { useField } from 'formik';
 import { formatCycles } from '@utils/stacking';
-import { useStackingClient } from '@components/stacking-client-provider/stacking-client-provider';
+import {
+  useGetCycleDurationQuery,
+  useStackingClient,
+} from '@components/stacking-client-provider/stacking-client-provider';
 import { useQuery } from '@tanstack/react-query';
 import { StackingClient } from '@stacks/stacking';
 import { addSeconds, formatDistanceToNow } from 'date-fns';
@@ -19,7 +22,7 @@ interface DurationCyclesFieldInnerProps {
   client: StackingClient;
 }
 export function DurationCyclesFieldInner({ client }: DurationCyclesFieldInnerProps) {
-  const q = useQuery(['cycleDuration'], () => client.getCycleDuration());
+  const q = useGetCycleDurationQuery();
   const [cyclesField, _meta, durationLengthHelpers] = useField('numberOfCycles');
   const duration = cyclesField.value ?? 1;
 
