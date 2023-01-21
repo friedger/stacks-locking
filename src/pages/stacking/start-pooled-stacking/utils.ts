@@ -30,7 +30,7 @@ export function createValidationSchema({ currentAccountAddress }: Args) {
         return value !== currentAccountAddress;
       },
     }),
-    amountStx: stxAmountSchema()
+    amount: stxAmountSchema()
       .test({
         name: 'test-min-allowed-delegated-stacking',
         message: `You must delegate at least ${toHumanReadableStx(

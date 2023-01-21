@@ -1,5 +1,3 @@
-import { UI_IMPOSED_MAX_STACKING_AMOUNT_USTX } from '@constants/index';
-import { stxToMicroStx, toHumanReadableStx } from '@utils/unit-convert';
 import { truncateMiddle } from '@utils/tx-utils';
 import { useFormikContext } from 'formik';
 import { EditingFormValues } from '../types';
@@ -7,15 +5,8 @@ import { Card, Title, Text, Divider, Group, Stack, Box } from '@mantine/core';
 import { formatCycles } from '@utils/stacking';
 import { useGetPoxInfoQuery } from '@components/stacking-client-provider/stacking-client-provider';
 import { cyclesToBurnChainHeight } from '@utils/calculate-burn-height';
+import { createAmountText } from '../../utils/create-amount-text';
 
-function createAmountText(amountStx: string | number | bigint) {
-  if (amountStx === '') return toHumanReadableStx(0);
-
-  const amountMicroStx = stxToMicroStx(amountStx);
-  if (amountMicroStx.isNaN() || amountMicroStx.gt(UI_IMPOSED_MAX_STACKING_AMOUNT_USTX)) return '—';
-
-  return toHumanReadableStx(amountMicroStx);
-}
 export function PoolingInfoCard() {
   const f = useFormikContext<EditingFormValues>();
   const poxInfoQuery = useGetPoxInfoQuery();
@@ -42,7 +33,7 @@ export function PoolingInfoCard() {
       <Stack>
         <Box>
           <Title order={4}>Start Pooling</Title>
-          <Text fz="34px">{amountText}</Text>
+          <Text fz={34}>{amountText}</Text>
         </Box>
 
         <Divider />

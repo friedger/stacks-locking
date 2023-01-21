@@ -22,7 +22,7 @@ export function ChoosePoolAddress() {
             Discover pools on stacks.co
           </ExternalLink>
         </Description>
-        <AddressField placeholder="Pool address" />
+        <AddressField name="poolAddress" placeholder="Pool address" />
       </Stack>
     </Step>
   );

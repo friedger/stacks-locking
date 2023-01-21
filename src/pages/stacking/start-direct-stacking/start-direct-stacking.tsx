@@ -22,6 +22,8 @@ import { Amount } from './components/choose-amount';
 import { Duration } from './components/duration';
 import { PoxAddress } from './components/pox-address/pox-address';
 import { useNetwork } from '@components/network-provider';
+import { ConfirmAndSubmit } from './components/confirm-and-submit';
+import { InfoPanel } from './components/direct-stacking-info-card';
 
 const initialFormValues: DirectStackingFormValues = {
   amount: '',
@@ -100,11 +102,7 @@ function StartDirectStackingLayout({ client }: StartDirectStackingLayoutProps) {
               timeUntilNextCycle={getSecondsUntilNextCycleQuery.data}
             />
           }
-          stackingInfoPanel={
-            <>
-              <Title>Info Panel</Title>
-            </>
-          }
+          stackingInfoPanel={<InfoPanel />}
           stackingForm={
             <Form>
               <Stack>
@@ -113,7 +111,7 @@ function StartDirectStackingLayout({ client }: StartDirectStackingLayoutProps) {
                 <Duration />
                 <Divider />
                 <PoxAddress />
-                {/* <ConfirmAndSubmit isLoading={isContractCallExtensionPageOpen} /> */}
+                <ConfirmAndSubmit isLoading={isContractCallExtensionPageOpen} />
               </Stack>
             </Form>
           }

@@ -9,7 +9,14 @@ interface ExternalLinkProps extends AnchorProps {
 export function ExternalLink({ children, href }: ExternalLinkProps) {
   return (
     <LegalDisclaimerTooltip>
-      <Anchor href={href} target="_blank" sx={{ whiteSpace: 'nowrap' }}>
+      <Anchor
+        // Ensures the width of the element is kept to that of the content, so if converted to a
+        // block when used as a flex item, it's width will remain that of the text within it.
+        w="fit-content"
+        href={href}
+        target="_blank"
+        sx={{ whiteSpace: 'nowrap' }}
+      >
         {children} ↗
       </Anchor>
     </LegalDisclaimerTooltip>

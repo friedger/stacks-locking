@@ -6,7 +6,6 @@ import {
 } from '@components/stacking-client-provider/stacking-client-provider';
 import { StackingClient } from '@stacks/stacking';
 import { useQuery } from '@tanstack/react-query';
-import { addSeconds, formatDistanceToNow } from 'date-fns';
 import { Form, Formik } from 'formik';
 
 import { StartStackingLayout } from '../components/stacking-layout';
