@@ -30,7 +30,6 @@ export function Duration() {
           <ActionIcon
             variant="default"
             onClick={() => {
-              console.log('ARY dec, value', field.value);
               if (field.value <= MIN_STACKING_CYCLES) {
                 helpers.setValue(MIN_STACKING_CYCLES);
                 return;
@@ -47,15 +46,12 @@ export function Duration() {
             value={field.value}
             handlersRef={handlers}
             formatter={n => {
-              console.log('ARY f.v', field.value);
-              console.log('ARY n', typeof n);
               return `${Number(n)} cycle${Number(n) > 1 ? 's' : ''}`;
             }}
           />
           <ActionIcon
             variant="default"
             onClick={() => {
-              console.log('ARY inc');
               if (field.value >= MAX_STACKING_CYCLES) {
                 helpers.setValue(MAX_STACKING_CYCLES);
                 return;

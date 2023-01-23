@@ -66,7 +66,7 @@ export function createValidationSchema({
           return new BigNumber(minimumAmountUStx.toString()).isLessThanOrEqualTo(uStxInput);
         },
       }),
-    cycles: yup.number().defined(),
+    lockPeriod: yup.number().defined(),
     poxAddress: createBtcAddressSchema({
       network,
       // TODO
@@ -100,6 +100,7 @@ export function createHandleSubmit({
       burnBlockHeight: 0,
     });
 
+    console.log('ARY will call open contract call');
     openContractCall({
       // Type coercion necessary because the `network` property returned by
       // `client.getStackingContract()` has a wider type than allowed by `openContractCall`. Despite
@@ -111,7 +112,7 @@ export function createHandleSubmit({
       ...(stackOptions as ContractCallRegularOptions),
       onFinish() {
         setIsContractCallExtensionPageOpen(false);
-        navigate('../pooled-stacking-info');
+        navigate('../direct-stacking-info');
       },
       onCancel() {
         setIsContractCallExtensionPageOpen(false);

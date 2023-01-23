@@ -69,7 +69,7 @@ function DirectStackingInfoLayout({ client }: CardLayoutProps) {
     getAccountExtendedBalancesQuery.isError ||
     !getAccountExtendedBalancesQuery.data ||
     getAccountBalanceLockedQuery.isError ||
-    !getAccountBalanceLockedQuery.data ||
+    typeof getAccountBalanceLockedQuery.data !== 'bigint' ||
     getCoreInfoQuery.isError ||
     !getCoreInfoQuery.data ||
     getPoxInfoQuery.isError ||

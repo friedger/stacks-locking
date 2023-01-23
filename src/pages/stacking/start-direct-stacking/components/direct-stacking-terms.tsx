@@ -48,19 +48,7 @@ export function DirectStackingTerms() {
             and you have control over it.
           </Text>
         </List.Item>
-        <List.Item
-          icon={
-            <IconBoundary>
-              <IconClock />
-            </IconBoundary>
-          }
-        >
-          <Text>Consider the following cooldown cycle</Text>
-          <Text>
-            After your chosen duration is finished, you have to wait one cycle before you can stack
-            from this address again
-          </Text>
-        </List.Item>
+
         <List.Item
           icon={
             <IconBoundary>

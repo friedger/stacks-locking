@@ -23,7 +23,7 @@ import { Duration } from './components/duration';
 import { PoxAddress } from './components/pox-address/pox-address';
 import { useNetwork } from '@components/network-provider';
 import { ConfirmAndSubmit } from './components/confirm-and-submit';
-import { InfoPanel } from './components/direct-stacking-info-card';
+import { InfoPanel } from './components/direct-stacking-info-card/direct-stacking-info-card';
 
 const initialFormValues: DirectStackingFormValues = {
   amount: '',
@@ -92,30 +92,45 @@ function StartDirectStackingLayout({ client }: StartDirectStackingLayoutProps) {
     <>
       <Formik
         initialValues={initialFormValues}
-        onSubmit={handleSubmit}
+        onSubmit={values => {
+          console.log('ARY hanlding submit...');
+          handleSubmit(values);
+        }}
         validationSchema={validationSchema}
       >
-        <StartStackingLayout
-          intro={
-            <DirectStackingIntro
-              estimatedStackingMinimum={BigInt(getPoxInfoQuery.data.min_amount_ustx)}
-              timeUntilNextCycle={getSecondsUntilNextCycleQuery.data}
-            />
-          }
-          stackingInfoPanel={<InfoPanel />}
-          stackingForm={
-            <Form>
-              <Stack>
-                <Amount />
-                <Divider />
-                <Duration />
-                <Divider />
-                <PoxAddress />
-                <ConfirmAndSubmit isLoading={isContractCallExtensionPageOpen} />
-              </Stack>
-            </Form>
-          }
-        />
+        {({ values, errors }) => (
+          <StartStackingLayout
+            intro={
+              <DirectStackingIntro
+                estimatedStackingMinimum={BigInt(getPoxInfoQuery.data.min_amount_ustx)}
+                timeUntilNextCycle={getSecondsUntilNextCycleQuery.data}
+              />
+            }
+            stackingInfoPanel={<InfoPanel />}
+            stackingForm={
+              <Form>
+                <Stack>
+                  <Amount />
+                  <Divider />
+                  <Duration />
+                  <Divider />
+                  <PoxAddress />
+                  <ConfirmAndSubmit isLoading={isContractCallExtensionPageOpen} />
+                  <div>
+                    <pre>
+                      <code>{JSON.stringify(values, null, 2)}</code>
+                    </pre>
+                  </div>
+                  <div>
+                    <pre>
+                      <code>{JSON.stringify(errors, null, 2)}</code>
+                    </pre>
+                  </div>
+                </Stack>
+              </Form>
+            }
+          />
+        )}
       </Formik>
       <Box pb="25vh" />
     </>

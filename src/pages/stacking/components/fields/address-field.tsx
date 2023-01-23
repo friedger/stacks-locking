@@ -6,7 +6,6 @@ interface Props extends TextInputProps {
 }
 export function AddressField(props: Props) {
   const [field, meta] = useField(props.name);
-  console.log('ARY meta', meta);
   return (
     <>
       <TextInput
