@@ -19,19 +19,26 @@ import {
   Anchor,
 } from '@mantine/core';
 import { IconChartLine, IconInfoCircle, IconLock, IconUser, IconUserMinus } from '@tabler/icons';
-import { useGetAccountBalanceLocked } from '@components/stacking-client-provider/stacking-client-provider';
+import {
+  useGetAccountBalance,
+  useGetAccountBalanceLocked,
+  useGetPoxInfoQuery,
+} from '@components/stacking-client-provider/stacking-client-provider';
 import { ErrorAlert } from '@components/error-alert';
 import { useDelegationStatusQuery } from '../stacking/pooled-stacking-info/use-delegation-status-query';
 import { useStackingInitiatedByQuery } from './use-stacking-initiated-by';
 import { useAuth } from '@components/auth-provider/auth-provider';
+import { ExternalLink } from '@components/external-link';
 
 export function ChooseStackingMethod() {
   const { address } = useAuth();
   const q1 = useDelegationStatusQuery();
   const q2 = useGetAccountBalanceLocked();
   const q3 = useStackingInitiatedByQuery();
+  const q4 = useGetAccountBalance();
+  const q5 = useGetPoxInfoQuery();
 
-  if (q1.isLoading || q2.isLoading || q3.isLoading) {
+  if (q1.isLoading || q2.isLoading || q3.isLoading || q4.isLoading || q5.isLoading) {
     return <Loader />;
   }
 
@@ -41,13 +48,20 @@ export function ChooseStackingMethod() {
     q2.isError ||
     typeof q2.data !== 'bigint' ||
     q3.isError ||
-    !q3.data
+    !q3.data ||
+    q4.isError ||
+    typeof q4.data !== 'bigint' ||
+    q5.isError ||
+    !q5.data
   ) {
     const msg = 'Error retrieving stacking or delegation info.';
     const id = 'beae38f3-59fb-4e0f-abdc-b837e2b6ebde';
     console.error(id, msg, q1, q2, q3);
     return <ErrorAlert id={id}>{msg}</ErrorAlert>;
   }
+
+  const hasEnoughBalanceToPool = q4.data > 0;
+  const hasEnoughBalanceToDirectStack = q4.data > BigInt(q5.data.min_amount_ustx);
 
   const isStacking = q2.data !== 0n;
   const hasExistingDelegation = q1.data.isDelegating;
@@ -58,6 +72,8 @@ export function ChooseStackingMethod() {
       hasExistingDelegation={hasExistingDelegation}
       hasExistingDelegatedStacking={hasExistingDelegatedStacking}
       hasExistingDirectStacking={hasExistingDirectStacking}
+      hasEnoughBalanceToPool={hasEnoughBalanceToPool}
+      hasEnoughBalanceToDirectStack={hasEnoughBalanceToDirectStack}
     />
   );
 }
@@ -65,11 +81,15 @@ interface ChooseStackingMethodInnerProps {
   hasExistingDelegation: boolean;
   hasExistingDelegatedStacking: boolean;
   hasExistingDirectStacking: boolean;
+  hasEnoughBalanceToPool: boolean;
+  hasEnoughBalanceToDirectStack: boolean;
 }
 export function ChooseStackingMethodInner({
   hasExistingDelegation,
   hasExistingDelegatedStacking,
   hasExistingDirectStacking,
+  hasEnoughBalanceToPool,
+  hasEnoughBalanceToDirectStack,
 }: ChooseStackingMethodInnerProps) {
   const navigate = useNavigate();
   const hasExistingCommitment =
@@ -107,6 +127,17 @@ export function ChooseStackingMethodInner({
             </Stack>
           </Alert>
         )}
+        {!hasExistingCommitment && !hasEnoughBalanceToPool && !hasEnoughBalanceToDirectStack && (
+          <Alert icon={<IconInfoCircle />}>
+            <Stack>
+              <Text>
+                It appears that you don't have enough funds yet. If you recently transferred funds
+                to this account, you'll soon be able to stack.{' '}
+              </Text>
+              <ExternalLink href="#TODO">Consider topping up your account</ExternalLink>
+            </Stack>
+          </Alert>
+        )}
         <Grid>
           <Grid.Col span={6}>
             <Card>
@@ -132,7 +163,7 @@ export function ChooseStackingMethodInner({
 
                 <Button
                   onClick={() => navigate('../start-pooled-stacking')}
-                  disabled={hasExistingCommitment}
+                  disabled={hasExistingCommitment || !hasEnoughBalanceToPool}
                 >
                   Stack in a pool
                 </Button>
@@ -169,7 +200,7 @@ export function ChooseStackingMethodInner({
 
                 <Button
                   onClick={() => navigate('../start-direct-stacking')}
-                  disabled={hasExistingCommitment}
+                  disabled={hasExistingCommitment || !hasEnoughBalanceToDirectStack}
                 >
                   Stack by yourself
                 </Button>
