@@ -56,7 +56,7 @@ export function ChooseStackingMethod() {
   ) {
     const msg = 'Error retrieving stacking or delegation info.';
     const id = 'beae38f3-59fb-4e0f-abdc-b837e2b6ebde';
-    console.error(id, msg, q1, q2, q3);
+    console.error(id, msg, q1, q2, q3, q4, q5);
     return <ErrorAlert id={id}>{msg}</ErrorAlert>;
   }
 

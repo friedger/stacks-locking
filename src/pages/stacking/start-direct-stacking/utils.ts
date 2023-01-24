@@ -87,9 +87,9 @@ export function createHandleSubmit({
 }: CreateHandleSubmitArgs) {
   return async function handleSubmit(values: DirectStackingFormValues) {
     // TODO: handle thrown errors
-    const [poxInfo, stackingContract] = await Promise.all([
-      client.getPoxInfo(),
+    const [stackingContract, coreInfo] = await Promise.all([
       client.getStackingContract(),
+      client.getCoreInfo(),
     ]);
     const stackOptions = client.getStackOptions({
       contract: stackingContract,
@@ -97,7 +97,7 @@ export function createHandleSubmit({
       cycles: values.lockPeriod,
       poxAddress: values.poxAddress,
       // TODO
-      burnBlockHeight: 0,
+      burnBlockHeight: coreInfo.burn_block_height,
     });
 
     console.log('ARY will call open contract call');

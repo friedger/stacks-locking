@@ -30,6 +30,7 @@ import { ExternalLink } from '@components/external-link';
 import { formatPoxAddressToNetwork } from '@utils/stacking';
 import { truncateMiddle } from '@utils/tx-utils';
 import { Address } from '@components/address';
+import { useGetHasPendingDirectStackingQuery } from './use-get-has-pending-direct-stacking';
 
 export function DirectStackingInfo() {
   const { client } = useStackingClient();
@@ -52,13 +53,15 @@ function DirectStackingInfoLayout({ client }: CardLayoutProps) {
   const getCoreInfoQuery = useGetCoreInfoQuery();
   const getAccountBalanceLockedQuery = useGetAccountBalanceLocked();
   const getPoxInfoQuery = useGetPoxInfoQuery();
+  const getHasPendingDirectStacking = useGetHasPendingDirectStackingQuery();
 
   if (
     getStatusQuery.isLoading ||
     getAccountExtendedBalancesQuery.isLoading ||
     getCoreInfoQuery.isLoading ||
     getPoxInfoQuery.isLoading ||
-    getAccountBalanceLockedQuery.isLoading
+    getAccountBalanceLockedQuery.isLoading ||
+    getHasPendingDirectStacking.isLoading
   ) {
     return <Loader />;
   }
@@ -73,7 +76,9 @@ function DirectStackingInfoLayout({ client }: CardLayoutProps) {
     getCoreInfoQuery.isError ||
     !getCoreInfoQuery.data ||
     getPoxInfoQuery.isError ||
-    !getPoxInfoQuery.data
+    !getPoxInfoQuery.data ||
+    getHasPendingDirectStacking.isError ||
+    getHasPendingDirectStacking.data === undefined
   ) {
     const msg = 'Error while loading data, try reloading the page.';
     console.error(msg);
@@ -89,6 +94,7 @@ function DirectStackingInfoLayout({ client }: CardLayoutProps) {
                 getAccountBalanceLockedQuery,
                 getCoreInfoQuery,
                 getPoxInfoQuery,
+                getHasPendingDirectStacking,
               },
               null,
               2
@@ -101,7 +107,7 @@ function DirectStackingInfoLayout({ client }: CardLayoutProps) {
 
   const isStacking = getStatusQuery.data.stacked;
 
-  if (!isStacking) {
+  if (!isStacking && getHasPendingDirectStacking.data === null) {
     return (
       <Card withBorder w="400px">
         <Alert icon={<IconInfoCircle />}>
@@ -112,7 +118,7 @@ function DirectStackingInfoLayout({ client }: CardLayoutProps) {
             </Text>
             <Text>
               You may want to{' '}
-              <Anchor to="../start-stacking" component={Link}>
+              <Anchor to="../start-direct-stacking" component={Link}>
                 start stacking
               </Anchor>{' '}
               or{' '}
@@ -123,6 +129,62 @@ function DirectStackingInfoLayout({ client }: CardLayoutProps) {
             </Text>
           </Stack>
         </Alert>
+      </Card>
+    );
+  }
+
+  if (!isStacking && getHasPendingDirectStacking.data) {
+    return (
+      <Card withBorder w="400px">
+        <Stack>
+          <Image
+            fit="contain"
+            height="100px"
+            width="130px"
+            src={stackByYourselfImg}
+            alt="Colourful illustration of a diving board protruding out of a blue hole"
+          />
+
+          <Stack>
+            <Box>
+              <Title order={4}>You're stacking</Title>
+              <Text fz="34px">
+                {toHumanReadableStx(getHasPendingDirectStacking.data.amountMicroStx)}
+              </Text>
+            </Box>
+
+            <Alert icon={<IconClockHour4 />} title="Waiting for transaction confirmation">
+              A stacking request was successfully submitted to the blockchain. Once confirmed, the
+              account will be ready to start stacking.
+            </Alert>
+
+            <Divider />
+
+            <Stack>
+              <Group position="apart">
+                <Text>Duration</Text>
+                <Text>{getHasPendingDirectStacking.data.lockPeriod.toString()} cycles</Text>
+              </Group>
+
+              <Divider />
+
+              <Group position="apart">
+                <Text>Bitcoin address</Text>
+                <Address address={getHasPendingDirectStacking.data.poxAddress} />
+              </Group>
+
+              <Divider />
+
+              <ExternalLink
+                href={`https://explorer.stacks.co/txid/${String(
+                  getHasPendingDirectStacking.data.poxAddress
+                )}`}
+              >
+                View transaction
+              </ExternalLink>
+            </Stack>
+          </Stack>
+        </Stack>
       </Card>
     );
   }
@@ -141,6 +203,15 @@ function DirectStackingInfoLayout({ client }: CardLayoutProps) {
       ((cycleLengthInBlocks - blocksUntilUnlocked) / cycleLengthInBlocks) * 100,
       0
     ).toFixed(2);
+  }
+
+  // This if statement may be unnecessary, as cases for when the account is not stacked should have
+  // already been handled above, but the type system can not guarantee this.
+  if (!getStatusQuery.data.stacked) {
+    const id = 'ee504e56-9cc5-49b4-ae98-a5cac5c35dbf';
+    const msg = 'Expected account to be stacked';
+    console.error(id, msg);
+    return <ErrorAlert id={id}>{msg}</ErrorAlert>;
   }
 
   const elapsedCyclesSinceStackingStart = Math.max(

@@ -98,39 +98,27 @@ function StartDirectStackingLayout({ client }: StartDirectStackingLayoutProps) {
         }}
         validationSchema={validationSchema}
       >
-        {({ values, errors }) => (
-          <StartStackingLayout
-            intro={
-              <DirectStackingIntro
-                estimatedStackingMinimum={BigInt(getPoxInfoQuery.data.min_amount_ustx)}
-                timeUntilNextCycle={getSecondsUntilNextCycleQuery.data}
-              />
-            }
-            stackingInfoPanel={<InfoPanel />}
-            stackingForm={
-              <Form>
-                <Stack>
-                  <Amount />
-                  <Divider />
-                  <Duration />
-                  <Divider />
-                  <PoxAddress />
-                  <ConfirmAndSubmit isLoading={isContractCallExtensionPageOpen} />
-                  <div>
-                    <pre>
-                      <code>{JSON.stringify(values, null, 2)}</code>
-                    </pre>
-                  </div>
-                  <div>
-                    <pre>
-                      <code>{JSON.stringify(errors, null, 2)}</code>
-                    </pre>
-                  </div>
-                </Stack>
-              </Form>
-            }
-          />
-        )}
+        <StartStackingLayout
+          intro={
+            <DirectStackingIntro
+              estimatedStackingMinimum={BigInt(getPoxInfoQuery.data.min_amount_ustx)}
+              timeUntilNextCycle={getSecondsUntilNextCycleQuery.data}
+            />
+          }
+          stackingInfoPanel={<InfoPanel />}
+          stackingForm={
+            <Form>
+              <Stack>
+                <Amount />
+                <Divider />
+                <Duration />
+                <Divider />
+                <PoxAddress />
+                <ConfirmAndSubmit isLoading={isContractCallExtensionPageOpen} />
+              </Stack>
+            </Form>
+          }
+        />
       </Formik>
       <Box pb="25vh" />
     </>

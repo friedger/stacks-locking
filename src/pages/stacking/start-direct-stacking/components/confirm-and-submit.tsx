@@ -20,7 +20,6 @@ export function ConfirmAndSubmit({ isLoading }: ConfirmAndSubmitProps) {
         <Action type="submit" loading={isLoading} disabled={!hasUserConfirmed}>
           Confirm and start stacking
         </Action>
-        <button type="submit">Go</button>
       </Stack>
     </Step>
   );

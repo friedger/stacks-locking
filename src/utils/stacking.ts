@@ -25,8 +25,8 @@ interface ConvertToPoxAddressBtc {
 export function convertPoxAddressToBtc(network: 'mainnet' | 'testnet') {
   return ({ version, hashbytes }: ConvertToPoxAddressBtc) => {
     const ver = new BN(version).toNumber() as AddressHashMode;
-    if (ver === AddressHashMode.SerializeP2WPKH || ver === AddressHashMode.SerializeP2WSH)
-      return null;
+    /* if (ver === AddressHashMode.SerializeP2WPKH || ver === AddressHashMode.SerializeP2WSH) */
+    /*   return null; */
     return base58check(sha256).encode(
       Buffer.concat([Buffer.from([poxKeyToVersionBytesMap[network][ver]]), hashbytes])
     );

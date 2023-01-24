@@ -2,10 +2,10 @@ import { useAuth } from '@components/auth-provider/auth-provider';
 import { useBlockchainApiClient } from '@components/blockchain-api-client-provider';
 import { useStackingClient } from '@components/stacking-client-provider/stacking-client-provider';
 import { useQuery } from '@tanstack/react-query';
-import { getDelegationStatus } from './get-delegation-status';
+import { getHasPendingDirectStacking } from './get-has-pending-direct-stacking';
 
-export function useDelegationStatusQuery() {
-  const { accountsApi, smartContractsApi, transactionsApi } = useBlockchainApiClient();
+export function useGetHasPendingDirectStackingQuery() {
+  const { accountsApi, transactionsApi } = useBlockchainApiClient();
   const { client } = useStackingClient();
   const { address } = useAuth();
   if (!client) {
@@ -21,11 +21,10 @@ export function useDelegationStatusQuery() {
   return useQuery(
     ['delegation-status'],
     async () =>
-      getDelegationStatus({
+      getHasPendingDirectStacking({
         stackingClient: client,
         accountsApi,
         address,
-        smartContractsApi,
         transactionsApi,
       }),
     { refetchInterval: 2000 }
