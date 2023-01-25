@@ -20,7 +20,7 @@ import { Alert, Anchor, Box, Loader, Stack, Text } from '@mantine/core';
 import { ErrorAlert } from '@components/error-alert';
 import { ExternalLink } from '@components/external-link';
 import { AmountField } from '../../components/fields/amount-field';
-import { IconInfoCircle } from '@tabler/icons';
+import { IconInfoCircle } from '@tabler/icons-react';
 
 const BigNumberFloorRound = BigNumber.clone({ ROUNDING_MODE: BigNumber.ROUND_FLOOR });
 

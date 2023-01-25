@@ -13,7 +13,7 @@ import {
   Title,
 } from '@mantine/core';
 import stackByYourselfImg from '@assets/images/stack-by-yourself.svg';
-import { IconClockHour4, IconInfoCircle } from '@tabler/icons';
+import { IconClockHour4, IconInfoCircle } from '@tabler/icons-react';
 import {
   useGetAccountBalanceLocked,
   useGetAccountExtendedBalancesQuery,

@@ -1,16 +1,6 @@
 import { useEffect } from 'react';
 import { Navigate, Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom';
-import {
-  Button,
-  Container,
-  Flex,
-  Text,
-  Group,
-  MantineProvider,
-  Title,
-  CopyButton,
-  Box,
-} from '@mantine/core';
+import { Button, Container, Flex, Text, Group, MantineProvider } from '@mantine/core';
 import { StackingClientProvider } from '@components/stacking-client-provider/stacking-client-provider';
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import { loadFonts } from '@utils/load-fonts';
@@ -20,12 +10,10 @@ import { SignIn } from './pages/sign-in/sign-in';
 import { ChooseStackingMethod } from './pages/choose-stacking-method/choose-stacking-method';
 import { StartPooledStacking } from './pages/stacking/start-pooled-stacking/start-pooled-stacking';
 import { PooledStackingInfo } from './pages/stacking/pooled-stacking-info/pooled-stacking-info';
-import { truncateMiddle } from '@utils/tx-utils';
 import { ErrorAlert } from '@components/error-alert';
 import { Configuration, NamesApi } from '@stacks/blockchain-api-client';
 import { NETWORK } from './constants';
 import { toUnicode } from 'punycode';
-import { IconCopy } from '@tabler/icons';
 import { Address } from '@components/address';
 import { DirectStackingInfo } from './pages/stacking/direct-stacking-info/direct-stacking-info';
 import { NetworkProvider } from '@components/network-provider';
@@ -80,7 +68,7 @@ function Layout() {
             <Button onClick={() => signOut()}>Sign out</Button>
           </Group>
         )}
-        <Container h="100%" fluid>
+        <Container fluid>
           <Outlet />
         </Container>
       </Flex>

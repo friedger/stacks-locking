@@ -1,6 +1,6 @@
 import React, { forwardRef, memo, Ref } from 'react';
 import { IconButton, IconButtonProps, useColorMode } from '@stacks/ui';
-import { IconSun, IconSunOff } from '@tabler/icons';
+import { IconSun, IconSunOff } from '@tabler/icons-react';
 
 export const ColorModeButton = memo(
   forwardRef((props: Omit<IconButtonProps, 'icon'>, ref: Ref<HTMLDivElement>) => {
@@ -17,7 +17,7 @@ export const ColorModeButton = memo(
           padding: 0,
         }}
         icon={Icon}
-        onClick={() => main.theme.toggleMode()}
+        /* onClick={() => main.theme.toggleMode()} */
         title="Toggle color mode"
         as="button"
         {...(props as any)}

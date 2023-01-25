@@ -7,7 +7,7 @@ type StartStackingLayoutProps = Record<Slots, JSX.Element>;
 export function StartStackingLayout(props: StartStackingLayoutProps) {
   const { intro, stackingInfoPanel, stackingForm } = props;
   return (
-    <Grid>
+    <Grid gutter="xl">
       <Grid.Col sm={12} md={6}>
         <Stack>
           {intro}

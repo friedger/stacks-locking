@@ -1,8 +1,6 @@
-import React, { FC, ReactNode } from 'react';
-import { Box, Flex, List, Stack, Text } from '@mantine/core';
-import { StackingTermItem, StackingTermItemProps } from '../../components/stacking-term';
-import { pseudoBorderLeft } from '@components/styles/pseudo-border-left';
-import { IconClock, IconLock } from '@tabler/icons';
+import { ReactNode } from 'react';
+import { Box, Flex, List, Text } from '@mantine/core';
+import { IconLock } from '@tabler/icons-react';
 import { StepsIcon } from '@components/icons/steps';
 
 /**

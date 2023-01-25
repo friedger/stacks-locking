@@ -18,7 +18,13 @@ import {
   Alert,
   Anchor,
 } from '@mantine/core';
-import { IconChartLine, IconInfoCircle, IconLock, IconUser, IconUserMinus } from '@tabler/icons';
+import {
+  IconChartLine,
+  IconInfoCircle,
+  IconLock,
+  IconUser,
+  IconUserMinus,
+} from '@tabler/icons-react';
 import {
   useGetAccountBalance,
   useGetAccountBalanceLocked,

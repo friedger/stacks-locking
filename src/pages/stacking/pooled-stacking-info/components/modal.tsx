@@ -1,5 +1,5 @@
 import { Modal, Text, Alert, Box, Group, Button, Stack } from '@mantine/core';
-import { IconInfoCircle } from '@tabler/icons';
+import { IconInfoCircle } from '@tabler/icons-react';
 
 interface Props {
   isStacking: boolean;

@@ -17,7 +17,7 @@ import {
 } from '@mantine/core';
 import { toHumanReadableStx } from '@utils/unit-convert';
 import pooledStackingImg from '@assets/images/pooled-stacking-swimming-pool.svg';
-import { IconBan, IconInfoCircle } from '@tabler/icons';
+import { IconBan, IconInfoCircle } from '@tabler/icons-react';
 import {
   useGetAccountExtendedBalancesQuery,
   useGetCoreInfoQuery,

@@ -1,5 +1,5 @@
 import { Box, CopyButton, Text } from '@mantine/core';
-import { IconCopy } from '@tabler/icons';
+import { IconCopy } from '@tabler/icons-react';
 import { truncateMiddle } from '@utils/tx-utils';
 
 interface AddressArgs {

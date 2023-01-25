@@ -18,7 +18,7 @@ import { useAuth } from '@components/auth-provider/auth-provider';
 import { useNavigate } from 'react-router-dom';
 import { createHandleSubmit, createValidationSchema } from './utils';
 import { EditingFormValues } from './types';
-import { Box, Divider, Stack } from '@mantine/core';
+import { Box, Container, Divider, Stack } from '@mantine/core';
 import { ErrorAlert } from '@components/error-alert';
 import { PoolingInfoCard } from './components/delegated-stacking-info-card';
 
@@ -67,7 +67,7 @@ function StartPooledStackingLayout({ client, currentAccountAddress }: StartPoole
   if (typeof queryGetAccountBalance.data !== 'bigint') return null;
 
   return (
-    <>
+    <Container p={0} size="lg">
       <Formik
         initialValues={initialDelegatingFormValues as EditingFormValues}
         onSubmit={handleSubmit}
@@ -92,6 +92,6 @@ function StartPooledStackingLayout({ client, currentAccountAddress }: StartPoole
         />
       </Formik>
       <Box pb="25vh" />
-    </>
+    </Container>
   );
 }

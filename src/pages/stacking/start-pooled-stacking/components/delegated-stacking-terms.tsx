@@ -1,4 +1,4 @@
-import { IconLock } from '@tabler/icons';
+import { IconLock } from '@tabler/icons-react';
 
 import { StepsIcon } from '@components/icons/steps';
 import { Box, Flex, List, Text } from '@mantine/core';
