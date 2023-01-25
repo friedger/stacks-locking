@@ -28,6 +28,6 @@ export function useDelegationStatusQuery() {
         smartContractsApi,
         transactionsApi,
       }),
-    { refetchInterval: 2000 }
+    { refetchInterval: 5000 }
   );
 }

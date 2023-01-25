@@ -100,7 +100,6 @@ export function createHandleSubmit({
       burnBlockHeight: coreInfo.burn_block_height,
     });
 
-    console.log('ARY will call open contract call');
     openContractCall({
       // Type coercion necessary because the `network` property returned by
       // `client.getStackingContract()` has a wider type than allowed by `openContractCall`. Despite

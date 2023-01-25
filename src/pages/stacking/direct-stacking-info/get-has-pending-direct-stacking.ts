@@ -1,5 +1,5 @@
 import { AccountsApi, TransactionsApi } from '@stacks/blockchain-api-client';
-import { StackingClient } from '@stacks/stacking';
+import { poxAddressToBtcAddress, StackingClient } from '@stacks/stacking';
 import { hexToCV, ClarityType } from '@stacks/transactions';
 
 /**
@@ -37,7 +37,8 @@ interface ReturnGetHasPendingDirectStacking {
 
 // TODO: Types. For now assuming callers only provide a `stack-stx` pox call transaction.
 function getDirectStackingStatusFromTransaction(
-  transaction: any
+  transaction: any,
+  network: 'mainnet' | 'testnet'
 ): ReturnGetHasPendingDirectStacking {
   const [amountMicroStxCV, poxAddressCV, startBurnHeightCV, lockPeriodCV] =
     transaction.contract_call.function_args.map((arg: any) => hexToCV(arg.hex));
@@ -52,14 +53,14 @@ function getDirectStackingStatusFromTransaction(
   if (!amountMicroStxCV || amountMicroStxCV.type !== ClarityType.UInt) {
     throw new Error('Expected `amount-ustx` to be defined.');
   }
+  console.log('ARY amountMicroStx', amountMicroStxCV);
+  console.log('ARY amountMicroStx.value', amountMicroStxCV.value);
   const amountMicroStx: bigint = amountMicroStxCV.value;
 
   // PoX address
-  const poxAddress = 'TODO';
-  console.log('ARY poxCV', poxAddressCV);
+  const poxAddress = poxAddressToBtcAddress(poxAddressCV, network);
 
   // Lock period
-  console.log('ARY lockperiod', lockPeriodCV);
   const lockPeriod = lockPeriodCV.value;
 
   return {
@@ -75,6 +76,7 @@ interface Args {
   accountsApi: AccountsApi;
   address: string;
   transactionsApi: TransactionsApi;
+  network: 'mainnet' | 'testnet';
 }
 
 export async function getHasPendingDirectStacking({
@@ -82,6 +84,7 @@ export async function getHasPendingDirectStacking({
   accountsApi,
   address,
   transactionsApi,
+  network,
 }: Args): Promise<null | ReturnGetHasPendingDirectStacking> {
   const [contractPrincipal, accountTransactions, mempoolTransactions] = await Promise.all([
     stackingClient.getStackingContract(),
@@ -116,7 +119,7 @@ export async function getHasPendingDirectStacking({
   }
 
   if (transaction) {
-    return getDirectStackingStatusFromTransaction(transaction);
+    return getDirectStackingStatusFromTransaction(transaction, network);
   }
 
   return null;

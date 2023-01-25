@@ -93,7 +93,6 @@ function StartDirectStackingLayout({ client }: StartDirectStackingLayoutProps) {
       <Formik
         initialValues={initialFormValues}
         onSubmit={values => {
-          console.log('ARY hanlding submit...');
           handleSubmit(values);
         }}
         validationSchema={validationSchema}
