@@ -1,22 +1,7 @@
-import { IconLock } from '@tabler/icons-react';
+import { IconLock, IconStairs } from '@tabler/icons-react';
 
-import { StepsIcon } from '@components/icons/steps';
-import { Box, Flex, List, Text } from '@mantine/core';
-import { ReactNode } from 'react';
+import { Box, List, Text } from '@mantine/core';
 
-/**
- * Ensures list item marker icons of different sizes are algined with each other.
- */
-function IconBoundary({ children }: { children: ReactNode }) {
-  return (
-    // The height and width values are set to "xl", which coincides with the 24px dimensions of the
-    // icons in `@tabler/icons` frequently used with Mantine. When using icons from other icons
-    // sets, they should be relatively well aligned, although some icon resizing may be necessary.
-    <Flex w="xl" h="xl" justify="center" align="center">
-      {children}
-    </Flex>
-  );
-}
 export function DelegatedStackingTerms() {
   return (
     <Box
@@ -26,26 +11,14 @@ export function DelegatedStackingTerms() {
       })}
     >
       <List spacing="xs">
-        <List.Item
-          icon={
-            <IconBoundary>
-              <IconLock />
-            </IconBoundary>
-          }
-        >
+        <List.Item icon={<IconLock />}>
           <Text>This transaction can't be reversed</Text>
           <Text>
             There will be no way to unlock your STX once the pool has started stacking them. You
             will need to wait until they unlock at the end of the pool's chosen number of cycles.
           </Text>
         </List.Item>
-        <List.Item
-          icon={
-            <IconBoundary>
-              <StepsIcon></StepsIcon>
-            </IconBoundary>
-          }
-        >
+        <List.Item icon={<IconStairs />}>
           <Text>Research your pool</Text>
           <Text>
             Paying out rewards is at the discretion of the pool. Make sure you’ve researched and

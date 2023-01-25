@@ -16,7 +16,7 @@ import {
   useGetAccountBalance,
   useGetPoxInfoQuery,
 } from '@components/stacking-client-provider/stacking-client-provider';
-import { Alert, Anchor, Box, Loader, Stack, Text } from '@mantine/core';
+import { Alert, Anchor, Loader, Stack, Text } from '@mantine/core';
 import { ErrorAlert } from '@components/error-alert';
 import { ExternalLink } from '@components/external-link';
 import { AmountField } from '../../components/fields/amount-field';
@@ -28,7 +28,7 @@ export function Amount() {
   const getAccountBalanceQuery = useGetAccountBalance();
   const getPoxInfoQuery = useGetPoxInfoQuery();
 
-  const [field, meta, helpers] = useField('amount');
+  const [field, _meta, helpers] = useField('amount');
 
   if (getAccountBalanceQuery.isLoading || getPoxInfoQuery.isLoading) return <Loader />;
 
@@ -51,9 +51,12 @@ export function Amount() {
 
   const showStackingWarningCard = ustxAmount.isGreaterThanOrEqualTo(minimumAmountUstx);
 
-  const maxAmountUstx = new BigNumberFloorRound(
+  let maxAmountUstx = new BigNumberFloorRound(
     new BigNumber(availableBalance.toString()).minus(STACKING_CONTRACT_CALL_TX_BYTES).toString()
   ).decimalPlaces(0);
+  if (maxAmountUstx.isNegative()) {
+    maxAmountUstx = new BigNumber(0);
+  }
 
   const setMax = useCallback(() => {
     helpers.setValue(microStxToStx(maxAmountUstx.toString()));
@@ -64,10 +67,7 @@ export function Amount() {
     new BigNumber(minimumAmountUstx)
   ).integerValue();
 
-  const floorRoundedStxBuffer = calculateStackingBuffer(
-    ustxAmount,
-    new BigNumber(minimumAmountUstx)
-  );
+  const buffer = calculateStackingBuffer(ustxAmount, new BigNumber(minimumAmountUstx));
 
   return (
     <Step title="Amount">
@@ -104,12 +104,12 @@ export function Amount() {
                 <Text>
                   This entered amount would get you {numberOfRewardSlots.toString()} reward slot
                   {numberOfRewardSlots.toNumber() === 1 ? '' : 's'} with a{' '}
-                  {toHumanReadableStx(floorRoundedStxBuffer || 0)} buffer at the current minimum.
-                  However, that minimum is subject to change and there is no guarantee you will get
-                  any reward slots.
+                  {toHumanReadableStx(buffer || 0)} buffer at the current minimum. However, that
+                  minimum is subject to change and there is no guarantee you will get any reward
+                  slots.
                 </Text>
               </Stack>
-              {floorRoundedStxBuffer.isEqualTo(0) && (
+              {buffer !== null && buffer.isEqualTo(0) && (
                 <Alert icon={<IconInfoCircle />} color="orange">
                   <Text>
                     Add a buffer for a higher chance (though no guarantee) of keeping the same

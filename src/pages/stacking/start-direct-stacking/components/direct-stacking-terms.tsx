@@ -1,21 +1,5 @@
-import { ReactNode } from 'react';
-import { Box, Flex, List, Text } from '@mantine/core';
-import { IconLock } from '@tabler/icons-react';
-import { StepsIcon } from '@components/icons/steps';
-
-/**
- * Ensures list item marker icons of different sizes are algined with each other.
- */
-function IconBoundary({ children }: { children: ReactNode }) {
-  return (
-    // The height and width values are set to "xl", which coincides with the 24px dimensions of the
-    // icons in `@tabler/icons` frequently used with Mantine. When using icons from other icons
-    // sets, they should be relatively well aligned, although some icon resizing may be necessary.
-    <Flex w="xl" h="xl" justify="center" align="center">
-      {children}
-    </Flex>
-  );
-}
+import { Box, List, Text } from '@mantine/core';
+import { IconLock, IconStairs } from '@tabler/icons-react';
 
 export function DirectStackingTerms() {
   return (
@@ -26,13 +10,7 @@ export function DirectStackingTerms() {
       })}
     >
       <List spacing="xs">
-        <List.Item
-          icon={
-            <IconBoundary>
-              <IconLock />
-            </IconBoundary>
-          }
-        >
+        <List.Item icon={<IconLock />}>
           <Text>This transaction can’t be reversed</Text>
           <Text>
             STX will be locked in your wallet for your chosen duration, even if an increase in the
@@ -47,13 +25,7 @@ export function DirectStackingTerms() {
           </Text>
         </List.Item>
 
-        <List.Item
-          icon={
-            <IconBoundary>
-              <StepsIcon />
-            </IconBoundary>
-          }
-        >
+        <List.Item icon={<IconStairs />}>
           <Text>Dynamic minimum</Text>
           <Text>
             If the minimum increases, you could end up with fewer or no reward slots, even if you’ve

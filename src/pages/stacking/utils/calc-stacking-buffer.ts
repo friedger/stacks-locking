@@ -12,19 +12,5 @@ export function calculateStackingBuffer(ustxAmount: BigNumber, minRequireToStack
   if (minRequireToStack.isEqualTo(0)) return null;
   if (ustxAmount.isLessThan(minRequireToStack)) return null;
 
-  /* const numberOfRewardSlots = calculateRewardSlots(ustxAmount, minRequireToStack); */
-  /**/
-  /* const stxBuffer = numberOfRewardSlots */
-  /*   .multipliedBy(minRequireToStack) */
-  /*   .minus(ustxAmount) */
-  /*   .absoluteValue(); */
-  /**/
-  /* const stackingIncrements = stxToMicroStx(10_000); */
-  /**/
-  /* return new BigNumberFloorRound(stxBuffer) */
-  /*   .dividedBy(stackingIncrements) */
-  /*   .integerValue() */
-  /*   .multipliedBy(stackingIncrements); */
-
   return ustxAmount.modulo(minRequireToStack).decimalPlaces(0, BigNumber.ROUND_FLOOR);
 }

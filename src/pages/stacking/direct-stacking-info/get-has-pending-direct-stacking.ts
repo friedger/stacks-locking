@@ -15,8 +15,12 @@ function getMostRecentSuccessfulStackStxTransaction(
 ) {
   return transactions.find((t: any) => {
     // For transactions in microblock
-    const isSuccessCV = hexToCV(t.tx_result?.hex);
-    let isSuccess = isSuccessCV.type === ClarityType.ResponseOk;
+
+    let isSuccess = false;
+    if (t.tx_result?.hex) {
+      const isSuccessCV = hexToCV(t.tx_result?.hex);
+      isSuccess = isSuccessCV.type === ClarityType.ResponseOk;
+    }
 
     // For transactions in mempool
     const isPending = t.tx_status === 'pending';
@@ -53,8 +57,6 @@ function getDirectStackingStatusFromTransaction(
   if (!amountMicroStxCV || amountMicroStxCV.type !== ClarityType.UInt) {
     throw new Error('Expected `amount-ustx` to be defined.');
   }
-  console.log('ARY amountMicroStx', amountMicroStxCV);
-  console.log('ARY amountMicroStx.value', amountMicroStxCV.value);
   const amountMicroStx: bigint = amountMicroStxCV.value;
 
   // PoX address

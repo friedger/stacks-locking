@@ -20,33 +20,18 @@ import {
   useGetCoreInfoQuery,
   useGetPoxInfoQuery,
   useGetStatusQuery,
-  useStackingClient,
 } from '@components/stacking-client-provider/stacking-client-provider';
-import { Link, useNavigate } from 'react-router-dom';
-import { StackingClient } from '@stacks/stacking';
+import { Link } from 'react-router-dom';
 import { ErrorAlert } from '@components/error-alert';
 import { toHumanReadableStx } from '@utils/unit-convert';
 import { ExternalLink } from '@components/external-link';
 import { formatPoxAddressToNetwork } from '@utils/stacking';
 import { Address } from '@components/address';
 import { useGetHasPendingDirectStackingQuery } from './use-get-has-pending-direct-stacking';
+import { useNetwork } from '@components/network-provider';
 
 export function DirectStackingInfo() {
-  const { client } = useStackingClient();
-  if (!client) {
-    const msg = 'Expected `client` to be defined.';
-    console.error(msg);
-    return <ErrorAlert id="6f080d24-1e87-45ab-b8f7-41ba9bd53e97">{msg}</ErrorAlert>;
-  }
-
-  return <DirectStackingInfoLayout client={client} />;
-}
-
-interface CardLayoutProps {
-  client: StackingClient;
-}
-function DirectStackingInfoLayout({ client }: CardLayoutProps) {
-  const navigate = useNavigate();
+  const { networkName } = useNetwork();
   const getStatusQuery = useGetStatusQuery();
   const getAccountExtendedBalancesQuery = useGetAccountExtendedBalancesQuery();
   const getCoreInfoQuery = useGetCoreInfoQuery();
@@ -177,7 +162,7 @@ function DirectStackingInfoLayout({ client }: CardLayoutProps) {
               <ExternalLink
                 href={`https://explorer.stacks.co/txid/${String(
                   getHasPendingDirectStacking.data.poxAddress
-                )}`}
+                )}?chain=${networkName}`}
               >
                 View transaction
               </ExternalLink>
