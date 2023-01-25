@@ -38,49 +38,51 @@ export function useStackingClient() {
 export function useGetCycleDurationQuery() {
   const { client } = useStackingClient();
   if (!client) throw new Error('Expected client to be defined.');
-  return useQuery(['getCycleDuration'], () => client.getCycleDuration());
+  return useQuery(['getCycleDuration', client], () => client.getCycleDuration());
 }
 
 export function useGetStatusQuery() {
   const { client } = useStackingClient();
   if (!client) throw new Error('Expected client to be defined.');
-  return useQuery(['getStatus'], () => client.getStatus());
+  return useQuery(['getStatus', client], () => client.getStatus());
 }
 
 export function useGetPoxOperationInfo() {
   const { client } = useStackingClient();
   if (!client) throw new Error('Expected client to be defined.');
-  return useQuery(['getPoxOperationInfo'], () => client.getPoxOperationInfo());
+  return useQuery(['getPoxOperationInfo', client], () => client.getPoxOperationInfo());
 }
 
 export function useGetAccountBalance() {
   const { client } = useStackingClient();
   if (!client) throw new Error('Expected client to be defined.');
-  return useQuery(['getAccountBalance'], () => client.getAccountBalance());
+  return useQuery(['getAccountBalance', client], () => client.getAccountBalance());
 }
 
 export function useGetAccountBalanceLocked() {
   const { client } = useStackingClient();
   if (!client) throw new Error('Expected client to be defined.');
-  return useQuery(['getAccountBalanceLocked'], () => client.getAccountBalanceLocked());
+  return useQuery(['getAccountBalanceLocked', client], () => client.getAccountBalanceLocked());
 }
 
 export function useGetCoreInfoQuery() {
   const { client } = useStackingClient();
   if (!client) throw new Error('Expected client to be defined.');
-  return useQuery(['getCoreInfo'], () => client.getCoreInfo());
+  return useQuery(['getCoreInfo', client], () => client.getCoreInfo());
 }
 
 export function useGetAccountExtendedBalancesQuery() {
   const { client } = useStackingClient();
   if (!client) throw new Error('Expected client to be defined.');
-  return useQuery(['getAccountExtendedBalances'], () => client.getAccountExtendedBalances());
+  return useQuery(['getAccountExtendedBalances', client], () =>
+    client.getAccountExtendedBalances()
+  );
 }
 
 export function useGetSecondsUntilNextCycleQuery() {
   const { client } = useStackingClient();
   if (!client) throw new Error('Expected client to be defined.');
-  return useQuery(['getSecondsUntilNextCycle'], () => client.getSecondsUntilNextCycle(), {
+  return useQuery(['getSecondsUntilNextCycle', client], () => client.getSecondsUntilNextCycle(), {
     refetchInterval: 60_000,
   });
 }
@@ -88,5 +90,5 @@ export function useGetSecondsUntilNextCycleQuery() {
 export function useGetPoxInfoQuery() {
   const { client } = useStackingClient();
   if (!client) throw new Error('Expected client to be defined.');
-  return useQuery(['getPoxInfo'], () => client.getPoxInfo());
+  return useQuery(['getPoxInfo', client], () => client.getPoxInfo());
 }

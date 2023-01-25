@@ -11,24 +11,21 @@ import { ChooseStackingMethod } from './pages/choose-stacking-method/choose-stac
 import { StartPooledStacking } from './pages/stacking/start-pooled-stacking/start-pooled-stacking';
 import { PooledStackingInfo } from './pages/stacking/pooled-stacking-info/pooled-stacking-info';
 import { ErrorAlert } from '@components/error-alert';
-import { Configuration, NamesApi } from '@stacks/blockchain-api-client';
-import { NETWORK } from './constants';
 import { toUnicode } from 'punycode';
 import { Address } from '@components/address';
 import { DirectStackingInfo } from './pages/stacking/direct-stacking-info/direct-stacking-info';
-import { NetworkProvider } from '@components/network-provider';
-import { BlockchainApiClientProvider } from '@components/blockchain-api-client-provider';
+import { NetworkProvider, useNetwork } from '@components/network-provider';
+import {
+  BlockchainApiClientProvider,
+  useBlockchainApiClient,
+} from '@components/blockchain-api-client-provider';
 import { StartDirectStacking } from './pages/stacking/start-direct-stacking/start-direct-stacking';
 
 function Profile() {
   const { address } = useAuth();
-  const q = useQuery(['bns'], () => {
-    const basePath =
-      NETWORK === 'testnet'
-        ? 'https://stacks-node-api.testnet.stacks.co'
-        : 'https://stacks-node-api.mainnet.stacks.co';
-    const client = new NamesApi(new Configuration({ basePath }));
-    return client.getNamesOwnedByAddress({
+  const { namesApi } = useBlockchainApiClient();
+  const q = useQuery(['bns', address, namesApi], () => {
+    return namesApi.getNamesOwnedByAddress({
       address: address ?? '',
       blockchain: 'stacks',
     });
@@ -58,6 +55,7 @@ function Profile() {
 
 function Layout() {
   const { isSignedIn, signOut } = useAuth();
+  const { networkName, setNetworkByName } = useNetwork();
 
   return (
     <>
@@ -65,6 +63,20 @@ function Layout() {
         {isSignedIn && (
           <Group p="sm" position="right">
             <Profile />
+            <Button
+              variant="outline"
+              onClick={() => {
+                if (networkName === 'mainnet') {
+                  setNetworkByName('testnet');
+                  return;
+                }
+
+                setNetworkByName('mainnet');
+              }}
+            >
+              {networkName !== 'mainnet' ? '🚧 ' : ''}
+              {networkName}
+            </Button>
             <Button onClick={() => signOut()}>Sign out</Button>
           </Group>
         )}
@@ -80,8 +92,8 @@ function Root() {
   useEffect(() => void loadFonts(), []);
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <NetworkProvider>
+      <NetworkProvider>
+        <AuthProvider>
           <StackingClientProvider>
             <BlockchainApiClientProvider>
               <MantineProvider withGlobalStyles withNormalizeCSS theme={{ primaryColor: 'violet' }}>
@@ -91,8 +103,8 @@ function Root() {
               </MantineProvider>
             </BlockchainApiClientProvider>
           </StackingClientProvider>
-        </NetworkProvider>
-      </AuthProvider>
+        </AuthProvider>
+      </NetworkProvider>
     </QueryClientProvider>
   );
 }

@@ -21,7 +21,7 @@ export function useGetHasPendingDirectStackingQuery() {
   }
 
   return useQuery(
-    ['delegation-status'],
+    ['delegation-status', client, accountsApi, address, transactionsApi, networkName],
     async () =>
       getHasPendingDirectStacking({
         stackingClient: client,

@@ -28,7 +28,6 @@ import { ErrorAlert } from '@components/error-alert';
 import { toHumanReadableStx } from '@utils/unit-convert';
 import { ExternalLink } from '@components/external-link';
 import { formatPoxAddressToNetwork } from '@utils/stacking';
-import { truncateMiddle } from '@utils/tx-utils';
 import { Address } from '@components/address';
 import { useGetHasPendingDirectStackingQuery } from './use-get-has-pending-direct-stacking';
 

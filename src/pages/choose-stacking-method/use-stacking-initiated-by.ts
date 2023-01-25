@@ -24,7 +24,7 @@ export function useStackingInitiatedByQuery() {
   const txId = (q.data?.stx as any)?.lock_tx_id as string | undefined;
 
   return useQuery(
-    ['stacker'],
+    ['stacker', txId, address, transactionsApi],
     async () => {
       if (!txId) return { address: null } as const;
       const res = await transactionsApi.getTransactionById({

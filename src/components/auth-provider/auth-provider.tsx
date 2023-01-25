@@ -3,19 +3,17 @@ import { ReactNode, createContext, useContext, useState } from 'react';
 
 import { UserData } from '@stacks/auth';
 import { AppConfig, UserSession, showConnect } from '@stacks/connect';
-import { NETWORK } from '@constants/index';
+import { useNetwork } from '@components/network-provider';
 
 const appConfig = new AppConfig(['store_write']);
 const userSession = new UserSession({ appConfig });
 
-function getAccountAddress(userData: any) {
-  // NOTE: Although obtaining the user's address in this way works, this
-  // approach is quite brittle. It relies on an environment variable having the
-  // same value as the object key below. Furthermore, type checks are innefective
-  // given `profile` is typed as `any`.
+function getAccountAddress(userData: any, network: string) {
+  // NOTE: Although this approach to obtain the user's address is good enough for now, it is quite brittle.
+  // It relies on a variable having the same value as the object key below. Type checking is not available given the `userSession` object managed by `@stacks/connect` is typed as `any`.
   //
   // Should this be a source of issues, it may be worth refactoring.
-  const address: string = userData?.profile?.stxAddress?.[NETWORK];
+  const address: string = userData?.profile?.stxAddress?.[network];
 
   if (!isValidStacksAddress(address)) {
     return null;
@@ -48,6 +46,7 @@ export function AuthProvider({ children }: Props) {
   const [isSigningIn, setIsSigningIn] = useState(false);
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [hasSearchedForExistingSession, setHasSearchedForExistingSession] = useState(false);
+  const { networkName } = useNetwork();
 
   function signIn() {
     if (isSigningIn) {
@@ -92,7 +91,7 @@ export function AuthProvider({ children }: Props) {
     // do nothing
   }
 
-  const address = getAccountAddress(userData);
+  const address = getAccountAddress(userData, networkName);
 
   return (
     <>

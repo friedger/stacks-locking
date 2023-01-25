@@ -1,47 +1,27 @@
-import React, { FC, useMemo } from 'react';
-import { Box, Card, Divider, Group, Loader, Stack, Text, Title } from '@mantine/core';
+import { useMemo } from 'react';
+import { Box, Card, Divider, Group, Stack, Text, Title } from '@mantine/core';
 import { BigNumber } from 'bignumber.js';
-import dayjs from 'dayjs';
 
-import { Hr } from '@components/hr';
-
-import { UI_IMPOSED_MAX_STACKING_AMOUNT_USTX } from '@constants/index';
 import { truncateMiddle } from '@utils/tx-utils';
 import { parseNumericalFormInput } from '@utils/form/parse-numerical-form-input';
 import { stxToMicroStx, toHumanReadableStx } from '@utils/unit-convert';
 import { calculateRewardSlots, calculateStackingBuffer } from '../../../utils/calc-stacking-buffer';
 import { useFormikContext } from 'formik';
 import { DirectStackingFormValues } from '../../types';
-import {
-  useGetPoxInfoQuery,
-  useGetSecondsUntilNextCycleQuery,
-} from '@components/stacking-client-provider/stacking-client-provider';
+import { useGetPoxInfoQuery } from '@components/stacking-client-provider/stacking-client-provider';
 import { createAmountText } from '../../../utils/create-amount-text';
-import { addSeconds, format, formatDistanceToNow } from 'date-fns';
 import { Start } from './components/start';
 
 export function InfoPanel() {
   const f = useFormikContext<DirectStackingFormValues>();
   const getPoxInfoQuery = useGetPoxInfoQuery();
-  const getSecondsUntilNextCycleQuery = useGetSecondsUntilNextCycleQuery();
 
   const { amount, lockPeriod, poxAddress } = f.values;
-
-  const amountText = createAmountText(amount);
 
   const amountToBeStacked = useMemo(
     () => stxToMicroStx(parseNumericalFormInput(amount)).integerValue(),
     [amount]
   );
-
-  const humanReadableAmount = useMemo(() => {
-    // There is no enforced upper limit for direct stacking
-    // but for rididuclous numbers we don't display in UI to prevent layouts breaking
-    if (amountToBeStacked.isGreaterThan(UI_IMPOSED_MAX_STACKING_AMOUNT_USTX.multipliedBy(100))) {
-      return '—';
-    }
-    return toHumanReadableStx(amountToBeStacked);
-  }, [amountToBeStacked]);
 
   const numberOfRewardSlots = calculateRewardSlots(
     amountToBeStacked,
@@ -79,10 +59,6 @@ export function InfoPanel() {
           <Text>{lockPeriod}</Text>
         </Group>
         <Start />
-        {/* <Group position="apart"> */}
-        {/*   <Text>End</Text> */}
-        {/*   <Text>TODO</Text> */}
-        {/* </Group> */}
 
         <Divider />
 

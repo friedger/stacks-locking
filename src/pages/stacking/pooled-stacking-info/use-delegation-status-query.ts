@@ -19,7 +19,7 @@ export function useDelegationStatusQuery() {
   }
 
   return useQuery(
-    ['delegation-status'],
+    ['delegation-status', client, accountsApi, address, smartContractsApi, transactionsApi],
     async () =>
       getDelegationStatus({
         stackingClient: client,

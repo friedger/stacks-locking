@@ -56,7 +56,9 @@ function StartPooledStackingLayout({ client, currentAccountAddress }: StartPoole
   const { data, isLoading } = useGetSecondsUntilNextCycleQuery();
 
   // TODO: move this inside ChoosePoolingAmount, not being used elsewhere
-  const queryGetAccountBalance = useQuery(['getAccountBalance'], () => client.getAccountBalance());
+  const queryGetAccountBalance = useQuery(['getAccountBalance', client], () =>
+    client.getAccountBalance()
+  );
   const navigate = useNavigate();
 
   const validationSchema = createValidationSchema({ currentAccountAddress });
