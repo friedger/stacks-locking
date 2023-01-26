@@ -20,7 +20,7 @@ export function getRecipientAddress(tx: Transaction) {
   return tx.token_transfer.recipient_address;
 }
 
-export function isContractCall(tx: AnyTx): tx is ContractCallTransaction {
+function isContractCall(tx: AnyTx): tx is ContractCallTransaction {
   return tx.tx_type === 'contract_call';
 }
 
@@ -83,16 +83,10 @@ export function inferSendManyTransferOperation(
   return { amount: amount.absoluteValue(), direction };
 }
 
-export function shortenHex(hex: string, length = 4) {
+function shortenHex(hex: string, length = 4) {
   return `${hex.substring(0, length + 2)}…${hex.substring(hex.length - length)}`;
 }
 
-/**
- * truncateMiddle
- *
- * @param {string} input - the string to truncate
- * @param {number} offset - the number of chars to keep on either end
- */
 export function truncateMiddle(input: string, offset = 5): string {
   if (!input) return '';
   // hashes

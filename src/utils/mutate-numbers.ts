@@ -1,4 +1,4 @@
-export const change = (i: number) => (input: number) => i + input;
+const change = (i: number) => (input: number) => i + input;
 
 export const increment = change(1);
 

@@ -29,6 +29,7 @@ import { formatPoxAddressToNetwork } from '@utils/stacking';
 import { Address } from '@components/address';
 import { useGetHasPendingDirectStackingQuery } from './use-get-has-pending-direct-stacking';
 import { useNetwork } from '@components/network-provider';
+import { makeExplorerTxLink, makeStackingClubRewardAddressLink } from '@utils/external-links';
 
 export function DirectStackingInfo() {
   const { networkName } = useNetwork();
@@ -160,9 +161,7 @@ export function DirectStackingInfo() {
               <Divider />
 
               <ExternalLink
-                href={`https://explorer.stacks.co/txid/${String(
-                  getHasPendingDirectStacking.data.poxAddress
-                )}?chain=${networkName}`}
+                href={makeExplorerTxLink(getHasPendingDirectStacking.data.poxAddress, networkName)}
               >
                 View transaction
               </ExternalLink>
@@ -275,9 +274,9 @@ export function DirectStackingInfo() {
               <Divider />
 
               <ExternalLink
-                href={`https://stacking.club/reward-address/${String(
-                  formatPoxAddressToNetwork(getStatusQuery.data.details.pox_address)
-                )}`}
+                href={makeStackingClubRewardAddressLink(
+                  String(formatPoxAddressToNetwork(getStatusQuery.data.details.pox_address))
+                )}
               >
                 🥞 View on stacking.club
               </ExternalLink>

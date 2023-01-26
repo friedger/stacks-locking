@@ -53,6 +53,8 @@ export const STACKING_GUIDE_URL = 'https://blog.stacks.co/stacking-strategy';
 export const STACKING_MINIMIUM_FOR_NEXT_CYCLE_URL =
   'https://stacking.club/cycles/next?tab=slot_minimum';
 
+export const STACKING_CLUB_URL = 'https://stacking.club';
+
 export const MAX_STACKING_CYCLES = 12;
 
 export const MIN_STACKING_CYCLES = 1;
