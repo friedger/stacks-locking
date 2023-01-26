@@ -13,7 +13,7 @@ export async function deriveKey({ pass, salt }: { pass: string; salt: string }) 
   return { derivedKeyHash: result.hash };
 }
 
-export function generateRandomHexString() {
+function generateRandomHexString() {
   const size = 16;
   const randomValues = [...crypto.getRandomValues(new Uint8Array(size))];
   return randomValues.map(val => ('00' + val.toString(16)).slice(-2)).join('');

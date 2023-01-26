@@ -17,7 +17,7 @@ import { Box, Container, Divider, Loader, Stack, Title } from '@mantine/core';
 import { ErrorAlert } from '@components/error-alert';
 import { DirectStackingFormValues } from './types';
 import { useCalculateFee } from '@hooks/use-calculate-fee';
-import { STACKING_CONTRACT_CALL_TX_BYTES } from '@constants/index';
+import { STACKING_CONTRACT_CALL_TX_BYTES } from '@constants/app';
 import { Amount } from './components/choose-amount';
 import { Duration } from './components/duration';
 import { PoxAddress } from './components/pox-address/pox-address';

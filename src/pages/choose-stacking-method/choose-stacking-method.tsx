@@ -90,7 +90,7 @@ interface ChooseStackingMethodInnerProps {
   hasEnoughBalanceToPool: boolean;
   hasEnoughBalanceToDirectStack: boolean;
 }
-export function ChooseStackingMethodInner({
+function ChooseStackingMethodInner({
   hasExistingDelegation,
   hasExistingDelegatedStacking,
   hasExistingDirectStacking,

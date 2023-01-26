@@ -2,7 +2,7 @@ import { useRef } from 'react';
 import { useField } from 'formik';
 
 import { ActionIcon, Group, NumberInput, NumberInputHandlers, Stack, Text } from '@mantine/core';
-import { MAX_STACKING_CYCLES, MIN_STACKING_CYCLES } from '@constants/index';
+import { MAX_STACKING_CYCLES, MIN_STACKING_CYCLES } from '@constants/app';
 
 import { Step, Description as Description } from '../../components/stacking-form-step';
 import {

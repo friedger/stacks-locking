@@ -1,4 +1,4 @@
-import { NETWORK } from '@constants/index';
+import { NETWORK } from '@constants/app';
 import { StacksTestnet, StacksMainnet, /* StacksMocknet, */ StacksNetwork } from '@stacks/network';
 import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState } from 'react';
 import { ErrorAlert } from './error-alert';

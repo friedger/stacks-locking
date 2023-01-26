@@ -3,7 +3,7 @@ import {
   MempoolTransaction,
   ContractCallTransaction,
 } from '@stacks/stacks-blockchain-api-types';
-import { SEND_MANY_CONTACT_ID } from '@constants/index';
+import { SEND_MANY_CONTACT_ID } from '@constants/app';
 import BigNumber from 'bignumber.js';
 import { StxTxDirection } from './get-stx-transfer-direction';
 import { sumStxTxTotal } from './sum-stx-tx-total';

@@ -2,7 +2,7 @@ import * as yup from 'yup';
 import {
   MIN_DELEGATED_STACKING_AMOUNT_USTX,
   UI_IMPOSED_MAX_STACKING_AMOUNT_USTX,
-} from '@constants/index';
+} from '@constants/app';
 import { toHumanReadableStx, stxToMicroStx } from '@utils/unit-convert';
 import { stxAddressSchema } from '@utils/validators/stx-address-validator';
 import { stxAmountSchema } from '@utils/validators/stx-amount-validator';

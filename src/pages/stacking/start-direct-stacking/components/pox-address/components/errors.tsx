@@ -1,5 +1,5 @@
 import { ExternalLink } from '@components/external-link';
-import { STACKING_ADDRESS_FORMAT_HELP_URL } from '@constants/index';
+import { STACKING_ADDRESS_FORMAT_HELP_URL } from '@constants/app';
 import { Tooltip, Text } from '@mantine/core';
 import { forwardRef } from 'react';
 

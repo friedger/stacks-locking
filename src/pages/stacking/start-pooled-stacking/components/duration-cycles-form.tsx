@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { MAX_STACKING_CYCLES, MIN_STACKING_CYCLES } from '@constants/index';
+import { MAX_STACKING_CYCLES, MIN_STACKING_CYCLES } from '@constants/app';
 import { CircleButton } from '@components/circle-button';
 import { decrement, increment } from '@utils/mutate-numbers';
 import { useField } from 'formik';
@@ -21,7 +21,7 @@ const durationWithDefault = (duration: number | null) => duration ?? 1;
 interface DurationCyclesFieldInnerProps {
   client: StackingClient;
 }
-export function DurationCyclesFieldInner({ client }: DurationCyclesFieldInnerProps) {
+function DurationCyclesFieldInner({ client }: DurationCyclesFieldInnerProps) {
   const q = useGetCycleDurationQuery();
   const [cyclesField, _meta, durationLengthHelpers] = useField('numberOfCycles');
   const duration = cyclesField.value ?? 1;

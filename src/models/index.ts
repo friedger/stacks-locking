@@ -1,14 +1,4 @@
-export type WindowActiveState = 'focused' | 'blurred';
-
-export type DelegationType = 'indefinite' | 'limited';
-
-export enum ApiResource {
-  Mempool = 'mempool',
-  Nonce = 'nonce',
-  DelegationStatus = 'delegation-status',
-  FeeRate = 'fee-rate',
-}
-
+// TODO: is this still necessary?
 declare global {
   const CONFIG: {
     NODE_ENV: 'development' | 'production' | 'test';
@@ -22,3 +12,5 @@ declare global {
     SHA?: string;
   };
 }
+
+export {};

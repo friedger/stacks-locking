@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 import { isMainnet, isTestnet } from '@utils/network-utils';
 import validate, { getAddressInfo } from 'bitcoin-address-validation';
-import { SUPPORTED_BTC_ADDRESS_FORMATS } from '@constants/index';
+import { SUPPORTED_BTC_ADDRESS_FORMATS } from '@constants/app';
 
 interface Args {
   network: string;

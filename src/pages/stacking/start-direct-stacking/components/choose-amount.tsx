@@ -8,7 +8,7 @@ import {
   STACKING_CONTRACT_CALL_TX_BYTES,
   STACKING_LEARN_MORE_URL,
   STACKING_MINIMIUM_FOR_NEXT_CYCLE_URL,
-} from '@constants/index';
+} from '@constants/app';
 
 import { Step, Description } from '../../components/stacking-form-step';
 import { calculateRewardSlots, calculateStackingBuffer } from '../../utils/calc-stacking-buffer';

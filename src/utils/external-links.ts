@@ -1,6 +1,6 @@
 import urljoin from 'url-join';
 import { isWebUri } from 'valid-url';
-import { EXPLORER_URL, STACKING_CLUB_URL } from '@constants/index';
+import { EXPLORER_URL, STACKING_CLUB_URL } from '@constants/app';
 
 export async function openExternalLink(url: string) {
   if (!isWebUri(url)) return;
@@ -19,17 +19,9 @@ export function makeExplorerTxLink(txId: string, network: string) {
   return makeExplorerLink(`/txid/${txId}`, network);
 }
 
-export async function openTxInExplorer(txid: string, network: string) {
-  return openExternalLink(makeExplorerTxLink(txid, network));
-}
-
-export function makeExplorerAddressLink(address: string, network: string) {
-  return makeExplorerLink(`/address/${address}`, network);
-}
-
-export async function openAddressInExplorer(address: string, network: string) {
-  return openExternalLink(makeExplorerAddressLink(address, network));
-}
+// export function makeExplorerAddressLink(address: string, network: string) {
+//   return makeExplorerLink(`/address/${address}`, network);
+// }
 
 // Stacking Club
 

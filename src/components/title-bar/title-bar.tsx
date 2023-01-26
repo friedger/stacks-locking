@@ -14,7 +14,7 @@ import { NetworkMessage } from './network-message';
 import { SettingsButton } from './settings-button';
 import { UpdateAvailableButton } from './update-available-button';
 
-export const TitleBar: FC = () => {
+const TitleBar: FC = () => {
   const el = document.querySelector('.draggable-bar');
   const location = useLocation();
 

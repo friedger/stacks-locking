@@ -1,6 +1,6 @@
 import * as yup from "yup";
 import { validateStacksAddress } from "../get-stx-transfer-direction";
-import { NETWORK } from "@constants/index";
+import { NETWORK } from "@constants/app";
 import { validateAddressChain } from "@crypto/validate-address-net";
 
 export function stxAddressSchema() {

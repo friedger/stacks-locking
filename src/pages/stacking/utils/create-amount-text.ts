@@ -1,4 +1,4 @@
-import { UI_IMPOSED_MAX_STACKING_AMOUNT_USTX } from '@constants/index';
+import { UI_IMPOSED_MAX_STACKING_AMOUNT_USTX } from '@constants/app';
 import { toHumanReadableStx, stxToMicroStx } from '@utils/unit-convert';
 
 export function createAmountText(amountStx: string | number | bigint) {

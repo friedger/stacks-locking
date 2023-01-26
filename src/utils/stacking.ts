@@ -1,5 +1,5 @@
 import { Buffer } from 'buffer';
-import { NETWORK } from '@constants/index';
+import { NETWORK } from '@constants/app';
 import { sha256 } from '@noble/hashes/sha256';
 import BN from 'bn.js';
 import { base58check } from '@scure/base';
