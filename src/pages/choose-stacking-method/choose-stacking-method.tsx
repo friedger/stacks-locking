@@ -35,6 +35,7 @@ import { useDelegationStatusQuery } from '../stacking/pooled-stacking-info/use-d
 import { useStackingInitiatedByQuery } from './use-stacking-initiated-by';
 import { useAuth } from '@components/auth-provider/auth-provider';
 import { ExternalLink } from '@components/external-link';
+import { BUY_STACKS_URL } from '@constants/app';
 
 export function ChooseStackingMethod() {
   const { address } = useAuth();
@@ -140,7 +141,7 @@ function ChooseStackingMethodInner({
                 It appears that you don't have enough funds yet. If you recently transferred funds
                 to this account, you'll soon be able to stack.{' '}
               </Text>
-              <ExternalLink href="#TODO">Consider topping up your account</ExternalLink>
+              <ExternalLink href={BUY_STACKS_URL}>Consider topping up your account</ExternalLink>
             </Stack>
           </Alert>
         )}

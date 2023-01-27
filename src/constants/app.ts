@@ -34,3 +34,5 @@ export const SUPPORTED_BTC_ADDRESS_FORMATS = ['p2pkh', 'p2sh'] as const;
 export const FEE_RATE = 400;
 
 export const SEND_MANY_CONTACT_ID = 'SP3FBR2AGK5H9QBDH3EEN6DF8EK8JY7RX8QJ5SVTE.send-many-memo';
+
+export const BUY_STACKS_URL = 'https://coinmarketcap.com/currencies/stacks/markets/';
