@@ -1,6 +1,12 @@
 import { AccountsApi, SmartContractsApi, TransactionsApi } from '@stacks/blockchain-api-client';
 import { StackingClient } from '@stacks/stacking';
 import {
+  Transaction,
+  MempoolTransaction,
+  ContractCallTransaction,
+  MempoolContractCallTransaction,
+} from '@stacks/stacks-blockchain-api-types';
+import {
   cvToHex,
   tupleCV,
   standardPrincipalCV,
@@ -10,30 +16,68 @@ import {
   ClarityValue,
 } from '@stacks/transactions';
 
-function getLastSuccessfulDelegationTransaction(transactions: any[]) {
-  return transactions.find((t: any) => {
-    // For transactions in microblock
-    const isUnanchored = t.is_unanchored === true;
-    const isSuccess = t.tx_result?.repr === '(ok true)';
-
-    // For transactions in mempool
-    const isPending = t.tx_status === 'pending';
-
-    const isDelegateStxOrRevokeDelegateStx = ['delegate-stx', 'revoke-delegate-stx'].includes(
-      t.contract_call?.function_name
-    );
-    return ((isUnanchored && isSuccess) || isPending) && isDelegateStxOrRevokeDelegateStx;
-  });
+function isMempoolContractCallTransaction(
+  t: MempoolTransaction
+): t is MempoolContractCallTransaction {
+  return t.tx_type === 'contract_call';
+}
+function isContractCallTransaction(t: Transaction): t is ContractCallTransaction {
+  return t.tx_type === 'contract_call';
 }
 
-function getDelegationStatusFromTransaction(transaction: any, burnBlockHeight: number) {
+function isDelegateOrRevokeDelegate(functionName: string) {
+  return ['delegate-stx', 'revoke-delegate-stx'].includes(functionName);
+}
+
+function findMempoolTransaction(
+  transactions: MempoolTransaction[]
+): MempoolContractCallTransaction | undefined {
+  return transactions.find(t => {
+    if (!isMempoolContractCallTransaction(t)) return false;
+
+    return isDelegateOrRevokeDelegate(t.contract_call.function_name);
+  }) as MempoolContractCallTransaction | undefined;
+}
+function findUnanchoredTransaction(
+  transactions: Transaction[]
+): ContractCallTransaction | undefined {
+  return transactions.find(t => {
+    if (!isContractCallTransaction(t)) return false;
+
+    const isUnanchored = t.is_unanchored;
+    // TODO: checking the hex would be more robust
+    const isOkResult = t.tx_result.repr === '(ok true)';
+    const isRelevantFunctionNameResult = isDelegateOrRevokeDelegate(t.contract_call.function_name);
+
+    return isUnanchored && isOkResult && isRelevantFunctionNameResult;
+  }) as ContractCallTransaction | undefined;
+}
+
+function getDelegationStatusFromTransaction(
+  transaction: ContractCallTransaction | MempoolContractCallTransaction,
+  burnBlockHeight: number
+) {
   if (transaction.contract_call.function_name === 'revoke-delegate-stx') {
     return { isDelegating: false } as const;
-  } else {
-    const [amountMicroStxCV, delegatedToCV, untilBurnHeightCV, _poxAddressCV] =
-      transaction.contract_call.function_args.map((arg: any) => hexToCV(arg.hex));
+  }
+
+  if (transaction.contract_call.function_name === 'delegate-stx') {
+    const args = transaction.contract_call.function_args;
+    if (!Array.isArray(args)) {
+      // TODO: log error
+      console.error('Detected a malformed delegate-stx transaction.');
+      return { isDelegating: false };
+    }
+
+    const [amountMicroStxCV, delegatedToCV, untilBurnHeightCV, _poxAddressCV] = args.map<
+      // The values above should be defined as long as the clarity contract and the api remain the
+      // same. Nevertheless, out of caution, marking them as possibly undefined.
+      ClarityValue | undefined
+    >(arg => hexToCV(arg.hex));
+
     let untilBurnHeight: null | bigint = null;
     if (
+      untilBurnHeightCV &&
       untilBurnHeightCV.type === ClarityType.OptionalSome &&
       untilBurnHeightCV.value.type === ClarityType.UInt
     ) {
@@ -48,9 +92,10 @@ function getDelegationStatusFromTransaction(transaction: any, burnBlockHeight: n
     const amountMicroStx: bigint = amountMicroStxCV.value;
 
     if (!delegatedToCV || delegatedToCV.type !== ClarityType.PrincipalStandard) {
-      throw new Error('Expected `amount-ustx` to be defined.');
+      throw new Error('Expected `delegate-to` to be defined.');
     }
     const delegatedTo = cvToString(delegatedToCV);
+
     return {
       isDelegating: true,
       isExpired,
@@ -59,6 +104,12 @@ function getDelegationStatusFromTransaction(transaction: any, burnBlockHeight: n
       untilBurnHeight,
     } as const;
   }
+
+  // TODO: log error
+  console.error(
+    'Processed a non-delegation transaction. Only delegation-related transaction should be used with this function.'
+  );
+  return { isDelegating: false };
 }
 
 function getDelegationStatusFromMapEntry(mapEntryCV: ClarityValue, burnBlockHeight: number) {
@@ -117,7 +168,6 @@ async function getOnChainPoxDelegationMapEntryCV({
   const key = cvToHex(tupleCV({ stacker: standardPrincipalCV(address) }));
   const [contractAddress, contractName] = contractPrincipal.split('.');
 
-  // https://docs.hiro.so/api#tag/Smart-Contracts/operation/get_contract_data_map_entry
   const args = {
     contractAddress,
     contractName,
@@ -158,17 +208,25 @@ export async function getDelegationStatus({
     ]
   );
 
-  const accountTransaction = getLastSuccessfulDelegationTransaction(accountTransactions.results);
-  const mempoolTransaction = getLastSuccessfulDelegationTransaction(mempoolTransactions.results);
+  // NOTE: `results` needs to be cast due to known issues with types,
+  // https://github.com/hirosystems/stacks-blockchain-api/tree/master/client#known-issues
+  const unanchoredTransaction = findUnanchoredTransaction(
+    accountTransactions.results as Transaction[]
+  );
+  const mempoolTransaction = findMempoolTransaction(
+    mempoolTransactions.results as MempoolTransaction[]
+  );
 
-  let transaction = null;
-  if (!accountTransaction) {
-    transaction = mempoolTransaction;
-  } else if (!mempoolTransaction) {
-    transaction = accountTransaction;
-  } else {
+  let transaction: ContractCallTransaction | MempoolContractCallTransaction | null = null;
+  if (unanchoredTransaction && mempoolTransaction) {
     transaction =
-      accountTransaction.nonce > mempoolTransaction.nonce ? accountTransaction : mempoolTransaction;
+      unanchoredTransaction.nonce > mempoolTransaction.nonce
+        ? unanchoredTransaction
+        : mempoolTransaction;
+  } else if (mempoolTransaction) {
+    transaction = mempoolTransaction;
+  } else if (unanchoredTransaction) {
+    transaction = unanchoredTransaction;
   }
 
   if (transaction) {

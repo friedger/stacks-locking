@@ -47,3 +47,7 @@ Users can revoke delegation by clicking on the provided button. This in turn dis
 
 - User is not stacking: simple confirmation message.
 - User is stacking: message to let them know that funds will be available after the locking period.
+
+# Type issues with `@stacks/stacks-blockchain-api-types`
+
+There are some type issues with this library which require some values to be ca
