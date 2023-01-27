@@ -1,12 +1,17 @@
 import { NETWORK } from '@constants/app';
-import { StacksTestnet, StacksMainnet, /* StacksMocknet, */ StacksNetwork } from '@stacks/network';
+import {
+  StacksTestnet,
+  StacksMainnet,
+  /* StacksMocknet, */ StacksNetwork,
+  StacksNetworkName,
+} from '@stacks/network';
 import { createContext, Dispatch, ReactNode, SetStateAction, useContext, useState } from 'react';
 import { ErrorAlert } from './error-alert';
 
 const Context = createContext<{
   network: StacksNetwork;
-  setNetworkByName: Dispatch<SetStateAction<'mainnet' | 'testnet'>>;
-  networkName: string;
+  setNetworkByName: Dispatch<SetStateAction<StacksNetworkName>>;
+  networkName: StacksNetworkName;
   /* setCustomNetwork: Dispatch<SetStateAction<StacksNetwork | null>>; */
 }>(null!);
 
@@ -14,7 +19,7 @@ interface Props {
   children: ReactNode;
 }
 export function NetworkProvider({ children }: Props) {
-  const [networkName, setNetworkByName] = useState(NETWORK ?? 'testnet');
+  const [networkName, setNetworkByName] = useState<StacksNetworkName>(NETWORK ?? 'testnet');
   /* const [customNetwork, setCustomNetwork] = useState<StacksMocknet | null>(null); */
 
   let network: StacksNetwork;

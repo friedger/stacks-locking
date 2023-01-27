@@ -10,13 +10,3 @@ export function getStxTxDirection(
   if (tx.sender_address === address) return 'sent';
   return 'received';
 }
-
-// TODO: remove when in tx lib
-export const validateStacksAddress = (stacksAddress: string): boolean => {
-  try {
-    c32addressDecode(stacksAddress);
-    return true;
-  } catch (e) {
-    return false;
-  }
-};

@@ -1,39 +1,30 @@
-import * as yup from "yup";
-import { validateStacksAddress } from "../get-stx-transfer-direction";
-import { NETWORK } from "@constants/app";
-import { validateAddressChain } from "@crypto/validate-address-net";
+import * as yup from 'yup';
+import { NETWORK } from '@constants/app';
+import { validateAddressChain } from '@crypto/validate-address-net';
+import { StacksNetworkName } from '@stacks/network';
+import { validateStacksAddress } from '@stacks/transactions';
 
-export function stxAddressSchema() {
-  let timer = 0;
+export function stxAddressSchema(networkName: StacksNetworkName) {
   return yup
     .string()
-    .defined("Must define a STX address")
+    .defined('Must define a STX address')
     .test({
-      name: "address-validation",
-      async test(value: any, context) {
-        return new Promise((resolve) => {
-          clearTimeout(timer);
-          timer = window.setTimeout(() => {
-            if (!value) return resolve(false);
-            const valid = validateStacksAddress(value);
+      name: 'address-validation',
+      test(value, context) {
+        if (!value) return false;
+        const valid = validateStacksAddress(value);
 
-            if (!valid) {
-              return resolve(
-                context.createError({
-                  message: "Input address is not a valid STX address",
-                })
-              );
-            }
-            if (!validateAddressChain(value)) {
-              return resolve(
-                context.createError({
-                  message: `Must use a ${NETWORK} STX address`,
-                })
-              );
-            }
-            return resolve(true);
-          }, 400);
-        });
+        if (!valid) {
+          return context.createError({
+            message: 'Input address is not a valid STX address',
+          });
+        }
+        if (!validateAddressChain(value, networkName)) {
+          return context.createError({
+            message: `Must use a ${networkName} STX address`,
+          });
+        }
+        return true;
       },
     });
 }

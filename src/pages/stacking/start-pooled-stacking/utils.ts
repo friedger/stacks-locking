@@ -12,6 +12,7 @@ import { EditingFormValues } from './types';
 import { StackingClient } from '@stacks/stacking';
 import { Dispatch, SetStateAction } from 'react';
 import { NavigateFunction } from 'react-router-dom';
+import { StacksNetworkName } from '@stacks/network';
 
 interface Args {
   /**
@@ -19,10 +20,12 @@ interface Args {
    * which although technically possible, is most likely not what they want.
    */
   currentAccountAddress: string;
+
+  networkName: StacksNetworkName;
 }
-export function createValidationSchema({ currentAccountAddress }: Args) {
+export function createValidationSchema({ currentAccountAddress, networkName }: Args) {
   return yup.object().shape({
-    poolAddress: stxAddressSchema().test({
+    poolAddress: stxAddressSchema(networkName).test({
       name: 'cannot-pool-to-yourself',
       message: 'Cannot pool to your own STX address',
       test(value: any) {

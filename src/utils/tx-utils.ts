@@ -96,13 +96,13 @@ export function truncateMiddle(input: string, offset = 5): string {
   // for contracts
   if (input.includes('.')) {
     const parts = input.split('.');
-    const start = parts[0]?.substr(0, offset);
-    const end = parts[0]?.substr(parts[0].length - offset, parts[0].length);
+    const start = parts[0]?.substring(0, offset);
+    const end = parts[0]?.substring(parts[0].length - offset, parts[0].length);
     return `${start}…${end}.${parts[1]}`;
   } else {
     // everything else
-    const start = input?.substr(0, offset);
-    const end = input?.substr(input.length - offset, input.length);
+    const start = input?.substring(0, offset);
+    const end = input?.substring(input.length - offset, input.length);
     return `${start}…${end}`;
   }
 }

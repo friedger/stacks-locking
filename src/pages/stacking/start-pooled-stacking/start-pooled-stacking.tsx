@@ -21,6 +21,8 @@ import { EditingFormValues } from './types';
 import { Box, Container, Divider, Stack } from '@mantine/core';
 import { ErrorAlert } from '@components/error-alert';
 import { PoolingInfoCard } from './components/delegated-stacking-info-card';
+import { useNetwork } from '@components/network-provider';
+import { StacksNetworkName } from '@stacks/network';
 
 const initialDelegatingFormValues: Partial<EditingFormValues> = {
   amount: '',
@@ -32,6 +34,7 @@ const initialDelegatingFormValues: Partial<EditingFormValues> = {
 export function StartPooledStacking() {
   const { client } = useStackingClient();
   const { address } = useAuth();
+  const { networkName } = useNetwork();
 
   if (!address) {
     const msg = 'Expected `address` to be defined.';
@@ -43,15 +46,31 @@ export function StartPooledStacking() {
     console.error(msg);
     return <ErrorAlert>{msg}</ErrorAlert>;
   }
+  if (!networkName) {
+    const msg = 'Expected `networkName` to be defined.';
+    console.error(msg);
+    return <ErrorAlert>{msg}</ErrorAlert>;
+  }
 
-  return <StartPooledStackingLayout client={client} currentAccountAddress={address} />;
+  return (
+    <StartPooledStackingLayout
+      client={client}
+      currentAccountAddress={address}
+      networkName={networkName}
+    />
+  );
 }
 
 interface StartPooledStackingProps {
   client: StackingClient;
   currentAccountAddress: string;
+  networkName: StacksNetworkName;
 }
-function StartPooledStackingLayout({ client, currentAccountAddress }: StartPooledStackingProps) {
+function StartPooledStackingLayout({
+  client,
+  networkName,
+  currentAccountAddress,
+}: StartPooledStackingProps) {
   const [isContractCallExtensionPageOpen, setIsContractCallExtensionPageOpen] = useState(false);
   const { data, isLoading } = useGetSecondsUntilNextCycleQuery();
 
@@ -61,7 +80,10 @@ function StartPooledStackingLayout({ client, currentAccountAddress }: StartPoole
   );
   const navigate = useNavigate();
 
-  const validationSchema = createValidationSchema({ currentAccountAddress });
+  const validationSchema = createValidationSchema({
+    currentAccountAddress,
+    networkName,
+  });
   const handleSubmit = createHandleSubmit({ client, navigate, setIsContractCallExtensionPageOpen });
 
   if (isLoading || queryGetAccountBalance.isLoading) return null;
