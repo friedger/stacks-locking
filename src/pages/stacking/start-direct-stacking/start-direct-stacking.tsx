@@ -13,7 +13,7 @@ import { StartStackingLayout } from '../components/stacking-layout';
 import { DirectStackingIntro } from './components/direct-stacking-intro';
 import { useNavigate } from 'react-router-dom';
 import { createHandleSubmit, createValidationSchema } from './utils';
-import { Box, Container, Divider, Loader, Stack, Title } from '@mantine/core';
+import { Box, Container, Divider, Loader, Stack } from '@mantine/core';
 import { ErrorAlert } from '@components/error-alert';
 import { DirectStackingFormValues } from './types';
 import { useCalculateFee } from '@hooks/use-calculate-fee';
