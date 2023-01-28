@@ -1,7 +1,8 @@
-import { Box, Flex, Radio, Text } from '@mantine/core';
-import { ReactNode } from 'react';
+import { ReactNode } from "react";
 
-type DelegationTypes = 'limited' | 'indefinite';
+import { Box, Flex, Radio, Text } from "@mantine/core";
+
+type DelegationTypes = "limited" | "indefinite";
 
 interface DurationSelectItemProps {
   title: string;
@@ -13,11 +14,18 @@ interface DurationSelectItemProps {
 }
 
 export function DurationSelectItem(props: DurationSelectItemProps) {
-  const { title, icon, delegationType, activeDelegationType, onChange, children } = props;
+  const {
+    title,
+    icon,
+    delegationType,
+    activeDelegationType,
+    onChange,
+    children,
+  } = props;
   return (
     <Box
-      sx={theme => ({
-        minHeight: '72px',
+      sx={(theme) => ({
+        minHeight: "72px",
         padding: theme.spacing.md,
         border: `1px solid ${
           delegationType === activeDelegationType
@@ -25,14 +33,14 @@ export function DurationSelectItem(props: DurationSelectItemProps) {
             : theme.colors.gray[5]
         }`,
         borderRadius: theme.radius.lg,
-        position: 'relative',
+        position: "relative",
       })}
       component="label"
       htmlFor={delegationType}
     >
       <Flex w="100%">
-        <Box sx={{ position: 'relative', top: '-3px' }}>{icon}</Box>
-        <Flex pl="lg" w="100%" direction={{ xs: 'column', md: 'row' }}>
+        <Box sx={{ position: "relative", top: "-3px" }}>{icon}</Box>
+        <Flex pl="lg" w="100%" direction={{ xs: "column", md: "row" }}>
           <Box>
             <Text>{title}</Text>
             <Text>{children}</Text>
@@ -44,7 +52,7 @@ export function DurationSelectItem(props: DurationSelectItemProps) {
             name="delegationType"
             value={delegationType}
             checked={delegationType === activeDelegationType}
-            onChange={e => onChange(e.target.value as DelegationTypes)}
+            onChange={(e) => onChange(e.target.value as DelegationTypes)}
           />
         </Flex>
       </Flex>

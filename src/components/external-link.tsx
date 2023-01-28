@@ -1,6 +1,8 @@
-import { LegalDisclaimerTooltip } from './legal-disclaimer-tooltip';
-import { Anchor, AnchorProps } from '@mantine/core';
-import { ReactNode } from 'react';
+import { ReactNode } from "react";
+
+import { Anchor, AnchorProps } from "@mantine/core";
+
+import { LegalDisclaimerTooltip } from "./legal-disclaimer-tooltip";
 
 interface ExternalLinkProps extends AnchorProps {
   children: ReactNode;
@@ -15,7 +17,7 @@ export function ExternalLink({ children, href }: ExternalLinkProps) {
         w="fit-content"
         href={href}
         target="_blank"
-        sx={{ whiteSpace: 'nowrap' }}
+        sx={{ whiteSpace: "nowrap" }}
       >
         {children} ↗
       </Anchor>

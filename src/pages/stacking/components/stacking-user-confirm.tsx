@@ -1,4 +1,4 @@
-import { Checkbox } from '@mantine/core';
+import { Checkbox } from "@mantine/core";
 
 interface StackingUserConfirmProps {
   onChange(userConfirmed: boolean): void;
@@ -9,7 +9,7 @@ export function StackingUserConfirm(props: StackingUserConfirmProps) {
   return (
     <Checkbox
       label="I have read and understand the above"
-      onChange={e => onChange(e.target.checked)}
+      onChange={(e) => onChange(e.target.checked)}
     />
   );
 }

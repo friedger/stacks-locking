@@ -1,7 +1,8 @@
-import { useCallback } from 'react';
-import BigNumber from 'bignumber.js';
+import { useCallback } from "react";
 
-import { useFeeRate } from './use-fee-rate';
+import BigNumber from "bignumber.js";
+
+import { useFeeRate } from "./use-fee-rate";
 
 /**
  * Returns a function calculating how much of a fee should be set
@@ -10,7 +11,8 @@ import { useFeeRate } from './use-fee-rate';
 export function useCalculateFee() {
   const { feeRate } = useFeeRate();
   return useCallback(
-    (bytes: number) => BigInt(new BigNumber(feeRate).multipliedBy(bytes).toString()),
+    (bytes: number) =>
+      BigInt(new BigNumber(feeRate).multipliedBy(bytes).toString()),
     [feeRate]
   );
 }

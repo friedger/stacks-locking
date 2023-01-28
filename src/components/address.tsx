@@ -1,6 +1,7 @@
-import { Box, CopyButton, Text } from '@mantine/core';
-import { IconCopy } from '@tabler/icons-react';
-import { truncateMiddle } from '@utils/tx-utils';
+import { Box, CopyButton, Text } from "@mantine/core";
+import { IconCopy } from "@tabler/icons-react";
+
+import { truncateMiddle } from "@utils/tx-utils";
 
 interface AddressArgs {
   address: string;
@@ -8,10 +9,10 @@ interface AddressArgs {
 export function Address({ address }: AddressArgs) {
   return (
     <Text>
-      {truncateMiddle(address)}{' '}
+      {truncateMiddle(address)}{" "}
       <CopyButton value={address}>
         {({ copy }) => (
-          <Box onClick={copy} display="inline" sx={{ cursor: 'pointer' }}>
+          <Box onClick={copy} display="inline" sx={{ cursor: "pointer" }}>
             <IconCopy size={14} />
           </Box>
         )}

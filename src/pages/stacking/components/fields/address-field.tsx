@@ -1,5 +1,5 @@
-import { TextInput, TextInputProps } from '@mantine/core';
-import { useField } from 'formik';
+import { TextInput, TextInputProps } from "@mantine/core";
+import { useField } from "formik";
 
 interface Props extends TextInputProps {
   name: string;
@@ -10,7 +10,7 @@ export function AddressField(props: Props) {
     <>
       <TextInput
         maw="400px"
-        styles={{ input: { fontFamily: 'monospace' } }}
+        styles={{ input: { fontFamily: "monospace" } }}
         error={meta.touched && meta.error}
         {...field}
         {...props}

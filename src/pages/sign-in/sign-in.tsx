@@ -1,8 +1,15 @@
-import { Navigate } from 'react-router-dom';
+import {
+  Button,
+  Card,
+  Center,
+  Container,
+  Stack,
+  Text,
+  Title,
+} from "@mantine/core";
+import { Navigate } from "react-router-dom";
 
-import { useAuth } from '@components/auth-provider/auth-provider';
-
-import { Button, Card, Center, Container, Stack, Text, Title } from '@mantine/core';
+import { useAuth } from "@components/auth-provider/auth-provider";
 
 export function SignIn() {
   const { isSignedIn, signIn, isSigningIn } = useAuth();

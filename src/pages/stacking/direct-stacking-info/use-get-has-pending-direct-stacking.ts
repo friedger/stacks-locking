@@ -1,9 +1,11 @@
-import { useAuth } from '@components/auth-provider/auth-provider';
-import { useBlockchainApiClient } from '@components/blockchain-api-client-provider';
-import { useNetwork } from '@components/network-provider';
-import { useStackingClient } from '@components/stacking-client-provider/stacking-client-provider';
-import { useQuery } from '@tanstack/react-query';
-import { getHasPendingDirectStacking } from './get-has-pending-direct-stacking';
+import { useQuery } from "@tanstack/react-query";
+
+import { useAuth } from "@components/auth-provider/auth-provider";
+import { useBlockchainApiClient } from "@components/blockchain-api-client-provider";
+import { useNetwork } from "@components/network-provider";
+import { useStackingClient } from "@components/stacking-client-provider/stacking-client-provider";
+
+import { getHasPendingDirectStacking } from "./get-has-pending-direct-stacking";
 
 export function useGetHasPendingDirectStackingQuery() {
   const { accountsApi, transactionsApi } = useBlockchainApiClient();
@@ -12,16 +14,25 @@ export function useGetHasPendingDirectStackingQuery() {
   const { networkName } = useNetwork();
   if (!client) {
     // TODO: report error
-    throw new Error('Expected to have a StackingClient available in the context.');
+    throw new Error(
+      "Expected to have a StackingClient available in the context."
+    );
   }
 
   if (!address) {
     // TODO: report error
-    throw new Error('Expected `address` to be defined.');
+    throw new Error("Expected `address` to be defined.");
   }
 
   return useQuery(
-    ['delegation-status', client, accountsApi, address, transactionsApi, networkName],
+    [
+      "delegation-status",
+      client,
+      accountsApi,
+      address,
+      transactionsApi,
+      networkName,
+    ],
     async () =>
       getHasPendingDirectStacking({
         stackingClient: client,
@@ -30,7 +41,7 @@ export function useGetHasPendingDirectStackingQuery() {
         transactionsApi,
 
         // TODO: better types or type checks to ensure all network names work
-        network: networkName as 'mainnet' | 'testnet',
+        network: networkName as "mainnet" | "testnet",
       }),
     { refetchInterval: 5000 }
   );

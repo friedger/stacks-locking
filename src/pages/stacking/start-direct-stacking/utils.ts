@@ -1,15 +1,18 @@
-import * as yup from 'yup';
-import { toHumanReadableStx, stxToMicroStx } from '@utils/unit-convert';
-import { stxAmountSchema } from '@utils/validators/stx-amount-validator';
-import { openContractCall, ContractCallRegularOptions } from '@stacks/connect';
-import { StackingClient } from '@stacks/stacking';
-import { Dispatch, SetStateAction } from 'react';
-import { NavigateFunction } from 'react-router-dom';
-import { validateDecimalPrecision } from '@utils/form/validate-decimals';
-import { createBtcAddressSchema } from '@utils/validators/btc-address-validator';
-import BigNumber from 'bignumber.js';
-import { stxBalanceValidator } from '@utils/validators/stx-balance-validator';
-import { DirectStackingFormValues } from './types';
+import { Dispatch, SetStateAction } from "react";
+
+import { ContractCallRegularOptions, openContractCall } from "@stacks/connect";
+import { StackingClient } from "@stacks/stacking";
+import BigNumber from "bignumber.js";
+import { NavigateFunction } from "react-router-dom";
+import * as yup from "yup";
+
+import { validateDecimalPrecision } from "@utils/form/validate-decimals";
+import { stxToMicroStx, toHumanReadableStx } from "@utils/unit-convert";
+import { createBtcAddressSchema } from "@utils/validators/btc-address-validator";
+import { stxAmountSchema } from "@utils/validators/stx-amount-validator";
+import { stxBalanceValidator } from "@utils/validators/stx-balance-validator";
+
+import { DirectStackingFormValues } from "./types";
 
 interface CreateValidationSchemaArgs {
   /**
@@ -41,29 +44,40 @@ export function createValidationSchema({
   return yup.object().shape({
     amount: stxAmountSchema()
       .test(stxBalanceValidator(availableBalanceUStx))
-      .test('test-precision', 'You cannot stack with a precision of less than 1 STX', value => {
-        // If `undefined`, throws `required` error
-        if (value === undefined) return true;
-        return validateDecimalPrecision(0)(value);
-      })
+      .test(
+        "test-precision",
+        "You cannot stack with a precision of less than 1 STX",
+        (value) => {
+          // If `undefined`, throws `required` error
+          if (value === undefined) return true;
+          return validateDecimalPrecision(0)(value);
+        }
+      )
       .test({
-        name: 'test-fee-margin',
-        message: 'You must stack less than your entire balance to allow for the transaction fee',
-        test: value => {
+        name: "test-fee-margin",
+        message:
+          "You must stack less than your entire balance to allow for the transaction fee",
+        test: (value) => {
           if (value === null || value === undefined) return false;
           const uStxInput = stxToMicroStx(value);
           return !uStxInput.isGreaterThan(
-            new BigNumber(availableBalanceUStx.toString()).minus(transactionFeeUStx.toString())
+            new BigNumber(availableBalanceUStx.toString()).minus(
+              transactionFeeUStx.toString()
+            )
           );
         },
       })
       .test({
-        name: 'test-min-utx',
-        message: `You must stack with at least ${toHumanReadableStx(minimumAmountUStx)}`,
-        test: value => {
+        name: "test-min-utx",
+        message: `You must stack with at least ${toHumanReadableStx(
+          minimumAmountUStx
+        )}`,
+        test: (value) => {
           if (value === null || value === undefined) return false;
           const uStxInput = stxToMicroStx(value);
-          return new BigNumber(minimumAmountUStx.toString()).isLessThanOrEqualTo(uStxInput);
+          return new BigNumber(
+            minimumAmountUStx.toString()
+          ).isLessThanOrEqualTo(uStxInput);
         },
       }),
     lockPeriod: yup.number().defined(),
@@ -111,7 +125,7 @@ export function createHandleSubmit({
       ...(stackOptions as ContractCallRegularOptions),
       onFinish() {
         setIsContractCallExtensionPageOpen(false);
-        navigate('../direct-stacking-info');
+        navigate("../direct-stacking-info");
       },
       onCancel() {
         setIsContractCallExtensionPageOpen(false);

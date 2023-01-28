@@ -1,42 +1,43 @@
-import { useState } from 'react';
+import { useState } from "react";
 
+import { Box, Container, Divider, Loader, Stack } from "@mantine/core";
+import { StackingClient } from "@stacks/stacking";
+import { Form, Formik } from "formik";
+import { useNavigate } from "react-router-dom";
+
+import { ErrorAlert } from "@components/error-alert";
+import { useNetwork } from "@components/network-provider";
 import {
   useGetAccountBalance,
   useGetPoxInfoQuery,
   useGetSecondsUntilNextCycleQuery,
   useStackingClient,
-} from '@components/stacking-client-provider/stacking-client-provider';
-import { StackingClient } from '@stacks/stacking';
-import { Form, Formik } from 'formik';
+} from "@components/stacking-client-provider/stacking-client-provider";
+import { STACKING_CONTRACT_CALL_TX_BYTES } from "@constants/app";
+import { useCalculateFee } from "@hooks/use-calculate-fee";
 
-import { StartStackingLayout } from '../components/stacking-layout';
-import { DirectStackingIntro } from './components/direct-stacking-intro';
-import { useNavigate } from 'react-router-dom';
-import { createHandleSubmit, createValidationSchema } from './utils';
-import { Box, Container, Divider, Loader, Stack } from '@mantine/core';
-import { ErrorAlert } from '@components/error-alert';
-import { DirectStackingFormValues } from './types';
-import { useCalculateFee } from '@hooks/use-calculate-fee';
-import { STACKING_CONTRACT_CALL_TX_BYTES } from '@constants/app';
-import { Amount } from './components/choose-amount';
-import { Duration } from './components/duration';
-import { PoxAddress } from './components/pox-address/pox-address';
-import { useNetwork } from '@components/network-provider';
-import { ConfirmAndSubmit } from './components/confirm-and-submit';
-import { InfoPanel } from './components/direct-stacking-info-card/direct-stacking-info-card';
+import { StartStackingLayout } from "../components/stacking-layout";
+import { Amount } from "./components/choose-amount";
+import { ConfirmAndSubmit } from "./components/confirm-and-submit";
+import { InfoPanel } from "./components/direct-stacking-info-card/direct-stacking-info-card";
+import { DirectStackingIntro } from "./components/direct-stacking-intro";
+import { Duration } from "./components/duration";
+import { PoxAddress } from "./components/pox-address/pox-address";
+import { DirectStackingFormValues } from "./types";
+import { createHandleSubmit, createValidationSchema } from "./utils";
 
 const initialFormValues: DirectStackingFormValues = {
-  amount: '',
+  amount: "",
   lockPeriod: 1,
-  poxAddress: '',
+  poxAddress: "",
 };
 
 export function StartDirectStacking() {
   const { client } = useStackingClient();
 
   if (!client) {
-    const msg = 'Expected `client` to be defined.';
-    const id = '32bd8efa-c6cb-4d1c-8f92-f39cd7f3cd74';
+    const msg = "Expected `client` to be defined.";
+    const id = "32bd8efa-c6cb-4d1c-8f92-f39cd7f3cd74";
     console.error(msg);
     return <ErrorAlert id={id}>{msg}</ErrorAlert>;
   }
@@ -48,7 +49,8 @@ interface StartDirectStackingLayoutProps {
   client: StackingClient;
 }
 function StartDirectStackingLayout({ client }: StartDirectStackingLayoutProps) {
-  const [isContractCallExtensionPageOpen, setIsContractCallExtensionPageOpen] = useState(false);
+  const [isContractCallExtensionPageOpen, setIsContractCallExtensionPageOpen] =
+    useState(false);
   const { networkName } = useNetwork();
 
   const getSecondsUntilNextCycleQuery = useGetSecondsUntilNextCycleQuery();
@@ -68,14 +70,14 @@ function StartDirectStackingLayout({ client }: StartDirectStackingLayoutProps) {
 
   if (
     getSecondsUntilNextCycleQuery.isError ||
-    typeof getSecondsUntilNextCycleQuery.data !== 'number' ||
+    typeof getSecondsUntilNextCycleQuery.data !== "number" ||
     getPoxInfoQuery.isError ||
     !getPoxInfoQuery.data ||
     getAccountBalanceQuery.isError ||
-    typeof getAccountBalanceQuery.data !== 'bigint'
+    typeof getAccountBalanceQuery.data !== "bigint"
   ) {
-    const msg = 'Failed to load necessary data.';
-    const id = '8c12f6b2-c839-4813-8471-b0fd542b845f';
+    const msg = "Failed to load necessary data.";
+    const id = "8c12f6b2-c839-4813-8471-b0fd542b845f";
     console.error(id, msg);
     return <ErrorAlert id={id}>{msg}</ErrorAlert>;
   }
@@ -86,13 +88,17 @@ function StartDirectStackingLayout({ client }: StartDirectStackingLayoutProps) {
     availableBalanceUStx: getAccountBalanceQuery.data,
     network: networkName,
   });
-  const handleSubmit = createHandleSubmit({ client, navigate, setIsContractCallExtensionPageOpen });
+  const handleSubmit = createHandleSubmit({
+    client,
+    navigate,
+    setIsContractCallExtensionPageOpen,
+  });
 
   return (
     <Container p={0} size="lg">
       <Formik
         initialValues={initialFormValues}
-        onSubmit={values => {
+        onSubmit={(values) => {
           handleSubmit(values);
         }}
         validationSchema={validationSchema}
@@ -100,7 +106,9 @@ function StartDirectStackingLayout({ client }: StartDirectStackingLayoutProps) {
         <StartStackingLayout
           intro={
             <DirectStackingIntro
-              estimatedStackingMinimum={BigInt(getPoxInfoQuery.data.min_amount_ustx)}
+              estimatedStackingMinimum={BigInt(
+                getPoxInfoQuery.data.min_amount_ustx
+              )}
               timeUntilNextCycle={getSecondsUntilNextCycleQuery.data}
             />
           }

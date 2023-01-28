@@ -1,5 +1,7 @@
 import React, { FC } from "react";
-import { BoxProps, color, Text } from "@stacks/ui";
+
+import { BoxProps, Text, color } from "@stacks/ui";
+
 // import { useSelector } from 'react-redux';
 // import { RootState } from '@store/index';
 // import { selectNextCycleInfo, selectPoxInfo } from '@store/stacking';

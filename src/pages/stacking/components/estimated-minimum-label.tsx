@@ -1,6 +1,7 @@
-import { IconStairs } from '@tabler/icons-react';
-import { Avatar, Box, Flex, Title, Text } from '@mantine/core';
-import { toHumanReadableStx } from '@utils/unit-convert';
+import { Avatar, Box, Flex, Text, Title } from "@mantine/core";
+import { IconStairs } from "@tabler/icons-react";
+
+import { toHumanReadableStx } from "@utils/unit-convert";
 
 interface EstimatedMinimumLabelProps {
   /**
@@ -8,7 +9,9 @@ interface EstimatedMinimumLabelProps {
    */
   estimatedStackingMinimum: bigint;
 }
-export function EstimatedMinimumLabel({ estimatedStackingMinimum }: EstimatedMinimumLabelProps) {
+export function EstimatedMinimumLabel({
+  estimatedStackingMinimum,
+}: EstimatedMinimumLabelProps) {
   return (
     <Flex gap="sm">
       <Avatar radius="xl">

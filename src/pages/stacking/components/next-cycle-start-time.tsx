@@ -1,6 +1,6 @@
-import { Avatar, Text, Flex, Title, Box } from '@mantine/core';
-import { IconClockHour3 } from '@tabler/icons-react';
-import { formatDistanceToNow, addSeconds } from 'date-fns';
+import { Avatar, Box, Flex, Text, Title } from "@mantine/core";
+import { IconClockHour3 } from "@tabler/icons-react";
+import { addSeconds, formatDistanceToNow } from "date-fns";
 
 interface NextCycleStartTimeProps {
   /**
@@ -9,8 +9,12 @@ interface NextCycleStartTimeProps {
   timeUntilNextCycle: number;
 }
 
-export function NextCycleStartTime({ timeUntilNextCycle }: NextCycleStartTimeProps) {
-  const timeUntilNextCycleText = formatDistanceToNow(addSeconds(new Date(), timeUntilNextCycle));
+export function NextCycleStartTime({
+  timeUntilNextCycle,
+}: NextCycleStartTimeProps) {
+  const timeUntilNextCycleText = formatDistanceToNow(
+    addSeconds(new Date(), timeUntilNextCycle)
+  );
   return (
     <Flex gap="sm">
       <Avatar radius="xl">

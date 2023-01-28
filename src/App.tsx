@@ -1,41 +1,67 @@
-import { useEffect } from 'react';
-import { Navigate, Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom';
-import { Button, Container, Flex, Text, Group, MantineProvider, Menu, Loader } from '@mantine/core';
-import { StackingClientProvider } from '@components/stacking-client-provider/stacking-client-provider';
-import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
-import { loadFonts } from '@utils/load-fonts';
-import { ModalsProvider } from '@mantine/modals';
-import { AuthProvider, useAuth } from './components/auth-provider/auth-provider';
-import { SignIn } from './pages/sign-in/sign-in';
-import { ChooseStackingMethod } from './pages/choose-stacking-method/choose-stacking-method';
-import { StartPooledStacking } from './pages/stacking/start-pooled-stacking/start-pooled-stacking';
-import { PooledStackingInfo } from './pages/stacking/pooled-stacking-info/pooled-stacking-info';
-import { ErrorAlert } from '@components/error-alert';
-import { toUnicode } from 'punycode';
-import { Address } from '@components/address';
-import { DirectStackingInfo } from './pages/stacking/direct-stacking-info/direct-stacking-info';
-import { NetworkProvider, useNetwork } from '@components/network-provider';
+import { useEffect } from "react";
+
+import {
+  Button,
+  Container,
+  Flex,
+  Group,
+  Loader,
+  MantineProvider,
+  Menu,
+  Text,
+} from "@mantine/core";
+import { ModalsProvider } from "@mantine/modals";
+import { IconDroplet } from "@tabler/icons-react";
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+} from "@tanstack/react-query";
+import { toUnicode } from "punycode";
+import {
+  Navigate,
+  Outlet,
+  RouterProvider,
+  createBrowserRouter,
+} from "react-router-dom";
+
+import { Address } from "@components/address";
 import {
   BlockchainApiClientProvider,
   useBlockchainApiClient,
-} from '@components/blockchain-api-client-provider';
-import { StartDirectStacking } from './pages/stacking/start-direct-stacking/start-direct-stacking';
-import { IconDroplet } from '@tabler/icons-react';
+} from "@components/blockchain-api-client-provider";
+import { ErrorAlert } from "@components/error-alert";
+import { NetworkProvider, useNetwork } from "@components/network-provider";
+import { StackingClientProvider } from "@components/stacking-client-provider/stacking-client-provider";
+import { loadFonts } from "@utils/load-fonts";
+
+import {
+  AuthProvider,
+  useAuth,
+} from "./components/auth-provider/auth-provider";
+import { ChooseStackingMethod } from "./pages/choose-stacking-method/choose-stacking-method";
+import { SignIn } from "./pages/sign-in/sign-in";
+import { DirectStackingInfo } from "./pages/stacking/direct-stacking-info/direct-stacking-info";
+import { PooledStackingInfo } from "./pages/stacking/pooled-stacking-info/pooled-stacking-info";
+import { StartDirectStacking } from "./pages/stacking/start-direct-stacking/start-direct-stacking";
+import { StartPooledStacking } from "./pages/stacking/start-pooled-stacking/start-pooled-stacking";
 
 function Profile() {
   const { address } = useAuth();
   const { namesApi } = useBlockchainApiClient();
-  const q = useQuery(['bns', address, namesApi], () => {
+  const q = useQuery(["bns", address, namesApi], () => {
     return namesApi.getNamesOwnedByAddress({
-      address: address ?? '',
-      blockchain: 'stacks',
+      address: address ?? "",
+      blockchain: "stacks",
     });
   });
 
   if (!address) {
-    const msg = 'Expected `address` to be defined.';
+    const msg = "Expected `address` to be defined.";
     console.error(msg);
-    return <ErrorAlert id="71582283-38b4-497d-b7ce-b8d524699653">{msg}</ErrorAlert>;
+    return (
+      <ErrorAlert id="71582283-38b4-497d-b7ce-b8d524699653">{msg}</ErrorAlert>
+    );
   }
 
   const parseIfValidPunycode = (s: string) => {
@@ -45,7 +71,7 @@ function Profile() {
       return s;
     }
   };
-  const bnsName = parseIfValidPunycode(q.data?.names[0] ?? '');
+  const bnsName = parseIfValidPunycode(q.data?.names[0] ?? "");
   return (
     <Group position="right">
       {bnsName && <Text>{bnsName}</Text>}
@@ -62,8 +88,8 @@ function Layout() {
 
   if (!address) {
     // TODO: log error
-    const id = '42d06620-f87d-487e-8f54-cb171b3e3ea6';
-    const msg = 'Expected `address` to be defined.';
+    const id = "42d06620-f87d-487e-8f54-cb171b3e3ea6";
+    const msg = "Expected `address` to be defined.";
     console.error(id, msg);
     return <ErrorAlert id={id}>{msg}</ErrorAlert>;
   }
@@ -72,15 +98,15 @@ function Layout() {
     <Button
       variant="outline"
       onClick={() => {
-        if (networkName === 'mainnet') {
-          setNetworkByName('testnet');
+        if (networkName === "mainnet") {
+          setNetworkByName("testnet");
           return;
         }
 
-        setNetworkByName('mainnet');
+        setNetworkByName("mainnet");
       }}
     >
-      {networkName !== 'mainnet' ? '🚧 ' : ''}
+      {networkName !== "mainnet" ? "🚧 " : ""}
       {networkName}
     </Button>
   );
@@ -90,7 +116,7 @@ function Layout() {
         {isSignedIn && (
           <Group p="sm" position="right">
             <Profile />
-            {networkName === 'testnet' ? (
+            {networkName === "testnet" ? (
               <Menu trigger="hover">
                 <Menu.Target>{networkButton}</Menu.Target>
                 <Menu.Dropdown>
@@ -138,7 +164,11 @@ function Root() {
         <AuthProvider>
           <StackingClientProvider>
             <BlockchainApiClientProvider>
-              <MantineProvider withGlobalStyles withNormalizeCSS theme={{ primaryColor: 'violet' }}>
+              <MantineProvider
+                withGlobalStyles
+                withNormalizeCSS
+                theme={{ primaryColor: "violet" }}
+              >
                 <ModalsProvider>
                   <Outlet />
                 </ModalsProvider>
@@ -166,12 +196,12 @@ function AuthGuard() {
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <Root />,
     children: [
       { index: true, element: <Navigate to="sign-in" /> },
       {
-        path: 'sign-in',
+        path: "sign-in",
         element: <SignIn />,
       },
       {
@@ -181,24 +211,24 @@ const router = createBrowserRouter([
             element: <Layout />,
             children: [
               {
-                path: 'choose-stacking-method',
+                path: "choose-stacking-method",
                 element: <ChooseStackingMethod />,
               },
               {
-                path: 'start-pooled-stacking',
+                path: "start-pooled-stacking",
                 element: <StartPooledStacking />,
               },
               {
-                path: 'pooled-stacking-info',
+                path: "pooled-stacking-info",
                 element: <PooledStackingInfo />,
               },
 
               {
-                path: 'start-direct-stacking',
+                path: "start-direct-stacking",
                 element: <StartDirectStacking />,
               },
               {
-                path: 'direct-stacking-info',
+                path: "direct-stacking-info",
                 element: <DirectStackingInfo />,
               },
             ],

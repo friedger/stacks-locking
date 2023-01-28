@@ -1,38 +1,44 @@
-import { AccountsApi, SmartContractsApi, TransactionsApi } from '@stacks/blockchain-api-client';
-import { StackingClient } from '@stacks/stacking';
 import {
-  Transaction,
-  MempoolTransaction,
+  AccountsApi,
+  SmartContractsApi,
+  TransactionsApi,
+} from "@stacks/blockchain-api-client";
+import { StackingClient } from "@stacks/stacking";
+import {
   ContractCallTransaction,
   MempoolContractCallTransaction,
-} from '@stacks/stacks-blockchain-api-types';
+  MempoolTransaction,
+  Transaction,
+} from "@stacks/stacks-blockchain-api-types";
 import {
-  cvToHex,
-  tupleCV,
-  standardPrincipalCV,
-  hexToCV,
   ClarityType,
-  cvToString,
   ClarityValue,
-} from '@stacks/transactions';
+  cvToHex,
+  cvToString,
+  hexToCV,
+  standardPrincipalCV,
+  tupleCV,
+} from "@stacks/transactions";
 
 function isMempoolContractCallTransaction(
   t: MempoolTransaction
 ): t is MempoolContractCallTransaction {
-  return t.tx_type === 'contract_call';
+  return t.tx_type === "contract_call";
 }
-function isContractCallTransaction(t: Transaction): t is ContractCallTransaction {
-  return t.tx_type === 'contract_call';
+function isContractCallTransaction(
+  t: Transaction
+): t is ContractCallTransaction {
+  return t.tx_type === "contract_call";
 }
 
 function isDelegateOrRevokeDelegate(functionName: string) {
-  return ['delegate-stx', 'revoke-delegate-stx'].includes(functionName);
+  return ["delegate-stx", "revoke-delegate-stx"].includes(functionName);
 }
 
 function findMempoolTransaction(
   transactions: MempoolTransaction[]
 ): MempoolContractCallTransaction | undefined {
-  return transactions.find(t => {
+  return transactions.find((t) => {
     if (!isMempoolContractCallTransaction(t)) return false;
 
     return isDelegateOrRevokeDelegate(t.contract_call.function_name);
@@ -41,13 +47,15 @@ function findMempoolTransaction(
 function findUnanchoredTransaction(
   transactions: Transaction[]
 ): ContractCallTransaction | undefined {
-  return transactions.find(t => {
+  return transactions.find((t) => {
     if (!isContractCallTransaction(t)) return false;
 
     const isUnanchored = t.is_unanchored;
     // TODO: checking the hex would be more robust
-    const isOkResult = t.tx_result.repr === '(ok true)';
-    const isRelevantFunctionNameResult = isDelegateOrRevokeDelegate(t.contract_call.function_name);
+    const isOkResult = t.tx_result.repr === "(ok true)";
+    const isRelevantFunctionNameResult = isDelegateOrRevokeDelegate(
+      t.contract_call.function_name
+    );
 
     return isUnanchored && isOkResult && isRelevantFunctionNameResult;
   }) as ContractCallTransaction | undefined;
@@ -57,23 +65,24 @@ function getDelegationStatusFromTransaction(
   transaction: ContractCallTransaction | MempoolContractCallTransaction,
   burnBlockHeight: number
 ) {
-  if (transaction.contract_call.function_name === 'revoke-delegate-stx') {
+  if (transaction.contract_call.function_name === "revoke-delegate-stx") {
     return { isDelegating: false } as const;
   }
 
-  if (transaction.contract_call.function_name === 'delegate-stx') {
+  if (transaction.contract_call.function_name === "delegate-stx") {
     const args = transaction.contract_call.function_args;
     if (!Array.isArray(args)) {
       // TODO: log error
-      console.error('Detected a malformed delegate-stx transaction.');
+      console.error("Detected a malformed delegate-stx transaction.");
       return { isDelegating: false };
     }
 
-    const [amountMicroStxCV, delegatedToCV, untilBurnHeightCV, _poxAddressCV] = args.map<
-      // The values above should be defined as long as the clarity contract and the api remain the
-      // same. Nevertheless, out of caution, marking them as possibly undefined.
-      ClarityValue | undefined
-    >(arg => hexToCV(arg.hex));
+    const [amountMicroStxCV, delegatedToCV, untilBurnHeightCV, _poxAddressCV] =
+      args.map<
+        // The values above should be defined as long as the clarity contract and the api remain the
+        // same. Nevertheless, out of caution, marking them as possibly undefined.
+        ClarityValue | undefined
+      >((arg) => hexToCV(arg.hex));
 
     let untilBurnHeight: null | bigint = null;
     if (
@@ -84,15 +93,19 @@ function getDelegationStatusFromTransaction(
       untilBurnHeight = untilBurnHeightCV.value.value;
     }
 
-    const isExpired = untilBurnHeight !== null && burnBlockHeight > untilBurnHeight;
+    const isExpired =
+      untilBurnHeight !== null && burnBlockHeight > untilBurnHeight;
 
     if (!amountMicroStxCV || amountMicroStxCV.type !== ClarityType.UInt) {
-      throw new Error('Expected `amount-ustx` to be defined.');
+      throw new Error("Expected `amount-ustx` to be defined.");
     }
     const amountMicroStx: bigint = amountMicroStxCV.value;
 
-    if (!delegatedToCV || delegatedToCV.type !== ClarityType.PrincipalStandard) {
-      throw new Error('Expected `delegate-to` to be defined.');
+    if (
+      !delegatedToCV ||
+      delegatedToCV.type !== ClarityType.PrincipalStandard
+    ) {
+      throw new Error("Expected `delegate-to` to be defined.");
     }
     const delegatedTo = cvToString(delegatedToCV);
 
@@ -107,44 +120,56 @@ function getDelegationStatusFromTransaction(
 
   // TODO: log error
   console.error(
-    'Processed a non-delegation transaction. Only delegation-related transaction should be used with this function.'
+    "Processed a non-delegation transaction. Only delegation-related transaction should be used with this function."
   );
   return { isDelegating: false };
 }
 
-function getDelegationStatusFromMapEntry(mapEntryCV: ClarityValue, burnBlockHeight: number) {
+function getDelegationStatusFromMapEntry(
+  mapEntryCV: ClarityValue,
+  burnBlockHeight: number
+) {
   if (mapEntryCV.type === ClarityType.OptionalNone) {
     return { isDelegating: false } as const;
   }
 
-  if (mapEntryCV.type !== ClarityType.OptionalSome || mapEntryCV.value.type !== ClarityType.Tuple) {
-    throw new Error('Expected to receive an `OptionalSome` value containing a `Tuple`.');
+  if (
+    mapEntryCV.type !== ClarityType.OptionalSome ||
+    mapEntryCV.value.type !== ClarityType.Tuple
+  ) {
+    throw new Error(
+      "Expected to receive an `OptionalSome` value containing a `Tuple`."
+    );
   }
 
   const tupleCVData = mapEntryCV.value.data;
 
   let untilBurnHeight = null;
   if (
-    tupleCVData['until-burn-ht'] &&
-    tupleCVData['until-burn-ht'].type === ClarityType.OptionalSome &&
-    tupleCVData['until-burn-ht'].value.type === ClarityType.UInt
+    tupleCVData["until-burn-ht"] &&
+    tupleCVData["until-burn-ht"].type === ClarityType.OptionalSome &&
+    tupleCVData["until-burn-ht"].value.type === ClarityType.UInt
   ) {
-    untilBurnHeight = tupleCVData['until-burn-ht'].value.value;
+    untilBurnHeight = tupleCVData["until-burn-ht"].value.value;
   }
-  const isExpired = untilBurnHeight !== null && burnBlockHeight > untilBurnHeight;
-
-  if (!tupleCVData['amount-ustx'] || tupleCVData['amount-ustx'].type !== ClarityType.UInt) {
-    throw new Error('Expected `amount-ustx` to be defined.');
-  }
-  const amountMicroStx = tupleCVData['amount-ustx'].value;
+  const isExpired =
+    untilBurnHeight !== null && burnBlockHeight > untilBurnHeight;
 
   if (
-    !tupleCVData['delegated-to'] ||
-    tupleCVData['delegated-to'].type !== ClarityType.PrincipalStandard
+    !tupleCVData["amount-ustx"] ||
+    tupleCVData["amount-ustx"].type !== ClarityType.UInt
   ) {
-    throw new Error('Expected `amount-ustx` to be defined.');
+    throw new Error("Expected `amount-ustx` to be defined.");
   }
-  const delegatedTo = cvToString(tupleCVData['delegated-to']);
+  const amountMicroStx = tupleCVData["amount-ustx"].value;
+
+  if (
+    !tupleCVData["delegated-to"] ||
+    tupleCVData["delegated-to"].type !== ClarityType.PrincipalStandard
+  ) {
+    throw new Error("Expected `amount-ustx` to be defined.");
+  }
+  const delegatedTo = cvToString(tupleCVData["delegated-to"]);
 
   return {
     isDelegating: true,
@@ -166,13 +191,13 @@ async function getOnChainPoxDelegationMapEntryCV({
   smartContractsApi,
 }: GetOnChainPoxDelegationMapEntryCVArgs) {
   const key = cvToHex(tupleCV({ stacker: standardPrincipalCV(address) }));
-  const [contractAddress, contractName] = contractPrincipal.split('.');
+  const [contractAddress, contractName] = contractPrincipal.split(".");
 
   const args = {
     contractAddress,
     contractName,
     key,
-    mapName: 'delegation-state',
+    mapName: "delegation-state",
   };
   const res = await smartContractsApi.getContractDataMapEntry(args);
   return hexToCV(res.data);
@@ -192,21 +217,24 @@ export async function getDelegationStatus({
   smartContractsApi,
   transactionsApi,
 }: Args) {
-  const [contractPrincipal, coreInfo, accountTransactions, mempoolTransactions] = await Promise.all(
-    [
-      stackingClient.getStackingContract(),
-      stackingClient.getCoreInfo(),
-      accountsApi.getAccountTransactions({
-        principal: address,
-        unanchored: true,
-        limit: 50,
-      }),
-      transactionsApi.getAddressMempoolTransactions({
-        address,
-        unanchored: true,
-      }),
-    ]
-  );
+  const [
+    contractPrincipal,
+    coreInfo,
+    accountTransactions,
+    mempoolTransactions,
+  ] = await Promise.all([
+    stackingClient.getStackingContract(),
+    stackingClient.getCoreInfo(),
+    accountsApi.getAccountTransactions({
+      principal: address,
+      unanchored: true,
+      limit: 50,
+    }),
+    transactionsApi.getAddressMempoolTransactions({
+      address,
+      unanchored: true,
+    }),
+  ]);
 
   // NOTE: `results` needs to be cast due to known issues with types,
   // https://github.com/hirosystems/stacks-blockchain-api/tree/master/client#known-issues
@@ -217,7 +245,10 @@ export async function getDelegationStatus({
     mempoolTransactions.results as MempoolTransaction[]
   );
 
-  let transaction: ContractCallTransaction | MempoolContractCallTransaction | null = null;
+  let transaction:
+    | ContractCallTransaction
+    | MempoolContractCallTransaction
+    | null = null;
   if (unanchoredTransaction && mempoolTransaction) {
     transaction =
       unanchoredTransaction.nonce > mempoolTransaction.nonce
@@ -230,7 +261,10 @@ export async function getDelegationStatus({
   }
 
   if (transaction) {
-    return getDelegationStatusFromTransaction(transaction, coreInfo.burn_block_height);
+    return getDelegationStatusFromTransaction(
+      transaction,
+      coreInfo.burn_block_height
+    );
   }
 
   const mapEntryCV = await getOnChainPoxDelegationMapEntryCV({
@@ -239,5 +273,8 @@ export async function getDelegationStatus({
     smartContractsApi,
   });
 
-  return getDelegationStatusFromMapEntry(mapEntryCV, coreInfo.burn_block_height);
+  return getDelegationStatusFromMapEntry(
+    mapEntryCV,
+    coreInfo.burn_block_height
+  );
 }

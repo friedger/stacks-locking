@@ -1,16 +1,21 @@
-import { useMemo } from 'react';
-import { Box, Card, Divider, Group, Stack, Text, Title } from '@mantine/core';
-import { BigNumber } from 'bignumber.js';
+import { useMemo } from "react";
 
-import { truncateMiddle } from '@utils/tx-utils';
-import { parseNumericalFormInput } from '@utils/form/parse-numerical-form-input';
-import { stxToMicroStx, toHumanReadableStx } from '@utils/unit-convert';
-import { calculateRewardSlots, calculateStackingBuffer } from '../../../utils/calc-stacking-buffer';
-import { useFormikContext } from 'formik';
-import { DirectStackingFormValues } from '../../types';
-import { useGetPoxInfoQuery } from '@components/stacking-client-provider/stacking-client-provider';
-import { createAmountText } from '../../../utils/create-amount-text';
-import { Start } from './components/start';
+import { Box, Card, Divider, Group, Stack, Text, Title } from "@mantine/core";
+import { BigNumber } from "bignumber.js";
+import { useFormikContext } from "formik";
+
+import { useGetPoxInfoQuery } from "@components/stacking-client-provider/stacking-client-provider";
+import { parseNumericalFormInput } from "@utils/form/parse-numerical-form-input";
+import { truncateMiddle } from "@utils/tx-utils";
+import { stxToMicroStx, toHumanReadableStx } from "@utils/unit-convert";
+
+import {
+  calculateRewardSlots,
+  calculateStackingBuffer,
+} from "../../../utils/calc-stacking-buffer";
+import { createAmountText } from "../../../utils/create-amount-text";
+import { DirectStackingFormValues } from "../../types";
+import { Start } from "./components/start";
 
 export function InfoPanel() {
   const f = useFormikContext<DirectStackingFormValues>();
@@ -49,7 +54,9 @@ export function InfoPanel() {
         </Group>
         <Group position="apart">
           <Text>Buffer</Text>
-          <Text>{buffer === null ? 'No buffer' : toHumanReadableStx(buffer)}</Text>
+          <Text>
+            {buffer === null ? "No buffer" : toHumanReadableStx(buffer)}
+          </Text>
         </Group>
 
         <Divider />
@@ -64,7 +71,7 @@ export function InfoPanel() {
 
         <Group position="apart">
           <Text>Bitcoin address</Text>
-          <Text>{poxAddress ? truncateMiddle(poxAddress) : '—'}</Text>
+          <Text>{poxAddress ? truncateMiddle(poxAddress) : "—"}</Text>
         </Group>
       </Stack>
     </Card>

@@ -8,7 +8,7 @@ const nativeExceptions = [
   SyntaxError,
   TypeError,
   URIError,
-].filter(except => typeof except === 'function');
+].filter((except) => typeof except === "function");
 
 function throwNative(error: Error) {
   for (const Exception of nativeExceptions) {
@@ -18,7 +18,7 @@ function throwNative(error: Error) {
 
 export function safeAwait<T>(promise: Promise<T>, finallyFn?: () => void) {
   return promise
-    .then(data => {
+    .then((data) => {
       if (data instanceof Error) {
         throwNative(data);
         return [data] as readonly [Error];

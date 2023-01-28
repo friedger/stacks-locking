@@ -1,18 +1,26 @@
-import { useRef } from 'react';
-import { useField } from 'formik';
+import { useRef } from "react";
 
-import { ActionIcon, Group, NumberInput, NumberInputHandlers, Stack, Text } from '@mantine/core';
-import { MAX_STACKING_CYCLES, MIN_STACKING_CYCLES } from '@constants/app';
+import {
+  ActionIcon,
+  Group,
+  NumberInput,
+  NumberInputHandlers,
+  Stack,
+  Text,
+} from "@mantine/core";
+import { addSeconds, formatDistance } from "date-fns";
+import { useField } from "formik";
 
-import { Step, Description as Description } from '../../components/stacking-form-step';
 import {
   useGetCycleDurationQuery,
   useGetPoxInfoQuery,
-} from '@components/stacking-client-provider/stacking-client-provider';
-import { addSeconds, formatDistance } from 'date-fns';
+} from "@components/stacking-client-provider/stacking-client-provider";
+import { MAX_STACKING_CYCLES, MIN_STACKING_CYCLES } from "@constants/app";
+
+import { Description, Step } from "../../components/stacking-form-step";
 
 export function Duration() {
-  const [field, _meta, helpers] = useField('lockPeriod');
+  const [field, _meta, helpers] = useField("lockPeriod");
   const getPoxInfoQuery = useGetPoxInfoQuery();
   const getCycleDurationQuery = useGetCycleDurationQuery();
   const handlers = useRef<NumberInputHandlers>();
@@ -21,8 +29,9 @@ export function Duration() {
       <Stack>
         <Description>
           <Text>
-            Every cycle, each of your reward slots will be eligible for rewards. After your chosen
-            duration, you’ll need to wait one cycle before you can stack from this address again.
+            Every cycle, each of your reward slots will be eligible for rewards.
+            After your chosen duration, you’ll need to wait one cycle before you
+            can stack from this address again.
           </Text>
         </Description>
 
@@ -45,8 +54,8 @@ export function Duration() {
             hideControls
             value={field.value}
             handlersRef={handlers}
-            formatter={n => {
-              return `${Number(n)} cycle${Number(n) > 1 ? 's' : ''}`;
+            formatter={(n) => {
+              return `${Number(n)} cycle${Number(n) > 1 ? "s" : ""}`;
             }}
           />
           <ActionIcon
@@ -65,8 +74,12 @@ export function Duration() {
         </Group>
 
         <Text>
-          Cycles last {getPoxInfoQuery.data?.reward_cycle_length} Bitcoin blocks, currently{' '}
-          {formatDistance(addSeconds(new Date(), getCycleDurationQuery.data ?? 0), new Date())}
+          Cycles last {getPoxInfoQuery.data?.reward_cycle_length} Bitcoin
+          blocks, currently{" "}
+          {formatDistance(
+            addSeconds(new Date(), getCycleDurationQuery.data ?? 0),
+            new Date()
+          )}
         </Text>
       </Stack>
     </Step>

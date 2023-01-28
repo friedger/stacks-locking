@@ -1,11 +1,12 @@
-import { validateStacksAddress as isValidStacksAddress } from '@stacks/transactions';
-import { ReactNode, createContext, useContext, useState } from 'react';
+import { ReactNode, createContext, useContext, useState } from "react";
 
-import { UserData } from '@stacks/auth';
-import { AppConfig, UserSession, showConnect } from '@stacks/connect';
-import { useNetwork } from '@components/network-provider';
+import { UserData } from "@stacks/auth";
+import { AppConfig, UserSession, showConnect } from "@stacks/connect";
+import { validateStacksAddress as isValidStacksAddress } from "@stacks/transactions";
 
-const appConfig = new AppConfig(['store_write']);
+import { useNetwork } from "@components/network-provider";
+
+const appConfig = new AppConfig(["store_write"]);
 const userSession = new UserSession({ appConfig });
 
 function getAccountAddress(userData: any, network: string) {
@@ -45,20 +46,21 @@ interface Props {
 export function AuthProvider({ children }: Props) {
   const [isSigningIn, setIsSigningIn] = useState(false);
   const [isSignedIn, setIsSignedIn] = useState(false);
-  const [hasSearchedForExistingSession, setHasSearchedForExistingSession] = useState(false);
+  const [hasSearchedForExistingSession, setHasSearchedForExistingSession] =
+    useState(false);
   const { networkName } = useNetwork();
 
   function signIn() {
     if (isSigningIn) {
-      console.warn('Attempted to sign in while sign is is in progress.');
+      console.warn("Attempted to sign in while sign is is in progress.");
       return;
     }
     setIsSigningIn(true);
     showConnect({
       userSession,
       appDetails: {
-        name: 'Stacking on the web',
-        icon: 'http://placekitten.com/200/200',
+        name: "Stacking on the web",
+        icon: "http://placekitten.com/200/200",
       },
       onFinish() {
         setIsSigningIn(false);
@@ -95,7 +97,9 @@ export function AuthProvider({ children }: Props) {
 
   return (
     <>
-      <AuthContext.Provider value={{ isSigningIn, isSignedIn, signIn, signOut, userData, address }}>
+      <AuthContext.Provider
+        value={{ isSigningIn, isSignedIn, signIn, signOut, userData, address }}
+      >
         {children}
       </AuthContext.Provider>
     </>

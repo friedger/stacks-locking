@@ -11,25 +11,30 @@ import {
   Stack,
   Text,
   Title,
-} from '@mantine/core';
-import stackByYourselfImg from '@assets/images/stack-by-yourself.svg';
-import { IconClockHour4, IconInfoCircle } from '@tabler/icons-react';
+} from "@mantine/core";
+import { IconClockHour4, IconInfoCircle } from "@tabler/icons-react";
+import { Link } from "react-router-dom";
+
+import stackByYourselfImg from "@assets/images/stack-by-yourself.svg";
+import { Address } from "@components/address";
+import { ErrorAlert } from "@components/error-alert";
+import { ExternalLink } from "@components/external-link";
+import { useNetwork } from "@components/network-provider";
 import {
   useGetAccountBalanceLocked,
   useGetAccountExtendedBalancesQuery,
   useGetCoreInfoQuery,
   useGetPoxInfoQuery,
   useGetStatusQuery,
-} from '@components/stacking-client-provider/stacking-client-provider';
-import { Link } from 'react-router-dom';
-import { ErrorAlert } from '@components/error-alert';
-import { toHumanReadableStx } from '@utils/unit-convert';
-import { ExternalLink } from '@components/external-link';
-import { formatPoxAddressToNetwork } from '@utils/stacking';
-import { Address } from '@components/address';
-import { useGetHasPendingDirectStackingQuery } from './use-get-has-pending-direct-stacking';
-import { useNetwork } from '@components/network-provider';
-import { makeExplorerTxLink, makeStackingClubRewardAddressLink } from '@utils/external-links';
+} from "@components/stacking-client-provider/stacking-client-provider";
+import {
+  makeExplorerTxLink,
+  makeStackingClubRewardAddressLink,
+} from "@utils/external-links";
+import { formatPoxAddressToNetwork } from "@utils/stacking";
+import { toHumanReadableStx } from "@utils/unit-convert";
+
+import { useGetHasPendingDirectStackingQuery } from "./use-get-has-pending-direct-stacking";
 
 export function DirectStackingInfo() {
   const { networkName } = useNetwork();
@@ -57,7 +62,7 @@ export function DirectStackingInfo() {
     getAccountExtendedBalancesQuery.isError ||
     !getAccountExtendedBalancesQuery.data ||
     getAccountBalanceLockedQuery.isError ||
-    typeof getAccountBalanceLockedQuery.data !== 'bigint' ||
+    typeof getAccountBalanceLockedQuery.data !== "bigint" ||
     getCoreInfoQuery.isError ||
     !getCoreInfoQuery.data ||
     getPoxInfoQuery.isError ||
@@ -65,7 +70,7 @@ export function DirectStackingInfo() {
     getHasPendingDirectStacking.isError ||
     getHasPendingDirectStacking.data === undefined
   ) {
-    const msg = 'Error while loading data, try reloading the page.';
+    const msg = "Error while loading data, try reloading the page.";
     console.error(msg);
     return (
       <ErrorAlert id="0abc083b-06c7-4795-8491-68264595f1b4">
@@ -98,15 +103,15 @@ export function DirectStackingInfo() {
         <Alert icon={<IconInfoCircle />}>
           <Stack>
             <Text>
-              It appears that you're not stacking yet. If you recently started to stack, your
-              stacking info will appear here in a few seconds.
+              It appears that you're not stacking yet. If you recently started
+              to stack, your stacking info will appear here in a few seconds.
             </Text>
             <Text>
-              You may want to{' '}
+              You may want to{" "}
               <Anchor to="../start-direct-stacking" component={Link}>
                 start stacking
-              </Anchor>{' '}
-              or{' '}
+              </Anchor>{" "}
+              or{" "}
               <Anchor to="../choose-stacking-method" component={Link}>
                 choose your stacking method
               </Anchor>
@@ -134,13 +139,18 @@ export function DirectStackingInfo() {
             <Box>
               <Title order={4}>You're stacking</Title>
               <Text fz="34px">
-                {toHumanReadableStx(getHasPendingDirectStacking.data.amountMicroStx)}
+                {toHumanReadableStx(
+                  getHasPendingDirectStacking.data.amountMicroStx
+                )}
               </Text>
             </Box>
 
-            <Alert icon={<IconClockHour4 />} title="Waiting for transaction confirmation">
-              A stacking request was successfully submitted to the blockchain. Once confirmed, the
-              account will be ready to start stacking.
+            <Alert
+              icon={<IconClockHour4 />}
+              title="Waiting for transaction confirmation"
+            >
+              A stacking request was successfully submitted to the blockchain.
+              Once confirmed, the account will be ready to start stacking.
             </Alert>
 
             <Divider />
@@ -148,20 +158,28 @@ export function DirectStackingInfo() {
             <Stack>
               <Group position="apart">
                 <Text>Duration</Text>
-                <Text>{getHasPendingDirectStacking.data.lockPeriod.toString()} cycles</Text>
+                <Text>
+                  {getHasPendingDirectStacking.data.lockPeriod.toString()}{" "}
+                  cycles
+                </Text>
               </Group>
 
               <Divider />
 
               <Group position="apart">
                 <Text>Bitcoin address</Text>
-                <Address address={getHasPendingDirectStacking.data.poxAddress} />
+                <Address
+                  address={getHasPendingDirectStacking.data.poxAddress}
+                />
               </Group>
 
               <Divider />
 
               <ExternalLink
-                href={makeExplorerTxLink(getHasPendingDirectStacking.data.poxAddress, networkName)}
+                href={makeExplorerTxLink(
+                  getHasPendingDirectStacking.data.poxAddress,
+                  networkName
+                )}
               >
                 View transaction
               </ExternalLink>
@@ -172,7 +190,7 @@ export function DirectStackingInfo() {
     );
   }
 
-  let lockingProgressPercentString = '0';
+  let lockingProgressPercentString = "0";
   if (getStatusQuery.data.stacked) {
     const cycleLengthInBlocks =
       getAccountExtendedBalancesQuery.data.stx.burnchain_unlock_height -
@@ -191,14 +209,15 @@ export function DirectStackingInfo() {
   // This if statement may be unnecessary, as cases for when the account is not stacked should have
   // already been handled above, but the type system can not guarantee this.
   if (!getStatusQuery.data.stacked) {
-    const id = 'ee504e56-9cc5-49b4-ae98-a5cac5c35dbf';
-    const msg = 'Expected account to be stacked';
+    const id = "ee504e56-9cc5-49b4-ae98-a5cac5c35dbf";
+    const msg = "Expected account to be stacked";
     console.error(id, msg);
     return <ErrorAlert id={id}>{msg}</ErrorAlert>;
   }
 
   const elapsedCyclesSinceStackingStart = Math.max(
-    getPoxInfoQuery.data.reward_cycle_id - getStatusQuery.data.details.first_reward_cycle,
+    getPoxInfoQuery.data.reward_cycle_id -
+      getStatusQuery.data.details.first_reward_cycle,
     0
   );
   const elapsedStackingCycles = Math.min(
@@ -207,9 +226,12 @@ export function DirectStackingInfo() {
   );
 
   const isBeforeFirstRewardCycle =
-    getPoxInfoQuery.data.reward_cycle_id < getStatusQuery.data.details.first_reward_cycle;
+    getPoxInfoQuery.data.reward_cycle_id <
+    getStatusQuery.data.details.first_reward_cycle;
 
-  const poxAddress = formatPoxAddressToNetwork(getStatusQuery.data.details.pox_address);
+  const poxAddress = formatPoxAddressToNetwork(
+    getStatusQuery.data.details.pox_address
+  );
 
   return (
     <>
@@ -226,13 +248,18 @@ export function DirectStackingInfo() {
           <Stack>
             <Box>
               <Title order={4}>You're stacking</Title>
-              <Text fz="34px">{toHumanReadableStx(getAccountBalanceLockedQuery.data)}</Text>
+              <Text fz="34px">
+                {toHumanReadableStx(getAccountBalanceLockedQuery.data)}
+              </Text>
             </Box>
 
             {isBeforeFirstRewardCycle && (
-              <Alert icon={<IconClockHour4 />} title="Waiting for the cycle to start">
-                Your STX are ready for stacking. Once the next cycle starts the network will
-                determine if and how many slots are claimed.
+              <Alert
+                icon={<IconClockHour4 />}
+                title="Waiting for the cycle to start"
+              >
+                Your STX are ready for stacking. Once the next cycle starts the
+                network will determine if and how many slots are claimed.
               </Alert>
             )}
 
@@ -242,19 +269,22 @@ export function DirectStackingInfo() {
               <Group position="apart">
                 <Text>Duration</Text>
                 <Text>
-                  {elapsedStackingCycles} / {getStatusQuery.data.details.lock_period}
+                  {elapsedStackingCycles} /{" "}
+                  {getStatusQuery.data.details.lock_period}
                 </Text>
               </Group>
               <Group position="apart">
                 <Text>Start</Text>
-                <Text>Cycle {getStatusQuery.data.details.first_reward_cycle}</Text>
+                <Text>
+                  Cycle {getStatusQuery.data.details.first_reward_cycle}
+                </Text>
               </Group>
               <Group position="apart">
                 <Text>End</Text>
                 <Text>
-                  Cycle{' '}
+                  Cycle{" "}
                   {getStatusQuery.data.details.first_reward_cycle +
-                    getStatusQuery.data.details.lock_period}{' '}
+                    getStatusQuery.data.details.lock_period}{" "}
                 </Text>
               </Group>
 
@@ -275,7 +305,11 @@ export function DirectStackingInfo() {
 
               <ExternalLink
                 href={makeStackingClubRewardAddressLink(
-                  String(formatPoxAddressToNetwork(getStatusQuery.data.details.pox_address))
+                  String(
+                    formatPoxAddressToNetwork(
+                      getStatusQuery.data.details.pox_address
+                    )
+                  )
                 )}
               >
                 🥞 View on stacking.club

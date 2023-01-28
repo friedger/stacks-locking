@@ -1,6 +1,6 @@
-import { AccountsApi, TransactionsApi } from '@stacks/blockchain-api-client';
-import { poxAddressToBtcAddress, StackingClient } from '@stacks/stacking';
-import { hexToCV, ClarityType } from '@stacks/transactions';
+import { AccountsApi, TransactionsApi } from "@stacks/blockchain-api-client";
+import { StackingClient, poxAddressToBtcAddress } from "@stacks/stacking";
+import { ClarityType, hexToCV } from "@stacks/transactions";
 
 /**
  * Given an array of transactions, ordered from most recent to least recent, returns the most recent
@@ -23,10 +23,10 @@ function getMostRecentSuccessfulStackStxTransaction(
     }
 
     // For transactions in mempool
-    const isPending = t.tx_status === 'pending';
+    const isPending = t.tx_status === "pending";
 
     const isCallToPoxStackStx =
-      t.contract_call?.function_name === 'stack-stx' &&
+      t.contract_call?.function_name === "stack-stx" &&
       t.contract_call?.contract_id === poxContractId;
     return (isSuccess || isPending) && isCallToPoxStackStx;
   });
@@ -42,7 +42,7 @@ interface ReturnGetHasPendingDirectStacking {
 // TODO: Types. For now assuming callers only provide a `stack-stx` pox call transaction.
 function getDirectStackingStatusFromTransaction(
   transaction: any,
-  network: 'mainnet' | 'testnet'
+  network: "mainnet" | "testnet"
 ): ReturnGetHasPendingDirectStacking {
   const [amountMicroStxCV, poxAddressCV, startBurnHeightCV, lockPeriodCV] =
     transaction.contract_call.function_args.map((arg: any) => hexToCV(arg.hex));
@@ -55,7 +55,7 @@ function getDirectStackingStatusFromTransaction(
 
   // Amount
   if (!amountMicroStxCV || amountMicroStxCV.type !== ClarityType.UInt) {
-    throw new Error('Expected `amount-ustx` to be defined.');
+    throw new Error("Expected `amount-ustx` to be defined.");
   }
   const amountMicroStx: bigint = amountMicroStxCV.value;
 
@@ -78,7 +78,7 @@ interface Args {
   accountsApi: AccountsApi;
   address: string;
   transactionsApi: TransactionsApi;
-  network: 'mainnet' | 'testnet';
+  network: "mainnet" | "testnet";
 }
 
 export async function getHasPendingDirectStacking({
@@ -88,18 +88,19 @@ export async function getHasPendingDirectStacking({
   transactionsApi,
   network,
 }: Args): Promise<null | ReturnGetHasPendingDirectStacking> {
-  const [contractPrincipal, accountTransactions, mempoolTransactions] = await Promise.all([
-    stackingClient.getStackingContract(),
-    accountsApi.getAccountTransactions({
-      principal: address,
-      unanchored: true,
-      limit: 50,
-    }),
-    transactionsApi.getAddressMempoolTransactions({
-      address,
-      unanchored: true,
-    }),
-  ]);
+  const [contractPrincipal, accountTransactions, mempoolTransactions] =
+    await Promise.all([
+      stackingClient.getStackingContract(),
+      accountsApi.getAccountTransactions({
+        principal: address,
+        unanchored: true,
+        limit: 50,
+      }),
+      transactionsApi.getAddressMempoolTransactions({
+        address,
+        unanchored: true,
+      }),
+    ]);
 
   const accountTransaction = getMostRecentSuccessfulStackStxTransaction(
     accountTransactions.results,
@@ -117,7 +118,9 @@ export async function getHasPendingDirectStacking({
     transaction = accountTransaction;
   } else {
     transaction =
-      accountTransaction.nonce > mempoolTransaction.nonce ? accountTransaction : mempoolTransaction;
+      accountTransaction.nonce > mempoolTransaction.nonce
+        ? accountTransaction
+        : mempoolTransaction;
   }
 
   if (transaction) {

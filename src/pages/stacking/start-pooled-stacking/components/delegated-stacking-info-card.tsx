@@ -1,11 +1,13 @@
-import { truncateMiddle } from '@utils/tx-utils';
-import { useFormikContext } from 'formik';
-import { EditingFormValues } from '../types';
-import { Card, Title, Text, Divider, Group, Stack, Box } from '@mantine/core';
-import { formatCycles } from '@utils/stacking';
-import { useGetPoxInfoQuery } from '@components/stacking-client-provider/stacking-client-provider';
-import { cyclesToBurnChainHeight } from '@utils/calculate-burn-height';
-import { createAmountText } from '../../utils/create-amount-text';
+import { Box, Card, Divider, Group, Stack, Text, Title } from "@mantine/core";
+import { useFormikContext } from "formik";
+
+import { useGetPoxInfoQuery } from "@components/stacking-client-provider/stacking-client-provider";
+import { cyclesToBurnChainHeight } from "@utils/calculate-burn-height";
+import { formatCycles } from "@utils/stacking";
+import { truncateMiddle } from "@utils/tx-utils";
+
+import { createAmountText } from "../../utils/create-amount-text";
+import { EditingFormValues } from "../types";
 
 export function PoolingInfoCard() {
   const f = useFormikContext<EditingFormValues>();
@@ -15,7 +17,9 @@ export function PoolingInfoCard() {
   const delegationType = f.values.delegationDurationType;
   const poolStxAddress = f.values.poolAddress;
   const durationInCycles =
-    f.values.delegationDurationType === 'limited' ? f.values.numberOfCycles : null;
+    f.values.delegationDurationType === "limited"
+      ? f.values.numberOfCycles
+      : null;
 
   const burnHeight =
     durationInCycles && poxInfoQuery.data
@@ -23,7 +27,8 @@ export function PoolingInfoCard() {
           cycles: durationInCycles,
           rewardCycleLength: poxInfoQuery.data.reward_cycle_length,
           currentCycleId: poxInfoQuery.data.current_cycle.id,
-          firstBurnchainBlockHeight: poxInfoQuery.data.first_burnchain_block_height,
+          firstBurnchainBlockHeight:
+            poxInfoQuery.data.first_burnchain_block_height,
         })
       : null;
   const amountText = createAmountText(amount);
@@ -49,9 +54,10 @@ export function PoolingInfoCard() {
               {/* </Tooltip> */}
             </Text>
             <Text>
-              {!delegationType && '—'}
-              {delegationType === 'limited' && formatCycles(durationInCycles ?? 0)}
-              {delegationType === 'indefinite' && 'Indefinite'}
+              {!delegationType && "—"}
+              {delegationType === "limited" &&
+                formatCycles(durationInCycles ?? 0)}
+              {delegationType === "indefinite" && "Indefinite"}
             </Text>
           </Group>
           {burnHeight && (
@@ -73,14 +79,14 @@ export function PoolingInfoCard() {
             {/*   </span> */}
             {/* </Tooltip> */}
           </Text>
-          <Text>{poolStxAddress ? truncateMiddle(poolStxAddress) : '—'}</Text>
+          <Text>{poolStxAddress ? truncateMiddle(poolStxAddress) : "—"}</Text>
         </Group>
 
         <Divider />
 
         <Group position="apart">
           <Text>Contract</Text>
-          <Text>{truncateMiddle(poxInfoQuery.data?.contract_id ?? '')}</Text>
+          <Text>{truncateMiddle(poxInfoQuery.data?.contract_id ?? "")}</Text>
         </Group>
       </Stack>
     </Card>

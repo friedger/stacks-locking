@@ -1,6 +1,6 @@
-import { Box, Grid, MediaQuery, Stack } from '@mantine/core';
+import { Box, Grid, MediaQuery, Stack } from "@mantine/core";
 
-type Slots = 'intro' | 'stackingInfoPanel' | 'stackingForm';
+type Slots = "intro" | "stackingInfoPanel" | "stackingForm";
 
 type StartStackingLayoutProps = Record<Slots, JSX.Element>;
 
@@ -12,7 +12,7 @@ export function StartStackingLayout(props: StartStackingLayoutProps) {
         <Stack>
           {intro}
 
-          <MediaQuery largerThan="md" styles={{ display: 'none' }}>
+          <MediaQuery largerThan="md" styles={{ display: "none" }}>
             <Box>{stackingInfoPanel}</Box>
           </MediaQuery>
 
@@ -20,9 +20,11 @@ export function StartStackingLayout(props: StartStackingLayoutProps) {
         </Stack>
       </Grid.Col>
 
-      <MediaQuery smallerThan="md" styles={{ display: 'none' }}>
+      <MediaQuery smallerThan="md" styles={{ display: "none" }}>
         <Grid.Col md={6}>
-          <Box sx={{ position: 'sticky', top: '20px' }}>{stackingInfoPanel}</Box>
+          <Box sx={{ position: "sticky", top: "20px" }}>
+            {stackingInfoPanel}
+          </Box>
         </Grid.Col>
       </MediaQuery>
     </Grid>

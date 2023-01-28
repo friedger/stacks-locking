@@ -1,9 +1,9 @@
-import { ExternalLink } from '@components/external-link';
+import { Stack, Text } from "@mantine/core";
 
-import { AddressField } from '../../components/fields/address-field';
-import { Description, Step } from '../../components/stacking-form-step';
+import { ExternalLink } from "@components/external-link";
 
-import { Stack, Text } from '@mantine/core';
+import { AddressField } from "../../components/fields/address-field";
+import { Description, Step } from "../../components/stacking-form-step";
 
 export function ChoosePoolAddress() {
   return (
@@ -11,12 +11,12 @@ export function ChoosePoolAddress() {
       <Stack>
         <Description>
           <Text>
-            Enter the STX address of the pool with which you’d like to Stack without your STX
-            leaving your wallet.
+            Enter the STX address of the pool with which you’d like to Stack
+            without your STX leaving your wallet.
           </Text>
           <Text>
-            The pool will provide this address for you. Pools can have different addresses that
-            correspond to particular durations.
+            The pool will provide this address for you. Pools can have different
+            addresses that correspond to particular durations.
           </Text>
           <ExternalLink href="https://stacks.co/stacking#services">
             Discover pools on stacks.co

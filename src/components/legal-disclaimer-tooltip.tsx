@@ -1,6 +1,6 @@
-import { Tooltip, TooltipProps } from '@mantine/core';
+import { Tooltip, TooltipProps } from "@mantine/core";
 
-export function LegalDisclaimerTooltip(props: Omit<TooltipProps, 'label'>) {
+export function LegalDisclaimerTooltip(props: Omit<TooltipProps, "label">) {
   return (
     <Tooltip
       // Setting the tooltip to render within a portal prevents it from being cut off when rendering

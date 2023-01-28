@@ -1,18 +1,21 @@
-import * as yup from 'yup';
+import { Dispatch, SetStateAction } from "react";
+
+import { ContractCallRegularOptions, openContractCall } from "@stacks/connect";
+import { StacksNetworkName } from "@stacks/network";
+import { StackingClient } from "@stacks/stacking";
+import { NavigateFunction } from "react-router-dom";
+import * as yup from "yup";
+
 import {
   MIN_DELEGATED_STACKING_AMOUNT_USTX,
   UI_IMPOSED_MAX_STACKING_AMOUNT_USTX,
-} from '@constants/app';
-import { toHumanReadableStx, stxToMicroStx } from '@utils/unit-convert';
-import { stxAddressSchema } from '@utils/validators/stx-address-validator';
-import { stxAmountSchema } from '@utils/validators/stx-amount-validator';
-import { openContractCall, ContractCallRegularOptions } from '@stacks/connect';
-import { cyclesToBurnChainHeight } from '@utils/calculate-burn-height';
-import { EditingFormValues } from './types';
-import { StackingClient } from '@stacks/stacking';
-import { Dispatch, SetStateAction } from 'react';
-import { NavigateFunction } from 'react-router-dom';
-import { StacksNetworkName } from '@stacks/network';
+} from "@constants/app";
+import { cyclesToBurnChainHeight } from "@utils/calculate-burn-height";
+import { stxToMicroStx, toHumanReadableStx } from "@utils/unit-convert";
+import { stxAddressSchema } from "@utils/validators/stx-address-validator";
+import { stxAmountSchema } from "@utils/validators/stx-amount-validator";
+
+import { EditingFormValues } from "./types";
 
 interface Args {
   /**
@@ -23,11 +26,14 @@ interface Args {
 
   networkName: StacksNetworkName;
 }
-export function createValidationSchema({ currentAccountAddress, networkName }: Args) {
+export function createValidationSchema({
+  currentAccountAddress,
+  networkName,
+}: Args) {
   return yup.object().shape({
     poolAddress: stxAddressSchema(networkName).test({
-      name: 'cannot-pool-to-yourself',
-      message: 'Cannot pool to your own STX address',
+      name: "cannot-pool-to-yourself",
+      message: "Cannot pool to your own STX address",
       test(value: any) {
         if (value === null || value === undefined) return false;
         return value !== currentAccountAddress;
@@ -35,28 +41,34 @@ export function createValidationSchema({ currentAccountAddress, networkName }: A
     }),
     amount: stxAmountSchema()
       .test({
-        name: 'test-min-allowed-delegated-stacking',
+        name: "test-min-allowed-delegated-stacking",
         message: `You must delegate at least ${toHumanReadableStx(
           MIN_DELEGATED_STACKING_AMOUNT_USTX
         )}`,
         test(value: any) {
           if (value === null || value === undefined) return false;
           const enteredAmount = stxToMicroStx(value);
-          return enteredAmount.isGreaterThanOrEqualTo(MIN_DELEGATED_STACKING_AMOUNT_USTX);
+          return enteredAmount.isGreaterThanOrEqualTo(
+            MIN_DELEGATED_STACKING_AMOUNT_USTX
+          );
         },
       })
       .test({
-        name: 'test-max-allowed-delegated-stacking',
+        name: "test-max-allowed-delegated-stacking",
         message: `You cannot delegate more than ${toHumanReadableStx(
           UI_IMPOSED_MAX_STACKING_AMOUNT_USTX
         )}`,
         test(value: any) {
           if (value === null || value === undefined) return false;
           const enteredAmount = stxToMicroStx(value);
-          return enteredAmount.isLessThanOrEqualTo(UI_IMPOSED_MAX_STACKING_AMOUNT_USTX);
+          return enteredAmount.isLessThanOrEqualTo(
+            UI_IMPOSED_MAX_STACKING_AMOUNT_USTX
+          );
         },
       }),
-    delegationDurationType: yup.string().required('Please select the delegation duration type.'),
+    delegationDurationType: yup
+      .string()
+      .required("Please select the delegation duration type."),
   });
 }
 
@@ -81,7 +93,7 @@ export function createHandleSubmit({
       amountMicroStx: stxToMicroStx(values.amount).toString(),
       delegateTo: values.poolAddress,
       untilBurnBlockHeight:
-        values.delegationDurationType === 'limited'
+        values.delegationDurationType === "limited"
           ? cyclesToBurnChainHeight({
               cycles: values.numberOfCycles,
               rewardCycleLength: poxInfo.reward_cycle_length,
@@ -102,7 +114,7 @@ export function createHandleSubmit({
       ...(delegateStxOptions as ContractCallRegularOptions),
       onFinish() {
         setIsContractCallExtensionPageOpen(false);
-        navigate('../pooled-stacking-info');
+        navigate("../pooled-stacking-info");
       },
       onCancel() {
         setIsContractCallExtensionPageOpen(false);
