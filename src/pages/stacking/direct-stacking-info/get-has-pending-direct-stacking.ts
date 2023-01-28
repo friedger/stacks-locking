@@ -1,37 +1,65 @@
 import { AccountsApi, TransactionsApi } from "@stacks/blockchain-api-client";
 import { StackingClient, poxAddressToBtcAddress } from "@stacks/stacking";
+import {
+  ContractCallTransaction,
+  ContractCallTransactionMetadata,
+  MempoolContractCallTransaction,
+  MempoolTransaction,
+  Transaction,
+} from "@stacks/stacks-blockchain-api-types";
 import { ClarityType, hexToCV } from "@stacks/transactions";
+import {
+  isContractCallTransaction,
+  isMempoolContractCallTransaction,
+} from "../utils/transactions";
 
-/**
- * Given an array of transactions, ordered from most recent to least recent, returns the most recent
- * successful transaction calling the PoX's `stack-stx` function. Mempool transactions are assumed
- * to be successful.
- */
-function getMostRecentSuccessfulStackStxTransaction(
-  transactions: any[],
+function isStackCall(
+  t: ContractCallTransactionMetadata,
+
   // Until PoX 2 has been fully activated, using this arg to determine the PoX contract id. Once
   // active, this value can be set to a constant.
   poxContractId: string
 ) {
-  return transactions.find((t: any) => {
-    // For transactions in microblock
+  return (
+    t.contract_call.function_name === "stack-stx" &&
+    t.contract_call.contract_id === poxContractId
+  );
+}
+/**
+ * Given an array of transactions, ordered from most recent to least recent, returns the most recent
+ * successful unanchored transaction calling the PoX's `stack-stx` function in a microblock.
+ */
+function findUnanchoredTransaction(
+  transactions: Transaction[],
+  // Until PoX 2 has been fully activated, using this arg to determine the PoX contract id. Once
+  // active, this value can be set to a constant.
+  poxContractId: string
+) {
+  return transactions.find((t) => {
+    if (!isContractCallTransaction(t)) return false;
 
-    let isSuccess = false;
-    if (t.tx_result?.hex) {
-      const isSuccessCV = hexToCV(t.tx_result?.hex);
-      isSuccess = isSuccessCV.type === ClarityType.ResponseOk;
-    }
+    const transactionResultCV = hexToCV(t.tx_result.hex);
+    const isOk = transactionResultCV.type === ClarityType.ResponseOk;
 
-    // For transactions in mempool
-    const isPending = t.tx_status === "pending";
-
-    const isCallToPoxStackStx =
-      t.contract_call?.function_name === "stack-stx" &&
-      t.contract_call?.contract_id === poxContractId;
-    return (isSuccess || isPending) && isCallToPoxStackStx;
+    return isOk && isStackCall(t, poxContractId);
   });
 }
+/**
+ * Given an array of transactions, ordered from most recent to least recent, returns the most recent
+ * transaction calling the PoX's `stack-stx` function in the mempool.
+ */
+function findMempoolTransaction(
+  transactions: MempoolTransaction[],
+  // Until PoX 2 has been fully activated, using this arg to determine the PoX contract id. Once
+  // active, this value can be set to a constant.
+  poxContractId: string
+) {
+  return transactions.find((t) => {
+    if (!isMempoolContractCallTransaction(t)) return false;
 
+    return isStackCall(t, poxContractId);
+  });
+}
 interface ReturnGetHasPendingDirectStacking {
   amountMicroStx: bigint;
   lockPeriod: number;
@@ -102,12 +130,14 @@ export async function getHasPendingDirectStacking({
       }),
     ]);
 
-  const accountTransaction = getMostRecentSuccessfulStackStxTransaction(
-    accountTransactions.results,
+  // NOTE: `results` needs to be cast due to known issues with types,
+  // https://github.com/hirosystems/stacks-blockchain-api/tree/master/client#known-issues
+  const accountTransaction = findUnanchoredTransaction(
+    accountTransactions.results as Transaction[],
     contractPrincipal
   );
-  const mempoolTransaction = getMostRecentSuccessfulStackStxTransaction(
-    mempoolTransactions.results,
+  const mempoolTransaction = findMempoolTransaction(
+    mempoolTransactions.results as MempoolTransaction[],
     contractPrincipal
   );
 

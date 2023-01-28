@@ -17,8 +17,11 @@ import {
   IconChartLine,
   IconInfoCircle,
   IconLock,
+  IconStairs,
+  IconStairsUp,
   IconUser,
   IconUserMinus,
+  IconUsers,
 } from "@tabler/icons-react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -36,6 +39,7 @@ import { BUY_STACKS_URL } from "@constants/app";
 
 import { useDelegationStatusQuery } from "../stacking/pooled-stacking-info/use-delegation-status-query";
 import { useStackingInitiatedByQuery } from "./use-stacking-initiated-by";
+import { toHumanReadableStx } from "@utils/unit-convert";
 
 export function ChooseStackingMethod() {
   const { address } = useAuth();
@@ -73,9 +77,9 @@ export function ChooseStackingMethod() {
     return <ErrorAlert id={id}>{msg}</ErrorAlert>;
   }
 
+  const stackingMinimumAmountUstx = BigInt(q5.data.min_amount_ustx);
   const hasEnoughBalanceToPool = q4.data > 0;
-  const hasEnoughBalanceToDirectStack =
-    q4.data > BigInt(q5.data.min_amount_ustx);
+  const hasEnoughBalanceToDirectStack = q4.data > stackingMinimumAmountUstx;
 
   const isStacking = q2.data !== 0n;
   const hasExistingDelegation = q1.data.isDelegating;
@@ -83,12 +87,13 @@ export function ChooseStackingMethod() {
     isStacking && address !== q3.data.address;
   const hasExistingDirectStacking = isStacking && address === q3.data.address;
   return (
-    <ChooseStackingMethodInner
+    <ChooseStackingMethodLayout
       hasExistingDelegation={hasExistingDelegation}
       hasExistingDelegatedStacking={hasExistingDelegatedStacking}
       hasExistingDirectStacking={hasExistingDirectStacking}
       hasEnoughBalanceToPool={hasEnoughBalanceToPool}
       hasEnoughBalanceToDirectStack={hasEnoughBalanceToDirectStack}
+      stackingMinimumAmountUstx={stackingMinimumAmountUstx}
     />
   );
 }
@@ -98,13 +103,15 @@ interface ChooseStackingMethodInnerProps {
   hasExistingDirectStacking: boolean;
   hasEnoughBalanceToPool: boolean;
   hasEnoughBalanceToDirectStack: boolean;
+  stackingMinimumAmountUstx: bigint;
 }
-function ChooseStackingMethodInner({
+function ChooseStackingMethodLayout({
   hasExistingDelegation,
   hasExistingDelegatedStacking,
   hasExistingDirectStacking,
   hasEnoughBalanceToPool,
   hasEnoughBalanceToDirectStack,
+  stackingMinimumAmountUstx,
 }: ChooseStackingMethodInnerProps) {
   const navigate = useNavigate();
   const hasExistingCommitment =
@@ -181,11 +188,14 @@ function ChooseStackingMethodInner({
                 </Text>
 
                 <List>
-                  <List.Item icon={<IconUser />}>
+                  <List.Item icon={<IconUsers />}>
                     A pool stacks on your behalf
                   </List.Item>
                   <List.Item icon={<IconChartLine />}>
                     More predictable returns
+                  </List.Item>
+                  <List.Item icon={<IconStairs />}>
+                    No minimum required
                   </List.Item>
                 </List>
 
@@ -223,13 +233,11 @@ function ChooseStackingMethodInner({
                   <List.Item icon={<IconUserMinus />}>
                     No intermediaries
                   </List.Item>
+                  <List.Item icon={<IconStairsUp />}>
+                    Dynamic minimum (currently{" "}
+                    {toHumanReadableStx(stackingMinimumAmountUstx)})
+                  </List.Item>
                 </List>
-                {/*   <OptionBenefit icon={StepsIcon}> */}
-                {/*     Minimum required to stack is{' '} */}
-                {/*     {/* {toHumanReadableStx( */}
-                {/*       poxInfo?.paddedMinimumStackingAmountMicroStx || 0 */}
-                {/*     )} */}
-                {/*   </OptionBenefit> */}
 
                 <Button
                   onClick={() => navigate("../start-direct-stacking")}
@@ -239,9 +247,6 @@ function ChooseStackingMethodInner({
                 >
                   Stack by yourself
                 </Button>
-                {/* {!meetsMinThresholdForDirectStacking && (
-              <InsufficientStackingBalanceWarning />
-            )} */}
               </Stack>
             </Card>
           </Grid.Col>

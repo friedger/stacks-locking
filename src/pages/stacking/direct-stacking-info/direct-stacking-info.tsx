@@ -123,6 +123,8 @@ export function DirectStackingInfo() {
     );
   }
 
+  const transactionId = getHasPendingDirectStacking.data?.transactionId;
+
   if (!isStacking && getHasPendingDirectStacking.data) {
     return (
       <Card withBorder w="400px">
@@ -175,14 +177,13 @@ export function DirectStackingInfo() {
 
               <Divider />
 
-              <ExternalLink
-                href={makeExplorerTxLink(
-                  getHasPendingDirectStacking.data.poxAddress,
-                  networkName
-                )}
-              >
-                View transaction
-              </ExternalLink>
+              {transactionId && (
+                <ExternalLink
+                  href={makeExplorerTxLink(transactionId, networkName)}
+                >
+                  View transaction
+                </ExternalLink>
+              )}
             </Stack>
           </Stack>
         </Stack>

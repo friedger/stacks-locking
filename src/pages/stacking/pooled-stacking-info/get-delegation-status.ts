@@ -6,6 +6,7 @@ import {
 import { StackingClient } from "@stacks/stacking";
 import {
   ContractCallTransaction,
+  ContractCallTransactionMetadata,
   MempoolContractCallTransaction,
   MempoolTransaction,
   Transaction,
@@ -19,20 +20,15 @@ import {
   standardPrincipalCV,
   tupleCV,
 } from "@stacks/transactions";
+import {
+  isMempoolContractCallTransaction,
+  isContractCallTransaction,
+} from "../utils/transactions";
 
-function isMempoolContractCallTransaction(
-  t: MempoolTransaction
-): t is MempoolContractCallTransaction {
-  return t.tx_type === "contract_call";
-}
-function isContractCallTransaction(
-  t: Transaction
-): t is ContractCallTransaction {
-  return t.tx_type === "contract_call";
-}
-
-function isDelegateOrRevokeDelegate(functionName: string) {
-  return ["delegate-stx", "revoke-delegate-stx"].includes(functionName);
+function isDelegateOrRevokeDelegate(t: ContractCallTransactionMetadata) {
+  return ["delegate-stx", "revoke-delegate-stx"].includes(
+    t.contract_call.function_name
+  );
 }
 
 function findMempoolTransaction(
@@ -41,7 +37,7 @@ function findMempoolTransaction(
   return transactions.find((t) => {
     if (!isMempoolContractCallTransaction(t)) return false;
 
-    return isDelegateOrRevokeDelegate(t.contract_call.function_name);
+    return isDelegateOrRevokeDelegate(t);
   }) as MempoolContractCallTransaction | undefined;
 }
 function findUnanchoredTransaction(
@@ -51,13 +47,11 @@ function findUnanchoredTransaction(
     if (!isContractCallTransaction(t)) return false;
 
     const isUnanchored = t.is_unanchored;
-    // TODO: checking the hex would be more robust
-    const isOkResult = t.tx_result.repr === "(ok true)";
-    const isRelevantFunctionNameResult = isDelegateOrRevokeDelegate(
-      t.contract_call.function_name
-    );
 
-    return isUnanchored && isOkResult && isRelevantFunctionNameResult;
+    const transactionResultCV = hexToCV(t.tx_result.hex);
+    const isOk = transactionResultCV.type === ClarityType.ResponseOk;
+
+    return isUnanchored && isOk && isDelegateOrRevokeDelegate(t);
   }) as ContractCallTransaction | undefined;
 }
 
