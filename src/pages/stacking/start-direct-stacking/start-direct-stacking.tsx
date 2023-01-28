@@ -121,6 +121,7 @@ function StartDirectStackingLayout({ client }: StartDirectStackingLayoutProps) {
                 <Duration />
                 <Divider />
                 <PoxAddress />
+                <Divider />
                 <ConfirmAndSubmit isLoading={isContractCallExtensionPageOpen} />
               </Stack>
             </Form>

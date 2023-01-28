@@ -23,7 +23,7 @@ export async function loadFonts(): Promise<void> {
     }
   );
   const openSauceRegular = new FontFace(
-    "Open Sauce",
+    "Open Sauce Sans",
     getFontAssetPath(OpenSauceSansRegular),
     {
       weight: "400",
@@ -31,7 +31,7 @@ export async function loadFonts(): Promise<void> {
   );
 
   const openSauceMedium = new FontFace(
-    "Open Sauce",
+    "Open Sauce Sans",
     getFontAssetPath(OpenSauceSansMedium),
     {
       weight: "500",

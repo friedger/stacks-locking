@@ -157,7 +157,7 @@ function Layout() {
 }
 const queryClient = new QueryClient();
 function Root() {
-  useEffect(() => void loadFonts(), []);
+  // useEffect(() => void loadFonts(), []);
   return (
     <QueryClientProvider client={queryClient}>
       <NetworkProvider>
@@ -167,7 +167,29 @@ function Root() {
               <MantineProvider
                 withGlobalStyles
                 withNormalizeCSS
-                theme={{ primaryColor: "violet" }}
+                theme={{
+                  // primaryColor: "violet",
+                  primaryColor: "brand",
+                  defaultRadius: "md",
+                  fontFamily: "Inter",
+                  colors: {
+                    brand: [
+                      "#D2CEFF",
+                      "#BAB4FF",
+                      "#A39BFF",
+                      "#8E84FF",
+                      "#7A6EFF",
+                      "#675AFF",
+                      "#5546FF",
+                      "#4332FF",
+                      "#3220FF",
+                      "#220FFF",
+                    ],
+                  },
+                  headings: {
+                    fontFamily: "Open Sauce One",
+                  },
+                }}
               >
                 <ModalsProvider>
                   <Outlet />
