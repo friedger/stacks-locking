@@ -43,7 +43,7 @@ export function DurationSelectItem(props: DurationSelectItemProps) {
         <Flex pl="lg" w="100%" direction={{ xs: "column", md: "row" }}>
           <Box>
             <Text>{title}</Text>
-            <Text>{children}</Text>
+            {children}
           </Box>
         </Flex>
         <Flex pl="lg" align="center">

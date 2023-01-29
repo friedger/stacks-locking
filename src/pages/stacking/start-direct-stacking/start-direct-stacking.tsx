@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { Box, Container, Divider, Loader, Stack } from "@mantine/core";
+import { Box, Container, Divider, Loader, Space, Stack } from "@mantine/core";
 import { StackingClient } from "@stacks/stacking";
 import { Form, Formik } from "formik";
 import { useNavigate } from "react-router-dom";
@@ -116,12 +116,16 @@ function StartDirectStackingLayout({ client }: StartDirectStackingLayoutProps) {
           stackingForm={
             <Form>
               <Stack>
+                <Space h="xl" />
                 <Amount />
                 <Divider />
+                <Space h="xl" />
                 <Duration />
                 <Divider />
+                <Space h="xl" />
                 <PoxAddress />
                 <Divider />
+                <Space h="xl" />
                 <ConfirmAndSubmit isLoading={isContractCallExtensionPageOpen} />
               </Stack>
             </Form>

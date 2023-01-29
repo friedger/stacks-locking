@@ -12,7 +12,7 @@ export function DelegatedStackingTerms() {
       <List spacing="xs">
         <List.Item icon={<IconLock />}>
           <Text>This transaction can't be reversed</Text>
-          <Text>
+          <Text c="dimmed">
             There will be no way to unlock your STX once the pool has started
             stacking them. You will need to wait until they unlock at the end of
             the pool's chosen number of cycles.
@@ -20,7 +20,7 @@ export function DelegatedStackingTerms() {
         </List.Item>
         <List.Item icon={<IconStairs />}>
           <Text>Research your pool</Text>
-          <Text>
+          <Text c="dimmed">
             Paying out rewards is at the discretion of the pool. Make sure
             you’ve researched and trust the pool you’re using. All pools are
             unaffiliated with Hiro PBC.

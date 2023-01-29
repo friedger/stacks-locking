@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { Box, Container, Divider, Stack } from "@mantine/core";
+import { Box, Container, Divider, Space, Stack } from "@mantine/core";
 import { StacksNetworkName } from "@stacks/network";
 import { StackingClient } from "@stacks/stacking";
 import { useQuery } from "@tanstack/react-query";
@@ -109,14 +109,18 @@ function StartPooledStackingLayout({
           stackingForm={
             <Form>
               <Stack>
+                <Space h="xl" />
                 <ChoosePoolAddress />
                 <Divider />
+                <Space h="xl" />
                 <ChoosePoolingAmount
                   availableBalance={queryGetAccountBalance.data}
                 />
                 <Divider />
+                <Space h="xl" />
                 <ChoosePoolingDuration />
                 <Divider />
+                <Space h="xl" />
                 <ConfirmAndSubmit isLoading={isContractCallExtensionPageOpen} />
               </Stack>
             </Form>

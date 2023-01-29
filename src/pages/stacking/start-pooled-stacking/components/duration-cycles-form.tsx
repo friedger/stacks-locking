@@ -1,8 +1,7 @@
 import { useMemo } from "react";
 
-import { Box, Flex, Group, Loader, Text } from "@mantine/core";
+import { Flex, Group, Loader, Text } from "@mantine/core";
 import { StackingClient } from "@stacks/stacking";
-import { useQuery } from "@tanstack/react-query";
 import { addSeconds, formatDistanceToNow } from "date-fns";
 import { useField } from "formik";
 
@@ -22,7 +21,7 @@ const durationWithDefault = (duration: number | null) => duration ?? 1;
 interface DurationCyclesFieldInnerProps {
   client: StackingClient;
 }
-function DurationCyclesFieldInner({ client }: DurationCyclesFieldInnerProps) {
+function DurationCyclesFieldLayout({ client }: DurationCyclesFieldInnerProps) {
   const q = useGetCycleDurationQuery();
   const [cyclesField, _meta, durationLengthHelpers] =
     useField("numberOfCycles");
@@ -59,7 +58,7 @@ function DurationCyclesFieldInner({ client }: DurationCyclesFieldInnerProps) {
       sx={(t) => ({
         boxShadow: "low",
         border: `1px solid ${t.colors.gray[5]}`,
-        borderRadius: t.radius.xs,
+        borderRadius: t.radius.md,
         position: "relative",
         zIndex: 10,
       })}
@@ -105,5 +104,5 @@ export function DurationCyclesField() {
     console.error(msg);
     return <ErrorAlert>{msg}</ErrorAlert>;
   }
-  return <DurationCyclesFieldInner client={client} />;
+  return <DurationCyclesFieldLayout client={client} />;
 }

@@ -34,9 +34,11 @@ export function ChoosePoolingDuration() {
           activeDelegationType={fieldDelegationDurationType.value}
           onChange={(val) => helpersDelegationDurationType.setValue(val)}
         >
-          Set a limit between 1 and 12 cycles for how long the pool can stack on
-          your behalf. The pool will only be able to stack your STX up to that
-          limit.
+          <Text c="dimmed">
+            Set a limit between 1 and 12 cycles for how long the pool can stack
+            on your behalf. The pool will only be able to stack your STX up to
+            that limit.
+          </Text>
           {fieldDelegationDurationType.value === "limited" && (
             <DurationCyclesField />
           )}
@@ -48,9 +50,11 @@ export function ChoosePoolingDuration() {
           activeDelegationType={fieldDelegationDurationType.value}
           onChange={(val) => helpersDelegationDurationType.setValue(val)}
         >
-          The pool has indefinite permission to lock your STX for up to 12
-          cycles at a time. Revoke manually at any time to prevent further
-          locks.
+          <Text c="dimmed">
+            The pool has indefinite permission to lock your STX for up to 12
+            cycles at a time. Revoke manually at any time to prevent further
+            locks.
+          </Text>
         </DurationSelectItem>
         <OneCycleDescriptor mt="loose" />
         {metaDelegationDurationType.touched &&

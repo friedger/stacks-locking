@@ -171,6 +171,13 @@ function Root() {
                   // primaryColor: "violet",
                   primaryColor: "brand",
                   defaultRadius: "md",
+                  components: {
+                    Checkbox: {
+                      defaultProps: {
+                        radius: "sm",
+                      },
+                    },
+                  },
                   fontFamily: "Inter",
                   colors: {
                     brand: [
