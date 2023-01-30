@@ -1,8 +1,8 @@
 import {
-  MempoolTransaction,
-  MempoolContractCallTransaction,
-  Transaction,
   ContractCallTransaction,
+  MempoolContractCallTransaction,
+  MempoolTransaction,
+  Transaction,
 } from "@stacks/stacks-blockchain-api-types";
 
 export function isMempoolContractCallTransaction(

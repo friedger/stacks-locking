@@ -1,11 +1,8 @@
-import { useEffect } from "react";
-
 import {
   Button,
   Container,
   Flex,
   Group,
-  Loader,
   MantineProvider,
   Menu,
   Text,
@@ -33,7 +30,6 @@ import {
 import { ErrorAlert } from "@components/error-alert";
 import { NetworkProvider, useNetwork } from "@components/network-provider";
 import { StackingClientProvider } from "@components/stacking-client-provider/stacking-client-provider";
-import { loadFonts } from "@utils/load-fonts";
 
 import {
   AuthProvider,

@@ -36,10 +36,10 @@ import {
   useGetPoxInfoQuery,
 } from "@components/stacking-client-provider/stacking-client-provider";
 import { BUY_STACKS_URL } from "@constants/app";
+import { toHumanReadableStx } from "@utils/unit-convert";
 
 import { useDelegationStatusQuery } from "../stacking/pooled-stacking-info/use-delegation-status-query";
 import { useStackingInitiatedByQuery } from "./use-stacking-initiated-by";
-import { toHumanReadableStx } from "@utils/unit-convert";
 
 export function ChooseStackingMethod() {
   const { address } = useAuth();

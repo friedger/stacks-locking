@@ -20,9 +20,10 @@ import {
   standardPrincipalCV,
   tupleCV,
 } from "@stacks/transactions";
+
 import {
-  isMempoolContractCallTransaction,
   isContractCallTransaction,
+  isMempoolContractCallTransaction,
 } from "../utils/transactions";
 
 function isDelegateOrRevokeDelegate(t: ContractCallTransactionMetadata) {
