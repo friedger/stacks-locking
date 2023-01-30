@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 
-import { Box, UnstyledButton } from "@mantine/core";
+import { UnstyledButton } from "@mantine/core";
 
 interface Props {
   onClick(e: React.MouseEvent<HTMLButtonElement>): void;
@@ -25,7 +25,8 @@ export function CircleButton({ onClick, children }: Props) {
           color: t.colors[t.primaryColor][5],
         },
       })}
-      children={children}
-    />
+    >
+      {children}
+    </UnstyledButton>
   );
 }

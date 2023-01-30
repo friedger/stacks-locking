@@ -3,6 +3,7 @@ import { StackingClient, poxAddressToBtcAddress } from "@stacks/stacking";
 import {
   ContractCallTransaction,
   ContractCallTransactionMetadata,
+  MempoolContractCallTransaction,
   MempoolTransaction,
   Transaction,
 } from "@stacks/stacks-blockchain-api-types";
@@ -34,7 +35,7 @@ function findUnanchoredTransaction(
   // Until PoX 2 has been fully activated, using this arg to determine the PoX contract id. Once
   // active, this value can be set to a constant.
   poxContractId: string
-) {
+): ContractCallTransaction | undefined {
   return transactions.find((t) => {
     if (!isContractCallTransaction(t)) return false;
 
@@ -42,7 +43,7 @@ function findUnanchoredTransaction(
     const isOk = transactionResultCV.type === ClarityType.ResponseOk;
 
     return isOk && isStackCall(t, poxContractId);
-  });
+  }) as ContractCallTransaction; // Casting as type is checked in `if` statement above.
 }
 /**
  * Given an array of transactions, ordered from most recent to least recent, returns the most recent
@@ -58,7 +59,7 @@ function findMempoolTransaction(
     if (!isMempoolContractCallTransaction(t)) return false;
 
     return isStackCall(t, poxContractId);
-  });
+  }) as MempoolContractCallTransaction; // Casting as type is checked in `if` statement above.
 }
 interface ReturnGetHasPendingDirectStacking {
   amountMicroStx: bigint;
@@ -70,7 +71,7 @@ interface ReturnGetHasPendingDirectStacking {
 
 // TODO: Types. For now assuming callers only provide a `stack-stx` pox call transaction.
 function getDirectStackingStatusFromTransaction(
-  transaction: ContractCallTransaction,
+  transaction: ContractCallTransaction | MempoolContractCallTransaction,
   network: "mainnet" | "testnet"
 ): ReturnGetHasPendingDirectStacking {
   const args = transaction.contract_call.function_args;
@@ -151,12 +152,15 @@ export async function getHasPendingDirectStacking({
     contractPrincipal
   );
 
-  let transaction = null;
-  if (!accountTransaction) {
+  let transaction:
+    | undefined
+    | ContractCallTransaction
+    | MempoolContractCallTransaction;
+  if (!accountTransaction && mempoolTransaction) {
     transaction = mempoolTransaction;
-  } else if (!mempoolTransaction) {
+  } else if (accountTransaction && !mempoolTransaction) {
     transaction = accountTransaction;
-  } else {
+  } else if (accountTransaction && mempoolTransaction) {
     transaction =
       accountTransaction.nonce > mempoolTransaction.nonce
         ? accountTransaction
