@@ -5,6 +5,8 @@ import { Text, Tooltip } from "@mantine/core";
 import { ExternalLink } from "@components/external-link";
 import { STACKING_ADDRESS_FORMAT_HELP_URL } from "@constants/app";
 
+// Using `forwardRef` needed by the tooltip component used below. See docs,
+// https://mantine.dev/core/tooltip/#required-ref-prop
 const KeyText = forwardRef<HTMLDivElement, { children: string }>(
   (props, ref) => (
     <Text
@@ -19,6 +21,7 @@ const KeyText = forwardRef<HTMLDivElement, { children: string }>(
     ></Text>
   )
 );
+KeyText.displayName = "KeyText";
 
 export function ErrorPeriod1() {
   return (

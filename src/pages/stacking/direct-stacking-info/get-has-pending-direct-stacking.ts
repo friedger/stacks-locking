@@ -3,7 +3,6 @@ import { StackingClient, poxAddressToBtcAddress } from "@stacks/stacking";
 import {
   ContractCallTransaction,
   ContractCallTransactionMetadata,
-  MempoolContractCallTransaction,
   MempoolTransaction,
   Transaction,
 } from "@stacks/stacks-blockchain-api-types";
@@ -70,7 +69,7 @@ interface ReturnGetHasPendingDirectStacking {
 
 // TODO: Types. For now assuming callers only provide a `stack-stx` pox call transaction.
 function getDirectStackingStatusFromTransaction(
-  transaction: any,
+  transaction: ContractCallTransaction,
   network: "mainnet" | "testnet"
 ): ReturnGetHasPendingDirectStacking {
   const [amountMicroStxCV, poxAddressCV, startBurnHeightCV, lockPeriodCV] =

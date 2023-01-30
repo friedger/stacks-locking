@@ -16,7 +16,7 @@ export function ChoosePoolingAmount({ availableBalance }: Props) {
       <Stack>
         <Description>
           <Text>
-            Choose how much you'll pool. Your pool may require a minimum.
+            Choose how much you&apos;ll pool. Your pool may require a minimum.
           </Text>
         </Description>
 

@@ -72,12 +72,11 @@ function getDelegationStatusFromTransaction(
       return { isDelegating: false };
     }
 
-    const [amountMicroStxCV, delegatedToCV, untilBurnHeightCV, _poxAddressCV] =
-      args.map<
-        // The values above should be defined as long as the clarity contract and the api remain the
-        // same. Nevertheless, out of caution, marking them as possibly undefined.
-        ClarityValue | undefined
-      >((arg) => hexToCV(arg.hex));
+    const [amountMicroStxCV, delegatedToCV, untilBurnHeightCV] = args.map<
+      // The values above should be defined as long as the clarity contract and the api remain the
+      // same. Nevertheless, out of caution, marking them as possibly undefined.
+      ClarityValue | undefined
+    >((arg) => hexToCV(arg.hex));
 
     let untilBurnHeight: null | bigint = null;
     if (
@@ -117,7 +116,7 @@ function getDelegationStatusFromTransaction(
   console.error(
     "Processed a non-delegation transaction. Only delegation-related transaction should be used with this function."
   );
-  return { isDelegating: false };
+  return { isDelegating: false } as const;
 }
 
 function getDelegationStatusFromMapEntry(

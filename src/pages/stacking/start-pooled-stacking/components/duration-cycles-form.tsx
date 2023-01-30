@@ -1,16 +1,12 @@
 import { useMemo } from "react";
 
 import { Flex, Group, Loader, Text } from "@mantine/core";
-import { StackingClient } from "@stacks/stacking";
 import { addSeconds, formatDistanceToNow } from "date-fns";
 import { useField } from "formik";
 
 import { CircleButton } from "@components/circle-button";
 import { ErrorAlert } from "@components/error-alert";
-import {
-  useGetCycleDurationQuery,
-  useStackingClient,
-} from "@components/stacking-client-provider/stacking-client-provider";
+import { useGetCycleDurationQuery } from "@components/stacking-client-provider/stacking-client-provider";
 import { MAX_STACKING_CYCLES, MIN_STACKING_CYCLES } from "@constants/app";
 import { decrement, increment } from "@utils/mutate-numbers";
 import { formatCycles } from "@utils/stacking";
@@ -18,10 +14,9 @@ import { formatCycles } from "@utils/stacking";
 const createCycleArray = () => new Array(12).fill(null).map((_, i) => i + 1);
 const durationWithDefault = (duration: number | null) => duration ?? 1;
 
-function DurationCyclesFieldLayout() {
+export function DurationCyclesField() {
   const q = useGetCycleDurationQuery();
-  const [cyclesField, _meta, durationLengthHelpers] =
-    useField("numberOfCycles");
+  const [cyclesField, , durationLengthHelpers] = useField("numberOfCycles");
   const duration = cyclesField.value ?? 1;
 
   const cycleLabels = useMemo(() => {
@@ -92,14 +87,4 @@ function DurationCyclesFieldLayout() {
       </Group>
     </Flex>
   );
-}
-
-export function DurationCyclesField() {
-  const { client } = useStackingClient();
-  if (!client) {
-    const msg = "Expected `client` to be defined.";
-    console.error(msg);
-    return <ErrorAlert>{msg}</ErrorAlert>;
-  }
-  return <DurationCyclesFieldLayout client={client} />;
 }

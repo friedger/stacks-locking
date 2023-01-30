@@ -8,6 +8,7 @@ import {
 } from "@components/stacking-client-provider/stacking-client-provider";
 
 import { useDelegationStatusQuery } from "./use-delegation-status-query";
+import { Transaction } from "@stacks/stacks-blockchain-api-types";
 
 /**
  * Fetches the address of the delegator the currently active account has delegated to or is stacking with if any.
@@ -47,6 +48,9 @@ export function useGetPoolAddress() {
   const q = useGetAccountExtendedBalancesQuery();
   const q2 = useDelegationStatusQuery();
 
+  // Typecast needed due to fields missing from types,
+  // https://github.com/hirosystems/stacks.js/issues/1437
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const txId = (q.data?.stx as any)?.lock_tx_id as string | undefined;
 
   return useQuery(
@@ -59,10 +63,10 @@ export function useGetPoolAddress() {
       if (!txId) {
         return { address: null };
       }
-      const res = await transactionsApi.getTransactionById({
+      const res = (await transactionsApi.getTransactionById({
         txId,
-      });
-      return { address: (res as any).sender_address as string };
+      })) as Transaction;
+      return { address: res.sender_address };
     },
     { enabled: !q.isLoading && !q2.isLoading }
   );

@@ -20,7 +20,7 @@ import { MAX_STACKING_CYCLES, MIN_STACKING_CYCLES } from "@constants/app";
 import { Description, Step } from "../../components/stacking-form-step";
 
 export function Duration() {
-  const [field, _meta, helpers] = useField("lockPeriod");
+  const [field, , helpers] = useField("lockPeriod");
   const getPoxInfoQuery = useGetPoxInfoQuery();
   const getCycleDurationQuery = useGetCycleDurationQuery();
   const handlers = useRef<NumberInputHandlers>();

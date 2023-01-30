@@ -29,7 +29,7 @@ export function PoxAddress() {
       <ErrorPostPeriod1 />
     );
 
-  const errorEl = meta.touched && meta.error;
+  const errorEl = meta.touched && meta.error && errorElement;
 
   return (
     <Step title="Bitcoin address">

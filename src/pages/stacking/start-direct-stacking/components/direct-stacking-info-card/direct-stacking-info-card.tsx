@@ -42,7 +42,7 @@ export function InfoPanel() {
     <Card withBorder>
       <Stack>
         <Box>
-          <Title order={4}>You'll lock</Title>
+          <Title order={4}>You&apos;ll lock</Title>
           <Text fz={34}>{createAmountText(amount)}</Text>
         </Box>
 

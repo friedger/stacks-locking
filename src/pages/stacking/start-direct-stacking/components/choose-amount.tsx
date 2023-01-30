@@ -37,7 +37,7 @@ export function Amount() {
   const getAccountBalanceQuery = useGetAccountBalance();
   const getPoxInfoQuery = useGetPoxInfoQuery();
 
-  const [field, _meta, helpers] = useField("amount");
+  const [field, , helpers] = useField("amount");
 
   if (getAccountBalanceQuery.isLoading || getPoxInfoQuery.isLoading)
     return <Loader />;
@@ -91,8 +91,8 @@ export function Amount() {
         <Description>
           <Stack>
             <Text>
-              You'll be eligible for one reward slot for every multiple of the
-              minimum you stack.
+              You&apos;ll be eligible for one reward slot for every multiple of
+              the minimum you stack.
             </Text>
             <Text>
               The estimated minimum per slot can change by multiples of 10,000

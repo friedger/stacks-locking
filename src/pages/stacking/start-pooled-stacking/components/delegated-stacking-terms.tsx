@@ -11,11 +11,11 @@ export function DelegatedStackingTerms() {
     >
       <List spacing="xs">
         <List.Item icon={<IconLock />}>
-          <Text>This transaction can't be reversed</Text>
+          <Text>This transaction can&apos;t be reversed</Text>
           <Text c="dimmed">
             There will be no way to unlock your STX once the pool has started
             stacking them. You will need to wait until they unlock at the end of
-            the pool's chosen number of cycles.
+            the pool&apos;s chosen number of cycles.
           </Text>
         </List.Item>
         <List.Item icon={<IconStairs />}>

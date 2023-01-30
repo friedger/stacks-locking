@@ -15,7 +15,6 @@ import {
   Text,
   Title,
 } from "@mantine/core";
-import { closeModal } from "@mantine/modals";
 import { intToBigInt } from "@stacks/common";
 import { ContractCallRegularOptions, openContractCall } from "@stacks/connect";
 import { StackingClient } from "@stacks/stacking";
@@ -123,8 +122,9 @@ function PooledStackingInfoLayout({ client }: CardLayoutProps) {
         <Alert icon={<IconInfoCircle />}>
           <Stack>
             <Text>
-              It appears that you're not pooling yet. If you recently started to
-              pool, your pooling info will appear here in a few seconds.
+              It appears that you&apos;re not pooling yet. If you recently
+              started to pool, your pooling info will appear here in a few
+              seconds.
             </Text>
             <Text>
               You may want to{" "}
@@ -199,7 +199,7 @@ function PooledStackingInfoLayout({ client }: CardLayoutProps) {
               <>
                 <Stack>
                   <Box>
-                    <Title order={4}>You're pooling</Title>
+                    <Title order={4}>You&apos;re pooling</Title>
                     <Text fz="34px">
                       {toHumanReadableStx(
                         delegationStatusQuery.data.amountMicroStx
@@ -256,10 +256,10 @@ function PooledStackingInfoLayout({ client }: CardLayoutProps) {
           {delegationStatusQuery.data.isDelegating &&
             delegationStatusQuery.data.isExpired && (
               <Box>
-                <Title>You've finished pooling</Title>
+                <Title>You&apos;ve finished pooling</Title>
                 <Text>
-                  Revoke the pool's permission to stack on your behalf to start
-                  stacking again.
+                  Revoke the pool&apos;s permission to stack on your behalf to
+                  start stacking again.
                 </Text>
                 <Box>
                   <Button
@@ -278,7 +278,7 @@ function PooledStackingInfoLayout({ client }: CardLayoutProps) {
             <>
               <Stack>
                 <Box>
-                  <Title order={4}>You're pooling</Title>
+                  <Title order={4}>You&apos;re pooling</Title>
                   <Text fz="34px">
                     {toHumanReadableStx(
                       intToBigInt(
@@ -323,8 +323,8 @@ function PooledStackingInfoLayout({ client }: CardLayoutProps) {
                   <Divider />
 
                   <Alert icon={<IconInfoCircle />}>
-                    You've revoked the pool's delegation. You'll be able to pool
-                    again when the locking period finishes.
+                    You&apos;ve revoked the pool&apos;s delegation. You&apos;ll
+                    be able to pool again when the locking period finishes.
                   </Alert>
                 </Stack>
               </Stack>

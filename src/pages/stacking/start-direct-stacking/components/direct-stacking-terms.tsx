@@ -22,8 +22,8 @@ export function DirectStackingTerms() {
             is finished.
           </Text>
           <Text c="dimmed">
-            Nor will you be able to change the entered BTC address. Ensure it's
-            entered correctly and you have control over it.
+            Nor will you be able to change the entered BTC address. Ensure
+            it&apos;s entered correctly and you have control over it.
           </Text>
         </List.Item>
 
