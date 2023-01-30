@@ -65,6 +65,7 @@ export function useGetPoolAddress() {
       }
       const res = (await transactionsApi.getTransactionById({
         txId,
+        // https://github.com/hirosystems/stacks-blockchain-api/tree/master/client#known-issues
       })) as Transaction;
       return { address: res.sender_address };
     },

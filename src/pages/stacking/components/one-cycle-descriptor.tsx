@@ -1,6 +1,6 @@
-import React, { FC } from "react";
+import { FC } from "react";
 
-import { BoxProps, Text, color } from "@stacks/ui";
+import { BoxProps } from "@stacks/ui";
 
 // import { useSelector } from 'react-redux';
 // import { RootState } from '@store/index';
@@ -8,7 +8,7 @@ import { BoxProps, Text, color } from "@stacks/ui";
 
 type OneCycleDescriptorProps = BoxProps;
 
-export const OneCycleDescriptor: FC<OneCycleDescriptorProps> = (props) => {
+export const OneCycleDescriptor: FC<OneCycleDescriptorProps> = () => {
   return <></>;
   // const { nextCycleInfo, poxInfo } = useSelector((state: RootState) => ({
   //   nextCycleInfo: selectNextCycleInfo(state),

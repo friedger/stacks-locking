@@ -24,6 +24,9 @@ const Context = createContext<{
   setNetworkByName: Dispatch<SetStateAction<StacksNetworkName>>;
   networkName: StacksNetworkName;
   /* setCustomNetwork: Dispatch<SetStateAction<StacksNetwork | null>>; */
+
+  // The context type is set as non-null to avoid having to use null-checks wherever it is used.
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 }>(null!);
 
 interface Props {

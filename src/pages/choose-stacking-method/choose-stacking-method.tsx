@@ -19,7 +19,6 @@ import {
   IconLock,
   IconStairs,
   IconStairsUp,
-  IconUser,
   IconUserMinus,
   IconUsers,
 } from "@tabler/icons-react";
@@ -126,9 +125,9 @@ function ChooseStackingMethodLayout({
           <Alert icon={<IconInfoCircle />}>
             <Stack>
               <Text>
-                It appears that you're currently pooling. If you recently
+                It appears that you&apos;re currently pooling. If you recently
                 revoked your delegation after the pool unlocked your funds,
-                you'll soon be able to pool again. This usually takes a few
+                you&apos;ll soon be able to pool again. This usually takes a few
                 seconds.
               </Text>
               <Text>
@@ -143,8 +142,8 @@ function ChooseStackingMethodLayout({
           <Alert icon={<IconInfoCircle />}>
             <Stack>
               <Text>
-                It appears that you're currently stacking. If your locking
-                period recently ended, you'll soon be able to stack again.
+                It appears that you&apos;re currently stacking. If your locking
+                period recently ended, you&apos;ll soon be able to stack again.
               </Text>
               <Anchor to="../direct-stacking-info" component={Link}>
                 View your stacking info.
@@ -158,9 +157,9 @@ function ChooseStackingMethodLayout({
             <Alert icon={<IconInfoCircle />}>
               <Stack>
                 <Text>
-                  It appears that you don't have enough funds yet. If you
-                  recently transferred funds to this account, you'll soon be
-                  able to stack.{" "}
+                  It appears that you don&apos;t have enough funds yet. If you
+                  recently transferred funds to this account, you&apos;ll soon
+                  be able to stack.{" "}
                 </Text>
                 <ExternalLink href={BUY_STACKS_URL}>
                   Consider topping up your account
@@ -183,8 +182,8 @@ function ChooseStackingMethodLayout({
                 <Title>Stack in a pool</Title>
                 <Text size="lg">
                   Team up with other stackers in a pool, enabling you to stack
-                  even if you don't meet the minimum. You have to trust a pool
-                  with the payment of your rewards.
+                  even if you don&apos;t meet the minimum. You have to trust a
+                  pool with the payment of your rewards.
                 </Text>
 
                 <List>

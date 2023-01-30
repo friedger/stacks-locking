@@ -35,6 +35,9 @@ const Context = createContext<{
   smartContractsApi: SmartContractsApi;
   stackingRewardsApi: StackingRewardsApi;
   transactionsApi: TransactionsApi;
+
+  // The context type is non-null to avoid null checks wherever the context is used.
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 }>(null!);
 
 interface Props {

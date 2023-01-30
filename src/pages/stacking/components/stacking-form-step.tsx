@@ -1,7 +1,7 @@
 import { ReactElement, ReactNode } from "react";
 
 import { Box, Title } from "@mantine/core";
-import { Button, ButtonProps, Container, Stack } from "@mantine/core";
+import { Button, ButtonProps, Stack } from "@mantine/core";
 
 interface StepProps {
   title: string;

@@ -2,10 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 
 import { useAuth } from "@components/auth-provider/auth-provider";
 import { useBlockchainApiClient } from "@components/blockchain-api-client-provider";
-import {
-  useGetAccountExtendedBalancesQuery,
-  useStackingClient,
-} from "@components/stacking-client-provider/stacking-client-provider";
+import { useGetAccountExtendedBalancesQuery } from "@components/stacking-client-provider/stacking-client-provider";
+import { Transaction } from "@stacks/stacks-blockchain-api-types";
 
 /**
  * Returns the address that initiated the current account's stacking. If the account isn't stacking,
@@ -22,16 +20,21 @@ export function useStackingInitiatedByQuery() {
 
   const q = useGetAccountExtendedBalancesQuery();
 
+  // Typecast needed due to fields missing from types,
+  // https://github.com/hirosystems/stacks.js/issues/1437
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const txId = (q.data?.stx as any)?.lock_tx_id as string | undefined;
 
   return useQuery(
     ["stacker", txId, address, transactionsApi],
     async () => {
       if (!txId) return { address: null } as const;
-      const res = await transactionsApi.getTransactionById({
+
+      const res = (await transactionsApi.getTransactionById({
         txId,
-      });
-      return { address: (res as any).sender_address as string };
+        // https://github.com/hirosystems/stacks-blockchain-api/tree/master/client#known-issues
+      })) as Transaction;
+      return { address: res.sender_address };
     },
     { enabled: !q.isLoading }
   );

@@ -62,9 +62,10 @@ function findMempoolTransaction(
 }
 interface ReturnGetHasPendingDirectStacking {
   amountMicroStx: bigint;
-  lockPeriod: number;
+  lockPeriod: bigint;
   poxAddress: string;
   transactionId: string;
+  startBurnHeight: bigint;
 }
 
 // TODO: Types. For now assuming callers only provide a `stack-stx` pox call transaction.
@@ -72,18 +73,23 @@ function getDirectStackingStatusFromTransaction(
   transaction: ContractCallTransaction,
   network: "mainnet" | "testnet"
 ): ReturnGetHasPendingDirectStacking {
+  const args = transaction.contract_call.function_args;
+  if (!args) {
+    // TODO: log error
+    throw new Error("Expected `args` to be defined.");
+  }
   const [amountMicroStxCV, poxAddressCV, startBurnHeightCV, lockPeriodCV] =
-    transaction.contract_call.function_args.map((arg: any) => hexToCV(arg.hex));
+    args.map((arg) => hexToCV(arg.hex));
 
   // Start burn height
-  let startBurnHeight: null | bigint = null;
-  if (startBurnHeightCV.type === ClarityType.UInt) {
-    startBurnHeight = startBurnHeightCV.value;
+  if (!startBurnHeightCV || startBurnHeightCV.type !== ClarityType.UInt) {
+    throw new Error("Expected `startBurnHeightCV` to be of type `UInt`.");
   }
+  const startBurnHeight: bigint = startBurnHeightCV.value;
 
   // Amount
   if (!amountMicroStxCV || amountMicroStxCV.type !== ClarityType.UInt) {
-    throw new Error("Expected `amount-ustx` to be defined.");
+    throw new Error("Expected `amountMicroStxCV` to be of type `UInt`.");
   }
   const amountMicroStx: bigint = amountMicroStxCV.value;
 
@@ -91,10 +97,14 @@ function getDirectStackingStatusFromTransaction(
   const poxAddress = poxAddressToBtcAddress(poxAddressCV, network);
 
   // Lock period
+  if (!lockPeriodCV || lockPeriodCV.type !== ClarityType.UInt) {
+    throw new Error("Expected `lockPeriodCV` to be of type `UInt`.");
+  }
   const lockPeriod = lockPeriodCV.value;
 
   return {
     transactionId: transaction.tx_id,
+    startBurnHeight,
     amountMicroStx,
     poxAddress,
     lockPeriod,

@@ -9,6 +9,7 @@ import { useNetwork } from "@components/network-provider";
 const appConfig = new AppConfig(["store_write"]);
 const userSession = new UserSession({ appConfig });
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getAccountAddress(userData: any, network: string) {
   // NOTE: Although this approach to obtain the user's address is good enough for now, it is quite brittle.
   // It relies on a variable having the same value as the object key below. Type checking is not available given the `userSession` object managed by `@stacks/connect` is typed as `any`.
@@ -31,14 +32,10 @@ interface AuthContext {
   userData: null | UserData;
   address: null | string;
 }
-const AuthContext = createContext<AuthContext>({
-  isSigningIn: false,
-  isSignedIn: false,
-  signIn() {},
-  signOut() {},
-  userData: null,
-  address: null,
-});
+
+// The context type is non-null to avoid null checks wherever the context is used.
+// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+const AuthContext = createContext<AuthContext>(null!);
 
 interface Props {
   children: ReactNode;

@@ -103,8 +103,9 @@ export function DirectStackingInfo() {
         <Alert icon={<IconInfoCircle />}>
           <Stack>
             <Text>
-              It appears that you're not stacking yet. If you recently started
-              to stack, your stacking info will appear here in a few seconds.
+              It appears that you&apos;re not stacking yet. If you recently
+              started to stack, your stacking info will appear here in a few
+              seconds.
             </Text>
             <Text>
               You may want to{" "}
@@ -139,7 +140,7 @@ export function DirectStackingInfo() {
 
           <Stack>
             <Box>
-              <Title order={4}>You're stacking</Title>
+              <Title order={4}>You&apos;re stacking</Title>
               <Text fz="34px">
                 {toHumanReadableStx(
                   getHasPendingDirectStacking.data.amountMicroStx
@@ -191,21 +192,21 @@ export function DirectStackingInfo() {
     );
   }
 
-  let lockingProgressPercentString = "0";
-  if (getStatusQuery.data.stacked) {
-    const cycleLengthInBlocks =
-      getAccountExtendedBalancesQuery.data.stx.burnchain_unlock_height -
-      getAccountExtendedBalancesQuery.data.stx.burnchain_lock_height;
-
-    const blocksUntilUnlocked =
-      getAccountExtendedBalancesQuery.data.stx.burnchain_unlock_height -
-      getCoreInfoQuery.data.burn_block_height;
-
-    lockingProgressPercentString = Math.max(
-      ((cycleLengthInBlocks - blocksUntilUnlocked) / cycleLengthInBlocks) * 100,
-      0
-    ).toFixed(2);
-  }
+  // let lockingProgressPercentString = "0";
+  // if (getStatusQuery.data.stacked) {
+  //   const cycleLengthInBlocks =
+  //     getAccountExtendedBalancesQuery.data.stx.burnchain_unlock_height -
+  //     getAccountExtendedBalancesQuery.data.stx.burnchain_lock_height;
+  //
+  //   const blocksUntilUnlocked =
+  //     getAccountExtendedBalancesQuery.data.stx.burnchain_unlock_height -
+  //     getCoreInfoQuery.data.burn_block_height;
+  //
+  //   lockingProgressPercentString = Math.max(
+  //     ((cycleLengthInBlocks - blocksUntilUnlocked) / cycleLengthInBlocks) * 100,
+  //     0
+  //   ).toFixed(2);
+  // }
 
   // This if statement may be unnecessary, as cases for when the account is not stacked should have
   // already been handled above, but the type system can not guarantee this.
@@ -248,7 +249,7 @@ export function DirectStackingInfo() {
 
           <Stack>
             <Box>
-              <Title order={4}>You're stacking</Title>
+              <Title order={4}>You&apos;re stacking</Title>
               <Text fz="34px">
                 {toHumanReadableStx(getAccountBalanceLockedQuery.data)}
               </Text>

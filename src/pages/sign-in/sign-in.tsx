@@ -1,12 +1,4 @@
-import {
-  Button,
-  Card,
-  Center,
-  Container,
-  Stack,
-  Text,
-  Title,
-} from "@mantine/core";
+import { Button, Card, Center, Stack, Title } from "@mantine/core";
 import { Navigate } from "react-router-dom";
 
 import { useAuth } from "@components/auth-provider/auth-provider";
