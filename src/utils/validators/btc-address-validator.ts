@@ -12,7 +12,7 @@ interface Args {
    */
   isPostPeriod1: boolean; // TODO
 }
-export function createBtcAddressSchema({ network, isPostPeriod1 }: Args) {
+export function createBtcAddressSchema({ network /*, isPostPeriod1 */ }: Args) {
   return yup
     .string()
     .defined(`Enter the BTC address where you'd like to recieve your rewards`)
@@ -41,7 +41,10 @@ export function createBtcAddressSchema({ network, isPostPeriod1 }: Args) {
         // TODO: how does this work?
         // https://github.com/blockstack/stacks-blockchain/issues/1902
         if (
-          !SUPPORTED_BTC_ADDRESS_FORMATS.includes(validationReport.type as any)
+          !SUPPORTED_BTC_ADDRESS_FORMATS.includes(
+            // TODO: check that all address types are properly supported
+            validationReport.type as (typeof SUPPORTED_BTC_ADDRESS_FORMATS)[number]
+          )
         ) {
           return this.createError({ message: "is-bech32" });
         }

@@ -2,7 +2,6 @@ import { StacksNetworkName } from "@stacks/network";
 import { validateStacksAddress } from "@stacks/transactions";
 import * as yup from "yup";
 
-import { NETWORK } from "@constants/app";
 import { validateAddressChain } from "@crypto/validate-address-net";
 
 export function stxAddressSchema(networkName: StacksNetworkName) {

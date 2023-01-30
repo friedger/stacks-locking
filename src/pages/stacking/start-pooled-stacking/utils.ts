@@ -34,8 +34,7 @@ export function createValidationSchema({
     poolAddress: stxAddressSchema(networkName).test({
       name: "cannot-pool-to-yourself",
       message: "Cannot pool to your own STX address",
-      test(value: any) {
-        if (value === null || value === undefined) return false;
+      test(value) {
         return value !== currentAccountAddress;
       },
     }),
@@ -45,8 +44,8 @@ export function createValidationSchema({
         message: `You must delegate at least ${toHumanReadableStx(
           MIN_DELEGATED_STACKING_AMOUNT_USTX
         )}`,
-        test(value: any) {
-          if (value === null || value === undefined) return false;
+        test(value) {
+          if (value === undefined) return false;
           const enteredAmount = stxToMicroStx(value);
           return enteredAmount.isGreaterThanOrEqualTo(
             MIN_DELEGATED_STACKING_AMOUNT_USTX
@@ -58,8 +57,8 @@ export function createValidationSchema({
         message: `You cannot delegate more than ${toHumanReadableStx(
           UI_IMPOSED_MAX_STACKING_AMOUNT_USTX
         )}`,
-        test(value: any) {
-          if (value === null || value === undefined) return false;
+        test(value) {
+          if (value === undefined) return false;
           const enteredAmount = stxToMicroStx(value);
           return enteredAmount.isLessThanOrEqualTo(
             UI_IMPOSED_MAX_STACKING_AMOUNT_USTX

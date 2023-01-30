@@ -1,10 +1,5 @@
-import { BigNumber } from "bignumber.js";
-
 import { stxToMicroStx } from "../../../utils/unit-convert";
-import {
-  calculateRewardSlots,
-  calculateStackingBuffer,
-} from "./calc-stacking-buffer";
+import { calculateRewardSlots } from "./calc-stacking-buffer";
 
 const minStackingAmount = stxToMicroStx(100_000);
 
@@ -40,36 +35,5 @@ describe(calculateRewardSlots.name, () => {
     expect(
       calculateRewardSlots(stxToMicroStx(299_999), minStackingAmount).toNumber()
     ).toEqual(2);
-  });
-});
-
-describe(calculateStackingBuffer.name, () => {
-  it("calculates zero if less than 10k STX", () => {
-    expect(
-      calculateStackingBuffer(
-        stxToMicroStx(100_000),
-        minStackingAmount
-      ).toNumber()
-    ).toEqual(0);
-    expect(
-      calculateStackingBuffer(
-        stxToMicroStx(100_999),
-        minStackingAmount
-      ).toNumber()
-    ).toEqual(0);
-  });
-  it("calculates 1 if more than 10k STX, less than 20k", () => {
-    expect(
-      calculateStackingBuffer(
-        stxToMicroStx(110_000),
-        minStackingAmount
-      ).toNumber()
-    ).toEqual(stxToMicroStx(10_000).toNumber());
-    expect(
-      calculateStackingBuffer(
-        stxToMicroStx(210_000),
-        minStackingAmount
-      ).toNumber()
-    ).toEqual(stxToMicroStx(10_000).toNumber());
   });
 });

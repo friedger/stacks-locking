@@ -34,7 +34,7 @@ async function checkIsNotUsingRanges() {
   const devDependencies = packageJson.devDependencies;
 
   const dependenciesWithVersionRanges: Array<[string, string]> = [];
-  for (let [dependency, version] of Object.entries(dependencies) as Array<
+  for (const [dependency, version] of Object.entries(dependencies) as Array<
     [string, string]
   >) {
     if (isVersionRange(version)) {
@@ -43,7 +43,7 @@ async function checkIsNotUsingRanges() {
   }
 
   const devDependenciesWithVersionRanges: Array<[string, string]> = [];
-  for (let [devDependency, version] of Object.entries(devDependencies) as Array<
+  for (const [devDependency, version] of Object.entries(devDependencies) as Array<
     [string, string]
   >) {
     if (isVersionRange(version)) {

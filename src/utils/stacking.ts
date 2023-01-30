@@ -6,8 +6,8 @@ import { Buffer } from "buffer";
 
 import { NETWORK } from "@constants/app";
 
-import { bufferToNumber } from "./buffer-to-number";
-
+// TODO: Can't figure out the right types
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const poxKeyToVersionBytesMap: Record<"mainnet" | "testnet", any> = {
   mainnet: {
     [AddressHashMode.SerializeP2PKH]: 0x00,

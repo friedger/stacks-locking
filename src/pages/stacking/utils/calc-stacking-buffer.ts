@@ -1,7 +1,5 @@
 import { BigNumber } from "bignumber.js";
 
-import { stxToMicroStx } from "@utils/unit-convert";
-
 const BigNumberFloorRound = BigNumber.clone({
   ROUNDING_MODE: BigNumber.ROUND_FLOOR,
 });

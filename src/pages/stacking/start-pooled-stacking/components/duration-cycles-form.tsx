@@ -18,10 +18,7 @@ import { formatCycles } from "@utils/stacking";
 const createCycleArray = () => new Array(12).fill(null).map((_, i) => i + 1);
 const durationWithDefault = (duration: number | null) => duration ?? 1;
 
-interface DurationCyclesFieldInnerProps {
-  client: StackingClient;
-}
-function DurationCyclesFieldLayout({ client }: DurationCyclesFieldInnerProps) {
+function DurationCyclesFieldLayout() {
   const q = useGetCycleDurationQuery();
   const [cyclesField, _meta, durationLengthHelpers] =
     useField("numberOfCycles");
