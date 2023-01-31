@@ -1,26 +1,21 @@
 import {
-  Alert,
-  Anchor,
-  Button,
-  Card,
-  Container,
-  Flex,
-  Grid,
-  Image,
-  List,
-  Loader,
-  Stack,
-  Text,
-  Title,
-} from "@mantine/core";
+  StartStackingLayout as Layout,
+  StackingOptionsCardContainer as CardContainer,
+  StackingOptionsCardDescription as Description,
+  StackingOptionCard as Card,
+  StackingOptionCardTitle as Title,
+  StackingOptionCardButton as OptionButton,
+  StackingOptionCardBenefit as OptionBenefit,
+  StackingOptionCardBenefitContainer as OptionBenefitContainer,
+  InsufficientStackingBalanceWarning,
+} from "./components/start-stacking-layout";
 import {
   IconChartLine,
   IconInfoCircle,
   IconLock,
   IconStairs,
-  IconStairsUp,
+  IconUser,
   IconUserMinus,
-  IconUsers,
 } from "@tabler/icons-react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -39,6 +34,11 @@ import { toHumanReadableStx } from "@utils/unit-convert";
 
 import { useDelegationStatusQuery } from "../stacking/pooled-stacking-info/use-delegation-status-query";
 import { useStackingInitiatedByQuery } from "./use-stacking-initiated-by";
+import { Spinner, Text, Stack, Flex, Box, useMediaQuery } from "@stacks/ui";
+import { Alert } from "@components/alert";
+import { Caption } from "@components/typography";
+import { ExplainerTooltip } from "@components/tooltip";
+import { pseudoBorderLeft } from "@components/styles/pseudo-border-left";
 
 export function ChooseStackingMethod() {
   const { address } = useAuth();
@@ -55,7 +55,7 @@ export function ChooseStackingMethod() {
     q4.isLoading ||
     q5.isLoading
   ) {
-    return <Loader />;
+    return <Spinner />;
   }
 
   if (
@@ -118,8 +118,9 @@ function ChooseStackingMethodLayout({
     hasExistingDelegatedStacking ||
     hasExistingDirectStacking;
 
+  const [columnBreakpoint] = useMediaQuery("(min-width: 991px)");
   return (
-    <Container size="lg">
+    <Layout>
       <Stack>
         {(hasExistingDelegation || hasExistingDelegatedStacking) && (
           <Alert icon={<IconInfoCircle />}>
@@ -131,9 +132,9 @@ function ChooseStackingMethodLayout({
                 seconds.
               </Text>
               <Text>
-                <Anchor to="../pooled-stacking-info" component={Link}>
+                <Caption to="../pooled-stacking-info" as={Link}>
                   View your pooling info.
-                </Anchor>
+                </Caption>
               </Text>
             </Stack>
           </Alert>
@@ -145,9 +146,9 @@ function ChooseStackingMethodLayout({
                 It appears that you&apos;re currently stacking. If your locking
                 period recently ended, you&apos;ll soon be able to stack again.
               </Text>
-              <Anchor to="../direct-stacking-info" component={Link}>
+              <Caption to="../direct-stacking-info" as={Link}>
                 View your stacking info.
-              </Anchor>
+              </Caption>
             </Stack>
           </Alert>
         )}
@@ -167,90 +168,103 @@ function ChooseStackingMethodLayout({
               </Stack>
             </Alert>
           )}
-        <Grid>
-          <Grid.Col span={6}>
-            <Card>
-              <Stack>
+        <CardContainer>
+          <Card>
+            <Box height="130px">
+              <img
+                src={divingBoardIllustration}
+                width="150px"
+                alt="Diving board illustration with a blue gradient and ominous-looking hole by Eugenia Digon"
+              />
+            </Box>
+            <Title>Stack in a pool</Title>
+            <Description>
+              Team up with other stackers in a pool, enabling you to stack even
+              if you don&apos;t meet the minimum. You have to trust a pool with
+              the payment of your rewards.
+            </Description>
+
+            <OptionBenefitContainer>
+              <OptionBenefit icon={IconUser}>
+                A pool stacks on your behalf
+              </OptionBenefit>
+              <OptionBenefit icon={IconChartLine}>
+                More predictable returns
+              </OptionBenefit>
+              <OptionBenefit icon={IconStairs}>
                 <Flex>
-                  <Image
-                    src={divingBoardIllustration}
-                    height="130px"
-                    fit="contain"
-                    alt="Diving board illustration with a blue gradient and ominous-looking hole by Eugenia Digon"
-                  />
+                  No minimum required
+                  <Box ml="extra-tight" alignSelf="center">
+                    <ExplainerTooltip>
+                      Your chosen pool may set their own minimum amount to
+                      participate
+                    </ExplainerTooltip>
+                  </Box>
                 </Flex>
-                <Title>Stack in a pool</Title>
-                <Text size="lg">
-                  Team up with other stackers in a pool, enabling you to stack
-                  even if you don&apos;t meet the minimum. You have to trust a
-                  pool with the payment of your rewards.
-                </Text>
+              </OptionBenefit>
+            </OptionBenefitContainer>
 
-                <List>
-                  <List.Item icon={<IconUsers />}>
-                    A pool stacks on your behalf
-                  </List.Item>
-                  <List.Item icon={<IconChartLine />}>
-                    More predictable returns
-                  </List.Item>
-                  <List.Item icon={<IconStairs />}>
-                    No minimum required
-                  </List.Item>
-                </List>
+            <Flex alignItems="center">
+              <OptionButton
+                onClick={() => navigate("../start-pooled-stacking")}
+                isDisabled={hasExistingCommitment || !hasEnoughBalanceToPool}
+              >
+                Stack in a pool
+              </OptionButton>
+              {!hasEnoughBalanceToPool && (
+                <InsufficientStackingBalanceWarning />
+              )}
+            </Flex>
+          </Card>
 
-                <Button
-                  onClick={() => navigate("../start-pooled-stacking")}
-                  disabled={hasExistingCommitment || !hasEnoughBalanceToPool}
-                >
-                  Stack in a pool
-                </Button>
-              </Stack>
-            </Card>
-          </Grid.Col>
+          <Card
+            mt={["extra-loose", null, null, "unset"]}
+            {...(columnBreakpoint ? pseudoBorderLeft("border", "1px") : {})}
+          >
+            <Box height="130px">
+              <img
+                src={fishBowlIllustration}
+                width="150px"
+                alt="A dark fishbowl with a lone fish facing right, perhaps contemplating the benefits of Stacking, by Eugenia Digon"
+              />
+            </Box>
+            <Title>Stack by yourself</Title>
 
-          <Grid.Col span={6}>
-            <Card>
-              <Stack>
-                <Image
-                  src={fishBowlIllustration}
-                  height="130px"
-                  fit="contain"
-                  alt="A dark fishbowl with a lone fish facing right, perhaps contemplating the benefits of Stacking, by Eugenia Digon"
-                />
-                <Title>Stack by yourself</Title>
+            <Description>
+              When you stack by yourself, you’ll interact with the protocol
+              directly. You don’t have to trust a pool if you have a sufficient
+              amount of STX available.
+            </Description>
 
-                <Text size="lg">
-                  When you stack by yourself, you’ll interact with the protocol
-                  directly. You don’t have to trust a pool if you have a
-                  sufficient amount of STX available.
-                </Text>
+            <OptionBenefitContainer>
+              <OptionBenefit icon={IconLock}>
+                Interact with the protocol directly
+              </OptionBenefit>
+              <OptionBenefit icon={IconUserMinus}>
+                No intermediaries
+              </OptionBenefit>
+              <OptionBenefit icon={IconStairs}>
+                Minimum required to stack is{" "}
+                {toHumanReadableStx(stackingMinimumAmountUstx)}
+              </OptionBenefit>
+            </OptionBenefitContainer>
 
-                <List>
-                  <List.Item icon={<IconLock />}>
-                    Interact with the protocol directly
-                  </List.Item>
-                  <List.Item icon={<IconUserMinus />}>
-                    No intermediaries
-                  </List.Item>
-                  <List.Item icon={<IconStairsUp />}>
-                    Dynamic minimum (currently{" "}
-                    {toHumanReadableStx(stackingMinimumAmountUstx)})
-                  </List.Item>
-                </List>
-
-                <Button
-                  onClick={() => navigate("../start-direct-stacking")}
-                  disabled={
-                    hasExistingCommitment || !hasEnoughBalanceToDirectStack
-                  }
-                >
-                  Stack by yourself
-                </Button>
-              </Stack>
-            </Card>
-          </Grid.Col>
-        </Grid>
+            <Flex alignItems="center">
+              <OptionButton
+                onClick={() => navigate("../start-direct-stacking")}
+                isDisabled={
+                  hasExistingCommitment || !hasEnoughBalanceToDirectStack
+                }
+              >
+                Stack by yourself
+              </OptionButton>
+              {!hasEnoughBalanceToDirectStack && (
+                <InsufficientStackingBalanceWarning />
+              )}
+            </Flex>
+          </Card>
+        </CardContainer>
       </Stack>
-    </Container>
+    </Layout>
   );
 }

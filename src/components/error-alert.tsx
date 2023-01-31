@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 
-import { Alert } from "@mantine/core";
 import { IconAlertCircle } from "@tabler/icons-react";
+import { Box } from "@stacks/ui";
 
 interface Props {
   id?: string;
@@ -9,12 +9,13 @@ interface Props {
 }
 export function ErrorAlert({ id, children }: Props) {
   return (
-    <Alert
+    <Box
+      bg="red"
       icon={<IconAlertCircle size={16} />}
       title={`Error ${id ? id : ""}`}
       color="red"
     >
       {children}
-    </Alert>
+    </Box>
   );
 }

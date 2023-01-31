@@ -17,9 +17,6 @@
   "dependencies": {
     "@emotion/react": "11.10.5",
     "@emotion/styled": "11.10.5",
-    "@mantine/core": "5.10.2",
-    "@mantine/hooks": "5.10.2",
-    "@mantine/modals": "5.10.2",
     "@noble/hashes": "1.1.5",
     "@scure/base": "1.1.1",
     "@stacks/auth": "6.1.0",

@@ -1,4 +1,4 @@
-import { Box, CopyButton, Text } from "@mantine/core";
+import { Box, Text } from "@stacks/ui";
 import { IconCopy } from "@tabler/icons-react";
 
 import { truncateMiddle } from "@utils/tx-utils";

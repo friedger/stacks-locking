@@ -1,20 +1,5 @@
-import {
-  Button,
-  Container,
-  Flex,
-  Group,
-  MantineProvider,
-  Menu,
-  Text,
-} from "@mantine/core";
-import { ModalsProvider } from "@mantine/modals";
-import { IconDroplet } from "@tabler/icons-react";
-import {
-  QueryClient,
-  QueryClientProvider,
-  useQuery,
-} from "@tanstack/react-query";
-import { toUnicode } from "punycode";
+import { Box, Button, CSSReset, Flex, ThemeProvider } from "@stacks/ui";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Navigate,
   Outlet,
@@ -22,182 +7,50 @@ import {
   createBrowserRouter,
 } from "react-router-dom";
 
-import { Address } from "@components/address";
-import {
-  BlockchainApiClientProvider,
-  useBlockchainApiClient,
-} from "@components/blockchain-api-client-provider";
-import { ErrorAlert } from "@components/error-alert";
-import { NetworkProvider, useNetwork } from "@components/network-provider";
+import { BlockchainApiClientProvider } from "@components/blockchain-api-client-provider";
+import { NetworkProvider } from "@components/network-provider";
 import { StackingClientProvider } from "@components/stacking-client-provider/stacking-client-provider";
 
 import {
   AuthProvider,
   useAuth,
 } from "./components/auth-provider/auth-provider";
-import { ChooseStackingMethod } from "./pages/choose-stacking-method/choose-stacking-method";
 import { SignIn } from "./pages/sign-in/sign-in";
-import { DirectStackingInfo } from "./pages/stacking/direct-stacking-info/direct-stacking-info";
-import { PooledStackingInfo } from "./pages/stacking/pooled-stacking-info/pooled-stacking-info";
-import { StartDirectStacking } from "./pages/stacking/start-direct-stacking/start-direct-stacking";
-import { StartPooledStacking } from "./pages/stacking/start-pooled-stacking/start-pooled-stacking";
-
-function Profile() {
-  const { address } = useAuth();
-  const { namesApi } = useBlockchainApiClient();
-  const q = useQuery(["bns", address, namesApi], () => {
-    return namesApi.getNamesOwnedByAddress({
-      address: address ?? "",
-      blockchain: "stacks",
-    });
-  });
-
-  if (!address) {
-    const msg = "Expected `address` to be defined.";
-    console.error(msg);
-    return (
-      <ErrorAlert id="71582283-38b4-497d-b7ce-b8d524699653">{msg}</ErrorAlert>
-    );
-  }
-
-  const parseIfValidPunycode = (s: string) => {
-    try {
-      return toUnicode(s);
-    } catch {
-      return s;
-    }
-  };
-  const bnsName = parseIfValidPunycode(q.data?.names[0] ?? "");
-  return (
-    <Group position="right">
-      {bnsName && <Text>{bnsName}</Text>}
-      <Address address={address} />
-    </Group>
-  );
-}
+import { useEffect } from "react";
+import { loadFonts } from "@utils/load-fonts";
+import { ChooseStackingMethod } from "./pages/choose-stacking-method/choose-stacking-method";
 
 function Layout() {
-  const { address } = useAuth();
   const { isSignedIn, signOut } = useAuth();
-  const { networkName, setNetworkByName } = useNetwork();
-  const { faucetsApi } = useBlockchainApiClient();
 
-  if (!address) {
-    // TODO: log error
-    const id = "42d06620-f87d-487e-8f54-cb171b3e3ea6";
-    const msg = "Expected `address` to be defined.";
-    console.error(id, msg);
-    return <ErrorAlert id={id}>{msg}</ErrorAlert>;
-  }
-
-  const networkButton = (
-    <Button
-      variant="outline"
-      onClick={() => {
-        if (networkName === "mainnet") {
-          setNetworkByName("testnet");
-          return;
-        }
-
-        setNetworkByName("mainnet");
-      }}
-    >
-      {networkName !== "mainnet" ? "🚧 " : ""}
-      {networkName}
-    </Button>
-  );
   return (
     <>
-      <Flex h="100vh" direction="column">
+      <Flex h="100vh" flexDirection="column">
         {isSignedIn && (
-          <Group p="sm" position="right">
-            <Profile />
-            {networkName === "testnet" ? (
-              <Menu trigger="hover">
-                <Menu.Target>{networkButton}</Menu.Target>
-                <Menu.Dropdown>
-                  <Menu.Item
-                    onClick={async () => {
-                      try {
-                        // alert requesting
-                        await faucetsApi.runFaucetStx({
-                          address,
-                          stacking: true,
-                        });
-                        // alert success
-                        // enable
-                      } catch (e) {
-                        // alert error
-                        // enable
-                      }
-                    }}
-                    icon={<IconDroplet size={14} />}
-                    // icon={<Loader size={14} />}
-                  >
-                    <Text>Request STX from Faucet</Text>
-                  </Menu.Item>
-                </Menu.Dropdown>
-              </Menu>
-            ) : (
-              networkButton
-            )}
+          <Flex p="sm" justify="right">
             <Button onClick={() => signOut()}>Sign out</Button>
-          </Group>
+          </Flex>
         )}
-        <Container fluid>
+        <Box>
           <Outlet />
-        </Container>
+        </Box>
       </Flex>
     </>
   );
 }
 const queryClient = new QueryClient();
 function Root() {
-  // useEffect(() => void loadFonts(), []);
+  useEffect(() => void loadFonts(), []);
   return (
     <QueryClientProvider client={queryClient}>
       <NetworkProvider>
         <AuthProvider>
           <StackingClientProvider>
             <BlockchainApiClientProvider>
-              <MantineProvider
-                withGlobalStyles
-                withNormalizeCSS
-                theme={{
-                  // primaryColor: "violet",
-                  primaryColor: "brand",
-                  defaultRadius: "md",
-                  components: {
-                    Checkbox: {
-                      defaultProps: {
-                        radius: "sm",
-                      },
-                    },
-                  },
-                  fontFamily: "Inter",
-                  colors: {
-                    brand: [
-                      "#D2CEFF",
-                      "#BAB4FF",
-                      "#A39BFF",
-                      "#8E84FF",
-                      "#7A6EFF",
-                      "#675AFF",
-                      "#5546FF",
-                      "#4332FF",
-                      "#3220FF",
-                      "#220FFF",
-                    ],
-                  },
-                  headings: {
-                    fontFamily: "Open Sauce One",
-                  },
-                }}
-              >
-                <ModalsProvider>
-                  <Outlet />
-                </ModalsProvider>
-              </MantineProvider>
+              <ThemeProvider>
+                {CSSReset}
+                <Outlet />
+              </ThemeProvider>
             </BlockchainApiClientProvider>
           </StackingClientProvider>
         </AuthProvider>
@@ -239,23 +92,23 @@ const router = createBrowserRouter([
                 path: "choose-stacking-method",
                 element: <ChooseStackingMethod />,
               },
-              {
-                path: "start-pooled-stacking",
-                element: <StartPooledStacking />,
-              },
-              {
-                path: "pooled-stacking-info",
-                element: <PooledStackingInfo />,
-              },
-
-              {
-                path: "start-direct-stacking",
-                element: <StartDirectStacking />,
-              },
-              {
-                path: "direct-stacking-info",
-                element: <DirectStackingInfo />,
-              },
+              // {
+              //   path: "start-pooled-stacking",
+              //   element: <StartPooledStacking />,
+              // },
+              // {
+              //   path: "pooled-stacking-info",
+              //   element: <PooledStackingInfo />,
+              // },
+              //
+              // {
+              //   path: "start-direct-stacking",
+              //   element: <StartDirectStacking />,
+              // },
+              // {
+              //   path: "direct-stacking-info",
+              //   element: <DirectStackingInfo />,
+              // },
             ],
           },
         ],
