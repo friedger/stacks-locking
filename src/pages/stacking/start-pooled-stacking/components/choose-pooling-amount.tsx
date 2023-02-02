@@ -1,39 +1,50 @@
-import { Anchor, Stack, Text } from "@mantine/core";
 import { useField } from "formik";
 
 import { microStxToStx, toHumanReadableStx } from "@utils/unit-convert";
 
-import { AmountField } from "../../components/fields/amount-field";
 import { Description, Step } from "../../components/stacking-form-step";
+
+import { Box, Button, color, Input, Text } from "@stacks/ui";
+import { ErrorLabel } from "@components/error-label";
+import { ErrorText } from "@components/error-text";
 
 interface Props {
   availableBalance: bigint;
 }
 export function ChoosePoolingAmount({ availableBalance }: Props) {
-  const helpers = useField("amount")[2];
+  const [field, meta, helpers] = useField("amount");
   return (
     <Step title="Amount">
-      <Stack>
-        <Description>
-          <Text>
-            Choose how much you&apos;ll pool. Your pool may require a minimum.
-          </Text>
-        </Description>
-
-        <AmountField placeholder="Amount of STX to Stack" />
+      <Description>
         <Text>
-          Available balance:{" "}
-          <Anchor
-            component="button"
-            type="button"
-            onClick={() =>
-              helpers.setValue(microStxToStx(availableBalance).toString())
-            }
-          >
-            {toHumanReadableStx(availableBalance)}
-          </Anchor>
+          Choose how much you&apos;ll pool. Your pool may require a minimum.
         </Text>
-      </Stack>
+      </Description>
+
+      <Box position="relative" maxWidth="400px">
+        <Input
+          id="stxAmount"
+          mt="loose"
+          placeholder="Amount of STX to Stack"
+          {...field}
+        />
+        {meta.touched && meta.error && (
+          <ErrorLabel>
+            <ErrorText>{meta.error}</ErrorText>
+          </ErrorLabel>
+        )}
+      </Box>
+
+      <Box textStyle="body.small" color={color("text-caption")} mt="base-tight">
+        Available balance:{" "}
+        <Button
+          variant="link"
+          type="button"
+          onClick={() => helpers.setValue(microStxToStx(availableBalance))}
+        >
+          {toHumanReadableStx(availableBalance)}
+        </Button>
+      </Box>
     </Step>
   );
 }

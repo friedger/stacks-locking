@@ -1,6 +1,5 @@
 import { useState } from "react";
 
-import { Box, Container, Divider, Space, Stack } from "@mantine/core";
 import { StacksNetworkName } from "@stacks/network";
 import { StackingClient } from "@stacks/stacking";
 import { useQuery } from "@tanstack/react-query";
@@ -24,6 +23,9 @@ import { PoolingInfoCard } from "./components/delegated-stacking-info-card";
 import { PooledStackingIntro } from "./components/pooled-stacking-intro";
 import { EditingFormValues } from "./types";
 import { createHandleSubmit, createValidationSchema } from "./utils";
+import { Stack, Box } from "@stacks/ui";
+import { StackingFormInfoPanel } from "../components/stacking-form-info-panel";
+import { StackingFormContainer } from "../components/stacking-form-container";
 
 const initialDelegatingFormValues: Partial<EditingFormValues> = {
   amount: "",
@@ -97,37 +99,33 @@ function StartPooledStackingLayout({
   if (typeof queryGetAccountBalance.data !== "bigint") return null;
 
   return (
-    <Container p={0} size="lg">
-      <Formik
-        initialValues={initialDelegatingFormValues as EditingFormValues}
-        onSubmit={handleSubmit}
-        validationSchema={validationSchema}
-      >
-        <StartStackingLayout
-          intro={<PooledStackingIntro timeUntilNextCycle={data} />}
-          stackingInfoPanel={<PoolingInfoCard />}
-          stackingForm={
+    <Formik
+      initialValues={initialDelegatingFormValues as EditingFormValues}
+      onSubmit={handleSubmit}
+      validationSchema={validationSchema}
+    >
+      <StartStackingLayout
+        intro={<PooledStackingIntro timeUntilNextCycle={data} />}
+        stackingInfoPanel={
+          <StackingFormInfoPanel>
+            <PoolingInfoCard />
+          </StackingFormInfoPanel>
+        }
+        stackingForm={
+          <>
             <Form>
-              <Stack>
-                <Space h="xl" />
+              <StackingFormContainer>
                 <ChoosePoolAddress />
-                <Divider />
-                <Space h="xl" />
                 <ChoosePoolingAmount
                   availableBalance={queryGetAccountBalance.data}
                 />
-                <Divider />
-                <Space h="xl" />
                 <ChoosePoolingDuration />
-                <Divider />
-                <Space h="xl" />
                 <ConfirmAndSubmit isLoading={isContractCallExtensionPageOpen} />
-              </Stack>
+              </StackingFormContainer>
             </Form>
-          }
-        />
-      </Formik>
-      <Box pb="25vh" />
-    </Container>
+          </>
+        }
+      />
+    </Formik>
   );
 }

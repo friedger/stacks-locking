@@ -14,7 +14,10 @@ export function PooledStackingIntro({
   return (
     <>
       <Title>Stack in a pool</Title>
-      <NextCycleStartTime timeUntilNextCycle={timeUntilNextCycle} />
+      <NextCycleStartTime
+        mt="extra-loose"
+        timeUntilNextCycle={timeUntilNextCycle}
+      />
     </>
   );
 }

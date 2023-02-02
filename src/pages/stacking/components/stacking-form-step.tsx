@@ -1,7 +1,10 @@
+import { Title } from "@components/title";
+import { Box, Button, ButtonProps, Flex, Stack } from "@stacks/ui";
+import {
+  ForwardRefExoticComponentWithAs,
+  forwardRefWithAs,
+} from "@stacks/ui-core";
 import { ReactElement, ReactNode } from "react";
-
-import { Box, Title } from "@mantine/core";
-import { Button, ButtonProps, Stack } from "@mantine/core";
 
 interface StepProps {
   title: string;
@@ -28,10 +31,12 @@ interface StepProps {
 export function Step(props: StepProps) {
   const { title, children, ...rest } = props;
   return (
-    <Stack mt="extra-loose" {...rest}>
-      <Title order={2}>{title}</Title>
+    <Flex flexDirection="column" mt="extra-loose" {...rest}>
+      <Title fontSize="24px" mt="extra-tight" mr="tight">
+        {title}
+      </Title>
       <Box>{children}</Box>
-    </Stack>
+    </Flex>
   );
 }
 
@@ -63,13 +68,15 @@ interface DescriptionProps {
  * ```
  */
 export function Description({ children }: DescriptionProps) {
-  return <Stack>{children}</Stack>;
-}
-
-export function Action({ children, ...rest }: ButtonProps) {
   return (
-    <Button size="md" mt="md" {...rest}>
+    <Stack display="block" textStyle="body.large" spacing="base">
       {children}
-    </Button>
+    </Stack>
   );
 }
+export const Action: ForwardRefExoticComponentWithAs<ButtonProps, "button"> =
+  forwardRefWithAs(({ children, ...props }, ref) => (
+    <Button size="md" mt="loose" ref={ref} {...props}>
+      {children}
+    </Button>
+  ));

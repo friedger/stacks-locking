@@ -19,6 +19,7 @@ import { SignIn } from "./pages/sign-in/sign-in";
 import { useEffect } from "react";
 import { loadFonts } from "@utils/load-fonts";
 import { ChooseStackingMethod } from "./pages/choose-stacking-method/choose-stacking-method";
+import { StartPooledStacking } from "./pages/stacking/start-pooled-stacking/start-pooled-stacking";
 
 function Layout() {
   const { isSignedIn, signOut } = useAuth();
@@ -92,10 +93,10 @@ const router = createBrowserRouter([
                 path: "choose-stacking-method",
                 element: <ChooseStackingMethod />,
               },
-              // {
-              //   path: "start-pooled-stacking",
-              //   element: <StartPooledStacking />,
-              // },
+              {
+                path: "start-pooled-stacking",
+                element: <StartPooledStacking />,
+              },
               // {
               //   path: "pooled-stacking-info",
               //   element: <PooledStackingInfo />,

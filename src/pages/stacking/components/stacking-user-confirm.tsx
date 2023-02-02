@@ -1,15 +1,25 @@
-import { Checkbox } from "@mantine/core";
+import { Box, BoxProps, color } from "@stacks/ui";
 
-interface StackingUserConfirmProps {
+interface StackingUserConfirmProps extends Omit<BoxProps, "onChange"> {
   onChange(userConfirmed: boolean): void;
 }
 
 export function StackingUserConfirm(props: StackingUserConfirmProps) {
-  const { onChange } = props;
+  const { onChange, ...rest } = props;
   return (
-    <Checkbox
-      label="I have read and understand the above"
-      onChange={(e) => onChange(e.target.checked)}
-    />
+    <Box
+      as="label"
+      display="block"
+      py="base"
+      textStyle="body.small"
+      color={color("text-caption")}
+      userSelect="none"
+      {...rest}
+    >
+      <Box mr="base-tight" display="inline-block">
+        <input type="checkbox" onChange={(e) => onChange(e.target.checked)} />
+      </Box>
+      I have read and understand the above
+    </Box>
   );
 }

@@ -1,32 +1,22 @@
-import { ReactNode } from "react";
+import { Box, BoxProps, color } from "@stacks/ui";
 
-import { UnstyledButton } from "@mantine/core";
+type CircleButtonProps = BoxProps;
 
-interface Props {
-  onClick(e: React.MouseEvent<HTMLButtonElement>): void;
-  children: ReactNode;
-}
-export function CircleButton({ onClick, children }: Props) {
+export function CircleButton(props: CircleButtonProps) {
   return (
-    <UnstyledButton
-      onClick={onClick}
-      type="button"
+    <Box
+      as="button"
+      {...{ type: "button" }}
+      backgroundColor={color("bg-4")}
+      _hover={{ color: color("brand") }}
       style={{ userSelect: "none" }}
       display="inline-block"
-      w="28px"
-      h="28px"
-      sx={(t) => ({
-        backgroundColor: t.colors.gray[2],
-        borderRadius: t.radius.xl,
-        fontWeight: 500,
-        outline: 0,
-        textAlign: "center",
-        ":hover": {
-          color: t.colors[t.primaryColor][5],
-        },
-      })}
-    >
-      {children}
-    </UnstyledButton>
+      width="28px"
+      height="28px"
+      borderRadius="50%"
+      fontWeight={800}
+      outline={0}
+      {...props}
+    />
   );
 }

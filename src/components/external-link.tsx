@@ -1,4 +1,3 @@
-import { FC } from "react";
 import { Box, Text, BoxProps, color } from "@stacks/ui";
 import { openExternalLink } from "@utils/external-links";
 import { LegalDisclaimerTooltip } from "./legal-disclaimer-tooltip";
@@ -7,11 +6,7 @@ interface ExternalLinkProps extends BoxProps {
   href: string;
 }
 
-export const ExternalLink: FC<ExternalLinkProps> = ({
-  href,
-  children,
-  ...props
-}) => {
+export function ExternalLink({ href, children, ...props }: ExternalLinkProps) {
   const openUrl = () => openExternalLink(href);
   return (
     <LegalDisclaimerTooltip display="inline-block">
@@ -34,4 +29,4 @@ export const ExternalLink: FC<ExternalLinkProps> = ({
       </Text>
     </LegalDisclaimerTooltip>
   );
-};
+}
