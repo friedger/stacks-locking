@@ -33,7 +33,7 @@
     "@tabler/icons-react": "2.1.2",
     "@tanstack/react-query": "4.24.2",
     "@tippyjs/react": "4.2.6",
-    "@types/bn.js": "^5.1.1",
+    "@types/bn.js": "5.1.1",
     "are-passive-events-supported": "1.1.1",
     "bignumber.js": "9.1.1",
     "bitcoin-address-validation": "2.2.1",
