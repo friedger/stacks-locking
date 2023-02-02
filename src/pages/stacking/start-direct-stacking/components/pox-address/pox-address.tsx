@@ -1,19 +1,21 @@
-import { Loader, Stack, Text } from "@mantine/core";
 import { PoxOperationPeriod } from "@stacks/stacking/dist/constants";
 import { useField } from "formik";
 
 import { ErrorAlert } from "@components/error-alert";
 import { useGetPoxOperationInfo } from "@components/stacking-client-provider/stacking-client-provider";
 
-import { AddressField } from "../../../components/fields/address-field";
-import { Step } from "../../../components/stacking-form-step";
+import { Description, Step } from "../../../components/stacking-form-step";
 import { ErrorPeriod1, ErrorPostPeriod1 } from "./components/errors";
+import { Spinner, Text } from "@stacks/ui";
+import { CryptoAddressInput } from "src/pages/stacking/components/crypto-address-form";
+import { ErrorLabel } from "@components/error-label";
+import { ErrorText } from "@components/error-text";
 
 export function PoxAddress() {
-  const meta = useField("poxAddress")[1];
+  const [field, meta] = useField("poxAddress");
   const q = useGetPoxOperationInfo();
 
-  if (q.isLoading) return <Loader />;
+  if (q.isLoading) return <Spinner />;
   if (q.isError || !q.data) {
     const id = "e69b0abe-495d-4587-9693-8bd4541dddaf";
     const msg = "Failed to establish current PoX period.";
@@ -22,25 +24,38 @@ export function PoxAddress() {
   }
 
   // TODO: when should this error be shown?
-  const errorElement =
+  const addressError =
     q.data.period === PoxOperationPeriod.Period1 ? (
       <ErrorPeriod1 />
     ) : (
       <ErrorPostPeriod1 />
     );
 
-  const errorEl = meta.touched && meta.error && errorElement;
+  const errors = meta.error ? (
+    <ErrorLabel maxWidth="430px">
+      <ErrorText lineHeight="18px">
+        {meta.error === "is-bech32" ? addressError : meta.error}
+      </ErrorText>
+    </ErrorLabel>
+  ) : null;
 
   return (
-    <Step title="Bitcoin address">
-      <Stack>
-        <Text>Choose the address where you’d like to receive bitcoin.</Text>
-        <AddressField
-          name="poxAddress"
-          placeholder="Bitcoin address"
-          error={errorEl}
-        />
-      </Stack>
-    </Step>
+    <>
+      <Step title="Bitcoin address">
+        <Description>
+          <Text>
+            Enter the Bitcoin address where you&apos;d like to receive your
+            rewards.
+          </Text>
+        </Description>
+        <CryptoAddressInput
+          fieldName="poxAddress"
+          placeholder="Bitcoin address (Legacy, Native SegWit or Taproot)"
+          {...field}
+        >
+          {meta.touched && errors}
+        </CryptoAddressInput>
+      </Step>
+    </>
   );
 }

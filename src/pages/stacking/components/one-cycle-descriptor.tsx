@@ -1,28 +1,35 @@
 import { FC } from "react";
 
-import { BoxProps } from "@stacks/ui";
-
-// import { useSelector } from 'react-redux';
-// import { RootState } from '@store/index';
-// import { selectNextCycleInfo, selectPoxInfo } from '@store/stacking';
+import { BoxProps, color, Spinner, Text } from "@stacks/ui";
+import { useGetPoxInfoQuery } from "@components/stacking-client-provider/stacking-client-provider";
+import { ErrorAlert } from "@components/error-alert";
 
 type OneCycleDescriptorProps = BoxProps;
 
-export const OneCycleDescriptor: FC<OneCycleDescriptorProps> = () => {
-  return <></>;
-  // const { nextCycleInfo, poxInfo } = useSelector((state: RootState) => ({
-  //   nextCycleInfo: selectNextCycleInfo(state),
-  //   poxInfo: selectPoxInfo(state),
-  // }));
-  // return (
-  //   <Text
-  //     display="block"
-  //     textStyle="body.small"
-  //     color={color("text-caption")}
-  //     {...props}
-  //   >
-  //     Cycles last {poxInfo?.reward_cycle_length} Bitcoin blocks, currently{" "}
-  //     {nextCycleInfo?.estimateCycleDuration}
-  //   </Text>
-  // );
+export const OneCycleDescriptor: FC<OneCycleDescriptorProps> = (props) => {
+  const q = useGetPoxInfoQuery();
+
+  if (q.isLoading) {
+    return <Spinner />;
+  }
+
+  if (q.isError || !q.data) {
+    const id = "d447780e-7df2-4953-b409-aef9e91cf2e8";
+    const msg = "Failed to retrieve necessary data.";
+    // TODO: log error
+    console.error(id, msg);
+    return <ErrorAlert id={id}>{msg}</ErrorAlert>;
+  }
+
+  return (
+    <Text
+      display="block"
+      textStyle="body.small"
+      color={color("text-caption")}
+      {...props}
+    >
+      Cycles last {q.data.reward_cycle_length} Bitcoin blocks, currently
+      TODO:time.
+    </Text>
+  );
 };

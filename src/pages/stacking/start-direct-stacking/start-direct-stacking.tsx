@@ -1,6 +1,5 @@
 import { useState } from "react";
 
-import { Box, Container, Divider, Loader, Space, Stack } from "@mantine/core";
 import { StackingClient } from "@stacks/stacking";
 import { Form, Formik } from "formik";
 import { useNavigate } from "react-router-dom";
@@ -25,6 +24,9 @@ import { Duration } from "./components/duration";
 import { PoxAddress } from "./components/pox-address/pox-address";
 import { DirectStackingFormValues } from "./types";
 import { createHandleSubmit, createValidationSchema } from "./utils";
+import { Spinner } from "@stacks/ui";
+import { StackingFormInfoPanel } from "../components/stacking-form-info-panel";
+import { StackingFormContainer } from "../components/stacking-form-container";
 
 const initialFormValues: DirectStackingFormValues = {
   amount: "",
@@ -66,7 +68,7 @@ function StartDirectStackingLayout({ client }: StartDirectStackingLayoutProps) {
     getPoxInfoQuery.isLoading ||
     getAccountBalanceQuery.isLoading
   )
-    return <Loader />;
+    return <Spinner />;
 
   if (
     getSecondsUntilNextCycleQuery.isError ||
@@ -95,44 +97,40 @@ function StartDirectStackingLayout({ client }: StartDirectStackingLayoutProps) {
   });
 
   return (
-    <Container p={0} size="lg">
-      <Formik
-        initialValues={initialFormValues}
-        onSubmit={(values) => {
-          handleSubmit(values);
-        }}
-        validationSchema={validationSchema}
-      >
-        <StartStackingLayout
-          intro={
-            <DirectStackingIntro
-              estimatedStackingMinimum={BigInt(
-                getPoxInfoQuery.data.min_amount_ustx
-              )}
-              timeUntilNextCycle={getSecondsUntilNextCycleQuery.data}
-            />
-          }
-          stackingInfoPanel={<InfoPanel />}
-          stackingForm={
-            <Form>
-              <Stack>
-                <Space h="xl" />
-                <Amount />
-                <Divider />
-                <Space h="xl" />
-                <Duration />
-                <Divider />
-                <Space h="xl" />
-                <PoxAddress />
-                <Divider />
-                <Space h="xl" />
-                <ConfirmAndSubmit isLoading={isContractCallExtensionPageOpen} />
-              </Stack>
-            </Form>
-          }
-        />
-      </Formik>
-      <Box pb="25vh" />
-    </Container>
+    <Formik
+      initialValues={initialFormValues}
+      onSubmit={(values) => {
+        handleSubmit(values);
+      }}
+      validationSchema={validationSchema}
+    >
+      <StartStackingLayout
+        intro={
+          <DirectStackingIntro
+            estimatedStackingMinimum={BigInt(
+              getPoxInfoQuery.data.min_amount_ustx
+            )}
+            timeUntilNextCycle={getSecondsUntilNextCycleQuery.data}
+          />
+        }
+        stackingInfoPanel={
+          <>
+            <StackingFormInfoPanel>
+              <InfoPanel />
+            </StackingFormInfoPanel>
+          </>
+        }
+        stackingForm={
+          <Form>
+            <StackingFormContainer>
+              <Amount />
+              <Duration />
+              <PoxAddress />
+              <ConfirmAndSubmit isLoading={isContractCallExtensionPageOpen} />
+            </StackingFormContainer>
+          </Form>
+        }
+      />
+    </Formik>
   );
 }

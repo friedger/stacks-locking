@@ -1,9 +1,7 @@
-import { Avatar, Box, Flex, Text, Title } from "@mantine/core";
-import { IconStairs } from "@tabler/icons-react";
+import { StepsIcon } from "@components/icons/steps";
+import { color, Flex, FlexProps, Text } from "@stacks/ui";
 
-import { toHumanReadableStx } from "@utils/unit-convert";
-
-interface EstimatedMinimumLabelProps {
+interface EstimatedMinimumLabelProps extends FlexProps {
   /**
    * Extimated amount of uSTX needed to start stacking.
    */
@@ -11,16 +9,39 @@ interface EstimatedMinimumLabelProps {
 }
 export function EstimatedMinimumLabel({
   estimatedStackingMinimum,
+  ...rest
 }: EstimatedMinimumLabelProps) {
   return (
-    <Flex gap="sm">
-      <Avatar radius="xl">
-        <IconStairs />
-      </Avatar>
-      <Box>
-        <Title order={4}>Estimated minimum</Title>
-        <Text>{toHumanReadableStx(estimatedStackingMinimum)}</Text>
-      </Box>
+    <Flex {...rest}>
+      <Flex
+        width="44px"
+        height="44px"
+        background={color("bg-4")}
+        borderRadius="50%"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <StepsIcon size="14px" />
+      </Flex>
+      <Flex ml="base" flexDirection="column">
+        <Text
+          as="h4"
+          display="block"
+          textStyle="body.large.medium"
+          lineHeight="20px"
+        >
+          Estimated minimum
+        </Text>
+        <Text
+          display="block"
+          textStyle="body.large"
+          color={color("text-caption")}
+          lineHeight="20px"
+          mt="extra-tight"
+        >
+          {estimatedStackingMinimum.toString()}
+        </Text>
+      </Flex>
     </Flex>
   );
 }

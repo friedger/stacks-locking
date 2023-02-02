@@ -1,6 +1,13 @@
+import {
+  InfoCard,
+  InfoCardLabel as Label,
+  InfoCardRow as Row,
+  InfoCardGroup as Group,
+  InfoCardValue as Value,
+  InfoCardSection as Section,
+} from "@components/info-card";
 import { useMemo } from "react";
 
-import { Box, Card, Divider, Group, Stack, Text, Title } from "@mantine/core";
 import { BigNumber } from "bignumber.js";
 import { useFormikContext } from "formik";
 
@@ -15,7 +22,8 @@ import {
 } from "../../../utils/calc-stacking-buffer";
 import { createAmountText } from "../../../utils/create-amount-text";
 import { DirectStackingFormValues } from "../../types";
-import { Start } from "./components/start";
+import { Box, Flex, Text } from "@stacks/ui";
+import { Hr } from "@components/hr";
 
 export function InfoPanel() {
   const f = useFormikContext<DirectStackingFormValues>();
@@ -39,41 +47,57 @@ export function InfoPanel() {
   );
 
   return (
-    <Card withBorder>
-      <Stack>
-        <Box>
-          <Title order={4}>You&apos;ll lock</Title>
-          <Text fz={34}>{createAmountText(amount)}</Text>
-        </Box>
-
-        <Divider />
-
-        <Group position="apart">
-          <Text>Reward slots</Text>
-          <Text>{numberOfRewardSlots.toString()}</Text>
-        </Group>
-        <Group position="apart">
-          <Text>Buffer</Text>
-          <Text>
-            {buffer === null ? "No buffer" : toHumanReadableStx(buffer)}
+    <InfoCard minHeight="84px">
+      <Box mx={["loose", "extra-loose"]}>
+        <Flex flexDirection="column" pt="extra-loose" pb="base-loose">
+          <Text textStyle="body.large.medium">You&apos;ll lock</Text>
+          <Text
+            fontSize="24px"
+            mt="extra-tight"
+            fontWeight={500}
+            fontFamily="Open Sauce"
+            letterSpacing="-0.02em"
+          >
+            {createAmountText(amount)}
           </Text>
+        </Flex>
+        <Hr />
+        <Group width="100%" mt="base-loose" mb="extra-loose">
+          <Section>
+            <Row>
+              <Label explainer="This is the estimated number of reward slots. The minimum can change before the next cycle begins.">
+                Reward slots
+              </Label>
+              <Value>{numberOfRewardSlots.toString()}</Value>
+            </Row>
+
+            <Row>
+              <Label>Buffer</Label>
+              <Value>
+                {buffer === null ? "No buffer" : toHumanReadableStx(buffer)}
+              </Value>
+            </Row>
+          </Section>
+
+          <Section>
+            <Row>
+              <Label
+                explainer={`One cycle lasts ${getPoxInfoQuery.data?.reward_cycle_length} blocks on the Bitcoin blockchain`}
+              >
+                Cycles
+              </Label>
+              <Value>{lockPeriod}</Value>
+            </Row>
+          </Section>
+
+          <Section>
+            <Row>
+              <Label>Bitcoin address</Label>
+              <Value>{poxAddress ? truncateMiddle(poxAddress) : "—"}</Value>
+            </Row>
+          </Section>
         </Group>
-
-        <Divider />
-
-        <Group position="apart">
-          <Text>Cycles</Text>
-          <Text>{lockPeriod}</Text>
-        </Group>
-        <Start />
-
-        <Divider />
-
-        <Group position="apart">
-          <Text>Bitcoin address</Text>
-          <Text>{poxAddress ? truncateMiddle(poxAddress) : "—"}</Text>
-        </Group>
-      </Stack>
-    </Card>
+      </Box>
+    </InfoCard>
   );
 }

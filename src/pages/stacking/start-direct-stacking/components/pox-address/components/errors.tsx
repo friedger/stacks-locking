@@ -1,58 +1,22 @@
-import { forwardRef } from "react";
-
-import { Text, Tooltip } from "@mantine/core";
-
 import { ExternalLink } from "@components/external-link";
 import { STACKING_ADDRESS_FORMAT_HELP_URL } from "@constants/app";
-
-// Using `forwardRef` needed by the tooltip component used below. See docs,
-// https://mantine.dev/core/tooltip/#required-ref-prop
-const KeyText = forwardRef<HTMLDivElement, { children: string }>(
-  (props, ref) => (
-    <Text
-      ref={ref}
-      display="inline"
-      sx={{
-        cursor: "help",
-        textDecoration: "underline",
-        textDecorationStyle: "dotted",
-      }}
-      {...props}
-    ></Text>
-  )
-);
-KeyText.displayName = "KeyText";
+import { ExplainerLabel } from "@components/tooltip";
 
 export function ErrorPeriod1() {
   return (
     <>
       Please use a{" "}
-      <Tooltip
-        width={220}
-        multiline
-        withArrow
-        label="Legacy, or P2PKH, Bitcoin addresses begin with the number 1"
-      >
-        <KeyText>Legacy</KeyText>
-      </Tooltip>{" "}
+      <ExplainerLabel text="Legacy, or P2PKH, Bitcoin addresses begin with the number 1">
+        Legacy
+      </ExplainerLabel>
       or{" "}
-      <Tooltip
-        width={220}
-        multiline
-        withArrow
-        label="SegWit (Segregated Witness), or P2SH, Bitcoin addresses begin with the number 3"
-      >
-        <KeyText>SegWit</KeyText>
-      </Tooltip>{" "}
+      <ExplainerLabel text="SegWit (Segregated Witness), or P2SH, Bitcoin addresses begin with the number 3">
+        SegWit
+      </ExplainerLabel>{" "}
       address.{" "}
-      <Tooltip
-        width={220}
-        multiline
-        withArrow
-        label="Native SegWit addresses begin with the letters bc"
-      >
-        <KeyText>Native SegWit</KeyText>
-      </Tooltip>{" "}
+      <ExplainerLabel text='Native SegWit, or P2WPKH, Bitcoin addresses begin with "bc1q"'>
+        Native SegWit
+      </ExplainerLabel>{" "}
       addresses are not supported.{" "}
       <ExternalLink href={STACKING_ADDRESS_FORMAT_HELP_URL}>
         Learn more
@@ -64,27 +28,29 @@ export function ErrorPeriod1() {
 export function ErrorPostPeriod1() {
   return (
     <>
-      Please use a{" "}
-      <Tooltip
-        inline
-        label="Legacy, or P2PKH, Bitcoin addresses begin with the number 1"
+      Please use a
+      <ExplainerLabel text="Legacy, or P2PKH, Bitcoin addresses begin with the number 1">
+        Legacy
+      </ExplainerLabel>
+      ,
+      <ExplainerLabel text="SegWit (Segregated Witness), or P2SH, Bitcoin addresses begin with the number 3">
+        SegWit
+      </ExplainerLabel>
+      ,
+      <ExplainerLabel text='Native SegWit, or P2WPKH, Bitcoin addresses begin with "bc1q"'>
+        Native SegWit
+      </ExplainerLabel>
+      or
+      <ExplainerLabel text='Taproot, or P2TR, Bitcoin addresses begin with "bc1p"'>
+        Taproot
+      </ExplainerLabel>
+      address.
+      <ExternalLink
+        href={STACKING_ADDRESS_FORMAT_HELP_URL}
+        textDecoration="underline"
+        display="inline-block"
+        ml="extra-tight"
       >
-        <KeyText>Legacy</KeyText>
-      </Tooltip>
-      ,{" "}
-      <Tooltip label="SegWit (Segregated Witness), or P2SH, Bitcoin addresses begin with the number 3">
-        <KeyText>SegWit</KeyText>
-      </Tooltip>
-      ,{" "}
-      <Tooltip label='Native SegWit, or P2WPKH, Bitcoin addresses begin with "bc1q"'>
-        <KeyText>Native SegWit</KeyText>
-      </Tooltip>{" "}
-      or{" "}
-      <Tooltip label='Taproot, or P2TR, Bitcoin addresses begin with "bc1p"'>
-        <KeyText>Taproot</KeyText>
-      </Tooltip>{" "}
-      address.{" "}
-      <ExternalLink href={STACKING_ADDRESS_FORMAT_HELP_URL}>
         Learn more
       </ExternalLink>
     </>

@@ -20,6 +20,7 @@ import { useEffect } from "react";
 import { loadFonts } from "@utils/load-fonts";
 import { ChooseStackingMethod } from "./pages/choose-stacking-method/choose-stacking-method";
 import { StartPooledStacking } from "./pages/stacking/start-pooled-stacking/start-pooled-stacking";
+import { StartDirectStacking } from "./pages/stacking/start-direct-stacking/start-direct-stacking";
 
 function Layout() {
   const { isSignedIn, signOut } = useAuth();
@@ -102,10 +103,10 @@ const router = createBrowserRouter([
               //   element: <PooledStackingInfo />,
               // },
               //
-              // {
-              //   path: "start-direct-stacking",
-              //   element: <StartDirectStacking />,
-              // },
+              {
+                path: "start-direct-stacking",
+                element: <StartDirectStacking />,
+              },
               // {
               //   path: "direct-stacking-info",
               //   element: <DirectStackingInfo />,

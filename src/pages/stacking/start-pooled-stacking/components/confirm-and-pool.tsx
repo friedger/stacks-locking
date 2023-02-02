@@ -16,7 +16,11 @@ export function ConfirmAndSubmit({ isLoading }: Props) {
       <StackingUserConfirm
         onChange={(useConfirmed) => setHasUserConfirmed(useConfirmed)}
       />
-      <Action type="submit" loading={isLoading} disabled={!hasUserConfirmed}>
+      <Action
+        type="submit"
+        isLoading={isLoading}
+        isDisabled={!hasUserConfirmed}
+      >
         Confirm and start pooling
       </Action>
     </Step>

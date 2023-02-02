@@ -23,9 +23,9 @@ import { PoolingInfoCard } from "./components/delegated-stacking-info-card";
 import { PooledStackingIntro } from "./components/pooled-stacking-intro";
 import { EditingFormValues } from "./types";
 import { createHandleSubmit, createValidationSchema } from "./utils";
-import { Stack, Box } from "@stacks/ui";
 import { StackingFormInfoPanel } from "../components/stacking-form-info-panel";
 import { StackingFormContainer } from "../components/stacking-form-container";
+import { Spinner } from "@stacks/ui";
 
 const initialDelegatingFormValues: Partial<EditingFormValues> = {
   amount: "",
@@ -76,7 +76,7 @@ function StartPooledStackingLayout({
 }: StartPooledStackingProps) {
   const [isContractCallExtensionPageOpen, setIsContractCallExtensionPageOpen] =
     useState(false);
-  const { data, isLoading } = useGetSecondsUntilNextCycleQuery();
+  const q1 = useGetSecondsUntilNextCycleQuery();
 
   // TODO: move this inside ChoosePoolingAmount, not being used elsewhere
   const queryGetAccountBalance = useQuery(["getAccountBalance", client], () =>
@@ -94,9 +94,20 @@ function StartPooledStackingLayout({
     setIsContractCallExtensionPageOpen,
   });
 
-  if (isLoading || queryGetAccountBalance.isLoading) return null;
-  if (typeof data !== "number") return null;
-  if (typeof queryGetAccountBalance.data !== "bigint") return null;
+  if (q1.isLoading || queryGetAccountBalance.isLoading) return <Spinner />;
+
+  if (
+    q1.isError ||
+    typeof q1.data !== "number" ||
+    queryGetAccountBalance.isError ||
+    typeof queryGetAccountBalance.data !== "bigint"
+  ) {
+    const id = "0106e9bf-ae2f-4fcc-bf00-5fe083001adb";
+    const msg = "Failed to load necessary data.";
+    // TODO: log error
+    console.error(id, msg);
+    return <ErrorAlert id={id}>{msg}</ErrorAlert>;
+  }
 
   return (
     <Formik
@@ -105,7 +116,7 @@ function StartPooledStackingLayout({
       validationSchema={validationSchema}
     >
       <StartStackingLayout
-        intro={<PooledStackingIntro timeUntilNextCycle={data} />}
+        intro={<PooledStackingIntro timeUntilNextCycle={q1.data} />}
         stackingInfoPanel={
           <StackingFormInfoPanel>
             <PoolingInfoCard />
