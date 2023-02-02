@@ -21,6 +21,7 @@ import { loadFonts } from "@utils/load-fonts";
 import { ChooseStackingMethod } from "./pages/choose-stacking-method/choose-stacking-method";
 import { StartPooledStacking } from "./pages/stacking/start-pooled-stacking/start-pooled-stacking";
 import { StartDirectStacking } from "./pages/stacking/start-direct-stacking/start-direct-stacking";
+import { PooledStackingInfo } from "./pages/stacking/pooled-stacking-info/pooled-stacking-info";
 
 function Layout() {
   const { isSignedIn, signOut } = useAuth();
@@ -98,11 +99,10 @@ const router = createBrowserRouter([
                 path: "start-pooled-stacking",
                 element: <StartPooledStacking />,
               },
-              // {
-              //   path: "pooled-stacking-info",
-              //   element: <PooledStackingInfo />,
-              // },
-              //
+              {
+                path: "pooled-stacking-info",
+                element: <PooledStackingInfo />,
+              },
               {
                 path: "start-direct-stacking",
                 element: <StartDirectStacking />,

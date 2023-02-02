@@ -1,18 +1,29 @@
-import React, { cloneElement, FC, isValidElement } from 'react';
-import { Box, BoxProps, color, Flex, FlexProps, Stack, StackProps, Text } from '@stacks/ui';
-import { ExplainerTooltip } from '@components/tooltip';
-import { Hr } from '@components/hr';
+import React, { cloneElement, FC, isValidElement } from "react";
+import {
+  Box,
+  BoxProps,
+  color,
+  Flex,
+  FlexProps,
+  Stack,
+  StackProps,
+  Text,
+} from "@stacks/ui";
+import { ExplainerTooltip } from "@components/tooltip";
+import { Hr } from "@components/hr";
 
-export const InfoCard: FC<FlexProps> = props => (
-  <Flex
-    flexDirection="column"
-    boxShadow="low"
-    border={`1px solid ${color('border')}`}
-    borderRadius="8px"
-    minHeight="84px"
-    {...props}
-  />
-);
+export function InfoCard(props: FlexProps) {
+  return (
+    <Flex
+      flexDirection="column"
+      boxShadow="low"
+      border={`1px solid ${color("border")}`}
+      borderRadius="8px"
+      minHeight="84px"
+      {...props}
+    />
+  );
+}
 
 type ChildProps = BoxProps;
 
@@ -28,9 +39,11 @@ export const InfoCardGroup = ({ children, ...props }: Props) => {
     return [
       cloneElement(child, {
         key: index,
-        mb: index === parsedChildren.length ? '280px' : undefined,
+        mb: index === parsedChildren.length ? "280px" : undefined,
       }),
-      index !== parsedChildren.length - 1 && <Hr my="loose" key={index.toString() + '-hr'} />,
+      index !== parsedChildren.length - 1 && (
+        <Hr my="loose" key={index.toString() + "-hr"} />
+      ),
     ];
   });
   return <Box {...props}>{infoGroup}</Box>;
@@ -42,20 +55,23 @@ export const InfoCardSection: FC<StackProps> = ({ children, ...props }) => (
   </Stack>
 );
 
-export const InfoCardRow: FC<FlexProps> = props => (
+export const InfoCardRow: FC<FlexProps> = (props) => (
   <Flex justifyContent="space-between" {...props} />
 );
 
 interface InfoCardLabelProps extends FlexProps {
   explainer?: string;
 }
-export const InfoCardLabel: FC<InfoCardLabelProps> = ({ children, ...props }) => (
-  <Flex color={color('text-caption')} alignItems="center" {...props}>
-    <Box mr={!!props.explainer ? 'tight' : undefined}>{children}</Box>
+export const InfoCardLabel: FC<InfoCardLabelProps> = ({
+  children,
+  ...props
+}) => (
+  <Flex color={color("text-caption")} alignItems="center" {...props}>
+    <Box mr={props.explainer ? "tight" : undefined}>{children}</Box>
     {props.explainer && <ExplainerTooltip>{props.explainer}</ExplainerTooltip>}
   </Flex>
 );
 
-export const InfoCardValue: FC<FlexProps> = props => (
+export const InfoCardValue: FC<FlexProps> = (props) => (
   <Text textStyle="body.large.medium" textAlign="right" {...props} />
 );
