@@ -100,6 +100,9 @@ export function createHandleSubmit({
   navigate,
 }: CreateHandleSubmitArgs) {
   return async function handleSubmit(values: DirectStackingFormValues) {
+    if (values.amount === null)
+      throw new Error("Expected a non-null amount to be submitted.");
+
     // TODO: handle thrown errors
     const [stackingContract, coreInfo] = await Promise.all([
       client.getStackingContract(),

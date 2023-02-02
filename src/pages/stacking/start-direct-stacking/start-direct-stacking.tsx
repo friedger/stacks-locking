@@ -30,7 +30,7 @@ import { StackingFormContainer } from "../components/stacking-form-container";
 
 const initialFormValues: DirectStackingFormValues = {
   amount: "",
-  lockPeriod: 1,
+  lockPeriod: 12,
   poxAddress: "",
 };
 

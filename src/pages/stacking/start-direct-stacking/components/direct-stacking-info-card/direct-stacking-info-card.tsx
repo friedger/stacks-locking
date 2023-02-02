@@ -58,7 +58,7 @@ export function InfoPanel() {
             fontFamily="Open Sauce"
             letterSpacing="-0.02em"
           >
-            {createAmountText(amount)}
+            {createAmountText(amount ?? 0)}
           </Text>
         </Flex>
         <Hr />

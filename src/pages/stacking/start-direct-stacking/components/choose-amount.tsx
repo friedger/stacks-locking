@@ -73,7 +73,9 @@ export function Amount() {
   }
 
   const setMax = useCallback(() => {
-    helpers.setValue(microStxToStx(maxAmountUstx.toString()));
+    helpers.setValue(
+      microStxToStx(maxAmountUstx.toString()).toFixed(0, BigNumber.ROUND_DOWN)
+    );
   }, [maxAmountUstx, helpers]);
 
   const numberOfRewardSlots = calculateRewardSlots(
