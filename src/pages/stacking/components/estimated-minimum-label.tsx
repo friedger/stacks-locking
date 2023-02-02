@@ -1,5 +1,6 @@
 import { StepsIcon } from "@components/icons/steps";
 import { color, Flex, FlexProps, Text } from "@stacks/ui";
+import { toHumanReadableStx } from "@utils/unit-convert";
 
 interface EstimatedMinimumLabelProps extends FlexProps {
   /**
@@ -39,7 +40,7 @@ export function EstimatedMinimumLabel({
           lineHeight="20px"
           mt="extra-tight"
         >
-          {estimatedStackingMinimum.toString()}
+          {toHumanReadableStx(estimatedStackingMinimum)}
         </Text>
       </Flex>
     </Flex>
