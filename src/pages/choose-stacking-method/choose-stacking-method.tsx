@@ -34,7 +34,15 @@ import { toHumanReadableStx } from "@utils/unit-convert";
 
 import { useDelegationStatusQuery } from "../stacking/pooled-stacking-info/use-delegation-status-query";
 import { useStackingInitiatedByQuery } from "./use-stacking-initiated-by";
-import { Spinner, Text, Stack, Flex, Box, useMediaQuery } from "@stacks/ui";
+import {
+  Spinner,
+  Text,
+  Stack,
+  Flex,
+  Box,
+  useMediaQuery,
+  color,
+} from "@stacks/ui";
 import { Alert } from "@components/alert";
 import { Caption } from "@components/typography";
 import { ExplainerTooltip } from "@components/tooltip";
@@ -132,7 +140,11 @@ function ChooseStackingMethodLayout({
                 seconds.
               </Text>
               <Text>
-                <Caption to="../pooled-stacking-info" as={Link}>
+                <Caption
+                  color={color("brand")}
+                  to="../pooled-stacking-info"
+                  as={Link}
+                >
                   View your pooling info.
                 </Caption>
               </Text>
@@ -146,7 +158,11 @@ function ChooseStackingMethodLayout({
                 It appears that you&apos;re currently stacking. If your locking
                 period recently ended, you&apos;ll soon be able to stack again.
               </Text>
-              <Caption to="../direct-stacking-info" as={Link}>
+              <Caption
+                color={color("brand")}
+                to="../direct-stacking-info"
+                as={Link}
+              >
                 View your stacking info.
               </Caption>
             </Stack>

@@ -28,7 +28,7 @@ import { formatPoxAddressToNetwork } from "@utils/stacking";
 import { toHumanReadableStx } from "@utils/unit-convert";
 
 import { useGetHasPendingDirectStackingQuery } from "./use-get-has-pending-direct-stacking";
-import { Box, Flex, Spinner, Stack, Text } from "@stacks/ui";
+import { Box, color, Flex, Spinner, Stack, Text } from "@stacks/ui";
 import { Alert } from "@components/alert";
 import { Caption } from "@components/typography";
 import { Hr } from "@components/hr";
@@ -94,15 +94,17 @@ export function DirectStackingInfo() {
                 <Caption
                   display="inline"
                   to="../start-direct-stacking"
-                  component={Link}
+                  color={color("brand")}
+                  as={Link}
                 >
                   start stacking
                 </Caption>{" "}
                 or{" "}
                 <Caption
                   display="inline"
+                  color={color("brand")}
                   to="../choose-stacking-method"
-                  component={Link}
+                  as={Link}
                 >
                   choose your stacking method
                 </Caption>
