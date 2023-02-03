@@ -69,7 +69,7 @@ function getDelegationStatusFromTransaction(
     if (!Array.isArray(args)) {
       // TODO: log error
       console.error("Detected a malformed delegate-stx transaction.");
-      return { isDelegating: false };
+      return { isDelegating: false } as const;
     }
 
     const [amountMicroStxCV, delegatedToCV, untilBurnHeightCV] = args.map<

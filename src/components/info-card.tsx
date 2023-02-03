@@ -27,7 +27,7 @@ export function InfoCard(props: FlexProps) {
 
 type ChildProps = BoxProps;
 
-type TChild = React.ReactElement<ChildProps>;
+type TChild = string | React.ReactElement<ChildProps>;
 
 interface Props extends BoxProps {
   children: TChild | TChild[];

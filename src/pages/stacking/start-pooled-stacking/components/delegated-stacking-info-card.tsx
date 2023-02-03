@@ -15,8 +15,9 @@ import { truncateMiddle } from "@utils/tx-utils";
 
 import { createAmountText } from "../../utils/create-amount-text";
 import { EditingFormValues } from "../types";
-import { Box, Flex, FlexProps, Text } from "@stacks/ui";
+import { Box, Flex, FlexProps, Text, Tooltip } from "@stacks/ui";
 import { Hr } from "@components/hr";
+import { IconQuestionCircle } from "@tabler/icons-react";
 
 export function PoolingInfoCard(props: FlexProps) {
   const f = useFormikContext<EditingFormValues>();
@@ -45,7 +46,7 @@ export function PoolingInfoCard(props: FlexProps) {
   return (
     <>
       <InfoCard {...props}>
-        <Box mx={["loose", "extra-loose"]}>
+        <Box mx={["loose", "extra-loose"]} sx={{ border: "1px solid red" }}>
           <Flex flexDirection="column" pt="extra-loose" pb="base-loose">
             <Text textStyle="body.large.medium">You&apos;re pooling</Text>
             <Text
@@ -66,11 +67,11 @@ export function PoolingInfoCard(props: FlexProps) {
               <Row>
                 <Label>
                   Duration
-                  {/* <Tooltip label="How long you want to delegate to the pool. This is not necessarily the locking duration. However, the locking period cannot be longer than the delegation duration."> */}
-                  {/*   <span> */}
-                  {/*     <IconQuestionCircle height="1rem" width="1rem" /> */}
-                  {/*   </span> */}
-                  {/* </Tooltip> */}
+                  <Tooltip label="How long you want to delegate to the pool. This is not necessarily the locking duration. However, the locking period cannot be longer than the delegation duration.">
+                    <span>
+                      <IconQuestionCircle height="1rem" width="1rem" />
+                    </span>
+                  </Tooltip>
                 </Label>
                 <Value>
                   {!delegationType && "—"}
