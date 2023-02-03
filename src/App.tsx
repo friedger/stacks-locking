@@ -22,6 +22,7 @@ import { ChooseStackingMethod } from "./pages/choose-stacking-method/choose-stac
 import { StartPooledStacking } from "./pages/stacking/start-pooled-stacking/start-pooled-stacking";
 import { StartDirectStacking } from "./pages/stacking/start-direct-stacking/start-direct-stacking";
 import { PooledStackingInfo } from "./pages/stacking/pooled-stacking-info/pooled-stacking-info";
+import { DirectStackingInfo } from "./pages/stacking/direct-stacking-info/direct-stacking-info";
 
 function Layout() {
   const { isSignedIn, signOut } = useAuth();
@@ -107,10 +108,10 @@ const router = createBrowserRouter([
                 path: "start-direct-stacking",
                 element: <StartDirectStacking />,
               },
-              // {
-              //   path: "direct-stacking-info",
-              //   element: <DirectStackingInfo />,
-              // },
+              {
+                path: "direct-stacking-info",
+                element: <DirectStackingInfo />,
+              },
             ],
           },
         ],

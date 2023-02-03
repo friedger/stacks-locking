@@ -1,21 +1,14 @@
 import {
-  Alert,
-  Anchor,
-  Box,
-  Card,
-  Code,
-  Divider,
-  Group,
-  Image,
-  Loader,
-  Stack,
-  Text,
-  Title,
-} from "@mantine/core";
+  InfoCard,
+  InfoCardLabel as Label,
+  InfoCardRow as Row,
+  InfoCardGroup as Group,
+  InfoCardValue as Value,
+  InfoCardSection as Section,
+} from "@components/info-card";
 import { IconClockHour4, IconInfoCircle } from "@tabler/icons-react";
 import { Link } from "react-router-dom";
 
-import stackByYourselfImg from "@assets/images/stack-by-yourself.svg";
 import { Address } from "@components/address";
 import { ErrorAlert } from "@components/error-alert";
 import { ExternalLink } from "@components/external-link";
@@ -35,6 +28,10 @@ import { formatPoxAddressToNetwork } from "@utils/stacking";
 import { toHumanReadableStx } from "@utils/unit-convert";
 
 import { useGetHasPendingDirectStackingQuery } from "./use-get-has-pending-direct-stacking";
+import { Box, Flex, Spinner, Stack, Text } from "@stacks/ui";
+import { Alert } from "@components/alert";
+import { Caption } from "@components/typography";
+import { Hr } from "@components/hr";
 
 export function DirectStackingInfo() {
   const { networkName } = useNetwork();
@@ -53,7 +50,7 @@ export function DirectStackingInfo() {
     getAccountBalanceLockedQuery.isLoading ||
     getHasPendingDirectStacking.isLoading
   ) {
-    return <Loader />;
+    return <Spinner />;
   }
 
   if (
@@ -74,23 +71,7 @@ export function DirectStackingInfo() {
     console.error(msg);
     return (
       <ErrorAlert id="0abc083b-06c7-4795-8491-68264595f1b4">
-        <>
-          <Text>{msg}</Text>
-          <Code block>
-            {JSON.stringify(
-              {
-                getStatusQuery,
-                getAccountExtendedBalancesQuery,
-                getAccountBalanceLockedQuery,
-                getCoreInfoQuery,
-                getPoxInfoQuery,
-                getHasPendingDirectStacking,
-              },
-              null,
-              2
-            )}
-          </Code>
-        </>
+        <Text>{msg}</Text>
       </ErrorAlert>
     );
   }
@@ -99,28 +80,38 @@ export function DirectStackingInfo() {
 
   if (!isStacking && getHasPendingDirectStacking.data === null) {
     return (
-      <Card withBorder w="400px">
-        <Alert icon={<IconInfoCircle />}>
-          <Stack>
-            <Text>
-              It appears that you&apos;re not stacking yet. If you recently
-              started to stack, your stacking info will appear here in a few
-              seconds.
-            </Text>
-            <Text>
-              You may want to{" "}
-              <Anchor to="../start-direct-stacking" component={Link}>
-                start stacking
-              </Anchor>{" "}
-              or{" "}
-              <Anchor to="../choose-stacking-method" component={Link}>
-                choose your stacking method
-              </Anchor>
-              .
-            </Text>
-          </Stack>
-        </Alert>
-      </Card>
+      <Flex justify="center" align="center">
+        <InfoCard width="420px">
+          <Alert icon={<IconInfoCircle />}>
+            <Stack>
+              <Text>
+                It appears that you&apos;re not stacking yet. If you recently
+                started to stack, your stacking info will appear here in a few
+                seconds.
+              </Text>
+              <Text>
+                You may want to{" "}
+                <Caption
+                  display="inline"
+                  to="../start-direct-stacking"
+                  component={Link}
+                >
+                  start stacking
+                </Caption>{" "}
+                or{" "}
+                <Caption
+                  display="inline"
+                  to="../choose-stacking-method"
+                  component={Link}
+                >
+                  choose your stacking method
+                </Caption>
+                .
+              </Text>
+            </Stack>
+          </Alert>
+        </InfoCard>
+      </Flex>
     );
   }
 
@@ -128,85 +119,77 @@ export function DirectStackingInfo() {
 
   if (!isStacking && getHasPendingDirectStacking.data) {
     return (
-      <Card withBorder w="400px">
-        <Stack>
-          <Image
-            fit="contain"
-            height="100px"
-            width="130px"
-            src={stackByYourselfImg}
-            alt="Colourful illustration of a diving board protruding out of a blue hole"
-          />
-
-          <Stack>
-            <Box>
-              <Title order={4}>You&apos;re stacking</Title>
-              <Text fz="34px">
-                {toHumanReadableStx(
-                  getHasPendingDirectStacking.data.amountMicroStx
-                )}
-              </Text>
-            </Box>
-
-            <Alert
-              icon={<IconClockHour4 />}
-              title="Waiting for transaction confirmation"
-            >
-              A stacking request was successfully submitted to the blockchain.
-              Once confirmed, the account will be ready to start stacking.
-            </Alert>
-
-            <Divider />
-
-            <Stack>
-              <Group position="apart">
-                <Text>Duration</Text>
-                <Text>
-                  {getHasPendingDirectStacking.data.lockPeriod.toString()}{" "}
-                  cycles
-                </Text>
-              </Group>
-
-              <Divider />
-
-              <Group position="apart">
-                <Text>Bitcoin address</Text>
-                <Address
-                  address={getHasPendingDirectStacking.data.poxAddress}
-                />
-              </Group>
-
-              <Divider />
-
-              {transactionId && (
-                <ExternalLink
-                  href={makeExplorerTxLink(transactionId, networkName)}
+      <>
+        <Flex justify="center" align="center">
+          <InfoCard width="420px">
+            <Box mx={["loose", "extra-loose"]}>
+              <Flex flexDirection="column" pt="extra-loose" pb="base-loose">
+                <Text textStyle="body.large.medium">You&apos;re stacking</Text>
+                <Text
+                  fontSize="24px"
+                  fontFamily="Open Sauce"
+                  fontWeight={500}
+                  letterSpacing="-0.02em"
+                  mt="extra-tight"
+                  pb="base-loose"
                 >
-                  View transaction
-                </ExternalLink>
-              )}
-            </Stack>
-          </Stack>
-        </Stack>
-      </Card>
+                  {toHumanReadableStx(
+                    getHasPendingDirectStacking.data.amountMicroStx
+                  )}
+                </Text>
+
+                <Box pb="base-loose">
+                  <Alert
+                    icon={<IconClockHour4 />}
+                    title="Waiting for transaction confirmation"
+                  >
+                    A stacking request was successfully submitted to the
+                    blockchain. Once confirmed, the account will be ready to
+                    start stacking.
+                  </Alert>
+                </Box>
+
+                <Hr />
+
+                <Group mt="base-loose">
+                  <Section>
+                    <Row>
+                      <Label>Duration</Label>
+                      <Value>
+                        {getHasPendingDirectStacking.data.lockPeriod.toString()}{" "}
+                        cycles
+                      </Value>
+                    </Row>
+                  </Section>
+                  <Section>
+                    <Row>
+                      <Label>Bitcoin address</Label>
+                      <Value>
+                        <Address
+                          address={getHasPendingDirectStacking.data.poxAddress}
+                        />
+                      </Value>
+                    </Row>
+                  </Section>
+                  <Section>
+                    <Row>
+                      {transactionId && (
+                        <ExternalLink
+                          href={makeExplorerTxLink(transactionId, networkName)}
+                        >
+                          View transaction
+                        </ExternalLink>
+                      )}
+                    </Row>
+                  </Section>
+                </Group>
+              </Flex>
+            </Box>
+          </InfoCard>
+        </Flex>
+      </>
     );
   }
-
-  // let lockingProgressPercentString = "0";
-  // if (getStatusQuery.data.stacked) {
-  //   const cycleLengthInBlocks =
-  //     getAccountExtendedBalancesQuery.data.stx.burnchain_unlock_height -
-  //     getAccountExtendedBalancesQuery.data.stx.burnchain_lock_height;
-  //
-  //   const blocksUntilUnlocked =
-  //     getAccountExtendedBalancesQuery.data.stx.burnchain_unlock_height -
-  //     getCoreInfoQuery.data.burn_block_height;
-  //
-  //   lockingProgressPercentString = Math.max(
-  //     ((cycleLengthInBlocks - blocksUntilUnlocked) / cycleLengthInBlocks) * 100,
-  //     0
-  //   ).toFixed(2);
-  // }
 
   // This if statement may be unnecessary, as cases for when the account is not stacked should have
   // already been handled above, but the type system can not guarantee this.
@@ -237,89 +220,92 @@ export function DirectStackingInfo() {
 
   return (
     <>
-      <Card withBorder w="400px">
-        <Stack>
-          <Image
-            fit="contain"
-            height="100px"
-            width="130px"
-            src={stackByYourselfImg}
-            alt="Colourful illustration of a diving board protruding out of a blue hole"
-          />
-
-          <Stack>
-            <Box>
-              <Title order={4}>You&apos;re stacking</Title>
-              <Text fz="34px">
+      <Flex justify="center" align="center">
+        <InfoCard width="420px">
+          <Box mx={["loose", "extra-loose"]}>
+            <Flex flexDirection="column" pt="extra-loose" pb="base-loose">
+              <Text textStyle="body.large.medium">You&apos;re stacking</Text>
+              <Text
+                fontSize="24px"
+                fontFamily="Open Sauce"
+                fontWeight={500}
+                letterSpacing="-0.02em"
+                mt="extra-tight"
+              >
                 {toHumanReadableStx(getAccountBalanceLockedQuery.data)}
               </Text>
-            </Box>
 
-            {isBeforeFirstRewardCycle && (
-              <Alert
-                icon={<IconClockHour4 />}
-                title="Waiting for the cycle to start"
-              >
-                Your STX are ready for stacking. Once the next cycle starts the
-                network will determine if and how many slots are claimed.
-              </Alert>
-            )}
-
-            <Divider />
-
-            <Stack>
-              <Group position="apart">
-                <Text>Duration</Text>
-                <Text>
-                  {elapsedStackingCycles} /{" "}
-                  {getStatusQuery.data.details.lock_period}
-                </Text>
-              </Group>
-              <Group position="apart">
-                <Text>Start</Text>
-                <Text>
-                  Cycle {getStatusQuery.data.details.first_reward_cycle}
-                </Text>
-              </Group>
-              <Group position="apart">
-                <Text>End</Text>
-                <Text>
-                  Cycle{" "}
-                  {getStatusQuery.data.details.first_reward_cycle +
-                    getStatusQuery.data.details.lock_period}{" "}
-                </Text>
-              </Group>
-
-              <Divider />
-
-              {/* <Group position="apart"> */}
-              {/*   <Text>Reward slots</Text> */}
-              {/*   <Text>TODO</Text> */}
-              {/* </Group> */}
-              {poxAddress && (
-                <Group position="apart">
-                  <Text>Bitcoin address</Text>
-                  <Address address={poxAddress} />
-                </Group>
+              {isBeforeFirstRewardCycle && (
+                <>
+                  <Box pb="base-loose"></Box>
+                  <Alert
+                    icon={<IconClockHour4 />}
+                    title="Waiting for the cycle to start"
+                  >
+                    Your STX are ready for stacking. Once the next cycle starts
+                    the network will determine if and how many slots are
+                    claimed.
+                  </Alert>
+                </>
               )}
 
-              <Divider />
+              <Box pb="base-loose"></Box>
 
-              <ExternalLink
-                href={makeStackingClubRewardAddressLink(
-                  String(
-                    formatPoxAddressToNetwork(
-                      getStatusQuery.data.details.pox_address
-                    )
-                  )
+              <Hr />
+              <Group pt="base-loose">
+                <Section>
+                  <Row>
+                    <Label>Duration</Label>
+                    <Value>
+                      {elapsedStackingCycles} /{" "}
+                      {getStatusQuery.data.details.lock_period}
+                    </Value>
+                  </Row>
+                  <Row>
+                    <Label>Start</Label>
+                    <Value>
+                      Cycle {getStatusQuery.data.details.first_reward_cycle}
+                    </Value>
+                  </Row>
+                  <Row>
+                    <Label>End</Label>
+                    <Value>
+                      Cycle{" "}
+                      {getStatusQuery.data.details.first_reward_cycle +
+                        getStatusQuery.data.details.lock_period}{" "}
+                    </Value>
+                  </Row>
+                </Section>
+
+                {poxAddress && (
+                  <Section>
+                    <Row>
+                      <Label>Bitcoin address</Label>
+                      <Value>
+                        <Address address={poxAddress} />
+                      </Value>
+                    </Row>
+                  </Section>
                 )}
-              >
-                🥞 View on stacking.club
-              </ExternalLink>
-            </Stack>
-          </Stack>
-        </Stack>
-      </Card>
+
+                <Section>
+                  <ExternalLink
+                    href={makeStackingClubRewardAddressLink(
+                      String(
+                        formatPoxAddressToNetwork(
+                          getStatusQuery.data.details.pox_address
+                        )
+                      )
+                    )}
+                  >
+                    🥞 View on stacking.club
+                  </ExternalLink>
+                </Section>
+              </Group>
+            </Flex>
+          </Box>
+        </InfoCard>
+      </Flex>
     </>
   );
 }
