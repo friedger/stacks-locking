@@ -4,14 +4,14 @@ Here documented are a collection of architectural conventions that help us form,
 
 # Environment and package manager
 
-This project is expected to run on a recent version of Node.js 18 and Yarn 1. Note that Node.js 18 comes with corepack, which itself already has Yarn 1, and may be used by running
+This project is expected to run on a recent version of Node.js 18 and [pnpm][pnpm-website]. Note that Node.js 18 comes with corepack, which itself already has pnpm, and may be used by running
 
 ```bash
-corepack enable # enables built-in package mamangers, including Yarn 1
+corepack enable pnpm # enables built-in pnpm package mamanger
 
-# yarn binary is now available
+# pnpm binary is now available
 
-yarn install
+pnpm install
 ```
 
 To install and manage Node.js versions, you may want to consider tools like [nvm](https://github.com/nvm-sh/nvm), [n](https://github.com/tj/n) and [avn](https://github.com/wbyoung/avn).
@@ -43,7 +43,7 @@ Uses the `.cjs` extension to ensure code is run as CommonJS given this package i
 
 Import aliases allow defining special `import` paths that map to specific locations. Different tools support this in different ways, and must all be set up to understand the same mappings.
 
-The aliases as defined in `tsconfig.json` represent the source of truth. Other tools should import this config or, when not possible, have it manually copied over.
+The aliases as defined in `tsconfig.json` are considered the source of truth. Other tools should import this config or, when not possible, have it manually copied over.
 
 The tools using aliases are,
 
@@ -81,3 +81,5 @@ Not yet set up. Tests have been copied over from the desktop wallet and Jest typ
 # User sessions
 
 The app currently relies on a default session created by `@stacks/connect`, which it creates when necessary. Internally, `@stacks/connect` uses the [`getOrCreateUserSession`](https://github.com/hirosystems/connect/blob/3ff4ab441a3e7b1c57459794b286eb27442aa2ff/packages/connect/src/auth.ts#L33) function, which it provides as an export. Whenever interacting with the user session in the app, this function should be used to ensure all code is referring to the same user session instance.
+
+[pnpm-website]: https://pnpm.io/
