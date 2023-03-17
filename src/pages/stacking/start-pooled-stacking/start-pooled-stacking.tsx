@@ -34,7 +34,7 @@ const initialDelegatingFormValues: Partial<EditingFormValues> = {
 
 export function StartPooledStacking() {
   const { client } = useStackingClient();
-  const { address } = useAuth();
+  const { address, btcAddressP2tr, btcAddressP2wpkh } = useAuth();
   const { networkName } = useNetwork();
 
   if (!address) {
@@ -88,6 +88,7 @@ function StartPooledStackingLayout({
 }: StartPooledStackingProps) {
   const [isContractCallExtensionPageOpen, setIsContractCallExtensionPageOpen] = useState(false);
   const q1 = useGetSecondsUntilNextCycleQuery();
+  const [rewardAddressEditable, setRewardAddressEditable] = useState(true);
 
   // TODO: move this inside ChoosePoolingAmount, not being used elsewhere
   const queryGetAccountBalance = useQuery(['getAccountBalance', client], () =>
@@ -104,6 +105,18 @@ function StartPooledStackingLayout({
     navigate,
     setIsContractCallExtensionPageOpen,
   });
+  
+  const onPoolChange = (poolName: PoolName) => {
+    if (poolName === "Custom Pool") {
+      setRewardAddressEditable(true);
+    } else {
+      const presetPool = pools.find((p) => p.name === poolName);
+      setRewardAddressEditable(
+        presetPool?.payoutMethod === "BTC" &&
+          presetPool?.allowCustomRewardAddress === true
+      );
+    }
+  };
 
   if (q1.isLoading || queryGetAccountBalance.isLoading) return <Spinner />;
 
@@ -122,7 +135,12 @@ function StartPooledStackingLayout({
 
   return (
     <Formik
-      initialValues={initialDelegatingFormValues as EditingFormValues}
+      initialValues={
+        {
+          ...initialDelegatingFormValues,
+          rewardAddress: currentAddresses.btcAddressP2wpkh,
+        } as EditingFormValues
+      }
       onSubmit={handleSubmit}
       validationSchema={validationSchema}
     >
@@ -137,14 +155,14 @@ function StartPooledStackingLayout({
           <>
             <Form>
               <StackingFormContainer>
-                <ChoosePool />
+                <ChoosePoolingPool onPoolChange={onPoolChange} />
                 <ChoosePoolingAmount
                   availableBalance={queryGetAccountBalance.data}
                 />
                 <ChoosePoolingDuration />
                 <ChoosePoolingRewardAddress
-                  btcAddress={currentAddresses.btcAddressP2tr}
-                  editable={true}
+                  btcAddress={currentAddresses.btcAddressP2wpkh}
+                  editable={rewardAddressEditable}
                 />
                 <ConfirmAndSubmit isLoading={isContractCallExtensionPageOpen} />
               </StackingFormContainer>
