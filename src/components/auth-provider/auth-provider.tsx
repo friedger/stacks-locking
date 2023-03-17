@@ -9,18 +9,22 @@ const appConfig = new AppConfig(['store_write']);
 const userSession = new UserSession({ appConfig });
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function getAccountAddress(userData: any, network: string) {
+function getAccountAddresses(userData: any, network: string) {
   // NOTE: Although this approach to obtain the user's address is good enough for now, it is quite brittle.
   // It relies on a variable having the same value as the object key below. Type checking is not available given the `userSession` object managed by `@stacks/connect` is typed as `any`.
   //
   // Should this be a source of issues, it may be worth refactoring.
   const address: string = userData?.profile?.stxAddress?.[network];
+  const btcAddressP2tr: string = userData?.profile?.btcAddress?.ptr?.[network];
+  const btcAddressP2wpkh: string =
+    userData?.profile?.btcAddress?.p2wpkh?.[network];
+  console.log(userData);
 
   if (!isValidStacksAddress(address)) {
     return null;
   }
 
-  return address;
+  return { address, btcAddressP2tr, btcAddressP2wpkh };
 }
 
 interface AuthContext {
@@ -30,6 +34,8 @@ interface AuthContext {
   signOut(): void;
   userData: null | UserData;
   address: null | string;
+  btcAddressP2tr: null | string;
+  btcAddressP2wpkh: null | string;
 }
 
 // The context type is non-null to avoid null checks wherever the context is used.
@@ -54,8 +60,8 @@ export function AuthProvider({ children }: Props) {
     showConnect({
       userSession,
       appDetails: {
-        name: 'Stacking on the web',
-        icon: 'http://placekitten.com/200/200',
+        name: "Bitcoin Web3 Portal",
+        icon: "http://placekitten.com/200/200",
       },
       onFinish() {
         setIsSigningIn(false);
@@ -88,11 +94,24 @@ export function AuthProvider({ children }: Props) {
     // do nothing
   }
 
-  const address = getAccountAddress(userData, networkName);
-
+  const { address, btcAddressP2tr, btcAddressP2wpkh } = getAccountAddresses(
+    userData,
+    networkName
+  );
   return (
     <>
-      <AuthContext.Provider value={{ isSigningIn, isSignedIn, signIn, signOut, userData, address }}>
+      <AuthContext.Provider
+        value={{
+          isSigningIn,
+          isSignedIn,
+          signIn,
+          signOut,
+          userData,
+          address,
+          btcAddressP2tr,
+          btcAddressP2wpkh,
+        }}
+      >
         {children}
       </AuthContext.Provider>
     </>

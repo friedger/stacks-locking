@@ -38,7 +38,17 @@ export function StartPooledStacking() {
   const { networkName } = useNetwork();
 
   if (!address) {
-    const msg = 'Expected `address` to be defined.';
+    const msg = "Expected `address` to be defined.";
+    console.error(msg);
+    return <ErrorAlert>{msg}</ErrorAlert>;
+  }
+  if (!btcAddressP2tr) {
+    const msg = "Expected `btcAddressP2tr` to be defined.";
+    console.error(msg);
+    return <ErrorAlert>{msg}</ErrorAlert>;
+  }
+  if (!btcAddressP2wpkh) {
+    const msg = "Expected `btcAddressP2wpkh` to be defined.";
     console.error(msg);
     return <ErrorAlert>{msg}</ErrorAlert>;
   }
@@ -56,7 +66,7 @@ export function StartPooledStacking() {
   return (
     <StartPooledStackingLayout
       client={client}
-      currentAccountAddress={address}
+      currentAddresses={{ address, btcAddressP2tr, btcAddressP2wpkh }}
       networkName={networkName}
     />
   );
@@ -64,13 +74,17 @@ export function StartPooledStacking() {
 
 interface StartPooledStackingProps {
   client: StackingClient;
-  currentAccountAddress: string;
+  currentAccountAddresses: {
+    address: string;
+    btcAddressP2tr: string;
+    btcAddressP2wpkh: string;
+  };
   networkName: StacksNetworkName;
 }
 function StartPooledStackingLayout({
   client,
   networkName,
-  currentAccountAddress,
+  currenAccounttAddresses,
 }: StartPooledStackingProps) {
   const [isContractCallExtensionPageOpen, setIsContractCallExtensionPageOpen] = useState(false);
   const q1 = useGetSecondsUntilNextCycleQuery();
@@ -82,7 +96,7 @@ function StartPooledStackingLayout({
   const navigate = useNavigate();
 
   const validationSchema = createValidationSchema({
-    currentAccountAddress,
+    currentAccountAddress: currentAccountAddresses.address,
     networkName,
   });
   const handleSubmit = createHandleSubmit({
@@ -123,9 +137,15 @@ function StartPooledStackingLayout({
           <>
             <Form>
               <StackingFormContainer>
-                <ChoosePoolAddress />
-                <ChoosePoolingAmount availableBalance={queryGetAccountBalance.data} />
+                <ChoosePool />
+                <ChoosePoolingAmount
+                  availableBalance={queryGetAccountBalance.data}
+                />
                 <ChoosePoolingDuration />
+                <ChoosePoolingRewardAddress
+                  btcAddress={currentAddresses.btcAddressP2tr}
+                  editable={true}
+                />
                 <ConfirmAndSubmit isLoading={isContractCallExtensionPageOpen} />
               </StackingFormContainer>
             </Form>
