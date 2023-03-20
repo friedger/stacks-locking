@@ -8,8 +8,12 @@ import { customPool, pools } from "./preset-pools";
 
 interface ChoosePoolingPoolProps {
   onPoolChange: (val: PoolName) => void;
+  handleAllowContractCallerSubmit(val: PoolName): void;
 }
-export function ChoosePoolingPool({ onPoolChange }: ChoosePoolingPoolProps) {
+export function ChoosePoolingPool({
+  onPoolChange,
+  handleAllowContractCallerSubmit,
+}: ChoosePoolingPoolProps) {
   const [fieldPoolName, , helpersPoolName] = useField("poolName");
   const onChange = (poolName: PoolName) => {
     helpersPoolName.setValue(poolName);
@@ -35,6 +39,7 @@ export function ChoosePoolingPool({ onPoolChange }: ChoosePoolingPoolProps) {
             key={index}
             activePoolName={fieldPoolName.value}
             onChange={onChange}
+            handleAllowContractCallerSubmit={handleAllowContractCallerSubmit}
           />
         ))}
         <PoolSelectItem

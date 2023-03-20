@@ -105,9 +105,15 @@ function StartPooledStackingLayout({
     navigate,
     setIsContractCallExtensionPageOpen,
   });
-  
+
+  const handleAllowContractCallerSubmit = createHandleAllowContractCallerSubmit(
+    {
+      client,
+      setIsContractCallExtensionPageOpen,
+    }
+  );
   const onPoolChange = (poolName: PoolName) => {
-    if (poolName === "Custom Pool") {
+    if (poolName === PoolName.CustomPool) {
       setRewardAddressEditable(true);
     } else {
       const presetPool = pools.find((p) => p.name === poolName);
@@ -155,7 +161,12 @@ function StartPooledStackingLayout({
           <>
             <Form>
               <StackingFormContainer>
-                <ChoosePoolingPool onPoolChange={onPoolChange} />
+                <ChoosePoolingPool
+                  onPoolChange={onPoolChange}
+                  handleAllowContractCallerSubmit={
+                    handleAllowContractCallerSubmit
+                  }
+                />
                 <ChoosePoolingAmount
                   availableBalance={queryGetAccountBalance.data}
                 />

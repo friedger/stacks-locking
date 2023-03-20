@@ -55,3 +55,9 @@ export const customPool: {
     "Enter the STX address of the pool with which you’d like to Stack without your STX leaving your wallet.",
   icon: <IconEdit />,
 };
+
+export function poolByName(poolName: PoolName) {
+  const pool = pools.find((p) => p.name === poolName);
+  if (!pool) throw new Error(`Invalid pool name "${poolName}`);
+  return pool;
+}
