@@ -1,8 +1,8 @@
-import { readFile } from "fs/promises";
-import sortPackageJson from "sort-package-json";
+import { readFile } from 'fs/promises';
+import sortPackageJson from 'sort-package-json';
 
 async function checkIsSorted() {
-  const packageJsonText = (await readFile("package.json")).toString();
+  const packageJsonText = (await readFile('package.json')).toString();
   const sortedPackageJsonText = sortPackageJson(packageJsonText);
 
   if (packageJsonText !== sortedPackageJsonText) {
@@ -27,16 +27,14 @@ async function checkIsNotUsingRanges() {
     return /^[\^~>]|-/.test(version) || !/^[^.]*\.[^.]*\.[^.]*$/.test(version);
   }
 
-  const packageJsonText = (await readFile("package.json")).toString();
+  const packageJsonText = (await readFile('package.json')).toString();
   const packageJson = JSON.parse(packageJsonText);
 
   const dependencies = packageJson.dependencies;
   const devDependencies = packageJson.devDependencies;
 
   const dependenciesWithVersionRanges: Array<[string, string]> = [];
-  for (const [dependency, version] of Object.entries(dependencies) as Array<
-    [string, string]
-  >) {
+  for (const [dependency, version] of Object.entries(dependencies) as Array<[string, string]>) {
     if (isVersionRange(version)) {
       dependenciesWithVersionRanges.push([dependency, version]);
     }
@@ -51,23 +49,16 @@ async function checkIsNotUsingRanges() {
     }
   }
 
-  if (
-    dependenciesWithVersionRanges.length > 0 ||
-    devDependenciesWithVersionRanges.length > 0
-  ) {
+  if (dependenciesWithVersionRanges.length > 0 || devDependenciesWithVersionRanges.length > 0) {
     let message =
-      "File `package.json` seems to have dependencies with version ranges. Please set a specific version for the following dependencies,\n\n";
+      'File `package.json` seems to have dependencies with version ranges. Please set a specific version for the following dependencies,\n\n';
     if (dependenciesWithVersionRanges.length > 0) {
       message += `dependencies:
-${dependenciesWithVersionRanges.map(
-  (entry) => `  ${entry[0]}: ${entry[1]}` + "\n"
-)}`;
+${dependenciesWithVersionRanges.map(entry => `  ${entry[0]}: ${entry[1]}` + '\n')}`;
     }
     if (devDependenciesWithVersionRanges.length > 0) {
       message += `devDependencies:
-${devDependenciesWithVersionRanges.map(
-  (entry) => `  ${entry[0]}: ${entry[1]}` + "\n"
-)}`;
+${devDependenciesWithVersionRanges.map(entry => `  ${entry[0]}: ${entry[1]}` + '\n')}`;
     }
     // remove trailing newline
     message = message.slice(0, -1);
@@ -77,7 +68,7 @@ ${devDependenciesWithVersionRanges.map(
 
 let hasError = false;
 
-[await checkIsSorted(), await checkIsNotUsingRanges()].forEach((msg) => {
+[await checkIsSorted(), await checkIsNotUsingRanges()].forEach(msg => {
   if (msg) {
     hasError = true;
     console.error(msg);

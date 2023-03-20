@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+
 import { Box, BoxProps } from '@stacks/ui';
 
 export const IndefiniteStackingIcon: FC<BoxProps> = props => {

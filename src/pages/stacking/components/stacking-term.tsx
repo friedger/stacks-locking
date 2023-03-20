@@ -1,5 +1,6 @@
-import { Flex, Text, Stack, FlexProps, color } from "@stacks/ui";
-import { ReactNode } from "react";
+import { ReactNode } from 'react';
+
+import { Flex, FlexProps, Stack, Text, color } from '@stacks/ui';
 
 export interface StackingTermItem extends FlexProps {
   title: string;
@@ -16,11 +17,7 @@ export function StackingTermItem(props: StackingTermItem) {
         <Text as="h3" textStyle="body.large.medium">
           {title}
         </Text>
-        <Stack
-          spacing="base"
-          textStyle="body.large"
-          color={color("text-caption")}
-        >
+        <Stack spacing="base" textStyle="body.large" color={color('text-caption')}>
           {children}
         </Stack>
       </Stack>

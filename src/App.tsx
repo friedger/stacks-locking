@@ -1,28 +1,19 @@
-import { Box, Button, CSSReset, Flex, ThemeProvider } from "@stacks/ui";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import {
-  Navigate,
-  Outlet,
-  RouterProvider,
-  createBrowserRouter,
-} from "react-router-dom";
+import { useEffect } from 'react';
+import { Navigate, Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom';
 
-import { BlockchainApiClientProvider } from "@components/blockchain-api-client-provider";
-import { NetworkProvider } from "@components/network-provider";
-import { StackingClientProvider } from "@components/stacking-client-provider/stacking-client-provider";
-
-import {
-  AuthProvider,
-  useAuth,
-} from "./components/auth-provider/auth-provider";
-import { SignIn } from "./pages/sign-in/sign-in";
-import { useEffect } from "react";
-import { loadFonts } from "@utils/load-fonts";
-import { ChooseStackingMethod } from "./pages/choose-stacking-method/choose-stacking-method";
-import { StartPooledStacking } from "./pages/stacking/start-pooled-stacking/start-pooled-stacking";
-import { StartDirectStacking } from "./pages/stacking/start-direct-stacking/start-direct-stacking";
-import { PooledStackingInfo } from "./pages/stacking/pooled-stacking-info/pooled-stacking-info";
-import { DirectStackingInfo } from "./pages/stacking/direct-stacking-info/direct-stacking-info";
+import { AuthProvider, useAuth } from './components/auth-provider/auth-provider';
+import { ChooseStackingMethod } from './pages/choose-stacking-method/choose-stacking-method';
+import { SignIn } from './pages/sign-in/sign-in';
+import { DirectStackingInfo } from './pages/stacking/direct-stacking-info/direct-stacking-info';
+import { PooledStackingInfo } from './pages/stacking/pooled-stacking-info/pooled-stacking-info';
+import { StartDirectStacking } from './pages/stacking/start-direct-stacking/start-direct-stacking';
+import { StartPooledStacking } from './pages/stacking/start-pooled-stacking/start-pooled-stacking';
+import { BlockchainApiClientProvider } from '@components/blockchain-api-client-provider';
+import { NetworkProvider } from '@components/network-provider';
+import { StackingClientProvider } from '@components/stacking-client-provider/stacking-client-provider';
+import { Box, Button, CSSReset, Flex, ThemeProvider } from '@stacks/ui';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { loadFonts } from '@utils/load-fonts';
 
 function Layout() {
   const { isSignedIn, signOut } = useAuth();
@@ -78,12 +69,12 @@ function AuthGuard() {
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <Root />,
     children: [
       { index: true, element: <Navigate to="sign-in" /> },
       {
-        path: "sign-in",
+        path: 'sign-in',
         element: <SignIn />,
       },
       {
@@ -93,23 +84,23 @@ const router = createBrowserRouter([
             element: <Layout />,
             children: [
               {
-                path: "choose-stacking-method",
+                path: 'choose-stacking-method',
                 element: <ChooseStackingMethod />,
               },
               {
-                path: "start-pooled-stacking",
+                path: 'start-pooled-stacking',
                 element: <StartPooledStacking />,
               },
               {
-                path: "pooled-stacking-info",
+                path: 'pooled-stacking-info',
                 element: <PooledStackingInfo />,
               },
               {
-                path: "start-direct-stacking",
+                path: 'start-direct-stacking',
                 element: <StartDirectStacking />,
               },
               {
-                path: "direct-stacking-info",
+                path: 'direct-stacking-info',
                 element: <DirectStackingInfo />,
               },
             ],

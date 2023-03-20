@@ -1,10 +1,8 @@
-import { Title } from "@components/title";
-import { Box, Button, ButtonProps, Flex, Stack } from "@stacks/ui";
-import {
-  ForwardRefExoticComponentWithAs,
-  forwardRefWithAs,
-} from "@stacks/ui-core";
-import { ReactElement, ReactNode } from "react";
+import { ReactElement, ReactNode } from 'react';
+
+import { Title } from '@components/title';
+import { Box, Button, ButtonProps, Flex, Stack } from '@stacks/ui';
+import { ForwardRefExoticComponentWithAs, forwardRefWithAs } from '@stacks/ui-core';
 
 interface StepProps {
   title: string;
@@ -74,9 +72,10 @@ export function Description({ children }: DescriptionProps) {
     </Stack>
   );
 }
-export const Action: ForwardRefExoticComponentWithAs<ButtonProps, "button"> =
-  forwardRefWithAs(({ children, ...props }, ref) => (
+export const Action: ForwardRefExoticComponentWithAs<ButtonProps, 'button'> = forwardRefWithAs(
+  ({ children, ...props }, ref) => (
     <Button size="md" mt="loose" ref={ref} {...props}>
       {children}
     </Button>
-  ));
+  )
+);

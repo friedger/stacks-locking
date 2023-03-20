@@ -1,23 +1,21 @@
+import { createAmountText } from '../../utils/create-amount-text';
+import { EditingFormValues } from '../types';
+import { Hr } from '@components/hr';
 import {
+  InfoCardGroup as Group,
   InfoCard,
   InfoCardLabel as Label,
   InfoCardRow as Row,
-  InfoCardGroup as Group,
-  InfoCardValue as Value,
   InfoCardSection as Section,
-} from "@components/info-card";
-import { useFormikContext } from "formik";
-
-import { useGetPoxInfoQuery } from "@components/stacking-client-provider/stacking-client-provider";
-import { cyclesToBurnChainHeight } from "@utils/calculate-burn-height";
-import { formatCycles } from "@utils/stacking";
-import { truncateMiddle } from "@utils/tx-utils";
-
-import { createAmountText } from "../../utils/create-amount-text";
-import { EditingFormValues } from "../types";
-import { Box, Flex, FlexProps, Text, Tooltip } from "@stacks/ui";
-import { Hr } from "@components/hr";
-import { IconQuestionCircle } from "@tabler/icons-react";
+  InfoCardValue as Value,
+} from '@components/info-card';
+import { useGetPoxInfoQuery } from '@components/stacking-client-provider/stacking-client-provider';
+import { Box, Flex, FlexProps, Text, Tooltip } from '@stacks/ui';
+import { IconHelpCircle } from '@tabler/icons-react';
+import { cyclesToBurnChainHeight } from '@utils/calculate-burn-height';
+import { formatCycles } from '@utils/stacking';
+import { truncateMiddle } from '@utils/tx-utils';
+import { useFormikContext } from 'formik';
 
 export function PoolingInfoCard(props: FlexProps) {
   const f = useFormikContext<EditingFormValues>();
@@ -27,9 +25,7 @@ export function PoolingInfoCard(props: FlexProps) {
   const delegationType = f.values.delegationDurationType;
   const poolStxAddress = f.values.poolAddress;
   const durationInCycles =
-    f.values.delegationDurationType === "limited"
-      ? f.values.numberOfCycles
-      : null;
+    f.values.delegationDurationType === 'limited' ? f.values.numberOfCycles : null;
 
   const burnHeight =
     durationInCycles && poxInfoQuery.data
@@ -37,8 +33,7 @@ export function PoolingInfoCard(props: FlexProps) {
           cycles: durationInCycles,
           rewardCycleLength: poxInfoQuery.data.reward_cycle_length,
           currentCycleId: poxInfoQuery.data.current_cycle.id,
-          firstBurnchainBlockHeight:
-            poxInfoQuery.data.first_burnchain_block_height,
+          firstBurnchainBlockHeight: poxInfoQuery.data.first_burnchain_block_height,
         })
       : null;
   const amountText = createAmountText(amount);
@@ -46,7 +41,7 @@ export function PoolingInfoCard(props: FlexProps) {
   return (
     <>
       <InfoCard {...props}>
-        <Box mx={["loose", "extra-loose"]} sx={{ border: "1px solid red" }}>
+        <Box mx={['loose', 'extra-loose']} sx={{ border: '1px solid red' }}>
           <Flex flexDirection="column" pt="extra-loose" pb="base-loose">
             <Text textStyle="body.large.medium">You&apos;re pooling</Text>
             <Text
@@ -69,15 +64,14 @@ export function PoolingInfoCard(props: FlexProps) {
                   Duration
                   <Tooltip label="How long you want to delegate to the pool. This is not necessarily the locking duration. However, the locking period cannot be longer than the delegation duration.">
                     <span>
-                      <IconQuestionCircle height="1rem" width="1rem" />
+                      <IconHelpCircle height="1rem" width="1rem" />
                     </span>
                   </Tooltip>
                 </Label>
                 <Value>
-                  {!delegationType && "—"}
-                  {delegationType === "limited" &&
-                    formatCycles(durationInCycles ?? 0)}
-                  {delegationType === "indefinite" && "Indefinite"}
+                  {!delegationType && '—'}
+                  {delegationType === 'limited' && formatCycles(durationInCycles ?? 0)}
+                  {delegationType === 'indefinite' && 'Indefinite'}
                 </Value>
               </Row>
             </Section>
@@ -88,10 +82,9 @@ export function PoolingInfoCard(props: FlexProps) {
                   Type
                 </Label>
                 <Value>
-                  {delegationType === null && "—"}
-                  {delegationType === "limited" &&
-                    formatCycles(durationInCycles ?? 0)}
-                  {delegationType === "indefinite" && "Indefinite"}
+                  {delegationType === null && '—'}
+                  {delegationType === 'limited' && formatCycles(durationInCycles ?? 0)}
+                  {delegationType === 'indefinite' && 'Indefinite'}
                 </Value>
               </Row>
 
@@ -108,15 +101,11 @@ export function PoolingInfoCard(props: FlexProps) {
                 <Label explainer="This address is provided to you by your chosen pool for Stacking delegation specifically.">
                   Pool address
                 </Label>
-                <Value>
-                  {poolStxAddress ? truncateMiddle(poolStxAddress) : "—"}
-                </Value>
+                <Value>{poolStxAddress ? truncateMiddle(poolStxAddress) : '—'}</Value>
               </Row>
               <Row>
                 <Label>Contract</Label>
-                <Value>
-                  {truncateMiddle(poxInfoQuery.data?.contract_id ?? "")}
-                </Value>
+                <Value>{truncateMiddle(poxInfoQuery.data?.contract_id ?? '')}</Value>
               </Row>
             </Section>
           </Group>

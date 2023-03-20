@@ -1,36 +1,34 @@
+import { StxTxDirection } from './get-stx-transfer-direction';
+import { sumStxTxTotal } from './sum-stx-tx-total';
+import { SEND_MANY_CONTACT_ID } from '@constants/app';
 import {
   ContractCallTransaction,
   MempoolTransaction,
   Transaction,
-} from "@stacks/stacks-blockchain-api-types";
-import BigNumber from "bignumber.js";
-
-import { SEND_MANY_CONTACT_ID } from "@constants/app";
-
-import { StxTxDirection } from "./get-stx-transfer-direction";
-import { sumStxTxTotal } from "./sum-stx-tx-total";
+} from '@stacks/stacks-blockchain-api-types';
+import BigNumber from 'bignumber.js';
 
 type AnyTx = Transaction | MempoolTransaction;
 
 export function hasMemo(tx: Transaction): boolean {
-  if (tx.tx_type !== "token_transfer") return false;
+  if (tx.tx_type !== 'token_transfer') return false;
   return !!tx.token_transfer.memo;
 }
 
 export function getRecipientAddress(tx: Transaction) {
-  if (tx.tx_type !== "token_transfer") return null;
+  if (tx.tx_type !== 'token_transfer') return null;
   return tx.token_transfer.recipient_address;
 }
 
 function isContractCall(tx: AnyTx): tx is ContractCallTransaction {
-  return tx.tx_type === "contract_call";
+  return tx.tx_type === 'contract_call';
 }
 
 export function isStackingTx(tx: AnyTx, poxContractId?: string) {
   return (
     isContractCall(tx) &&
     tx.contract_call.contract_id === poxContractId &&
-    tx.contract_call.function_name === "stack-stx"
+    tx.contract_call.function_name === 'stack-stx'
   );
 }
 
@@ -38,7 +36,7 @@ export function isDelegatedStackingTx(tx: AnyTx, poxContractId?: string) {
   return (
     isContractCall(tx) &&
     tx.contract_call.contract_id === poxContractId &&
-    tx.contract_call.function_name === "delegate-stack-stx"
+    tx.contract_call.function_name === 'delegate-stack-stx'
   );
 }
 
@@ -46,7 +44,7 @@ export function isDelegateStxTx(tx: AnyTx, poxContractId?: string) {
   return (
     isContractCall(tx) &&
     tx.contract_call.contract_id === poxContractId &&
-    tx.contract_call.function_name === "delegate-stx"
+    tx.contract_call.function_name === 'delegate-stx'
   );
 }
 
@@ -54,26 +52,20 @@ export function isRevokingDelegationTx(tx: AnyTx, poxContractId?: string) {
   return (
     isContractCall(tx) &&
     tx.contract_call.contract_id === poxContractId &&
-    tx.contract_call.function_name === "revoke-delegate-stx"
+    tx.contract_call.function_name === 'revoke-delegate-stx'
   );
 }
 
 export function isMempoolTx(tx: AnyTx): tx is MempoolTransaction {
-  return tx.tx_status === "pending";
+  return tx.tx_status === 'pending';
 }
 
 export function isSendManyTx(tx: AnyTx) {
-  return (
-    tx.tx_type === "contract_call" &&
-    tx.contract_call.contract_id === SEND_MANY_CONTACT_ID
-  );
+  return tx.tx_type === 'contract_call' && tx.contract_call.contract_id === SEND_MANY_CONTACT_ID;
 }
 
 export function sumTxsTotalSpentByAddress(txs: AnyTx[], address: string) {
-  return txs.reduce(
-    (acc, tx) => acc.plus(sumStxTxTotal(address, tx)),
-    new BigNumber(0)
-  );
+  return txs.reduce((acc, tx) => acc.plus(sumStxTxTotal(address, tx)), new BigNumber(0));
 }
 
 interface InferSendManyTransferOperationReturn {
@@ -87,25 +79,23 @@ export function inferSendManyTransferOperation(
   const sent = new BigNumber(sentAmount);
   const received = new BigNumber(receivedAmount);
   const amount = sent.minus(received);
-  const direction = amount.isNegative() ? "received" : "sent";
+  const direction = amount.isNegative() ? 'received' : 'sent';
   return { amount: amount.absoluteValue(), direction };
 }
 
 function shortenHex(hex: string, length = 4) {
-  return `${hex.substring(0, length + 2)}…${hex.substring(
-    hex.length - length
-  )}`;
+  return `${hex.substring(0, length + 2)}…${hex.substring(hex.length - length)}`;
 }
 
 export function truncateMiddle(input: string, offset = 5): string {
-  if (!input) return "";
+  if (!input) return '';
   // hashes
-  if (input.startsWith("0x")) {
+  if (input.startsWith('0x')) {
     return shortenHex(input, offset);
   }
   // for contracts
-  if (input.includes(".")) {
-    const parts = input.split(".");
+  if (input.includes('.')) {
+    const parts = input.split('.');
     const start = parts[0]?.substring(0, offset);
     const end = parts[0]?.substring(parts[0].length - offset, parts[0].length);
     return `${start}…${end}.${parts[1]}`;

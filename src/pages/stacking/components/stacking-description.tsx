@@ -1,4 +1,4 @@
-import { Text, BoxProps } from "@stacks/ui";
+import { BoxProps, Text } from '@stacks/ui';
 
 export function StackingDescription({ children, ...props }: BoxProps) {
   return (

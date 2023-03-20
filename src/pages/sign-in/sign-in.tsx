@@ -1,9 +1,9 @@
-import { Navigate } from "react-router-dom";
+import { Navigate } from 'react-router-dom';
 
-import { useAuth } from "@components/auth-provider/auth-provider";
-import { Button, Flex, Stack } from "@stacks/ui";
-import { Card } from "@components/card";
-import { Title } from "@components/title";
+import { useAuth } from '@components/auth-provider/auth-provider';
+import { Card } from '@components/card';
+import { Title } from '@components/title';
+import { Button, Flex, Stack } from '@stacks/ui';
 
 export function SignIn() {
   const { isSignedIn, signIn, isSigningIn } = useAuth();

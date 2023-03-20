@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { Box, BoxProps } from '@stacks/ui';
 
 export function StepsIcon(props: BoxProps) {

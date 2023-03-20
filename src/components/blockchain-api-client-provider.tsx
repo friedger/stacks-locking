@@ -1,5 +1,6 @@
-import { ReactNode, createContext, useContext } from "react";
+import { ReactNode, createContext, useContext } from 'react';
 
+import { useNetwork } from './network-provider';
 import {
   AccountsApi,
   BlocksApi,
@@ -16,9 +17,7 @@ import {
   SmartContractsApi,
   StackingRewardsApi,
   TransactionsApi,
-} from "@stacks/blockchain-api-client";
-
-import { useNetwork } from "./network-provider";
+} from '@stacks/blockchain-api-client';
 
 const Context = createContext<{
   accountsApi: AccountsApi;

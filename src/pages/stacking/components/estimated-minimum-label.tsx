@@ -1,6 +1,6 @@
-import { StepsIcon } from "@components/icons/steps";
-import { color, Flex, FlexProps, Text } from "@stacks/ui";
-import { toHumanReadableStx } from "@utils/unit-convert";
+import { StepsIcon } from '@components/icons/steps';
+import { Flex, FlexProps, Text, color } from '@stacks/ui';
+import { toHumanReadableStx } from '@utils/unit-convert';
 
 interface EstimatedMinimumLabelProps extends FlexProps {
   /**
@@ -17,7 +17,7 @@ export function EstimatedMinimumLabel({
       <Flex
         width="44px"
         height="44px"
-        background={color("bg-4")}
+        background={color('bg-4')}
         borderRadius="50%"
         alignItems="center"
         justifyContent="center"
@@ -25,18 +25,13 @@ export function EstimatedMinimumLabel({
         <StepsIcon size="14px" />
       </Flex>
       <Flex ml="base" flexDirection="column">
-        <Text
-          as="h4"
-          display="block"
-          textStyle="body.large.medium"
-          lineHeight="20px"
-        >
+        <Text as="h4" display="block" textStyle="body.large.medium" lineHeight="20px">
           Estimated minimum
         </Text>
         <Text
           display="block"
           textStyle="body.large"
-          color={color("text-caption")}
+          color={color('text-caption')}
           lineHeight="20px"
           mt="extra-tight"
         >

@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+
 import { Box, color } from '@stacks/ui';
 
 interface DelegatedIconProps {

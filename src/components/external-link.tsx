@@ -1,6 +1,6 @@
-import { Box, Text, BoxProps, color } from "@stacks/ui";
-import { openExternalLink } from "@utils/external-links";
-import { LegalDisclaimerTooltip } from "./legal-disclaimer-tooltip";
+import { LegalDisclaimerTooltip } from './legal-disclaimer-tooltip';
+import { Box, BoxProps, Text, color } from '@stacks/ui';
+import { openExternalLink } from '@utils/external-links';
 
 interface ExternalLinkProps extends BoxProps {
   href: string;
@@ -17,9 +17,9 @@ export function ExternalLink({ href, children, ...props }: ExternalLinkProps) {
         cursor="pointer"
         display="block"
         outline={0}
-        color={color("brand")}
-        _hover={{ textDecoration: "underline" }}
-        _focus={{ textDecoration: "underline" }}
+        color={color('brand')}
+        _hover={{ textDecoration: 'underline' }}
+        _focus={{ textDecoration: 'underline' }}
         {...props}
       >
         {children}

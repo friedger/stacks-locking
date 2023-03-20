@@ -1,5 +1,6 @@
-import { color } from '@stacks/ui-utils';
 import React from 'react';
+
+import { color } from '@stacks/ui-utils';
 
 export const EmptyTxList: React.FC = () => (
   <svg width="100%" fill="none" viewBox="0 0 133 122" xmlns="http://www.w3.org/2000/svg">

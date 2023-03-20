@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Box, color, Flex, FlexProps } from '@stacks/ui';
+
+import { Box, Flex, FlexProps, color } from '@stacks/ui';
 
 type CalendarIconProps = FlexProps;
 

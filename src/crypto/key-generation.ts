@@ -1,13 +1,7 @@
-import argon2, { ArgonType } from "argon2-browser";
-import { identity, memoizeWith } from "ramda";
+import argon2, { ArgonType } from 'argon2-browser';
+import { identity, memoizeWith } from 'ramda';
 
-export async function deriveKey({
-  pass,
-  salt,
-}: {
-  pass: string;
-  salt: string;
-}) {
+export async function deriveKey({ pass, salt }: { pass: string; salt: string }) {
   const result = await argon2.hash({
     pass,
     salt,
@@ -22,11 +16,7 @@ export async function deriveKey({
 function generateRandomHexString() {
   const size = 16;
   const randomValues = [...crypto.getRandomValues(new Uint8Array(size))];
-  return randomValues
-    .map((val) => ("00" + val.toString(16)).slice(-2))
-    .join("");
+  return randomValues.map(val => ('00' + val.toString(16)).slice(-2)).join('');
 }
 
-export const generateSalt = memoizeWith(identity, () =>
-  generateRandomHexString()
-);
+export const generateSalt = memoizeWith(identity, () => generateRandomHexString());

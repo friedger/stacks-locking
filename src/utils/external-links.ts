@@ -1,14 +1,13 @@
-import urljoin from "url-join";
-import { isWebUri } from "valid-url";
-
-import { EXPLORER_URL, STACKING_CLUB_URL } from "@constants/app";
+import { EXPLORER_URL, STACKING_CLUB_URL } from '@constants/app';
+import urljoin from 'url-join';
+import { isWebUri } from 'valid-url';
 
 export async function openExternalLink(url: string) {
   if (!isWebUri(url)) return;
   return window.open(url);
 }
 
-const utmSource = "utm_source=stacks-wallet";
+const utmSource = 'utm_source=stacks-wallet';
 
 // Explorer
 

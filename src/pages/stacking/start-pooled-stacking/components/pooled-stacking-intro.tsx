@@ -1,6 +1,5 @@
-import { Title } from "@components/title";
-
-import { NextCycleStartTime } from "../../components/next-cycle-start-time";
+import { NextCycleStartTime } from '../../components/next-cycle-start-time';
+import { Title } from '@components/title';
 
 interface PooledStackingIntroProps {
   /**
@@ -8,16 +7,11 @@ interface PooledStackingIntroProps {
    */
   timeUntilNextCycle: number;
 }
-export function PooledStackingIntro({
-  timeUntilNextCycle,
-}: PooledStackingIntroProps) {
+export function PooledStackingIntro({ timeUntilNextCycle }: PooledStackingIntroProps) {
   return (
     <>
       <Title>Stack in a pool</Title>
-      <NextCycleStartTime
-        mt="extra-loose"
-        timeUntilNextCycle={timeUntilNextCycle}
-      />
+      <NextCycleStartTime mt="extra-loose" timeUntilNextCycle={timeUntilNextCycle} />
     </>
   );
 }

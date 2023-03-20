@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { color } from '@stacks/ui';
 
 export const SuccessCheckmark: React.FC = () => (

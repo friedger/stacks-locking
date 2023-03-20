@@ -1,5 +1,6 @@
-import { Text, BoxProps, color } from '@stacks/ui';
 import React, { FC } from 'react';
+
+import { BoxProps, Text, color } from '@stacks/ui';
 
 type TitleProps = BoxProps;
 

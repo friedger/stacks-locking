@@ -1,9 +1,9 @@
-import { Box, color, Flex, FlexProps, Text } from "@stacks/ui";
-import { useFocus } from "use-events";
+import { Box, Flex, FlexProps, Text, color } from '@stacks/ui';
+import { useFocus } from 'use-events';
 
-type DelegationTypes = "limited" | "indefinite";
+type DelegationTypes = 'limited' | 'indefinite';
 
-interface DurationSelectItemProps extends Omit<FlexProps, "onChange"> {
+interface DurationSelectItemProps extends Omit<FlexProps, 'onChange'> {
   title: string;
   delegationType: DelegationTypes;
   activeDelegationType: DelegationTypes | null;
@@ -12,15 +12,7 @@ interface DurationSelectItemProps extends Omit<FlexProps, "onChange"> {
 }
 
 export function DurationSelectItem(props: DurationSelectItemProps) {
-  const {
-    title,
-    icon,
-    delegationType,
-    activeDelegationType,
-    onChange,
-    children,
-    ...rest
-  } = props;
+  const { title, icon, delegationType, activeDelegationType, onChange, children, ...rest } = props;
   const [isFocused, bind] = useFocus();
   return (
     <Flex
@@ -28,20 +20,20 @@ export function DurationSelectItem(props: DurationSelectItemProps) {
       p="base-loose"
       as="label"
       htmlFor={delegationType}
-      border={`1px solid ${color("border")}`}
+      border={`1px solid ${color('border')}`}
       borderRadius="12px"
       position="relative"
       {...(isFocused
         ? {
             _before: {
               content: '""',
-              position: "absolute",
-              top: "-1px",
-              left: "-1px",
-              right: "-1px",
-              bottom: "-1px",
-              borderRadius: "12px",
-              border: "2px solid #CEDAFA",
+              position: 'absolute',
+              top: '-1px',
+              left: '-1px',
+              right: '-1px',
+              bottom: '-1px',
+              borderRadius: '12px',
+              border: '2px solid #CEDAFA',
             },
           }
         : {})}
@@ -51,19 +43,19 @@ export function DurationSelectItem(props: DurationSelectItemProps) {
         <Box position="relative" top="-3px">
           {icon}
         </Box>
-        <Flex ml="base-loose" width="100%" flexDirection={["column", "row"]}>
+        <Flex ml="base-loose" width="100%" flexDirection={['column', 'row']}>
           <Box>
             <Text
               textStyle="body.small"
               fontWeight={500}
               display="block"
-              style={{ wordBreak: "break-all" }}
+              style={{ wordBreak: 'break-all' }}
             >
               {title}
             </Text>
             <Text
               textStyle="body.small"
-              color={color("text-caption")}
+              color={color('text-caption')}
               mt="tight"
               display="inline-block"
               lineHeight="18px"
@@ -79,8 +71,8 @@ export function DurationSelectItem(props: DurationSelectItemProps) {
             name="delegationType"
             value={delegationType}
             checked={delegationType === activeDelegationType}
-            style={{ transform: "scale(1.2)", outline: 0 }}
-            onChange={(e) => onChange(e.target.value as DelegationTypes)}
+            style={{ transform: 'scale(1.2)', outline: 0 }}
+            onChange={e => onChange(e.target.value as DelegationTypes)}
             {...bind}
           />
         </Flex>

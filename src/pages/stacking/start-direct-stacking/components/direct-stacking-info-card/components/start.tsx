@@ -1,23 +1,21 @@
-import { Group, Loader, Text } from "@mantine/core";
-import { addSeconds, formatDistanceToNow } from "date-fns";
-
 import {
   useGetPoxInfoQuery,
   useGetSecondsUntilNextCycleQuery,
-} from "@components/stacking-client-provider/stacking-client-provider";
+} from '@components/stacking-client-provider/stacking-client-provider';
+import { Group, Loader, Text } from '@mantine/core';
+import { addSeconds, formatDistanceToNow } from 'date-fns';
 
 export function Start() {
   const getPoxInfoQuery = useGetPoxInfoQuery();
   const getSecondsUntilNextCycleQuery = useGetSecondsUntilNextCycleQuery();
 
-  const isLoading =
-    getPoxInfoQuery.isLoading || getSecondsUntilNextCycleQuery.isLoading;
+  const isLoading = getPoxInfoQuery.isLoading || getSecondsUntilNextCycleQuery.isLoading;
 
   if (
     getPoxInfoQuery.isError ||
     !getPoxInfoQuery.data ||
     getSecondsUntilNextCycleQuery.isError ||
-    typeof getSecondsUntilNextCycleQuery.data !== "number"
+    typeof getSecondsUntilNextCycleQuery.data !== 'number'
   ) {
     // TODO log error
     return null;
@@ -30,10 +28,8 @@ export function Start() {
         <Loader />
       ) : (
         <Text>
-          Cycle {getPoxInfoQuery.data.next_cycle.id} ~ in{" "}
-          {formatDistanceToNow(
-            addSeconds(new Date(), getSecondsUntilNextCycleQuery.data)
-          )}
+          Cycle {getPoxInfoQuery.data.next_cycle.id} ~ in{' '}
+          {formatDistanceToNow(addSeconds(new Date(), getSecondsUntilNextCycleQuery.data))}
         </Text>
       )}
     </Group>

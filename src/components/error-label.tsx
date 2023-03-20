@@ -1,7 +1,7 @@
 import React from 'react';
-import { Flex, Box, FlexProps } from '@stacks/ui';
 
 import { ExclamationMark } from './icons/exclamation-mark';
+import { Box, Flex, FlexProps } from '@stacks/ui';
 
 interface ErrorLabelProps extends FlexProps {
   size?: 'sm' | 'md';

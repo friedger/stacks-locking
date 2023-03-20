@@ -1,9 +1,8 @@
-import { useQuery } from "@tanstack/react-query";
-
-import { useAuth } from "@components/auth-provider/auth-provider";
-import { useBlockchainApiClient } from "@components/blockchain-api-client-provider";
-import { useGetAccountExtendedBalancesQuery } from "@components/stacking-client-provider/stacking-client-provider";
-import { Transaction } from "@stacks/stacks-blockchain-api-types";
+import { useAuth } from '@components/auth-provider/auth-provider';
+import { useBlockchainApiClient } from '@components/blockchain-api-client-provider';
+import { useGetAccountExtendedBalancesQuery } from '@components/stacking-client-provider/stacking-client-provider';
+import { Transaction } from '@stacks/stacks-blockchain-api-types';
+import { useQuery } from '@tanstack/react-query';
 
 /**
  * Returns the address that initiated the current account's stacking. If the account isn't stacking,
@@ -15,7 +14,7 @@ export function useStackingInitiatedByQuery() {
 
   if (!address) {
     // TODO: report error
-    throw new Error("Expected `address` to be defined.");
+    throw new Error('Expected `address` to be defined.');
   }
 
   const q = useGetAccountExtendedBalancesQuery();
@@ -26,7 +25,7 @@ export function useStackingInitiatedByQuery() {
   const txId = (q.data?.stx as any)?.lock_tx_id as string | undefined;
 
   return useQuery(
-    ["stacker", txId, address, transactionsApi],
+    ['stacker', txId, address, transactionsApi],
     async () => {
       if (!txId) return { address: null } as const;
 

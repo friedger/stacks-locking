@@ -1,23 +1,14 @@
-import {
-  Dispatch,
-  ReactNode,
-  SetStateAction,
-  createContext,
-  useContext,
-  useState,
-} from "react";
+import { Dispatch, ReactNode, SetStateAction, createContext, useContext, useState } from 'react';
 
+import { ErrorAlert } from './error-alert';
+import { NETWORK } from '@constants/app';
 import {
   StacksMainnet,
   /* StacksMocknet, */
   StacksNetwork,
   StacksNetworkName,
   StacksTestnet,
-} from "@stacks/network";
-
-import { NETWORK } from "@constants/app";
-
-import { ErrorAlert } from "./error-alert";
+} from '@stacks/network';
 
 const Context = createContext<{
   network: StacksNetwork;
@@ -33,30 +24,26 @@ interface Props {
   children: ReactNode;
 }
 export function NetworkProvider({ children }: Props) {
-  const [networkName, setNetworkByName] = useState<StacksNetworkName>(
-    NETWORK ?? "testnet"
-  );
+  const [networkName, setNetworkByName] = useState<StacksNetworkName>(NETWORK ?? 'testnet');
   /* const [customNetwork, setCustomNetwork] = useState<StacksMocknet | null>(null); */
 
   let network: StacksNetwork;
-  if (networkName === "mainnet") {
+  if (networkName === 'mainnet') {
     network = new StacksMainnet();
-  } else if (networkName === "testnet") {
+  } else if (networkName === 'testnet') {
     network = new StacksTestnet();
-  } else if (NETWORK === "mainnet") {
+  } else if (NETWORK === 'mainnet') {
     network = new StacksMainnet();
-  } else if (NETWORK === "testnet") {
+  } else if (NETWORK === 'testnet') {
     network = new StacksTestnet();
   } else {
-    const msg = "Unable to set up network to use for the app.";
-    const id = "4e7eb9d7-1610-4b5e-be95-79d3dea3e670";
+    const msg = 'Unable to set up network to use for the app.';
+    const id = '4e7eb9d7-1610-4b5e-be95-79d3dea3e670';
     return <ErrorAlert id={id}>{msg}</ErrorAlert>;
   }
 
   return (
-    <Context.Provider
-      value={{ network, setNetworkByName, networkName /* setCustomNetwork */ }}
-    >
+    <Context.Provider value={{ network, setNetworkByName, networkName /* setCustomNetwork */ }}>
       {children}
     </Context.Provider>
   );

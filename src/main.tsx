@@ -1,8 +1,7 @@
-import React from "react";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
 
-import ReactDOM from "react-dom/client";
-
-import { App } from "./App";
+import { App } from './App';
 
 // Ensures `BigInt`s don't throw errors when using `JSON.stringify`, as they are not supported by
 // the `stringify` function.
@@ -11,7 +10,7 @@ import { App } from "./App";
   return this.toString();
 };
 
-ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
+ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <App />
   </React.StrictMode>

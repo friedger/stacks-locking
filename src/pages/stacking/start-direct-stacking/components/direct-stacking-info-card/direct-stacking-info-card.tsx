@@ -1,29 +1,24 @@
+import { useMemo } from 'react';
+
+import { calculateRewardSlots, calculateStackingBuffer } from '../../../utils/calc-stacking-buffer';
+import { createAmountText } from '../../../utils/create-amount-text';
+import { DirectStackingFormValues } from '../../types';
+import { Hr } from '@components/hr';
 import {
+  InfoCardGroup as Group,
   InfoCard,
   InfoCardLabel as Label,
   InfoCardRow as Row,
-  InfoCardGroup as Group,
-  InfoCardValue as Value,
   InfoCardSection as Section,
-} from "@components/info-card";
-import { useMemo } from "react";
-
-import { BigNumber } from "bignumber.js";
-import { useFormikContext } from "formik";
-
-import { useGetPoxInfoQuery } from "@components/stacking-client-provider/stacking-client-provider";
-import { parseNumericalFormInput } from "@utils/form/parse-numerical-form-input";
-import { truncateMiddle } from "@utils/tx-utils";
-import { stxToMicroStx, toHumanReadableStx } from "@utils/unit-convert";
-
-import {
-  calculateRewardSlots,
-  calculateStackingBuffer,
-} from "../../../utils/calc-stacking-buffer";
-import { createAmountText } from "../../../utils/create-amount-text";
-import { DirectStackingFormValues } from "../../types";
-import { Box, Flex, Text } from "@stacks/ui";
-import { Hr } from "@components/hr";
+  InfoCardValue as Value,
+} from '@components/info-card';
+import { useGetPoxInfoQuery } from '@components/stacking-client-provider/stacking-client-provider';
+import { Box, Flex, Text } from '@stacks/ui';
+import { parseNumericalFormInput } from '@utils/form/parse-numerical-form-input';
+import { truncateMiddle } from '@utils/tx-utils';
+import { stxToMicroStx, toHumanReadableStx } from '@utils/unit-convert';
+import { BigNumber } from 'bignumber.js';
+import { useFormikContext } from 'formik';
 
 export function InfoPanel() {
   const f = useFormikContext<DirectStackingFormValues>();
@@ -48,7 +43,7 @@ export function InfoPanel() {
 
   return (
     <InfoCard minHeight="84px">
-      <Box mx={["loose", "extra-loose"]}>
+      <Box mx={['loose', 'extra-loose']}>
         <Flex flexDirection="column" pt="extra-loose" pb="base-loose">
           <Text textStyle="body.large.medium">You&apos;ll lock</Text>
           <Text
@@ -73,9 +68,7 @@ export function InfoPanel() {
 
             <Row>
               <Label>Buffer</Label>
-              <Value>
-                {buffer === null ? "No buffer" : toHumanReadableStx(buffer)}
-              </Value>
+              <Value>{buffer === null ? 'No buffer' : toHumanReadableStx(buffer)}</Value>
             </Row>
           </Section>
 
@@ -93,7 +86,7 @@ export function InfoPanel() {
           <Section>
             <Row>
               <Label>Bitcoin address</Label>
-              <Value>{poxAddress ? truncateMiddle(poxAddress) : "—"}</Value>
+              <Value>{poxAddress ? truncateMiddle(poxAddress) : '—'}</Value>
             </Row>
           </Section>
         </Group>

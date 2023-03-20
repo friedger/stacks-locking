@@ -1,12 +1,12 @@
-import { cyclesToBurnChainHeight } from "./calculate-burn-height";
+import { cyclesToBurnChainHeight } from './calculate-burn-height';
 
 describe(cyclesToBurnChainHeight.name, () => {
   const genesisBurnBlockHeight = 666050;
 
-  describe("testnet scenarios", () => {
+  describe('testnet scenarios', () => {
     const rewardCycleLength = 50;
 
-    test("it calculates correctly with one cycle", () => {
+    test('it calculates correctly with one cycle', () => {
       const result = cyclesToBurnChainHeight({
         firstBurnchainBlockHeight: genesisBurnBlockHeight,
         cycles: 1,
@@ -17,7 +17,7 @@ describe(cyclesToBurnChainHeight.name, () => {
       expect((result - genesisBurnBlockHeight) % rewardCycleLength).toEqual(0);
     });
 
-    test("it calculates correctly with two cycles", () => {
+    test('it calculates correctly with two cycles', () => {
       const result = cyclesToBurnChainHeight({
         firstBurnchainBlockHeight: genesisBurnBlockHeight,
         cycles: 2,
@@ -29,10 +29,10 @@ describe(cyclesToBurnChainHeight.name, () => {
     });
   });
 
-  describe("mainnet scenarios", () => {
+  describe('mainnet scenarios', () => {
     const rewardCycleLength = 2100;
 
-    test("it calculates correctly with three cycles, one block into current cycle", () => {
+    test('it calculates correctly with three cycles, one block into current cycle', () => {
       const result = cyclesToBurnChainHeight({
         firstBurnchainBlockHeight: genesisBurnBlockHeight,
         rewardCycleLength,
@@ -43,7 +43,7 @@ describe(cyclesToBurnChainHeight.name, () => {
       expect((result - genesisBurnBlockHeight) % rewardCycleLength).toEqual(0);
     });
 
-    test("it calculates correctly with eight cycles", () => {
+    test('it calculates correctly with eight cycles', () => {
       const result = cyclesToBurnChainHeight({
         firstBurnchainBlockHeight: genesisBurnBlockHeight,
         rewardCycleLength,
@@ -54,7 +54,7 @@ describe(cyclesToBurnChainHeight.name, () => {
       expect((result - genesisBurnBlockHeight) % rewardCycleLength).toEqual(0);
     });
 
-    test("it calculates correctly with twelve cycles", () => {
+    test('it calculates correctly with twelve cycles', () => {
       const result = cyclesToBurnChainHeight({
         firstBurnchainBlockHeight: genesisBurnBlockHeight,
         rewardCycleLength,

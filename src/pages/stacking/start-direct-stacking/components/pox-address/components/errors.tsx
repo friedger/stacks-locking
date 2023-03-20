@@ -1,26 +1,24 @@
-import { ExternalLink } from "@components/external-link";
-import { STACKING_ADDRESS_FORMAT_HELP_URL } from "@constants/app";
-import { ExplainerLabel } from "@components/tooltip";
+import { ExternalLink } from '@components/external-link';
+import { ExplainerLabel } from '@components/tooltip';
+import { STACKING_ADDRESS_FORMAT_HELP_URL } from '@constants/app';
 
 export function ErrorPeriod1() {
   return (
     <>
-      Please use a{" "}
+      Please use a{' '}
       <ExplainerLabel text="Legacy, or P2PKH, Bitcoin addresses begin with the number 1">
         Legacy
       </ExplainerLabel>
-      or{" "}
+      or{' '}
       <ExplainerLabel text="SegWit (Segregated Witness), or P2SH, Bitcoin addresses begin with the number 3">
         SegWit
-      </ExplainerLabel>{" "}
-      address.{" "}
+      </ExplainerLabel>{' '}
+      address.{' '}
       <ExplainerLabel text='Native SegWit, or P2WPKH, Bitcoin addresses begin with "bc1q"'>
         Native SegWit
-      </ExplainerLabel>{" "}
-      addresses are not supported.{" "}
-      <ExternalLink href={STACKING_ADDRESS_FORMAT_HELP_URL}>
-        Learn more
-      </ExternalLink>
+      </ExplainerLabel>{' '}
+      addresses are not supported.{' '}
+      <ExternalLink href={STACKING_ADDRESS_FORMAT_HELP_URL}>Learn more</ExternalLink>
     </>
   );
 }

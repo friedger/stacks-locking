@@ -1,14 +1,12 @@
-import { useQuery } from "@tanstack/react-query";
-
-import { useAuth } from "@components/auth-provider/auth-provider";
-import { useBlockchainApiClient } from "@components/blockchain-api-client-provider";
+import { useDelegationStatusQuery } from './use-delegation-status-query';
+import { useAuth } from '@components/auth-provider/auth-provider';
+import { useBlockchainApiClient } from '@components/blockchain-api-client-provider';
 import {
   useGetAccountExtendedBalancesQuery,
   useStackingClient,
-} from "@components/stacking-client-provider/stacking-client-provider";
-
-import { useDelegationStatusQuery } from "./use-delegation-status-query";
-import { Transaction } from "@stacks/stacks-blockchain-api-types";
+} from '@components/stacking-client-provider/stacking-client-provider';
+import { Transaction } from '@stacks/stacks-blockchain-api-types';
+import { useQuery } from '@tanstack/react-query';
 
 /**
  * Fetches the address of the delegator the currently active account has delegated to or is stacking with if any.
@@ -35,14 +33,12 @@ export function useGetPoolAddress() {
   const { transactionsApi } = useBlockchainApiClient();
   if (!client) {
     // TODO: report error
-    throw new Error(
-      "Expected to have a StackingClient available in the context."
-    );
+    throw new Error('Expected to have a StackingClient available in the context.');
   }
 
   if (!address) {
     // TODO: report error
-    throw new Error("Expected `address` to be defined.");
+    throw new Error('Expected `address` to be defined.');
   }
 
   const q = useGetAccountExtendedBalancesQuery();
@@ -54,7 +50,7 @@ export function useGetPoolAddress() {
   const txId = (q.data?.stx as any)?.lock_tx_id as string | undefined;
 
   return useQuery(
-    ["stacker", { txId, address: q2.data?.delegatedTo }] as const,
+    ['stacker', { txId, address: q2.data?.delegatedTo }] as const,
     async ({ queryKey }) => {
       const { txId, address } = queryKey[1];
       if (address) {

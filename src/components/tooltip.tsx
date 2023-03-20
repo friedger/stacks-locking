@@ -1,8 +1,8 @@
-import React, { FC, ReactNode } from "react";
-import Tippy from "@tippyjs/react";
-import { Box, BoxProps } from "@stacks/ui";
+import React, { FC, ReactNode } from 'react';
 
-import { ExplainerIcon } from "./icons/explainer";
+import { ExplainerIcon } from './icons/explainer';
+import { Box, BoxProps } from '@stacks/ui';
+import Tippy from '@tippyjs/react';
 
 interface TooltipProps extends BoxProps {
   text: string;
@@ -40,15 +40,15 @@ interface ExplainerLabelProps {
 
 export const ExplainerLabel: FC<ExplainerLabelProps> = ({ text, children }) => (
   <>
-    {" "}
+    {' '}
     <Tooltip
       text={text}
       textDecoration="underline"
-      style={{ textDecorationStyle: "dotted" }}
+      style={{ textDecorationStyle: 'dotted' }}
       cursor="help"
     >
       {children}
-    </Tooltip>{" "}
+    </Tooltip>{' '}
   </>
 );
 

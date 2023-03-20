@@ -1,18 +1,14 @@
-import { AccountsApi, TransactionsApi } from "@stacks/blockchain-api-client";
-import { StackingClient, poxAddressToBtcAddress } from "@stacks/stacking";
+import { isContractCallTransaction, isMempoolContractCallTransaction } from '../utils/transactions';
+import { AccountsApi, TransactionsApi } from '@stacks/blockchain-api-client';
+import { StackingClient, poxAddressToBtcAddress } from '@stacks/stacking';
 import {
   ContractCallTransaction,
   ContractCallTransactionMetadata,
   MempoolContractCallTransaction,
   MempoolTransaction,
   Transaction,
-} from "@stacks/stacks-blockchain-api-types";
-import { ClarityType, hexToCV } from "@stacks/transactions";
-
-import {
-  isContractCallTransaction,
-  isMempoolContractCallTransaction,
-} from "../utils/transactions";
+} from '@stacks/stacks-blockchain-api-types';
+import { ClarityType, hexToCV } from '@stacks/transactions';
 
 function isStackCall(
   t: ContractCallTransactionMetadata,
@@ -22,8 +18,7 @@ function isStackCall(
   poxContractId: string
 ) {
   return (
-    t.contract_call.function_name === "stack-stx" &&
-    t.contract_call.contract_id === poxContractId
+    t.contract_call.function_name === 'stack-stx' && t.contract_call.contract_id === poxContractId
   );
 }
 /**
@@ -36,7 +31,7 @@ function findUnanchoredTransaction(
   // active, this value can be set to a constant.
   poxContractId: string
 ): ContractCallTransaction | undefined {
-  return transactions.find((t) => {
+  return transactions.find(t => {
     if (!isContractCallTransaction(t)) return false;
 
     const transactionResultCV = hexToCV(t.tx_result.hex);
@@ -55,7 +50,7 @@ function findMempoolTransaction(
   // active, this value can be set to a constant.
   poxContractId: string
 ) {
-  return transactions.find((t) => {
+  return transactions.find(t => {
     if (!isMempoolContractCallTransaction(t)) return false;
 
     return isStackCall(t, poxContractId);
@@ -72,25 +67,26 @@ interface ReturnGetHasPendingDirectStacking {
 // TODO: Types. For now assuming callers only provide a `stack-stx` pox call transaction.
 function getDirectStackingStatusFromTransaction(
   transaction: ContractCallTransaction | MempoolContractCallTransaction,
-  network: "mainnet" | "testnet"
+  network: 'mainnet' | 'testnet'
 ): ReturnGetHasPendingDirectStacking {
   const args = transaction.contract_call.function_args;
   if (!args) {
     // TODO: log error
-    throw new Error("Expected `args` to be defined.");
+    throw new Error('Expected `args` to be defined.');
   }
-  const [amountMicroStxCV, poxAddressCV, startBurnHeightCV, lockPeriodCV] =
-    args.map((arg) => hexToCV(arg.hex));
+  const [amountMicroStxCV, poxAddressCV, startBurnHeightCV, lockPeriodCV] = args.map(arg =>
+    hexToCV(arg.hex)
+  );
 
   // Start burn height
   if (!startBurnHeightCV || startBurnHeightCV.type !== ClarityType.UInt) {
-    throw new Error("Expected `startBurnHeightCV` to be of type `UInt`.");
+    throw new Error('Expected `startBurnHeightCV` to be of type `UInt`.');
   }
   const startBurnHeight: bigint = startBurnHeightCV.value;
 
   // Amount
   if (!amountMicroStxCV || amountMicroStxCV.type !== ClarityType.UInt) {
-    throw new Error("Expected `amountMicroStxCV` to be of type `UInt`.");
+    throw new Error('Expected `amountMicroStxCV` to be of type `UInt`.');
   }
   const amountMicroStx: bigint = amountMicroStxCV.value;
 
@@ -99,7 +95,7 @@ function getDirectStackingStatusFromTransaction(
 
   // Lock period
   if (!lockPeriodCV || lockPeriodCV.type !== ClarityType.UInt) {
-    throw new Error("Expected `lockPeriodCV` to be of type `UInt`.");
+    throw new Error('Expected `lockPeriodCV` to be of type `UInt`.');
   }
   const lockPeriod = lockPeriodCV.value;
 
@@ -117,7 +113,7 @@ interface Args {
   accountsApi: AccountsApi;
   address: string;
   transactionsApi: TransactionsApi;
-  network: "mainnet" | "testnet";
+  network: 'mainnet' | 'testnet';
 }
 
 export async function getHasPendingDirectStacking({
@@ -127,19 +123,18 @@ export async function getHasPendingDirectStacking({
   transactionsApi,
   network,
 }: Args): Promise<null | ReturnGetHasPendingDirectStacking> {
-  const [contractPrincipal, accountTransactions, mempoolTransactions] =
-    await Promise.all([
-      stackingClient.getStackingContract(),
-      accountsApi.getAccountTransactions({
-        principal: address,
-        unanchored: true,
-        limit: 50,
-      }),
-      transactionsApi.getAddressMempoolTransactions({
-        address,
-        unanchored: true,
-      }),
-    ]);
+  const [contractPrincipal, accountTransactions, mempoolTransactions] = await Promise.all([
+    stackingClient.getStackingContract(),
+    accountsApi.getAccountTransactions({
+      principal: address,
+      unanchored: true,
+      limit: 50,
+    }),
+    transactionsApi.getAddressMempoolTransactions({
+      address,
+      unanchored: true,
+    }),
+  ]);
 
   // NOTE: `results` needs to be cast due to known issues with types,
   // https://github.com/hirosystems/stacks-blockchain-api/tree/master/client#known-issues
@@ -152,19 +147,14 @@ export async function getHasPendingDirectStacking({
     contractPrincipal
   );
 
-  let transaction:
-    | undefined
-    | ContractCallTransaction
-    | MempoolContractCallTransaction;
+  let transaction: undefined | ContractCallTransaction | MempoolContractCallTransaction;
   if (!accountTransaction && mempoolTransaction) {
     transaction = mempoolTransaction;
   } else if (accountTransaction && !mempoolTransaction) {
     transaction = accountTransaction;
   } else if (accountTransaction && mempoolTransaction) {
     transaction =
-      accountTransaction.nonce > mempoolTransaction.nonce
-        ? accountTransaction
-        : mempoolTransaction;
+      accountTransaction.nonce > mempoolTransaction.nonce ? accountTransaction : mempoolTransaction;
   }
 
   if (transaction) {

@@ -1,5 +1,6 @@
-import { BoxProps } from '@stacks/ui';
 import React from 'react';
+
+import { BoxProps } from '@stacks/ui';
 
 interface ClockIconProps extends BoxProps {
   size: string;

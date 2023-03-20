@@ -1,7 +1,7 @@
-import { ReactNode } from "react";
+import { ReactNode } from 'react';
 
-import { IconAlertCircle } from "@tabler/icons-react";
-import { Box } from "@stacks/ui";
+import { Box } from '@stacks/ui';
+import { IconAlertCircle } from '@tabler/icons-react';
 
 interface Props {
   id?: string;
@@ -9,12 +9,7 @@ interface Props {
 }
 export function ErrorAlert({ id, children }: Props) {
   return (
-    <Box
-      bg="red"
-      icon={<IconAlertCircle size={16} />}
-      title={`Error ${id ? id : ""}`}
-      color="red"
-    >
+    <Box bg="red" icon={<IconAlertCircle size={16} />} title={`Error ${id ? id : ''}`} color="red">
       {children}
     </Box>
   );

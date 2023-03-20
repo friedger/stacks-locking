@@ -1,17 +1,17 @@
-import { FC } from "react";
-import { Text, Stack, StackProps } from "@stacks/ui";
+import { FC } from 'react';
 
-import { StackingTermItem } from "../../components/stacking-term";
-import { pseudoBorderLeft } from "@components/styles/pseudo-border-left";
-import { IconClock, IconLock } from "@tabler/icons-react";
-import { StepsIcon } from "@components/icons/steps";
+import { StackingTermItem } from '../../components/stacking-term';
+import { StepsIcon } from '@components/icons/steps';
+import { pseudoBorderLeft } from '@components/styles/pseudo-border-left';
+import { Stack, StackProps, Text } from '@stacks/ui';
+import { IconClock, IconLock } from '@tabler/icons-react';
 
-export const DirectStackingTerms: FC<StackProps> = (props) => (
+export const DirectStackingTerms: FC<StackProps> = props => (
   <Stack
-    textStyle={["body.small", "body.large"]}
+    textStyle={['body.small', 'body.large']}
     spacing="base-loose"
     pl="base"
-    {...pseudoBorderLeft("feedback-alert")}
+    {...pseudoBorderLeft('feedback-alert')}
     {...props}
   >
     <StackingTermItem
@@ -19,28 +19,20 @@ export const DirectStackingTerms: FC<StackProps> = (props) => (
       icon={<IconLock width="16px" height="16px" />}
     >
       <Text>
-        STX will be locked in your wallet for your chosen duration, even if an
-        increase in the minimum causes you to end up with fewer or no reward
-        slots.
+        STX will be locked in your wallet for your chosen duration, even if an increase in the
+        minimum causes you to end up with fewer or no reward slots.
       </Text>
+      <Text>There will be no way to unlock your STX before the chosen duration is finished.</Text>
       <Text>
-        There will be no way to unlock your STX before the chosen duration is
-        finished.
-      </Text>
-      <Text>
-        Nor will you be able to change the entered BTC address. Ensure it&apos;s
-        entered correctly and you have control over it.
+        Nor will you be able to change the entered BTC address. Ensure it&apos;s entered correctly
+        and you have control over it.
       </Text>
     </StackingTermItem>
-    <StackingTermItem
-      title="Dynamic minimum"
-      icon={<StepsIcon width="16px" height="16px" />}
-    >
+    <StackingTermItem title="Dynamic minimum" icon={<StepsIcon width="16px" height="16px" />}>
       <Text>
-        If the minimum increases, you could end up with fewer or no reward
-        slots, even if you’ve added a buffer. There will be no way to lock more
-        STX for Stacking with this address until the selected duration is
-        finished.
+        If the minimum increases, you could end up with fewer or no reward slots, even if you’ve
+        added a buffer. There will be no way to lock more STX for Stacking with this address until
+        the selected duration is finished.
       </Text>
     </StackingTermItem>
   </Stack>

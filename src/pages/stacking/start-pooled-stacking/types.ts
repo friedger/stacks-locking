@@ -1,10 +1,10 @@
 interface DelegatingFormIndefiniteValues<N> {
-  delegationDurationType: "indefinite";
+  delegationDurationType: 'indefinite';
   amount: N;
   poolAddress: string;
 }
 interface DelegatingFormLimitedValues<N> {
-  delegationDurationType: "limited";
+  delegationDurationType: 'limited';
   amount: N;
   poolAddress: string;
   numberOfCycles: number;

@@ -1,34 +1,25 @@
-import { useCallback } from "react";
+import { useCallback } from 'react';
 
-import { BigNumber } from "bignumber.js";
-import { useField } from "formik";
-
-import { ErrorAlert } from "@components/error-alert";
-import { ExternalLink } from "@components/external-link";
+import { Description, Step } from '../../components/stacking-form-step';
+import { calculateRewardSlots, calculateStackingBuffer } from '../../utils/calc-stacking-buffer';
+import { ErrorAlert } from '@components/error-alert';
+import { ErrorLabel } from '@components/error-label';
+import { ErrorText } from '@components/error-text';
+import { ExternalLink } from '@components/external-link';
 import {
   useGetAccountBalance,
   useGetPoxInfoQuery,
-} from "@components/stacking-client-provider/stacking-client-provider";
+} from '@components/stacking-client-provider/stacking-client-provider';
+import { pseudoBorderLeft } from '@components/styles/pseudo-border-left';
 import {
   STACKING_CONTRACT_CALL_TX_BYTES,
   STACKING_LEARN_MORE_URL,
   STACKING_MINIMIUM_FOR_NEXT_CYCLE_URL,
-} from "@constants/app";
-import {
-  microStxToStx,
-  stxToMicroStx,
-  toHumanReadableStx,
-} from "@utils/unit-convert";
-
-import { Description, Step } from "../../components/stacking-form-step";
-import {
-  calculateRewardSlots,
-  calculateStackingBuffer,
-} from "../../utils/calc-stacking-buffer";
-import { Box, Button, color, Input, Spinner, Stack, Text } from "@stacks/ui";
-import { ErrorLabel } from "@components/error-label";
-import { ErrorText } from "@components/error-text";
-import { pseudoBorderLeft } from "@components/styles/pseudo-border-left";
+} from '@constants/app';
+import { Box, Button, Input, Spinner, Stack, Text, color } from '@stacks/ui';
+import { microStxToStx, stxToMicroStx, toHumanReadableStx } from '@utils/unit-convert';
+import { BigNumber } from 'bignumber.js';
+import { useField } from 'formik';
 
 const BigNumberFloorRound = BigNumber.clone({
   ROUNDING_MODE: BigNumber.ROUND_FLOOR,
@@ -38,19 +29,18 @@ export function Amount() {
   const getAccountBalanceQuery = useGetAccountBalance();
   const getPoxInfoQuery = useGetPoxInfoQuery();
 
-  const [field, meta, helpers] = useField("amount");
+  const [field, meta, helpers] = useField('amount');
 
-  if (getAccountBalanceQuery.isLoading || getPoxInfoQuery.isLoading)
-    return <Spinner />;
+  if (getAccountBalanceQuery.isLoading || getPoxInfoQuery.isLoading) return <Spinner />;
 
   if (
     getAccountBalanceQuery.isError ||
-    typeof getAccountBalanceQuery.data !== "bigint" ||
+    typeof getAccountBalanceQuery.data !== 'bigint' ||
     getPoxInfoQuery.isError ||
     !getPoxInfoQuery.data
   ) {
-    const id = "134098d7-444b-4591-abfe-8767af6def3f";
-    const msg = "Failed to load necessary data.";
+    const id = '134098d7-444b-4591-abfe-8767af6def3f';
+    const msg = 'Failed to load necessary data.';
     console.error(id, msg);
     return <ErrorAlert id={id}>{msg}</ErrorAlert>;
   }
@@ -60,22 +50,17 @@ export function Amount() {
 
   const ustxAmount = stxToMicroStx(field.value || 0);
 
-  const showStackingWarningCard =
-    ustxAmount.isGreaterThanOrEqualTo(minimumAmountUstx);
+  const showStackingWarningCard = ustxAmount.isGreaterThanOrEqualTo(minimumAmountUstx);
 
   let maxAmountUstx = new BigNumberFloorRound(
-    new BigNumber(availableBalance.toString())
-      .minus(STACKING_CONTRACT_CALL_TX_BYTES)
-      .toString()
+    new BigNumber(availableBalance.toString()).minus(STACKING_CONTRACT_CALL_TX_BYTES).toString()
   ).decimalPlaces(0);
   if (maxAmountUstx.isNegative()) {
     maxAmountUstx = new BigNumber(0);
   }
 
   const setMax = useCallback(() => {
-    helpers.setValue(
-      microStxToStx(maxAmountUstx.toString()).toFixed(0, BigNumber.ROUND_DOWN)
-    );
+    helpers.setValue(microStxToStx(maxAmountUstx.toString()).toFixed(0, BigNumber.ROUND_DOWN));
   }, [maxAmountUstx, helpers]);
 
   const numberOfRewardSlots = calculateRewardSlots(
@@ -83,23 +68,18 @@ export function Amount() {
     new BigNumber(minimumAmountUstx)
   ).integerValue();
 
-  const buffer = calculateStackingBuffer(
-    ustxAmount,
-    new BigNumber(minimumAmountUstx)
-  );
+  const buffer = calculateStackingBuffer(ustxAmount, new BigNumber(minimumAmountUstx));
 
   return (
     <Step title="Choose amount">
       <Description>
         <Stack alignItems="flex-start" spacing="base">
           <Text>
-            You’ll be eligible for one reward slot for every multiple of the
-            minimum you stack.
+            You’ll be eligible for one reward slot for every multiple of the minimum you stack.
           </Text>
           <Text>
-            The estimated minimum per slot can change by multiples of 10,000
-            every cycle, so you may want to add a buffer to increase your chance
-            of keeping the same number of slots.
+            The estimated minimum per slot can change by multiples of 10,000 every cycle, so you may
+            want to add a buffer to increase your chance of keeping the same number of slots.
           </Text>
           <ExternalLink href={STACKING_LEARN_MORE_URL}>
             Learn how to choose the right amount
@@ -111,12 +91,7 @@ export function Amount() {
       </Description>
 
       <Box position="relative" maxWidth="400px">
-        <Input
-          id="stxAmount"
-          placeholder="Amount of STX to Stack"
-          mt="loose"
-          {...field}
-        />
+        <Input id="stxAmount" placeholder="Amount of STX to Stack" mt="loose" {...field} />
         {meta.touched && meta.error && (
           <ErrorLabel>
             <ErrorText>{meta.error}</ErrorText>
@@ -129,7 +104,7 @@ export function Amount() {
           height="28px"
           right="12px"
           top="10px"
-          style={{ position: "absolute" }}
+          style={{ position: 'absolute' }}
           width="80px"
           onClick={setMax}
         >
@@ -139,46 +114,35 @@ export function Amount() {
 
       {showStackingWarningCard && (
         <>
-          <Stack
-            textStyle="body.small"
-            color={color("text-caption")}
-            spacing="base"
-            mt="base"
-          >
+          <Stack textStyle="body.small" color={color('text-caption')} spacing="base" mt="base">
             <Text>
-              This entered amount would get you {numberOfRewardSlots.toString()}{" "}
-              reward slot
-              {numberOfRewardSlots.toNumber() === 1 ? "" : "s"} with a{" "}
-              {toHumanReadableStx(buffer || 0)} buffer at the current minimum.
-              However, that minimum is subject to change and there is no
-              guarantee you will get any reward slots.
+              This entered amount would get you {numberOfRewardSlots.toString()} reward slot
+              {numberOfRewardSlots.toNumber() === 1 ? '' : 's'} with a{' '}
+              {toHumanReadableStx(buffer || 0)} buffer at the current minimum. However, that minimum
+              is subject to change and there is no guarantee you will get any reward slots.
             </Text>
           </Stack>
 
           {buffer !== null && buffer.isEqualTo(0) && (
             <Box
               textStyle="body.small"
-              color={color("text-body")}
+              color={color('text-body')}
               border="1px solid"
               p="loose"
               mt="base"
               borderRadius="6px"
-              borderColor={color("border")}
-              {...pseudoBorderLeft("feedback-alert")}
+              borderColor={color('border')}
+              {...pseudoBorderLeft('feedback-alert')}
             >
-              Add a buffer for a higher chance (though no guarantee) of keeping
-              the same number of reward slots should the minimum increase. If
-              you can’t add a buffer, consider Stacking in a pool instead.
+              Add a buffer for a higher chance (though no guarantee) of keeping the same number of
+              reward slots should the minimum increase. If you can’t add a buffer, consider Stacking
+              in a pool instead.
               <Button
                 variant="link"
                 type="button"
                 display="block"
                 mt="tight"
-                onClick={() =>
-                  helpers.setValue(
-                    new BigNumber(field.value).plus(10000).toString()
-                  )
-                }
+                onClick={() => helpers.setValue(new BigNumber(field.value).plus(10000).toString())}
               >
                 Add 10,000 STX buffer
               </Button>
