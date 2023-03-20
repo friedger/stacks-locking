@@ -1,6 +1,6 @@
-# Stacking
+# BTC Web 3
 
-App for handlling all your stacking needs.
+Engage with Web 3.0 using Bitcoin.
 
 # Quickstart
 
