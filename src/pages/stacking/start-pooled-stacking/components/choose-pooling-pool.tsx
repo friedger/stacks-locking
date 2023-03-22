@@ -1,10 +1,10 @@
-import { ExternalLink } from "@components/external-link";
-import { Text, Stack } from "@stacks/ui";
-import { useField } from "formik";
-import { Description, Step } from "../../components/stacking-form-step";
-import { PoolName, Pool } from "../types-preset-pools";
-import { PoolSelectItem } from "./pool-select-item";
-import { customPool, pools } from "./preset-pools";
+import { Description, Step } from '../../components/stacking-form-step';
+import { Pool, PoolName } from '../types-preset-pools';
+import { PoolSelectItem } from './pool-select-item';
+import { customPool, pools } from './preset-pools';
+import { ExternalLink } from '@components/external-link';
+import { Stack, Text } from '@stacks/ui';
+import { useField } from 'formik';
 
 interface ChoosePoolingPoolProps {
   onPoolChange: (val: PoolName) => void;
@@ -14,7 +14,7 @@ export function ChoosePoolingPool({
   onPoolChange,
   handleAllowContractCallerSubmit,
 }: ChoosePoolingPoolProps) {
-  const [fieldPoolName, , helpersPoolName] = useField("poolName");
+  const [fieldPoolName, , helpersPoolName] = useField('poolName');
   const onChange = (poolName: PoolName) => {
     helpersPoolName.setValue(poolName);
     onPoolChange(poolName);
@@ -23,7 +23,7 @@ export function ChoosePoolingPool({
     <Step title="Pool">
       <Description>
         <Text>
-          Select a pool to start stacking or{" "}
+          Select a pool to start stacking or{' '}
           <ExternalLink href="https://www.stacks.co/learn/stacking">
             discover others on stacks.co.
           </ExternalLink>

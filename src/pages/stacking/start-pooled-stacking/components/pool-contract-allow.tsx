@@ -1,8 +1,8 @@
-import { color, Text } from "@stacks/ui";
-import { truncateMiddle } from "@utils/tx-utils";
-import { Pool, PoolName } from "../types-preset-pools";
-import { PoolContractAllowButton } from "./pool-contract-allow-button";
-import { poolByName } from "./preset-pools";
+import { Pool, PoolName } from '../types-preset-pools';
+import { PoolContractAllowButton } from './pool-contract-allow-button';
+import { poolByName } from './preset-pools';
+import { Text, color } from '@stacks/ui';
+import { truncateMiddle } from '@utils/tx-utils';
 
 export function userHasAllowedContractCallerForPool(pool: Pool) {
   return pool.name === PoolName.PlanBetter;
@@ -20,7 +20,7 @@ export function PoolContractAllow({
     return (
       <Text
         textStyle="body.small"
-        color={color("text-caption")}
+        color={color('text-caption')}
         mt="tight"
         display="inline-block"
         lineHeight="18px"
@@ -29,11 +29,6 @@ export function PoolContractAllow({
       </Text>
     );
   } else {
-    return (
-      <PoolContractAllowButton
-        poolName={poolName}
-        handleSubmit={handleSubmit}
-      />
-    );
+    return <PoolContractAllowButton poolName={poolName} handleSubmit={handleSubmit} />;
   }
 }

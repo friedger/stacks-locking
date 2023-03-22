@@ -24,7 +24,7 @@ export function PoolingInfoCard(props: FlexProps) {
   const amount = f.values.amount;
   const delegationType = f.values.delegationDurationType;
   const poolName = f.values.poolName;
-  const pool = pools.find((p) => p.name === poolName);
+  const pool = pools.find(p => p.name === poolName);
   const poolStxAddress = pool?.poolAddress || f.values.poolAddress;
   const poolContract = pool?.poxContract || poxInfoQuery.data?.contract_id;
   const durationInCycles =

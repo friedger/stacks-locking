@@ -1,11 +1,10 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction } from 'react';
 
-import { ContractCallRegularOptions, openContractCall } from "@stacks/connect";
-
-import { PoolName } from "./types-preset-pools";
-import { noneCV, principalCV } from "@stacks/transactions";
-import { poolByName } from "./components/preset-pools";
-import { StackingClient } from "@stacks/stacking";
+import { poolByName } from './components/preset-pools';
+import { PoolName } from './types-preset-pools';
+import { ContractCallRegularOptions, openContractCall } from '@stacks/connect';
+import { StackingClient } from '@stacks/stacking';
+import { noneCV, principalCV } from '@stacks/transactions';
 
 function getPoolAdmin(poolName: PoolName) {
   if (poolName === PoolName.CustomPool) {
@@ -16,18 +15,15 @@ function getPoolAdmin(poolName: PoolName) {
   }
 }
 
-function getOptions(
-  poolName: PoolName,
-  stackingContract: string
-): ContractCallRegularOptions {
+function getOptions(poolName: PoolName, stackingContract: string): ContractCallRegularOptions {
   const poolAdmin = getPoolAdmin(poolName);
   console.log({ poolAdmin });
-  const [contractAddress, contractName] = stackingContract.split(".");
+  const [contractAddress, contractName] = stackingContract.split('.');
   const functionArgs = [principalCV(poolAdmin), noneCV()];
   return {
     contractAddress,
     contractName,
-    functionName: "allow-contract-caller",
+    functionName: 'allow-contract-caller',
     functionArgs,
   };
 }
@@ -42,9 +38,7 @@ export function createHandleSubmit({
 }: CreateHandleSubmitArgs) {
   return async function handleSubmit(poolName: PoolName) {
     // TODO: handle thrown errors
-    const [stackingContract] = await Promise.all([
-      client.getStackingContract(),
-    ]);
+    const [stackingContract] = await Promise.all([client.getStackingContract()]);
 
     const allowContractCallerOptions = getOptions(poolName, stackingContract);
 

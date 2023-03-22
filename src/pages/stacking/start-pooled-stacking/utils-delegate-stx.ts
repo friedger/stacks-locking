@@ -1,25 +1,23 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction } from 'react';
+import { NavigateFunction } from 'react-router-dom';
 
-import { ContractCallRegularOptions, openContractCall } from "@stacks/connect";
-import { StacksNetworkName } from "@stacks/network";
-import { poxAddressToTuple, PoxInfo, StackingClient } from "@stacks/stacking";
-import { NavigateFunction } from "react-router-dom";
-import * as yup from "yup";
-
+import { pools } from './components/preset-pools';
+import { EditingFormValues } from './types';
+import { PoolName, PoxContract } from './types-preset-pools';
 import {
   MIN_DELEGATED_STACKING_AMOUNT_USTX,
   UI_IMPOSED_MAX_STACKING_AMOUNT_USTX,
-} from "@constants/app";
-import { cyclesToBurnChainHeight } from "@utils/calculate-burn-height";
-import { stxToMicroStx, toHumanReadableStx } from "@utils/unit-convert";
-import { stxAddressSchema } from "@utils/validators/stx-address-validator";
-import { stxAmountSchema } from "@utils/validators/stx-amount-validator";
-
-import { EditingFormValues } from "./types";
-import { PoolName, PoxContract } from "./types-preset-pools";
-import { noneCV, someCV, uintCV } from "@stacks/transactions";
-import { principalCV } from "@stacks/transactions/dist/clarity/types/principalCV";
-import { pools } from "./components/preset-pools";
+} from '@constants/app';
+import { ContractCallRegularOptions, openContractCall } from '@stacks/connect';
+import { StacksNetworkName } from '@stacks/network';
+import { PoxInfo, StackingClient, poxAddressToTuple } from '@stacks/stacking';
+import { noneCV, someCV, uintCV } from '@stacks/transactions';
+import { principalCV } from '@stacks/transactions/dist/clarity/types/principalCV';
+import { cyclesToBurnChainHeight } from '@utils/calculate-burn-height';
+import { stxToMicroStx, toHumanReadableStx } from '@utils/unit-convert';
+import { stxAddressSchema } from '@utils/validators/stx-address-validator';
+import { stxAmountSchema } from '@utils/validators/stx-amount-validator';
+import * as yup from 'yup';
 
 interface Args {
   /**
@@ -30,53 +28,44 @@ interface Args {
 
   networkName: StacksNetworkName;
 }
-export function createValidationSchema({
-  currentAccountAddress,
-  networkName,
-}: Args) {
+export function createValidationSchema({ currentAccountAddress, networkName }: Args) {
   return yup.object().shape({
-    poolAddress: yup.string().when("poolName", {
-      is: "Custom Pool",
-      then: (schema) =>
+    poolAddress: yup.string().when('poolName', {
+      is: 'Custom Pool',
+      then: schema =>
         stxAddressSchema(schema, networkName).test({
-          name: "cannot-pool-to-yourself",
-          message: "Cannot pool to your own STX address",
+          name: 'cannot-pool-to-yourself',
+          message: 'Cannot pool to your own STX address',
           test(value) {
             return value !== currentAccountAddress;
           },
         }),
-      otherwise: (schema) => schema.optional(),
+      otherwise: schema => schema.optional(),
     }),
     amount: stxAmountSchema()
       .test({
-        name: "test-min-allowed-delegated-stacking",
+        name: 'test-min-allowed-delegated-stacking',
         message: `You must delegate at least ${toHumanReadableStx(
           MIN_DELEGATED_STACKING_AMOUNT_USTX
         )}`,
         test(value) {
           if (value === undefined) return false;
           const enteredAmount = stxToMicroStx(value);
-          return enteredAmount.isGreaterThanOrEqualTo(
-            MIN_DELEGATED_STACKING_AMOUNT_USTX
-          );
+          return enteredAmount.isGreaterThanOrEqualTo(MIN_DELEGATED_STACKING_AMOUNT_USTX);
         },
       })
       .test({
-        name: "test-max-allowed-delegated-stacking",
+        name: 'test-max-allowed-delegated-stacking',
         message: `You cannot delegate more than ${toHumanReadableStx(
           UI_IMPOSED_MAX_STACKING_AMOUNT_USTX
         )}`,
         test(value) {
           if (value === undefined) return false;
           const enteredAmount = stxToMicroStx(value);
-          return enteredAmount.isLessThanOrEqualTo(
-            UI_IMPOSED_MAX_STACKING_AMOUNT_USTX
-          );
+          return enteredAmount.isLessThanOrEqualTo(UI_IMPOSED_MAX_STACKING_AMOUNT_USTX);
         },
       }),
-    delegationDurationType: yup
-      .string()
-      .required("Please select the delegation duration type."),
+    delegationDurationType: yup.string().required('Please select the delegation duration type.'),
   });
 }
 
@@ -87,7 +76,7 @@ function getOptions(
   client: StackingClient
 ): ContractCallRegularOptions {
   const untilBurnBlockHeight =
-    values.delegationDurationType === "limited"
+    values.delegationDurationType === 'limited'
       ? cyclesToBurnChainHeight({
           cycles: values.numberOfCycles,
           rewardCycleLength: poxInfo.reward_cycle_length,
@@ -112,10 +101,10 @@ function getOptions(
       // https://github.com/hirosystems/stacks.js/blob/0e1f9f19dfa45788236c9e481f9a476d9948d86d/packages/stacking/src/index.ts#L1054
     ) as ContractCallRegularOptions;
   } else {
-    const pool = pools.find((p) => p.name === values.poolName);
-    if (!pool) throw new Error("Invalid Pool Name");
+    const pool = pools.find(p => p.name === values.poolName);
+    if (!pool) throw new Error('Invalid Pool Name');
 
-    const [contractAddress, contractName] = pool.poxContract.split(".");
+    const [contractAddress, contractName] = pool.poxContract.split('.');
     const functionArgs =
       pool.poxContract === PoxContract.poxDelegation
         ? /* (amount-ustx uint) (delegate-to principal) (until-burn-ht (optional uint))
@@ -126,9 +115,7 @@ function getOptions(
           [
             uintCV(stxToMicroStx(values.amount).toString()),
             principalCV(pool.poolAddress),
-            untilBurnBlockHeight
-              ? someCV(uintCV(untilBurnBlockHeight))
-              : noneCV(),
+            untilBurnBlockHeight ? someCV(uintCV(untilBurnBlockHeight)) : noneCV(),
             noneCV(),
             poxAddressToTuple(values.rewardAddress),
             uintCV(1),
@@ -139,7 +126,7 @@ function getOptions(
     return {
       contractAddress,
       contractName,
-      functionName: "delegate-stx",
+      functionName: 'delegate-stx',
       functionArgs,
     };
   }
@@ -161,12 +148,7 @@ export function createHandleSubmit({
       client.getStackingContract(),
     ]);
 
-    const delegateStxOptions = getOptions(
-      values,
-      poxInfo,
-      stackingContract,
-      client
-    );
+    const delegateStxOptions = getOptions(values, poxInfo, stackingContract, client);
 
     console.log(delegateStxOptions);
 
@@ -174,7 +156,7 @@ export function createHandleSubmit({
       ...delegateStxOptions,
       onFinish() {
         setIsContractCallExtensionPageOpen(false);
-        navigate("../pooled-stacking-info");
+        navigate('../pooled-stacking-info');
       },
       onCancel() {
         setIsContractCallExtensionPageOpen(false);

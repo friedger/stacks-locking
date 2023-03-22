@@ -16,8 +16,7 @@ function getAccountAddresses(userData: any, network: string) {
   // Should this be a source of issues, it may be worth refactoring.
   const address: string = userData?.profile?.stxAddress?.[network];
   const btcAddressP2tr: string = userData?.profile?.btcAddress?.p2tr?.[network];
-  const btcAddressP2wpkh: string =
-    userData?.profile?.btcAddress?.p2wpkh?.[network];
+  const btcAddressP2wpkh: string = userData?.profile?.btcAddress?.p2wpkh?.[network];
   console.log(userData);
 
   if (!isValidStacksAddress(address)) {
@@ -60,8 +59,8 @@ export function AuthProvider({ children }: Props) {
     showConnect({
       userSession,
       appDetails: {
-        name: "Bitcoin Web3 Portal",
-        icon: "http://placekitten.com/200/200",
+        name: 'Bitcoin Web3 Portal',
+        icon: 'http://placekitten.com/200/200',
       },
       onFinish() {
         setIsSigningIn(false);
@@ -94,10 +93,7 @@ export function AuthProvider({ children }: Props) {
     // do nothing
   }
 
-  const { address, btcAddressP2tr, btcAddressP2wpkh } = getAccountAddresses(
-    userData,
-    networkName
-  );
+  const { address, btcAddressP2tr, btcAddressP2wpkh } = getAccountAddresses(userData, networkName);
   return (
     <>
       <AuthContext.Provider

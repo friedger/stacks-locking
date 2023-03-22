@@ -7,11 +7,19 @@ import { StartStackingLayout } from '../components/stacking-layout';
 import { ChoosePoolAddress } from './components/choose-pool-stx-address';
 import { ChoosePoolingAmount } from './components/choose-pooling-amount';
 import { ChoosePoolingDuration } from './components/choose-pooling-duration';
+import { ChoosePoolingPool } from './components/choose-pooling-pool';
+import { ChoosePoolingRewardAddress } from './components/choose-pooling-reward-address';
 import { ConfirmAndSubmit } from './components/confirm-and-pool';
 import { PoolingInfoCard } from './components/delegated-stacking-info-card';
 import { PooledStackingIntro } from './components/pooled-stacking-intro';
+import { pools } from './components/preset-pools';
 import { EditingFormValues } from './types';
-import { createHandleSubmit, createValidationSchema } from './utils';
+import { PoolName } from './types-preset-pools';
+import { createHandleSubmit as createHandleAllowContractCallerSubmit } from './utils-allow-contract-caller';
+import {
+  createHandleSubmit as createHandleDelegateStxSubmit,
+  createValidationSchema,
+} from './utils-delegate-stx';
 import { useAuth } from '@components/auth-provider/auth-provider';
 import { ErrorAlert } from '@components/error-alert';
 import { useNetwork } from '@components/network-provider';
@@ -38,17 +46,17 @@ export function StartPooledStacking() {
   const { networkName } = useNetwork();
 
   if (!address) {
-    const msg = "Expected `address` to be defined.";
+    const msg = 'Expected `address` to be defined.';
     console.error(msg);
     return <ErrorAlert>{msg}</ErrorAlert>;
   }
   if (!btcAddressP2tr) {
-    const msg = "Expected `btcAddressP2tr` to be defined.";
+    const msg = 'Expected `btcAddressP2tr` to be defined.';
     console.error(msg);
     return <ErrorAlert>{msg}</ErrorAlert>;
   }
   if (!btcAddressP2wpkh) {
-    const msg = "Expected `btcAddressP2wpkh` to be defined.";
+    const msg = 'Expected `btcAddressP2wpkh` to be defined.';
     console.error(msg);
     return <ErrorAlert>{msg}</ErrorAlert>;
   }
@@ -66,7 +74,7 @@ export function StartPooledStacking() {
   return (
     <StartPooledStackingLayout
       client={client}
-      currentAddresses={{ address, btcAddressP2tr, btcAddressP2wpkh }}
+      currentAccountAddresses={{ address, btcAddressP2tr, btcAddressP2wpkh }}
       networkName={networkName}
     />
   );
@@ -84,7 +92,7 @@ interface StartPooledStackingProps {
 function StartPooledStackingLayout({
   client,
   networkName,
-  currenAccounttAddresses,
+  currentAccountAddresses,
 }: StartPooledStackingProps) {
   const [isContractCallExtensionPageOpen, setIsContractCallExtensionPageOpen] = useState(false);
   const q1 = useGetSecondsUntilNextCycleQuery();
@@ -100,26 +108,23 @@ function StartPooledStackingLayout({
     currentAccountAddress: currentAccountAddresses.address,
     networkName,
   });
-  const handleSubmit = createHandleSubmit({
+  const handleDelegateStxSubmit = createHandleDelegateStxSubmit({
     client,
     navigate,
     setIsContractCallExtensionPageOpen,
   });
 
-  const handleAllowContractCallerSubmit = createHandleAllowContractCallerSubmit(
-    {
-      client,
-      setIsContractCallExtensionPageOpen,
-    }
-  );
+  const handleAllowContractCallerSubmit = createHandleAllowContractCallerSubmit({
+    client,
+    setIsContractCallExtensionPageOpen,
+  });
   const onPoolChange = (poolName: PoolName) => {
     if (poolName === PoolName.CustomPool) {
       setRewardAddressEditable(true);
     } else {
-      const presetPool = pools.find((p) => p.name === poolName);
+      const presetPool = pools.find(p => p.name === poolName);
       setRewardAddressEditable(
-        presetPool?.payoutMethod === "BTC" &&
-          presetPool?.allowCustomRewardAddress === true
+        presetPool?.payoutMethod === 'BTC' && presetPool?.allowCustomRewardAddress === true
       );
     }
   };
@@ -144,10 +149,10 @@ function StartPooledStackingLayout({
       initialValues={
         {
           ...initialDelegatingFormValues,
-          rewardAddress: currentAddresses.btcAddressP2wpkh,
+          rewardAddress: currentAccountAddresses.btcAddressP2wpkh,
         } as EditingFormValues
       }
-      onSubmit={handleSubmit}
+      onSubmit={handleDelegateStxSubmit}
       validationSchema={validationSchema}
     >
       <StartStackingLayout
@@ -163,16 +168,12 @@ function StartPooledStackingLayout({
               <StackingFormContainer>
                 <ChoosePoolingPool
                   onPoolChange={onPoolChange}
-                  handleAllowContractCallerSubmit={
-                    handleAllowContractCallerSubmit
-                  }
+                  handleAllowContractCallerSubmit={handleAllowContractCallerSubmit}
                 />
-                <ChoosePoolingAmount
-                  availableBalance={queryGetAccountBalance.data}
-                />
+                <ChoosePoolingAmount availableBalance={queryGetAccountBalance.data} />
                 <ChoosePoolingDuration />
                 <ChoosePoolingRewardAddress
-                  btcAddress={currentAddresses.btcAddressP2wpkh}
+                  btcAddress={currentAccountAddresses.btcAddressP2wpkh}
                   editable={rewardAddressEditable}
                 />
                 <ConfirmAndSubmit isLoading={isContractCallExtensionPageOpen} />

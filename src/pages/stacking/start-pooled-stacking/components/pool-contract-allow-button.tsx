@@ -1,5 +1,5 @@
-import { Button, color, Text } from "@stacks/ui";
-import { PoolName } from "../types-preset-pools";
+import { PoolName } from '../types-preset-pools';
+import { Button, Text, color } from '@stacks/ui';
 
 export function PoolContractAllowButton({
   poolName,
@@ -12,13 +12,13 @@ export function PoolContractAllowButton({
     <>
       <Text
         textStyle="body.small"
-        color={color("text-caption")}
+        color={color('text-caption')}
         mt="tight"
         display="inline-block"
         lineHeight="18px"
       >
-        The pool uses a contract to handle your stacking. You need to allow the
-        contract to confirm your delegation.
+        The pool uses a contract to handle your stacking. You need to allow the contract to confirm
+        your delegation.
       </Text>
 
       <Button size="sm" mx="loose" onClick={() => handleSubmit(poolName)}>

@@ -1,21 +1,18 @@
-import { useField } from "formik";
+import { useState } from 'react';
 
-import { Description, Step } from "../../components/stacking-form-step";
-
-import { Box, color, Input, Text } from "@stacks/ui";
-import { ErrorLabel } from "@components/error-label";
-import { ErrorText } from "@components/error-text";
-import { useState } from "react";
+import { Description, Step } from '../../components/stacking-form-step';
+import { ErrorLabel } from '@components/error-label';
+import { ErrorText } from '@components/error-text';
+import { Box, Input, Text, color } from '@stacks/ui';
+import { useField } from 'formik';
 
 interface Props {
   editable: boolean;
   btcAddress: string;
 }
 export function ChoosePoolingRewardAddress({ btcAddress, editable }: Props) {
-  const [field, meta, helpers] = useField("rewardAddress");
-  const [showBtcAddressWarning, setShowBtcAddressWarning] = useState(
-    btcAddress === field.onChange
-  );
+  const [field, meta, helpers] = useField('rewardAddress');
+  const [showBtcAddressWarning, setShowBtcAddressWarning] = useState(btcAddress === field.onChange);
   const checkBtcAddress = (val: string) => {
     setShowBtcAddressWarning(btcAddress !== val);
   };
@@ -24,8 +21,8 @@ export function ChoosePoolingRewardAddress({ btcAddress, editable }: Props) {
     <Step title="Reward address">
       <Description>
         <Text>
-          Choose how you would like to receive your stacking rewards. Your pool
-          might require to use your own Bitcoin address only.
+          Choose how you would like to receive your stacking rewards. Your pool might require to use
+          your own Bitcoin address only.
         </Text>
       </Description>
 
@@ -44,20 +41,12 @@ export function ChoosePoolingRewardAddress({ btcAddress, editable }: Props) {
         )}
       </Box>
       {editable ? (
-        <Box
-          textStyle="body.small"
-          color={color("feedback-alert")}
-          mt="base-tight"
-        >
-          Make sure you controll this BTC address. It is written on-chain and
-          pool operators use the address as is.
+        <Box textStyle="body.small" color={color('feedback-alert')} mt="base-tight">
+          Make sure you controll this BTC address. It is written on-chain and pool operators use the
+          address as is.
         </Box>
       ) : (
-        <Box
-          textStyle="body.small"
-          color={color("text-caption")}
-          mt="base-tight"
-        >
+        <Box textStyle="body.small" color={color('text-caption')} mt="base-tight">
           This is your BTC address.
         </Box>
       )}

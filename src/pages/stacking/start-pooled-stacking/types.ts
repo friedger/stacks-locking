@@ -25,5 +25,5 @@ export type PresetPool = {
   description: string;
   website: string;
   duration: number;
-  payoutMethod: "BTC" | "STX";
+  payoutMethod: 'BTC' | 'STX';
 };
