@@ -20,7 +20,7 @@ function getAccountAddresses(userData: any, network: string) {
   console.log(userData);
 
   if (!isValidStacksAddress(address)) {
-    return null;
+    return { address: null, btcAddressP2tr: null, btcAddressP2wpkh: null };
   }
 
   return { address, btcAddressP2tr, btcAddressP2wpkh };

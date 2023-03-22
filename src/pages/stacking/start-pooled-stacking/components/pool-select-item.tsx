@@ -1,7 +1,6 @@
 import { PoolName } from '../types-preset-pools';
 import { CustomPoolAddressInput } from './custom-pool-address-input';
 import { PoolContractAllow } from './pool-contract-allow';
-import { PoolContractAllowButton } from './pool-contract-allow-button';
 import { Box, Flex, FlexProps, Text, color } from '@stacks/ui';
 import { useFocus } from 'use-events';
 
@@ -77,7 +76,11 @@ export function PoolSelectItem(props: PoolSelectItemProps) {
               <CustomPoolAddressInput />
             ) : (
               handleAllowContractCallerSubmit && (
-                <PoolContractAllow poolName={name} handleSubmit={handleAllowContractCallerSubmit} />
+                <PoolContractAllow
+                  poolName={name}
+                  isPoolActive={activePoolName === name}
+                  handleSubmit={handleAllowContractCallerSubmit}
+                />
               )
             )}
           </Box>

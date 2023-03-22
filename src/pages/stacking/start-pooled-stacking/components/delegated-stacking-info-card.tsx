@@ -16,6 +16,7 @@ import { cyclesToBurnChainHeight } from '@utils/calculate-burn-height';
 import { formatCycles } from '@utils/stacking';
 import { truncateMiddle } from '@utils/tx-utils';
 import { useFormikContext } from 'formik';
+import { pools } from './preset-pools';
 
 export function PoolingInfoCard(props: FlexProps) {
   const f = useFormikContext<EditingFormValues>();
@@ -44,7 +45,7 @@ export function PoolingInfoCard(props: FlexProps) {
   return (
     <>
       <InfoCard {...props}>
-        <Box mx={['loose', 'extra-loose']} sx={{ border: '1px solid red' }}>
+        <Box mx={['loose', 'extra-loose']} sx={{}}>
           <Flex flexDirection="column" pt="extra-loose" pb="base-loose">
             <Text textStyle="body.large.medium">You&apos;re pooling</Text>
             <Text
@@ -63,13 +64,8 @@ export function PoolingInfoCard(props: FlexProps) {
           <Group mt="base-loose" mb="extra-loose">
             <Section>
               <Row>
-                <Label>
+                <Label explainer="How long you want to delegate to the pool. This is not necessarily the locking duration. However, the locking period cannot be longer than the delegation duration.">
                   Duration
-                  <Tooltip label="How long you want to delegate to the pool. This is not necessarily the locking duration. However, the locking period cannot be longer than the delegation duration.">
-                    <span>
-                      <IconHelpCircle height="1rem" width="1rem" />
-                    </span>
-                  </Tooltip>
                 </Label>
                 <Value>
                   {!delegationType && '—'}

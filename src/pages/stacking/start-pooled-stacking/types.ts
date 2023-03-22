@@ -1,9 +1,11 @@
+import { PoolName } from './types-preset-pools';
+
 interface DelegatingFormIndefiniteValues<N> {
   delegationDurationType: 'indefinite';
   amount: N;
   poolAddress: string;
   rewardAddress: string;
-  presetPool: PresetPool | undefined;
+  poolName: PoolName | undefined;
 }
 interface DelegatingFormLimitedValues<N> {
   delegationDurationType: 'limited';
@@ -11,7 +13,7 @@ interface DelegatingFormLimitedValues<N> {
   poolAddress: string;
   numberOfCycles: number;
   rewardAddress: string;
-  presetPool: PresetPool | undefined;
+  poolName: PoolName | undefined;
 }
 type AbstractDelegatingFormValues<N> =
   | DelegatingFormIndefiniteValues<N>
