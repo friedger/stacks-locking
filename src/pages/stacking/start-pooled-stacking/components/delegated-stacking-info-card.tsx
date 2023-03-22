@@ -17,6 +17,7 @@ import { formatCycles } from '@utils/stacking';
 import { truncateMiddle } from '@utils/tx-utils';
 import { useFormikContext } from 'formik';
 import { pools } from './preset-pools';
+import { PoolingAmountInfo } from './pooling-amount-info';
 
 export function PoolingInfoCard(props: FlexProps) {
   const f = useFormikContext<EditingFormValues>();
@@ -25,7 +26,7 @@ export function PoolingInfoCard(props: FlexProps) {
   const amount = f.values.amount;
   const delegationType = f.values.delegationDurationType;
   const poolName = f.values.poolName;
-  const pool = pools.find(p => p.name === poolName);
+  const pool = poolName ? pools[poolName] : undefined;
   const poolStxAddress = pool?.poolAddress || f.values.poolAddress;
   const poolContract = pool?.poxContract || poxInfoQuery.data?.contract_id;
   const durationInCycles =
@@ -46,18 +47,7 @@ export function PoolingInfoCard(props: FlexProps) {
     <>
       <InfoCard {...props}>
         <Box mx={['loose', 'extra-loose']} sx={{}}>
-          <Flex flexDirection="column" pt="extra-loose" pb="base-loose">
-            <Text textStyle="body.large.medium">You&apos;re pooling</Text>
-            <Text
-              fontSize="24px"
-              fontFamily="Open Sauce"
-              fontWeight={500}
-              letterSpacing="-0.02em"
-              mt="extra-tight"
-            >
-              {amountText}
-            </Text>
-          </Flex>
+          <PoolingAmountInfo title="You'll pool up to" amountText={amountText} />
 
           <Hr />
 

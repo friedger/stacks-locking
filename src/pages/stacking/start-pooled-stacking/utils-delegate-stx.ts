@@ -3,7 +3,7 @@ import { NavigateFunction } from 'react-router-dom';
 
 import { pools } from './components/preset-pools';
 import { EditingFormValues } from './types';
-import { PoolName, PoxContract } from './types-preset-pools';
+import { PoolName, Pox2Contract } from './types-preset-pools';
 import {
   MIN_DELEGATED_STACKING_AMOUNT_USTX,
   UI_IMPOSED_MAX_STACKING_AMOUNT_USTX,
@@ -84,12 +84,17 @@ function getOptions(
           firstBurnchainBlockHeight: poxInfo.first_burnchain_block_height,
         })
       : undefined;
+  const pool = values.poolName ? pools[values.poolName] : undefined;
+  if (!pool) throw new Error('Invalid Pool Name');
+
+  const delegateTo = pool.poolAddress || values.poolAddress;
+
   if (values.poolName === PoolName.CustomPool) {
     return client.getDelegateOptions(
       {
         contract: stackingContract,
         amountMicroStx: stxToMicroStx(values.amount).toString(),
-        delegateTo: values.poolAddress,
+        delegateTo,
         untilBurnBlockHeight,
       }
       // Type coercion necessary because the `network` property returned by
@@ -101,26 +106,18 @@ function getOptions(
       // https://github.com/hirosystems/stacks.js/blob/0e1f9f19dfa45788236c9e481f9a476d9948d86d/packages/stacking/src/index.ts#L1054
     ) as ContractCallRegularOptions;
   } else {
-    const pool = pools.find(p => p.name === values.poolName);
-    if (!pool) throw new Error('Invalid Pool Name');
-
     const [contractAddress, contractName] = pool.poxContract.split('.');
     const functionArgs =
-      pool.poxContract === PoxContract.poxDelegation
-        ? /* (amount-ustx uint) (delegate-to principal) (until-burn-ht (optional uint))
-              (pool-pox-addr (optional (tuple (hashbytes (buff 32)) (version (buff 1)))))
-              (user-pox-addr (tuple (hashbytes (buff 32)) (version (buff 1))))
-              (lock-period uint)
-              */
-          [
+      pool.poxContract === Pox2Contract.WrapperOncCycle
+        ? [
             uintCV(stxToMicroStx(values.amount).toString()),
-            principalCV(pool.poolAddress),
+            principalCV(delegateTo),
             untilBurnBlockHeight ? someCV(uintCV(untilBurnBlockHeight)) : noneCV(),
             noneCV(),
             poxAddressToTuple(values.rewardAddress),
             uintCV(1),
           ]
-        : pool.poxContract === PoxContract.fpDelegation
+        : pool.poxContract === Pox2Contract.WrapperFastPool
         ? [uintCV(stxToMicroStx(values.amount).toString())]
         : [];
     return {

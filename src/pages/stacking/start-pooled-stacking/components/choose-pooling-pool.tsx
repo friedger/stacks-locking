@@ -1,7 +1,7 @@
 import { Description, Step } from '../../components/stacking-form-step';
 import { Pool, PoolName } from '../types-preset-pools';
 import { PoolSelectItem } from './pool-select-item';
-import { customPool, pools } from './preset-pools';
+import { pools } from './preset-pools';
 import { ExternalLink } from '@components/external-link';
 import { Stack, Text } from '@stacks/ui';
 import { useField } from 'formik';
@@ -31,24 +31,20 @@ export function ChoosePoolingPool({
       </Description>
 
       <Stack spacing="base" mt="extra-loose">
-        {pools.map((p: Pool, index: number) => (
-          <PoolSelectItem
-            name={p.name}
-            icon={p.icon}
-            description={p.description}
-            key={index}
-            activePoolName={fieldPoolName.value}
-            onChange={onChange}
-            handleAllowContractCallerSubmit={handleAllowContractCallerSubmit}
-          />
-        ))}
-        <PoolSelectItem
-          name={customPool.name}
-          icon={customPool.icon}
-          description={customPool.description}
-          activePoolName={fieldPoolName.value}
-          onChange={onChange}
-        />
+        {(Object.keys(pools) as PoolName[]).map((poolName: PoolName, index: number) => {
+          const p = pools[poolName];
+          return (
+            <PoolSelectItem
+              name={p.name}
+              icon={p.icon}
+              description={p.description}
+              key={index}
+              activePoolName={fieldPoolName.value}
+              onChange={onChange}
+              handleAllowContractCallerSubmit={handleAllowContractCallerSubmit}
+            />
+          );
+        })}
       </Stack>
     </Step>
   );

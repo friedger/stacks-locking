@@ -4,18 +4,18 @@ import { pools } from './components/preset-pools';
 import { PoolName, Pox2Contract } from './types-preset-pools';
 import { ContractCallRegularOptions, openContractCall } from '@stacks/connect';
 import { StackingClient } from '@stacks/stacking';
-import { noneCV, principalCV } from '@stacks/transactions';
+import { principalCV } from '@stacks/transactions';
 
 function getOptions(
   poxWrapperContract: Pox2Contract,
   stackingContract: string
 ): ContractCallRegularOptions {
   const [contractAddress, contractName] = stackingContract.split('.');
-  const functionArgs = [principalCV(poxWrapperContract), noneCV()];
+  const functionArgs = [principalCV(poxWrapperContract)];
   return {
     contractAddress,
     contractName,
-    functionName: 'allow-contract-caller',
+    functionName: 'disallow-contract-caller',
     functionArgs,
   };
 }

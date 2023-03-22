@@ -1,15 +1,12 @@
 import { Pool, PoolName } from '../types-preset-pools';
 import { PoolContractAllowButton } from './pool-contract-allow-button';
-import { poolByName } from './preset-pools';
+import { pools } from './preset-pools';
 import { Text, color, Spinner } from '@stacks/ui';
 import { truncateMiddle } from '@utils/tx-utils';
 import { useGetAllowanceContractCallers } from '@components/stacking-client-provider/stacking-client-provider';
 import { ErrorAlert } from '@components/error-alert';
 import { ClarityType } from '@stacks/transactions';
-
-export function userHasAllowedContractCallerForPool(pool: Pool) {
-  return pool.name === PoolName.PlanBetter;
-}
+import { PoolContractDisallowButton } from './pool-contract-disallow-button';
 
 export function PoolContractAllow({
   poolName,
@@ -20,7 +17,7 @@ export function PoolContractAllow({
   handleSubmit(poolName: PoolName): void;
   isPoolActive: boolean;
 }) {
-  const pool = poolByName(poolName);
+  const pool = pools[poolName];
   const q = useGetAllowanceContractCallers(pool.poxContract);
   if (q.isLoading) {
     return isPoolActive ? <Spinner /> : <></>;
@@ -40,7 +37,8 @@ export function PoolContractAllow({
         display="inline-block"
         lineHeight="18px"
       >
-        Uses pool contract {truncateMiddle(pool.poxContract)}: Allowed.
+        Uses pool contract {truncateMiddle(pool.poxContract)}: Trusted.
+        <PoolContractDisallowButton poolName={poolName} handleSubmit={handleSubmit} />
       </Text>
     );
   } else if (isPoolActive) {

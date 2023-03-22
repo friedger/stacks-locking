@@ -11,7 +11,7 @@ import {
   validateStacksAddress as isValidStacksAddress,
 } from '@stacks/transactions';
 import { useQuery } from '@tanstack/react-query';
-import { PoxContract } from 'src/pages/stacking/start-pooled-stacking/types-preset-pools';
+import { Pox2Contract } from 'src/pages/stacking/start-pooled-stacking/types-preset-pools';
 
 interface StackingClientContext {
   client: null | StackingClient;
@@ -108,11 +108,12 @@ export function useGetAllowanceContractCallers(callingContract: string) {
   const { network } = useNetwork();
 
   // TODO use correct pox contract id
-  const poxContractId = PoxContract.pox2;
+  const poxContractId = Pox2Contract.PoX2;
 
   return useQuery(['getAllowanceContractCallers', senderAddress, callingContract, network], () => {
     if (senderAddress) {
-      if (callingContract === PoxContract.poxDelegation) {
+      // TODO remove this. Only for Demo
+      if (callingContract === Pox2Contract.WrapperOncCycle) {
         return Promise.resolve(someCV(noneCV()));
       }
       const [contractAddress, contractName] = poxContractId.split('.');

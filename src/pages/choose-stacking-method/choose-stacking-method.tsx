@@ -95,14 +95,16 @@ interface ChooseStackingMethodInnerProps {
   hasEnoughBalanceToPool: boolean;
   hasEnoughBalanceToDirectStack: boolean;
   stackingMinimumAmountUstx: bigint;
+  withoutAccount?: boolean;
 }
-function ChooseStackingMethodLayout({
+export function ChooseStackingMethodLayout({
   hasExistingDelegation,
   hasExistingDelegatedStacking,
   hasExistingDirectStacking,
   hasEnoughBalanceToPool,
   hasEnoughBalanceToDirectStack,
   stackingMinimumAmountUstx,
+  withoutAccount,
 }: ChooseStackingMethodInnerProps) {
   const navigate = useNavigate();
   const hasExistingCommitment =
@@ -182,15 +184,17 @@ function ChooseStackingMethodLayout({
               </OptionBenefit>
             </OptionBenefitContainer>
 
-            <Flex alignItems="center">
-              <OptionButton
-                onClick={() => navigate('../start-pooled-stacking')}
-                isDisabled={hasExistingCommitment || !hasEnoughBalanceToPool}
-              >
-                Stack in a pool
-              </OptionButton>
-              {!hasEnoughBalanceToPool && <InsufficientStackingBalanceWarning />}
-            </Flex>
+            {!withoutAccount && (
+              <Flex alignItems="center">
+                <OptionButton
+                  onClick={() => navigate('../start-pooled-stacking')}
+                  isDisabled={hasExistingCommitment || !hasEnoughBalanceToPool}
+                >
+                  Stack in a pool
+                </OptionButton>
+                {!hasEnoughBalanceToPool && <InsufficientStackingBalanceWarning />}
+              </Flex>
+            )}
           </Card>
 
           <Card
@@ -219,15 +223,17 @@ function ChooseStackingMethodLayout({
               </OptionBenefit>
             </OptionBenefitContainer>
 
-            <Flex alignItems="center">
-              <OptionButton
-                onClick={() => navigate('../start-direct-stacking')}
-                isDisabled={hasExistingCommitment || !hasEnoughBalanceToDirectStack}
-              >
-                Stack by yourself
-              </OptionButton>
-              {!hasEnoughBalanceToDirectStack && <InsufficientStackingBalanceWarning />}
-            </Flex>
+            {!withoutAccount && (
+              <Flex alignItems="center">
+                <OptionButton
+                  onClick={() => navigate('../start-direct-stacking')}
+                  isDisabled={hasExistingCommitment || !hasEnoughBalanceToDirectStack}
+                >
+                  Stack by yourself
+                </OptionButton>
+                {!hasEnoughBalanceToDirectStack && <InsufficientStackingBalanceWarning />}
+              </Flex>
+            )}
           </Card>
         </CardContainer>
       </Stack>

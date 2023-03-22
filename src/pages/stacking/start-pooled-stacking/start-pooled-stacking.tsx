@@ -32,6 +32,7 @@ import { StackingClient } from '@stacks/stacking';
 import { Spinner } from '@stacks/ui';
 import { useQuery } from '@tanstack/react-query';
 import { Form, Formik } from 'formik';
+import { StackingGuideInfoCard } from './components/stacking-guide-info-card';
 
 const initialDelegatingFormValues: Partial<EditingFormValues> = {
   amount: '',
@@ -124,7 +125,7 @@ function StartPooledStackingLayout({
       setRewardAddressEditable(true);
       setPoolRequiresUserRewardAddress(false);
     } else {
-      const presetPool = pools.find(p => p.name === poolName);
+      const presetPool = pools[poolName];
       setRewardAddressEditable(
         presetPool?.payoutMethod === 'BTC' && presetPool?.allowCustomRewardAddress === true
       );
@@ -163,6 +164,7 @@ function StartPooledStackingLayout({
         stackingInfoPanel={
           <StackingFormInfoPanel>
             <PoolingInfoCard />
+            <StackingGuideInfoCard />
           </StackingFormInfoPanel>
         }
         stackingForm={

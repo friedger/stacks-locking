@@ -3,6 +3,7 @@ import { CustomPoolAddressInput } from './custom-pool-address-input';
 import { PoolContractAllow } from './pool-contract-allow';
 import { Box, Flex, FlexProps, Text, color } from '@stacks/ui';
 import { useFocus } from 'use-events';
+import { IconEdit } from '@tabler/icons-react';
 
 interface PoolSelectItemProps extends Omit<FlexProps, 'onChange'> {
   name: PoolName;

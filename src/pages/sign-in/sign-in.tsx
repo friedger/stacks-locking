@@ -4,6 +4,7 @@ import { useAuth } from '@components/auth-provider/auth-provider';
 import { Card } from '@components/card';
 import { Title } from '@components/title';
 import { Button, Flex, Stack } from '@stacks/ui';
+import { ChooseStackingMethodLayout } from '../choose-stacking-method/choose-stacking-method';
 
 export function SignIn() {
   const { isSignedIn, signIn, isSigningIn } = useAuth();
@@ -12,8 +13,8 @@ export function SignIn() {
   }
 
   return (
-    <Flex w="100vw" h="100vh" align="center" justify="center">
-      <Card width="300px">
+    <Flex flexDirection="column" justify="center" alignItems="center" mx="auto" px="extra-loose">
+      <Card width="300px" mt="44px">
         <Stack>
           <Title pb="1rem">Get stacking</Title>
           <Button onClick={signIn} isLoading={isSigningIn}>
@@ -21,6 +22,15 @@ export function SignIn() {
           </Button>
         </Stack>
       </Card>
+      <ChooseStackingMethodLayout
+        hasEnoughBalanceToDirectStack
+        hasEnoughBalanceToPool
+        hasExistingDelegation={false}
+        hasExistingDelegatedStacking={false}
+        hasExistingDirectStacking={false}
+        stackingMinimumAmountUstx={100000000000n}
+        withoutAccount
+      />
     </Flex>
   );
 }
