@@ -97,6 +97,7 @@ function StartPooledStackingLayout({
   const [isContractCallExtensionPageOpen, setIsContractCallExtensionPageOpen] = useState(false);
   const q1 = useGetSecondsUntilNextCycleQuery();
   const [rewardAddressEditable, setRewardAddressEditable] = useState(true);
+  const [poolRequiresUserRewardAddress, setPoolRequiresUserRewardAddress] = useState(true);
 
   // TODO: move this inside ChoosePoolingAmount, not being used elsewhere
   const queryGetAccountBalance = useQuery(['getAccountBalance', client], () =>
@@ -121,11 +122,13 @@ function StartPooledStackingLayout({
   const onPoolChange = (poolName: PoolName) => {
     if (poolName === PoolName.CustomPool) {
       setRewardAddressEditable(true);
+      setPoolRequiresUserRewardAddress(false);
     } else {
       const presetPool = pools.find(p => p.name === poolName);
       setRewardAddressEditable(
         presetPool?.payoutMethod === 'BTC' && presetPool?.allowCustomRewardAddress === true
       );
+      setPoolRequiresUserRewardAddress(presetPool?.payoutMethod === 'BTC');
     }
   };
 
@@ -172,10 +175,14 @@ function StartPooledStackingLayout({
                 />
                 <ChoosePoolingAmount availableBalance={queryGetAccountBalance.data} />
                 <ChoosePoolingDuration />
-                <ChoosePoolingRewardAddress
-                  btcAddress={currentAccountAddresses.btcAddressP2wpkh}
-                  editable={rewardAddressEditable}
-                />
+                {poolRequiresUserRewardAddress ? (
+                  <ChoosePoolingRewardAddress
+                    btcAddress={currentAccountAddresses.btcAddressP2wpkh}
+                    editable={rewardAddressEditable}
+                  />
+                ) : (
+                  <></>
+                )}
                 <ConfirmAndSubmit isLoading={isContractCallExtensionPageOpen} />
               </StackingFormContainer>
             </Form>
