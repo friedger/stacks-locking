@@ -15,7 +15,7 @@ import { noneCV, someCV, uintCV } from '@stacks/transactions';
 import { principalCV } from '@stacks/transactions/dist/clarity/types/principalCV';
 import { cyclesToBurnChainHeight } from '@utils/calculate-burn-height';
 import { stxToMicroStx, toHumanReadableStx } from '@utils/unit-convert';
-import { stxAddressSchema } from '@utils/validators/stx-address-validator';
+import { stxPrincipalSchema } from '@utils/validators/stx-address-validator';
 import { stxAmountSchema } from '@utils/validators/stx-amount-validator';
 import * as yup from 'yup';
 
@@ -33,7 +33,7 @@ export function createValidationSchema({ currentAccountAddress, networkName }: A
     poolAddress: yup.string().when('poolName', {
       is: 'Custom Pool',
       then: schema =>
-        stxAddressSchema(schema, networkName).test({
+        stxPrincipalSchema(schema, networkName).test({
           name: 'cannot-pool-to-yourself',
           message: 'Cannot pool to your own STX address',
           test(value) {

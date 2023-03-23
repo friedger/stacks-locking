@@ -23,7 +23,7 @@ export const OneCycleDescriptor: FC<OneCycleDescriptorProps> = props => {
 
   return (
     <Text display="block" textStyle="body.small" color={color('text-caption')} {...props}>
-      Cycles last {q.data.reward_cycle_length} Bitcoin blocks, currently TODO:time.
+      Cycles last {q.data.reward_cycle_length} Bitcoin blocks.
     </Text>
   );
 };

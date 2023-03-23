@@ -11,7 +11,7 @@ export const pools: { [key in PoolName]: Pool } = {
     duration: 1,
     website: 'https://pool.friedger.de',
     payoutMethod: PayoutMethod.STX,
-    poolAddress: 'ST000000000000000000002AMW42H.fp-delegation',
+    poolAddress: Pox2Contract.WrapperFastPool, // pool address is the same as pool contract
     poxContract: Pox2Contract.WrapperFastPool,
     icon: <PoolIcon src="/32x32_FastPool.png" />,
     allowCustomRewardAddress: false,

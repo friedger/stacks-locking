@@ -67,12 +67,12 @@ export function PoolingInfoCard(props: FlexProps) {
 
             <Section>
               <Row>
-                <Label explainer=" How long you want to delegate to the pool. This is not necessarily the locking duration. However, the locking period cannot be longer than the delegation duration.">
+                <Label explainer="How you want to delegate to the pool. This is not necessarily the locking duration. However, the locking period cannot be longer than the delegation duration.">
                   Type
                 </Label>
                 <Value>
                   {delegationType === null && '—'}
-                  {delegationType === 'limited' && formatCycles(durationInCycles ?? 0)}
+                  {delegationType === 'limited' && "Limited permission"}
                   {delegationType === 'indefinite' && 'Indefinite'}
                 </Value>
               </Row>

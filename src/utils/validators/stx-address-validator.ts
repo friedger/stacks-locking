@@ -3,14 +3,15 @@ import { StacksNetworkName } from '@stacks/network';
 import { validateStacksAddress } from '@stacks/transactions';
 import * as yup from 'yup';
 
-export function stxAddressSchema(schema: yup.StringSchema, networkName: StacksNetworkName) {
+export function stxPrincipalSchema(schema: yup.StringSchema, networkName: StacksNetworkName) {
   return schema.defined('Must define a STX address').test({
     name: 'address-validation',
     test(value, context) {
       if (!value) return false;
-      const valid = validateStacksAddress(value);
+      const [address, name] = value.split('.');
+      const valid = validateStacksAddress(address);
 
-      if (!valid) {
+      if (!valid || name === "") {
         return context.createError({
           message: 'Input address is not a valid STX address',
         });

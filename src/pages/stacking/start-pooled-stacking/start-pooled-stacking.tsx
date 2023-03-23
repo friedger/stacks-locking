@@ -99,7 +99,7 @@ function StartPooledStackingLayout({
   const q1 = useGetSecondsUntilNextCycleQuery();
   const [rewardAddressEditable, setRewardAddressEditable] = useState(true);
   const [poolRequiresUserRewardAddress, setPoolRequiresUserRewardAddress] = useState(true);
-
+  const [requiresAllowContractCaller, setRequiresAllowContractCaller] = useState(true);
   // TODO: move this inside ChoosePoolingAmount, not being used elsewhere
   const queryGetAccountBalance = useQuery(['getAccountBalance', client], () =>
     client.getAccountBalance()
@@ -115,7 +115,6 @@ function StartPooledStackingLayout({
     navigate,
     setIsContractCallExtensionPageOpen,
   });
-
   const handleAllowContractCallerSubmit = createHandleAllowContractCallerSubmit({
     client,
     setIsContractCallExtensionPageOpen,
@@ -124,6 +123,7 @@ function StartPooledStackingLayout({
     handleDelegateStxSubmit,
     handleAllowContractCallerSubmit,
   });
+
   const onPoolChange = (poolName: PoolName) => {
     if (poolName === PoolName.CustomPool) {
       setRewardAddressEditable(true);
@@ -186,7 +186,10 @@ function StartPooledStackingLayout({
                 ) : (
                   <></>
                 )}
-                <ConfirmAndSubmit isLoading={isContractCallExtensionPageOpen} />
+                <ConfirmAndSubmit
+                  isLoading={isContractCallExtensionPageOpen}
+                  requiresAllowContractCaller={requiresAllowContractCaller}
+                />
               </StackingFormContainer>
             </Form>
           </>
