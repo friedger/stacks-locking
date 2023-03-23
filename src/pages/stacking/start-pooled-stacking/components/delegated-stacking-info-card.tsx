@@ -28,7 +28,7 @@ export function PoolingInfoCard(props: FlexProps) {
   const poolName = f.values.poolName;
   const pool = poolName ? pools[poolName] : undefined;
   const poolStxAddress = pool?.poolAddress || f.values.poolAddress;
-  const poolContract = pool?.poxContract || poxInfoQuery.data?.contract_id;
+  const poxWrapperContract = pool?.poxContract || poxInfoQuery.data?.contract_id;
   const durationInCycles =
     f.values.delegationDurationType === 'limited' ? f.values.numberOfCycles : null;
 
@@ -94,7 +94,7 @@ export function PoolingInfoCard(props: FlexProps) {
               </Row>
               <Row>
                 <Label>Contract</Label>
-                <Value>{truncateMiddle(poxInfoQuery.data?.contract_id ?? '')}</Value>
+                <Value>{truncateMiddle(poxWrapperContract ?? '')}</Value>
               </Row>
             </Section>
           </Group>

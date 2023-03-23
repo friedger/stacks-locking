@@ -1,4 +1,4 @@
-import { PoolName } from '../types-preset-pools';
+import { PoolName, Pox2Contract } from '../types-preset-pools';
 import { CustomPoolAddressInput } from './custom-pool-address-input';
 import { PoolContractAllow } from './pool-contract-allow';
 import { Box, Flex, FlexProps, Text, color } from '@stacks/ui';
@@ -11,19 +11,10 @@ interface PoolSelectItemProps extends Omit<FlexProps, 'onChange'> {
   icon: JSX.Element;
   activePoolName: PoolName;
   onChange(poolName: PoolName): void;
-  handleAllowContractCallerSubmit?(poolName: PoolName): void;
 }
 
 export function PoolSelectItem(props: PoolSelectItemProps) {
-  const {
-    name,
-    description,
-    icon,
-    activePoolName,
-    onChange,
-    handleAllowContractCallerSubmit,
-    ...rest
-  } = props;
+  const { name, description, icon, activePoolName, onChange, ...rest } = props;
   const [isFocused, bind] = useFocus();
   return (
     <Flex
@@ -73,17 +64,7 @@ export function PoolSelectItem(props: PoolSelectItemProps) {
             >
               {description}
             </Text>
-            {name == PoolName.CustomPool ? (
-              <CustomPoolAddressInput />
-            ) : (
-              handleAllowContractCallerSubmit && (
-                <PoolContractAllow
-                  poolName={name}
-                  isPoolActive={activePoolName === name}
-                  handleSubmit={handleAllowContractCallerSubmit}
-                />
-              )
-            )}
+            {name == PoolName.CustomPool && <CustomPoolAddressInput />}
           </Box>
         </Flex>
         <Flex ml="loose" alignItems="center">

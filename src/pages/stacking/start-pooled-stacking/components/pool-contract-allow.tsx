@@ -1,4 +1,4 @@
-import { Pool, PoolName } from '../types-preset-pools';
+import { Pool, PoolName, Pox2Contract } from '../types-preset-pools';
 import { PoolContractAllowButton } from './pool-contract-allow-button';
 import { pools } from './preset-pools';
 import { Text, color, Spinner } from '@stacks/ui';
@@ -14,7 +14,7 @@ export function PoolContractAllow({
   isPoolActive,
 }: {
   poolName: PoolName;
-  handleSubmit(poolName: PoolName): void;
+  handleSubmit(val: Pox2Contract): void;
   isPoolActive: boolean;
 }) {
   const pool = pools[poolName];

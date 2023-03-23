@@ -1,4 +1,4 @@
-import { PoolName } from '../types-preset-pools';
+import { PoolName, Pox2Contract } from '../types-preset-pools';
 import { Button } from '@stacks/ui';
 
 export function PoolContractDisallowButton({
@@ -6,7 +6,7 @@ export function PoolContractDisallowButton({
   handleSubmit,
 }: {
   poolName: PoolName;
-  handleSubmit(poolName: PoolName): void;
+  handleSubmit(val: Pox2Contract): void;
 }) {
   return (
     <>

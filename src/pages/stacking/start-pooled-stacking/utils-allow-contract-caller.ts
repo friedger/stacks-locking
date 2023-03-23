@@ -28,7 +28,13 @@ export function createHandleSubmit({
   client,
   setIsContractCallExtensionPageOpen,
 }: CreateHandleSubmitArgs) {
-  return async function handleSubmit(poxWrapperContract: Pox2Contract) {
+  return async function handleSubmit({
+    poxWrapperContract,
+    onFinish,
+  }: {
+    poxWrapperContract: Pox2Contract;
+    onFinish: () => Promise<void>;
+  }) {
     // TODO: handle thrown errors
     const [stackingContract] = await Promise.all([client.getStackingContract()]);
 
@@ -40,6 +46,7 @@ export function createHandleSubmit({
       ...allowContractCallerOptions,
       onFinish() {
         setIsContractCallExtensionPageOpen(false);
+        onFinish();
       },
       onCancel() {
         setIsContractCallExtensionPageOpen(false);

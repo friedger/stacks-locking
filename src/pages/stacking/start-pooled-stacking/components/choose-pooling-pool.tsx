@@ -1,5 +1,5 @@
 import { Description, Step } from '../../components/stacking-form-step';
-import { Pool, PoolName } from '../types-preset-pools';
+import { Pool, PoolName, Pox2Contract } from '../types-preset-pools';
 import { PoolSelectItem } from './pool-select-item';
 import { pools } from './preset-pools';
 import { ExternalLink } from '@components/external-link';
@@ -8,11 +8,9 @@ import { useField } from 'formik';
 
 interface ChoosePoolingPoolProps {
   onPoolChange: (val: PoolName) => void;
-  handleAllowContractCallerSubmit(val: PoolName): void;
 }
 export function ChoosePoolingPool({
   onPoolChange,
-  handleAllowContractCallerSubmit,
 }: ChoosePoolingPoolProps) {
   const [fieldPoolName, , helpersPoolName] = useField('poolName');
   const onChange = (poolName: PoolName) => {
@@ -41,7 +39,6 @@ export function ChoosePoolingPool({
               key={index}
               activePoolName={fieldPoolName.value}
               onChange={onChange}
-              handleAllowContractCallerSubmit={handleAllowContractCallerSubmit}
             />
           );
         })}

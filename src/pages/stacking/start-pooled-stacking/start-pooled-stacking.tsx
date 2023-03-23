@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { StackingFormContainer } from '../components/stacking-form-container';
 import { StackingFormInfoPanel } from '../components/stacking-form-info-panel';
 import { StartStackingLayout } from '../components/stacking-layout';
-import { ChoosePoolAddress } from './components/choose-pool-stx-address';
 import { ChoosePoolingAmount } from './components/choose-pooling-amount';
 import { ChoosePoolingDuration } from './components/choose-pooling-duration';
 import { ChoosePoolingPool } from './components/choose-pooling-pool';
@@ -15,6 +14,7 @@ import { PooledStackingIntro } from './components/pooled-stacking-intro';
 import { pools } from './components/preset-pools';
 import { EditingFormValues } from './types';
 import { PoolName } from './types-preset-pools';
+import { createHandleSubmit } from './utils';
 import { createHandleSubmit as createHandleAllowContractCallerSubmit } from './utils-allow-contract-caller';
 import {
   createHandleSubmit as createHandleDelegateStxSubmit,
@@ -120,6 +120,10 @@ function StartPooledStackingLayout({
     client,
     setIsContractCallExtensionPageOpen,
   });
+  const handleSubmit = createHandleSubmit({
+    handleDelegateStxSubmit,
+    handleAllowContractCallerSubmit,
+  });
   const onPoolChange = (poolName: PoolName) => {
     if (poolName === PoolName.CustomPool) {
       setRewardAddressEditable(true);
@@ -156,7 +160,7 @@ function StartPooledStackingLayout({
           rewardAddress: currentAccountAddresses.btcAddressP2wpkh,
         } as EditingFormValues
       }
-      onSubmit={handleDelegateStxSubmit}
+      onSubmit={handleSubmit}
       validationSchema={validationSchema}
     >
       <StartStackingLayout
@@ -171,10 +175,7 @@ function StartPooledStackingLayout({
           <>
             <Form>
               <StackingFormContainer>
-                <ChoosePoolingPool
-                  onPoolChange={onPoolChange}
-                  handleAllowContractCallerSubmit={handleAllowContractCallerSubmit}
-                />
+                <ChoosePoolingPool onPoolChange={onPoolChange} />
                 <ChoosePoolingAmount availableBalance={queryGetAccountBalance.data} />
                 <ChoosePoolingDuration />
                 {poolRequiresUserRewardAddress ? (
