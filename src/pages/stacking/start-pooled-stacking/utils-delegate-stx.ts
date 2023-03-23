@@ -9,7 +9,7 @@ import {
   UI_IMPOSED_MAX_STACKING_AMOUNT_USTX,
 } from '@constants/app';
 import { ContractCallRegularOptions, openContractCall } from '@stacks/connect';
-import { StacksNetworkName } from '@stacks/network';
+import { StacksNetwork, StacksNetworkName } from '@stacks/network';
 import { PoxInfo, StackingClient, poxAddressToTuple } from '@stacks/stacking';
 import { noneCV, someCV, uintCV } from '@stacks/transactions';
 import { principalCV } from '@stacks/transactions/dist/clarity/types/principalCV';
@@ -18,6 +18,7 @@ import { stxToMicroStx, toHumanReadableStx } from '@utils/unit-convert';
 import { stxPrincipalSchema } from '@utils/validators/stx-address-validator';
 import { stxAmountSchema } from '@utils/validators/stx-amount-validator';
 import * as yup from 'yup';
+import { useNetwork } from '@components/network-provider';
 
 interface Args {
   /**
@@ -73,7 +74,8 @@ function getOptions(
   values: EditingFormValues,
   poxInfo: PoxInfo,
   stackingContract: string,
-  client: StackingClient
+  client: StackingClient,
+  network: StacksNetwork
 ): ContractCallRegularOptions {
   const untilBurnBlockHeight =
     values.delegationDurationType === 'limited'
@@ -125,16 +127,19 @@ function getOptions(
       contractName,
       functionName: 'delegate-stx',
       functionArgs,
+      network,
     };
   }
 }
 interface CreateHandleSubmitArgs {
   client: StackingClient;
+  network: StacksNetwork;
   setIsContractCallExtensionPageOpen: Dispatch<SetStateAction<boolean>>;
   navigate: NavigateFunction;
 }
 export function createHandleSubmit({
   client,
+  network,
   setIsContractCallExtensionPageOpen,
   navigate,
 }: CreateHandleSubmitArgs) {
@@ -145,7 +150,7 @@ export function createHandleSubmit({
       client.getStackingContract(),
     ]);
 
-    const delegateStxOptions = getOptions(values, poxInfo, stackingContract, client);
+    const delegateStxOptions = getOptions(values, poxInfo, stackingContract, client, network);
 
     console.log(delegateStxOptions);
 

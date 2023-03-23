@@ -75,6 +75,7 @@ export function ChooseStackingMethod() {
 
   const isStacking = q2.data !== 0n;
   const hasExistingDelegation = q1.data.isDelegating;
+  // TODO delegated Stacking can be initiated by the user itself via self-service delegation pool
   const hasExistingDelegatedStacking = isStacking && address !== q3.data.address;
   const hasExistingDirectStacking = isStacking && address === q3.data.address;
   return (

@@ -133,9 +133,10 @@ function getDelegationStatusFromMapEntry(mapEntryCV: ClarityValue, burnBlockHeig
 
   if (
     !tupleCVData['delegated-to'] ||
-    tupleCVData['delegated-to'].type !== ClarityType.PrincipalStandard
+    (tupleCVData['delegated-to'].type !== ClarityType.PrincipalStandard &&
+      tupleCVData['delegated-to'].type !== ClarityType.PrincipalContract)
   ) {
-    throw new Error('Expected `amount-ustx` to be defined.');
+    throw new Error('Expected `delegated-to` to be defined.');
   }
   const delegatedTo = cvToString(tupleCVData['delegated-to']);
 

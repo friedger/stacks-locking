@@ -5,10 +5,13 @@ import { PoolName, Pox2Contract } from './types-preset-pools';
 import { ContractCallRegularOptions, openContractCall } from '@stacks/connect';
 import { StackingClient } from '@stacks/stacking';
 import { noneCV, principalCV } from '@stacks/transactions';
+import { useNetwork } from '@components/network-provider';
+import { StacksNetwork } from '@stacks/network';
 
 function getOptions(
   poxWrapperContract: Pox2Contract,
-  stackingContract: string
+  stackingContract: string,
+  network: StacksNetwork
 ): ContractCallRegularOptions {
   const [contractAddress, contractName] = stackingContract.split('.');
   const functionArgs = [principalCV(poxWrapperContract), noneCV()];
@@ -17,30 +20,32 @@ function getOptions(
     contractName,
     functionName: 'allow-contract-caller',
     functionArgs,
+    network,
   };
 }
 
+export interface HandleAllowContractCallerArgs {
+  poxWrapperContract: Pox2Contract;
+  onFinish: () => Promise<void>;
+}
 interface CreateHandleSubmitArgs {
   client: StackingClient;
+  network: StacksNetwork;
   setIsContractCallExtensionPageOpen: Dispatch<SetStateAction<boolean>>;
 }
 export function createHandleSubmit({
   client,
+  network,
   setIsContractCallExtensionPageOpen,
 }: CreateHandleSubmitArgs) {
   return async function handleSubmit({
     poxWrapperContract,
     onFinish,
-  }: {
-    poxWrapperContract: Pox2Contract;
-    onFinish: () => Promise<void>;
-  }) {
+  }: HandleAllowContractCallerArgs) {
     // TODO: handle thrown errors
     const [stackingContract] = await Promise.all([client.getStackingContract()]);
 
-    const allowContractCallerOptions = getOptions(poxWrapperContract, stackingContract);
-
-    console.log(allowContractCallerOptions);
+    const allowContractCallerOptions = getOptions(poxWrapperContract, stackingContract, network);
 
     openContractCall({
       ...allowContractCallerOptions,

@@ -13,7 +13,7 @@ import { PoolingInfoCard } from './components/delegated-stacking-info-card';
 import { PooledStackingIntro } from './components/pooled-stacking-intro';
 import { pools } from './components/preset-pools';
 import { EditingFormValues } from './types';
-import { PoolName } from './types-preset-pools';
+import { PoolName, Pox2Contract, usesPoxWrapperContract } from './types-preset-pools';
 import { createHandleSubmit } from './utils';
 import { createHandleSubmit as createHandleAllowContractCallerSubmit } from './utils-allow-contract-caller';
 import {
@@ -104,7 +104,9 @@ function StartPooledStackingLayout({
   const queryGetAccountBalance = useQuery(['getAccountBalance', client], () =>
     client.getAccountBalance()
   );
+
   const navigate = useNavigate();
+  const { network } = useNetwork();
 
   const validationSchema = createValidationSchema({
     currentAccountAddress: currentAccountAddresses.address,
@@ -112,11 +114,13 @@ function StartPooledStackingLayout({
   });
   const handleDelegateStxSubmit = createHandleDelegateStxSubmit({
     client,
+    network,
     navigate,
     setIsContractCallExtensionPageOpen,
   });
   const handleAllowContractCallerSubmit = createHandleAllowContractCallerSubmit({
     client,
+    network,
     setIsContractCallExtensionPageOpen,
   });
   const handleSubmit = createHandleSubmit({
@@ -128,12 +132,14 @@ function StartPooledStackingLayout({
     if (poolName === PoolName.CustomPool) {
       setRewardAddressEditable(true);
       setPoolRequiresUserRewardAddress(false);
+      setRequiresAllowContractCaller(false);
     } else {
-      const presetPool = pools[poolName];
+      const pool = pools[poolName];
       setRewardAddressEditable(
-        presetPool?.payoutMethod === 'BTC' && presetPool?.allowCustomRewardAddress === true
+        pool?.payoutMethod === 'BTC' && pool?.allowCustomRewardAddress === true
       );
-      setPoolRequiresUserRewardAddress(presetPool?.payoutMethod === 'BTC');
+      setPoolRequiresUserRewardAddress(pool?.payoutMethod === 'BTC');
+      setRequiresAllowContractCaller(usesPoxWrapperContract(pool));
     }
   };
 
@@ -188,7 +194,9 @@ function StartPooledStackingLayout({
                 )}
                 <ConfirmAndSubmit
                   isLoading={isContractCallExtensionPageOpen}
+                  allowContractCallerTxId={''}
                   requiresAllowContractCaller={requiresAllowContractCaller}
+                  handleFirstSubmit={handleAllowContractCallerSubmit}
                 />
               </StackingFormContainer>
             </Form>

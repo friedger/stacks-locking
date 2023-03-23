@@ -26,3 +26,7 @@ export type Pool = {
   poxContract: Pox2Contract;
   allowCustomRewardAddress: boolean;
 };
+
+export function usesPoxWrapperContract(pool: Pool) {
+  return pool.poxContract !== Pox2Contract.PoX2;
+}

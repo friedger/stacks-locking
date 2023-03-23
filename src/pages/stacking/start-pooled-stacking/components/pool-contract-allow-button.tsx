@@ -1,12 +1,12 @@
-import { PoolName, Pox2Contract } from '../types-preset-pools';
+import { Pox2Contract } from '../types-preset-pools';
 import { Button, Text, color } from '@stacks/ui';
 
 export function PoolContractAllowButton({
-  poolName,
+  poxWrapperContract,
   handleSubmit,
 }: {
-  poolName: PoolName;
-  handleSubmit(val: Pox2Contract): void;
+  poxWrapperContract: Pox2Contract;
+  handleSubmit(val: Pox2Contract): Promise<void>;
 }) {
   return (
     <>
@@ -21,7 +21,7 @@ export function PoolContractAllowButton({
         your delegation.
       </Text>
 
-      <Button size="sm" mx="loose" onClick={() => handleSubmit(poolName)}>
+      <Button size="sm" mx="loose" onClick={() => handleSubmit(poxWrapperContract)}>
         Allow pool contract
       </Button>
     </>

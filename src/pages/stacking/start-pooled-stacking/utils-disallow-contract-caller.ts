@@ -1,14 +1,15 @@
 import { Dispatch, SetStateAction } from 'react';
 
-import { pools } from './components/preset-pools';
-import { PoolName, Pox2Contract } from './types-preset-pools';
+import { Pox2Contract } from './types-preset-pools';
 import { ContractCallRegularOptions, openContractCall } from '@stacks/connect';
 import { StackingClient } from '@stacks/stacking';
 import { principalCV } from '@stacks/transactions';
+import { StacksNetwork } from '@stacks/network';
 
 function getOptions(
   poxWrapperContract: Pox2Contract,
-  stackingContract: string
+  stackingContract: string,
+  network: StacksNetwork
 ): ContractCallRegularOptions {
   const [contractAddress, contractName] = stackingContract.split('.');
   const functionArgs = [principalCV(poxWrapperContract)];
@@ -17,22 +18,25 @@ function getOptions(
     contractName,
     functionName: 'disallow-contract-caller',
     functionArgs,
+    network,
   };
 }
 
 interface CreateHandleSubmitArgs {
   client: StackingClient;
+  network: StacksNetwork;
   setIsContractCallExtensionPageOpen: Dispatch<SetStateAction<boolean>>;
 }
 export function createHandleSubmit({
   client,
+  network,
   setIsContractCallExtensionPageOpen,
 }: CreateHandleSubmitArgs) {
   return async function handleSubmit(poxWrapperContract: Pox2Contract) {
     // TODO: handle thrown errors
     const [stackingContract] = await Promise.all([client.getStackingContract()]);
 
-    const allowContractCallerOptions = getOptions(poxWrapperContract, stackingContract);
+    const allowContractCallerOptions = getOptions(poxWrapperContract, stackingContract, network);
 
     console.log(allowContractCallerOptions);
 
