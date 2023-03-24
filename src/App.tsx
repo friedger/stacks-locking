@@ -17,9 +17,11 @@ import { loadFonts } from '@utils/load-fonts';
 import { Stacks } from '@components/icons/stacks';
 import { figmaTheme } from '@constants/figma-theme';
 import { truncateMiddle } from '@utils/tx-utils';
+import { useHover } from 'use-events';
 
 function Navbar() {
   const { isSignedIn, signOut, signIn, address } = useAuth();
+  const [isHovered, bind] = useHover();
 
   return (
     <Flex
@@ -37,10 +39,10 @@ function Navbar() {
         </Text>
       </Flex>
       <Box>
-        {isSignedIn ? (
+        {isSignedIn && address ? (
           <Flex p="sm" justify="right">
-            <Button mode="tertiary" onClick={() => signOut()}>
-              {truncateMiddle(address)}
+            <Button mode="tertiary" onClick={() => signOut()} {...bind}>
+              {isHovered ? 'Sign out' : truncateMiddle(address)}
             </Button>
           </Flex>
         ) : (
