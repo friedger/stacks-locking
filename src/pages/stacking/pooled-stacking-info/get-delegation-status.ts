@@ -56,9 +56,9 @@ function getDelegationStatusFromTransaction(
 
   if (transaction.contract_call.function_name === 'delegate-stx') {
     const args = transaction.contract_call.function_args;
-    if (!Array.isArray(args)) {
+    if (!Array.isArray(args) || args.length !== 3) {
       // TODO: log error
-      console.error('Detected a malformed delegate-stx transaction.');
+      console.error('Detected a non-standard delegate-stx transaction.');
       return { isDelegating: false } as const;
     }
 
@@ -84,7 +84,11 @@ function getDelegationStatusFromTransaction(
     }
     const amountMicroStx: bigint = amountMicroStxCV.value;
 
-    if (!delegatedToCV || delegatedToCV.type !== ClarityType.PrincipalStandard) {
+    if (
+      !delegatedToCV ||
+      (delegatedToCV.type !== ClarityType.PrincipalStandard &&
+        delegatedToCV.type !== ClarityType.PrincipalContract)
+    ) {
       throw new Error('Expected `delegate-to` to be defined.');
     }
     const delegatedTo = cvToString(delegatedToCV);
