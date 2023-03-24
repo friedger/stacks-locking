@@ -13,7 +13,7 @@ import { PoolingInfoCard } from './components/delegated-stacking-info-card';
 import { PooledStackingIntro } from './components/pooled-stacking-intro';
 import { pools } from './components/preset-pools';
 import { EditingFormValues, PoolWrapperAllowanceState } from './types';
-import { PoolName, Pox2Contract, usesPoxWrapperContract } from './types-preset-pools';
+import { PayoutMethod, PoolName, Pox2Contract, usesPoxWrapperContract } from './types-preset-pools';
 import { createHandleSubmit } from './utils';
 import { createHandleSubmit as createHandleAllowContractCallerSubmit } from './utils-allow-contract-caller';
 import {
@@ -24,15 +24,17 @@ import { useAuth } from '@components/auth-provider/auth-provider';
 import { ErrorAlert } from '@components/error-alert';
 import { useNetwork } from '@components/network-provider';
 import {
+  useGetAllowanceContractCallers,
   useGetSecondsUntilNextCycleQuery,
   useStackingClient,
 } from '@components/stacking-client-provider/stacking-client-provider';
 import { StacksNetworkName } from '@stacks/network';
 import { StackingClient } from '@stacks/stacking';
 import { Spinner } from '@stacks/ui';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { Form, Formik } from 'formik';
 import { StackingGuideInfoCard } from './components/stacking-guide-info-card';
+import { ClarityType } from '@stacks/transactions';
 
 const initialDelegatingFormValues: Partial<EditingFormValues> = {
   amount: '',
@@ -96,16 +98,26 @@ function StartPooledStackingLayout({
   currentAccountAddresses,
 }: StartPooledStackingProps) {
   const [isContractCallExtensionPageOpen, setIsContractCallExtensionPageOpen] = useState(false);
-  const q1 = useGetSecondsUntilNextCycleQuery();
   const [rewardAddressEditable, setRewardAddressEditable] = useState(true);
   const [poolRequiresUserRewardAddress, setPoolRequiresUserRewardAddress] = useState(true);
   const [requiresAllowContractCaller, setRequiresAllowContractCaller] = useState(true);
-  const [hasUserConfirmedPoolWrapperContract, setHasUserConfirmedPoolWrapperContract] =
-    useState<PoolWrapperAllowanceState>({ 'ST000000000000000000002AMW42H.pox-2': true });
   // TODO: move this inside ChoosePoolingAmount, not being used elsewhere
   const queryGetAccountBalance = useQuery(['getAccountBalance', client], () =>
     client.getAccountBalance()
   );
+
+  const q1 = useGetSecondsUntilNextCycleQuery();
+  const q2 = useGetAllowanceContractCallers(Pox2Contract.WrapperFastPool);
+  const q3 = useGetAllowanceContractCallers(Pox2Contract.WrapperOneCycle);
+
+  const [hasUserConfirmedPoolWrapperContract, setHasUserConfirmedPoolWrapperContract] =
+    useState<PoolWrapperAllowanceState>({
+      'ST000000000000000000002AMW42H.pox-2': true,
+      'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.pox-pool-self-service':
+        q2?.data?.type === ClarityType.OptionalSome,
+      'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.pox-pools-1-cycle':
+        q3?.data?.type === ClarityType.OptionalSome,
+    });
 
   const navigate = useNavigate();
   const { network } = useNetwork();
@@ -140,9 +152,9 @@ function StartPooledStackingLayout({
     } else {
       const pool = pools[poolName];
       setRewardAddressEditable(
-        pool?.payoutMethod === 'BTC' && pool?.allowCustomRewardAddress === true
+        pool.payoutMethod === PayoutMethod.BTC && pool.allowCustomRewardAddress === true
       );
-      setPoolRequiresUserRewardAddress(pool?.payoutMethod === 'BTC');
+      setPoolRequiresUserRewardAddress(pool.payoutMethod === 'BTC');
       setRequiresAllowContractCaller(usesPoxWrapperContract(pool));
     }
   };
@@ -200,7 +212,6 @@ function StartPooledStackingLayout({
                   isLoading={isContractCallExtensionPageOpen}
                   allowContractCallerTxId={''}
                   requiresAllowContractCaller={requiresAllowContractCaller}
-                  handleFirstSubmit={handleAllowContractCallerSubmit}
                   hasUserConfirmedPoolWrapperContract={hasUserConfirmedPoolWrapperContract}
                   setHasUserConfirmedPoolWrapperContract={setHasUserConfirmedPoolWrapperContract}
                 />
