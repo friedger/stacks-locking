@@ -35,15 +35,13 @@ export function createBtcAddressSchema({ network /*, isPostPeriod1 */ }: Args) {
             message: 'Mainnet addresses not supported on Testnet',
           });
         }
-        // TODO: how does this work?
-        // https://github.com/blockstack/stacks-blockchain/issues/1902
         if (
           !SUPPORTED_BTC_ADDRESS_FORMATS.includes(
             // TODO: check that all address types are properly supported
             validationReport.type as (typeof SUPPORTED_BTC_ADDRESS_FORMATS)[number]
           )
         ) {
-          return this.createError({ message: 'is-bech32' });
+          return this.createError({ message: 'Unsupported BTC address type' });
         }
         return true;
       },

@@ -25,6 +25,7 @@ import { useCalculateFee } from '@hooks/use-calculate-fee';
 import { StackingClient } from '@stacks/stacking';
 import { Spinner } from '@stacks/ui';
 import { Form, Formik } from 'formik';
+import { useAuth } from '@components/auth-provider/auth-provider';
 
 const initialFormValues: DirectStackingFormValues = {
   amount: '',
@@ -55,6 +56,7 @@ function StartDirectStackingLayout({ client }: StartDirectStackingLayoutProps) {
   const getSecondsUntilNextCycleQuery = useGetSecondsUntilNextCycleQuery();
   const getPoxInfoQuery = useGetPoxInfoQuery();
   const getAccountBalanceQuery = useGetAccountBalance();
+  const { btcAddressP2wpkh } = useAuth();
 
   const navigate = useNavigate();
   const calcFee = useCalculateFee();
@@ -95,7 +97,7 @@ function StartDirectStackingLayout({ client }: StartDirectStackingLayoutProps) {
 
   return (
     <Formik
-      initialValues={initialFormValues}
+      initialValues={{ ...initialFormValues, poxAddress: btcAddressP2wpkh || '' }}
       onSubmit={values => {
         handleSubmit(values);
       }}

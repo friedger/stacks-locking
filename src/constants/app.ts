@@ -29,7 +29,7 @@ export const UI_IMPOSED_MAX_STACKING_AMOUNT_USTX = stxToMicroStx(10_000_000_000)
 
 export const STACKING_CONTRACT_CALL_TX_BYTES = 260;
 
-export const SUPPORTED_BTC_ADDRESS_FORMATS = ['p2pkh', 'p2sh'] as const;
+export const SUPPORTED_BTC_ADDRESS_FORMATS = ['p2pkh', 'p2sh', 'p2wpkh', 'p2tr'] as const;
 
 export const FEE_RATE = 400;
 

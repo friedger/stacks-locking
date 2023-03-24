@@ -21,15 +21,9 @@ export function PoxAddress() {
     return <ErrorAlert id={id}>{msg}</ErrorAlert>;
   }
 
-  // TODO: when should this error be shown?
-  const addressError =
-    q.data.period === PoxOperationPeriod.Period1 ? <ErrorPeriod1 /> : <ErrorPostPeriod1 />;
-
   const errors = meta.error ? (
     <ErrorLabel maxWidth="430px">
-      <ErrorText lineHeight="18px">
-        {meta.error === 'is-bech32' ? addressError : meta.error}
-      </ErrorText>
+      <ErrorText lineHeight="18px">{meta.error}</ErrorText>
     </ErrorLabel>
   ) : null;
 
