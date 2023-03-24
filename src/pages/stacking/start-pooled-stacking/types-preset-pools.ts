@@ -6,7 +6,7 @@ export enum PoolName {
 }
 export enum Pox2Contract {
   PoX2 = 'ST000000000000000000002AMW42H.pox-2',
-  WrapperOncCycle = 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.pox-pools-1-cycle',
+  WrapperOneCycle = 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.pox-pools-1-cycle',
   WrapperFastPool = 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.pox-pool-self-service',
 }
 export enum PayoutMethod {

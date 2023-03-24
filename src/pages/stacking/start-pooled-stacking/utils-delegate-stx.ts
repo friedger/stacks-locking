@@ -110,7 +110,7 @@ function getOptions(
   } else {
     const [contractAddress, contractName] = pool.poxContract.split('.');
     const functionArgs =
-      pool.poxContract === Pox2Contract.WrapperOncCycle
+      pool.poxContract === Pox2Contract.WrapperOneCycle
         ? [
             uintCV(stxToMicroStx(values.amount).toString()),
             principalCV(delegateTo),

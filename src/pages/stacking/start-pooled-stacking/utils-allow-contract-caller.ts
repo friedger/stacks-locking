@@ -26,7 +26,7 @@ function getOptions(
 
 export interface HandleAllowContractCallerArgs {
   poxWrapperContract: Pox2Contract;
-  onFinish: () => Promise<void>;
+  onFinish: () => void;
 }
 interface CreateHandleSubmitArgs {
   client: StackingClient;

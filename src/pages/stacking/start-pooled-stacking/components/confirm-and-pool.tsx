@@ -1,52 +1,56 @@
-import validate from 'bitcoin-address-validation';
 import { useFormikContext } from 'formik';
 import { useState } from 'react';
 
 import { Action, Step } from '../../components/stacking-form-step';
 import { StackingUserConfirm } from '../../components/stacking-user-confirm';
-import { EditingFormValues } from '../types';
-import { Pox2Contract } from '../types-preset-pools';
+import { EditingFormValues, PoolWrapperAllowanceState } from '../types';
 import { HandleAllowContractCallerArgs } from '../utils-allow-contract-caller';
 import { DelegatedStackingTerms } from './delegated-stacking-terms';
-import { PoolContractAllow } from './pool-contract-allow';
-import { pools } from './preset-pools';
+import { ActionsForWrapperContract } from './pool-contract-allow';
 
 interface Props {
   isLoading: boolean;
   requiresAllowContractCaller: boolean;
   allowContractCallerTxId: string | undefined;
   handleFirstSubmit: (val: HandleAllowContractCallerArgs) => Promise<void>;
+  hasUserConfirmedPoolWrapperContract: PoolWrapperAllowanceState;
+  setHasUserConfirmedPoolWrapperContract: React.Dispatch<
+    React.SetStateAction<PoolWrapperAllowanceState>
+  >;
 }
 export function ConfirmAndSubmit({
   isLoading,
   requiresAllowContractCaller,
   allowContractCallerTxId,
   handleFirstSubmit,
+  hasUserConfirmedPoolWrapperContract,
+  setHasUserConfirmedPoolWrapperContract,
 }: Props) {
   const [hasUserConfirmed, setHasUserConfirmed] = useState(false);
   const f = useFormikContext<EditingFormValues>();
+
   return (
     <Step title="Confirm and pool">
       <DelegatedStackingTerms mt="loose" />
       <StackingUserConfirm onChange={useConfirmed => setHasUserConfirmed(useConfirmed)} />
-      {requiresAllowContractCaller && f.values.poolName && (
-        <PoolContractAllow
+
+      {requiresAllowContractCaller && f.values.poolName ? (
+        <ActionsForWrapperContract
+          hasUserConfirmedPoolWrapperContract={hasUserConfirmedPoolWrapperContract}
+          setHasUserConfirmedPoolWrapperContract={setHasUserConfirmedPoolWrapperContract}
           poolName={f.values.poolName}
-          handleSubmit={async (poxWrapperContract: Pox2Contract) => {
-            await handleFirstSubmit({
-              poxWrapperContract,
-              onFinish: () => Promise.resolve(),
-            });
-          }}
         />
+      ) : (
+        <Action
+          type="submit"
+          isLoading={isLoading}
+          isDisabled={
+            !hasUserConfirmed || (requiresAllowContractCaller && !allowContractCallerTxId)
+          }
+        >
+          Confirm and start pooling
+        </Action>
       )}
-      <Action
-        type="submit"
-        isLoading={isLoading}
-        isDisabled={!hasUserConfirmed || (requiresAllowContractCaller && !allowContractCallerTxId)}
-      >
-        Confirm and start pooling
-      </Action>
     </Step>
   );
 }

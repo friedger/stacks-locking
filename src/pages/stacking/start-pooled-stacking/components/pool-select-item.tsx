@@ -1,6 +1,6 @@
 import { PoolName, Pox2Contract } from '../types-preset-pools';
 import { CustomPoolAddressInput } from './custom-pool-address-input';
-import { PoolContractAllow } from './pool-contract-allow';
+import { ActionsForWrapperContract } from './pool-contract-allow';
 import { Box, Flex, FlexProps, Text, color } from '@stacks/ui';
 import { useFocus } from 'use-events';
 import { IconEdit } from '@tabler/icons-react';

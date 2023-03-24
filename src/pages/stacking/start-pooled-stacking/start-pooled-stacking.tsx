@@ -12,7 +12,7 @@ import { ConfirmAndSubmit } from './components/confirm-and-pool';
 import { PoolingInfoCard } from './components/delegated-stacking-info-card';
 import { PooledStackingIntro } from './components/pooled-stacking-intro';
 import { pools } from './components/preset-pools';
-import { EditingFormValues } from './types';
+import { EditingFormValues, PoolWrapperAllowanceState } from './types';
 import { PoolName, Pox2Contract, usesPoxWrapperContract } from './types-preset-pools';
 import { createHandleSubmit } from './utils';
 import { createHandleSubmit as createHandleAllowContractCallerSubmit } from './utils-allow-contract-caller';
@@ -30,7 +30,7 @@ import {
 import { StacksNetworkName } from '@stacks/network';
 import { StackingClient } from '@stacks/stacking';
 import { Spinner } from '@stacks/ui';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Form, Formik } from 'formik';
 import { StackingGuideInfoCard } from './components/stacking-guide-info-card';
 
@@ -100,6 +100,8 @@ function StartPooledStackingLayout({
   const [rewardAddressEditable, setRewardAddressEditable] = useState(true);
   const [poolRequiresUserRewardAddress, setPoolRequiresUserRewardAddress] = useState(true);
   const [requiresAllowContractCaller, setRequiresAllowContractCaller] = useState(true);
+  const [hasUserConfirmedPoolWrapperContract, setHasUserConfirmedPoolWrapperContract] =
+    useState<PoolWrapperAllowanceState>({ 'ST000000000000000000002AMW42H.pox-2': true });
   // TODO: move this inside ChoosePoolingAmount, not being used elsewhere
   const queryGetAccountBalance = useQuery(['getAccountBalance', client], () =>
     client.getAccountBalance()
@@ -126,6 +128,8 @@ function StartPooledStackingLayout({
   const handleSubmit = createHandleSubmit({
     handleDelegateStxSubmit,
     handleAllowContractCallerSubmit,
+    hasUserConfirmedPoolWrapperContract,
+    setHasUserConfirmedPoolWrapperContract,
   });
 
   const onPoolChange = (poolName: PoolName) => {
@@ -197,6 +201,8 @@ function StartPooledStackingLayout({
                   allowContractCallerTxId={''}
                   requiresAllowContractCaller={requiresAllowContractCaller}
                   handleFirstSubmit={handleAllowContractCallerSubmit}
+                  hasUserConfirmedPoolWrapperContract={hasUserConfirmedPoolWrapperContract}
+                  setHasUserConfirmedPoolWrapperContract={setHasUserConfirmedPoolWrapperContract}
                 />
               </StackingFormContainer>
             </Form>

@@ -1,4 +1,4 @@
-import { PoolName } from './types-preset-pools';
+import { PoolName, Pox2Contract } from './types-preset-pools';
 
 interface DelegatingFormIndefiniteValues<N> {
   delegationDurationType: 'indefinite';
@@ -29,3 +29,7 @@ export type PresetPool = {
   duration: number;
   payoutMethod: 'BTC' | 'STX';
 };
+
+export type PoolWrapperAllowanceState = Partial<{
+  [keys in Pox2Contract]: boolean;
+}>;

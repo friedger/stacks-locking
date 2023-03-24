@@ -1,17 +1,22 @@
-import { PoolName, Pox2Contract } from '../types-preset-pools';
-import { PoolContractAllowButton } from './pool-contract-allow-button';
+import { PoolName } from '../types-preset-pools';
 import { pools } from './preset-pools';
-import { Spinner } from '@stacks/ui';
+import { Spinner, Stack } from '@stacks/ui';
 import { useGetAllowanceContractCallers } from '@components/stacking-client-provider/stacking-client-provider';
 import { ErrorAlert } from '@components/error-alert';
 import { ClarityType } from '@stacks/transactions';
+import { Action } from '../../components/stacking-form-step';
+import { PoolWrapperAllowanceState } from '../types';
 
-export function PoolContractAllow({
+export function ActionsForWrapperContract({
   poolName,
-  handleSubmit,
+  hasUserConfirmedPoolWrapperContract,
+  setHasUserConfirmedPoolWrapperContract,
 }: {
+  hasUserConfirmedPoolWrapperContract: PoolWrapperAllowanceState;
+  setHasUserConfirmedPoolWrapperContract: React.Dispatch<
+    React.SetStateAction<PoolWrapperAllowanceState>
+  >;
   poolName: PoolName;
-  handleSubmit(val: Pox2Contract): Promise<void>;
 }) {
   const pool = pools[poolName];
   const q = useGetAllowanceContractCallers(pool.poxContract);
@@ -24,11 +29,26 @@ export function PoolContractAllow({
     console.error(id, msg, q);
     return <ErrorAlert id={id}>{msg}</ErrorAlert>;
   }
-  if (q.data.type === ClarityType.OptionalSome) {
-    return <></>;
-  } else {
-    return (
-      <PoolContractAllowButton poxWrapperContract={pool.poxContract} handleSubmit={handleSubmit} />
-    );
-  }
+  const hasUserConfirmed = q.data.type === ClarityType.OptionalSome;
+
+  return (
+    <Stack>
+      <Action
+        type="submit"
+        // TODO
+        // isLoading={isLoading}
+        isDisabled={hasUserConfirmedPoolWrapperContract[pool.poxContract] || hasUserConfirmed}
+      >
+        Step 1: Allow pool contract
+      </Action>
+      <Action
+        type="submit"
+        // TODO
+        // isLoading={isLoading}
+        isDisabled={!hasUserConfirmedPoolWrapperContract}
+      >
+        Step 2: Confirm and start pooling
+      </Action>
+    </Stack>
+  );
 }

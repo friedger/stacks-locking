@@ -1,19 +1,22 @@
 import { StackingClient } from '@stacks/stacking';
+import { QueryClient } from '@tanstack/react-query';
 import { Dispatch, SetStateAction } from 'react';
 import { NavigateFunction } from 'react-router-dom';
 import { pools } from './components/preset-pools';
-import { EditingFormValues } from './types';
+import { EditingFormValues, PoolWrapperAllowanceState } from './types';
 import { PoolName, Pox2Contract } from './types-preset-pools';
+import { HandleAllowContractCallerArgs } from './utils-allow-contract-caller';
 
 interface CreateHandleSubmitArgs {
+  hasUserConfirmedPoolWrapperContract: PoolWrapperAllowanceState;
+  setHasUserConfirmedPoolWrapperContract: React.Dispatch<
+    React.SetStateAction<PoolWrapperAllowanceState>
+  >;
   handleDelegateStxSubmit: (val: EditingFormValues) => Promise<void>;
   handleAllowContractCallerSubmit: ({
     poxWrapperContract,
     onFinish,
-  }: {
-    poxWrapperContract: Pox2Contract;
-    onFinish: () => Promise<void>;
-  }) => Promise<void>;
+  }: HandleAllowContractCallerArgs) => Promise<void>;
 }
 
 function requiresAllowContractCaller(values: EditingFormValues) {
@@ -30,17 +33,30 @@ function getPoxWrapperContract(values: EditingFormValues) {
 export function createHandleSubmit({
   handleDelegateStxSubmit,
   handleAllowContractCallerSubmit,
+  hasUserConfirmedPoolWrapperContract,
+  setHasUserConfirmedPoolWrapperContract,
 }: CreateHandleSubmitArgs) {
   return async function handleSubmit(values: EditingFormValues) {
     console.log('SUBMIT', values.poolName);
     if (requiresAllowContractCaller(values)) {
       const poxWrapperContract = getPoxWrapperContract(values);
-      handleAllowContractCallerSubmit({
-        poxWrapperContract,
-        onFinish: () => handleDelegateStxSubmit(values),
-      });
+      if (hasUserConfirmedPoolWrapperContract[poxWrapperContract]) {
+        handleDelegateStxSubmit(values);
+        return;
+      } else {
+        handleAllowContractCallerSubmit({
+          poxWrapperContract,
+          onFinish: () =>
+            setHasUserConfirmedPoolWrapperContract({
+              ...hasUserConfirmedPoolWrapperContract,
+              [poxWrapperContract]: true,
+            }),
+        });
+        return;
+      }
     } else {
       handleDelegateStxSubmit(values);
+      return;
     }
   };
 }

@@ -24,7 +24,7 @@ export const pools: { [key in PoolName]: Pool } = {
     website: 'https://app.planbetter.org',
     payoutMethod: PayoutMethod.BTC,
     poolAddress: 'SP3TDKYYRTYFE32N19484838WEJ25GX40Z24GECPZ',
-    poxContract: Pox2Contract.WrapperOncCycle,
+    poxContract: Pox2Contract.WrapperOneCycle,
     icon: <PoolIcon src="/32x32_PlanBetter.png" />,
     allowCustomRewardAddress: false, // only for ledger users
   },
@@ -37,7 +37,7 @@ export const pools: { [key in PoolName]: Pool } = {
     website: 'https://pool.xverse.app/',
     payoutMethod: PayoutMethod.BTC,
     poolAddress: 'SPXVRSEH2BKSXAEJ00F1BY562P45D5ERPSKR4Q33',
-    poxContract: Pox2Contract.WrapperOncCycle,
+    poxContract: Pox2Contract.WrapperOneCycle,
     icon: <PoolIcon src="/32x32_Xverse.png" />,
     allowCustomRewardAddress: true,
   },
