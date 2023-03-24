@@ -31,11 +31,11 @@ export function NetworkProvider({ children }: Props) {
   if (networkName === 'mainnet') {
     network = new StacksMainnet();
   } else if (networkName === 'testnet') {
-    network = new StacksTestnet({ url: 'http://localhost:3999' });
+    network = new StacksTestnet();
   } else if (NETWORK === 'mainnet') {
     network = new StacksMainnet();
   } else if (NETWORK === 'testnet') {
-    network = new StacksTestnet({ url: 'http://localhost:3999' });
+    network = new StacksTestnet();
   } else {
     const msg = 'Unable to set up network to use for the app.';
     const id = '4e7eb9d7-1610-4b5e-be95-79d3dea3e670';

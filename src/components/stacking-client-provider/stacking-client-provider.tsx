@@ -62,13 +62,13 @@ export function useGetPoxOperationInfo() {
   return useQuery(['getPoxOperationInfo', client], () => client.getPoxOperationInfo());
 }
 
-export function useGetAccountBalance() {
+export function useGetAccountBalanceQuery() {
   const { client } = useStackingClient();
   if (!client) throw new Error('Expected client to be defined.');
   return useQuery(['getAccountBalance', client], () => client.getAccountBalance());
 }
 
-export function useGetAccountBalanceLocked() {
+export function useGetAccountBalanceLockedQuery() {
   const { client } = useStackingClient();
   if (!client) throw new Error('Expected client to be defined.');
   return useQuery(['getAccountBalanceLocked', client], () => client.getAccountBalanceLocked());

@@ -11,21 +11,53 @@ import { StartPooledStacking } from './pages/stacking/start-pooled-stacking/star
 import { BlockchainApiClientProvider } from '@components/blockchain-api-client-provider';
 import { NetworkProvider } from '@components/network-provider';
 import { StackingClientProvider } from '@components/stacking-client-provider/stacking-client-provider';
-import { Box, Button, CSSReset, Flex, ThemeProvider } from '@stacks/ui';
+import { Box, Button, CSSReset, Flex, ThemeProvider, Text } from '@stacks/ui';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { loadFonts } from '@utils/load-fonts';
+import { Stacks } from '@components/icons/stacks';
+import { figmaTheme } from '@constants/figma-theme';
+import { truncateMiddle } from '@utils/tx-utils';
+
+function Navbar() {
+  const { isSignedIn, signOut, signIn, address } = useAuth();
+
+  return (
+    <Flex
+      flexDirection="row"
+      justifyContent="space-between"
+      p="tight"
+      borderBottom={`1px solid ${figmaTheme.borderSubdued}`}
+    >
+      <Flex alignItems="center">
+        <Box pr="extra-tight">
+          <Stacks />
+        </Box>
+        <Text color={figmaTheme.text} fontWeight={500}>
+          / Stacking
+        </Text>
+      </Flex>
+      <Box>
+        {isSignedIn ? (
+          <Flex p="sm" justify="right">
+            <Button mode="tertiary" onClick={() => signOut()}>
+              {truncateMiddle(address)}
+            </Button>
+          </Flex>
+        ) : (
+          <Flex p="sm" justify="right">
+            <Button onClick={() => signIn()}>Connect wallet</Button>
+          </Flex>
+        )}
+      </Box>
+    </Flex>
+  );
+}
 
 function Layout() {
-  const { isSignedIn, signOut } = useAuth();
-
   return (
     <>
       <Flex h="100vh" flexDirection="column">
-        {isSignedIn && (
-          <Flex p="sm" justify="right">
-            <Button onClick={() => signOut()}>Sign out</Button>
-          </Flex>
-        )}
+        <Navbar />
         <Box>
           <Outlet />
         </Box>
@@ -75,7 +107,13 @@ const router = createBrowserRouter([
       { index: true, element: <Navigate to="sign-in" /> },
       {
         path: 'sign-in',
-        element: <SignIn />,
+        element: <Layout />,
+        children: [
+          {
+            index: true,
+            element: <SignIn />,
+          },
+        ],
       },
       {
         element: <AuthGuard />,

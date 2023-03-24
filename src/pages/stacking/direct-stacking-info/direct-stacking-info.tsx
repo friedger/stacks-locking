@@ -16,7 +16,7 @@ import {
 } from '@components/info-card';
 import { useNetwork } from '@components/network-provider';
 import {
-  useGetAccountBalanceLocked,
+  useGetAccountBalanceLockedQuery,
   useGetAccountExtendedBalancesQuery,
   useGetCoreInfoQuery,
   useGetPoxInfoQuery,
@@ -34,7 +34,7 @@ export function DirectStackingInfo() {
   const getStatusQuery = useGetStatusQuery();
   const getAccountExtendedBalancesQuery = useGetAccountExtendedBalancesQuery();
   const getCoreInfoQuery = useGetCoreInfoQuery();
-  const getAccountBalanceLockedQuery = useGetAccountBalanceLocked();
+  const getAccountBalanceLockedQuery = useGetAccountBalanceLockedQuery();
   const getPoxInfoQuery = useGetPoxInfoQuery();
   const getHasPendingDirectStacking = useGetHasPendingDirectStackingQuery();
 

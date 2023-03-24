@@ -7,7 +7,7 @@ import { ErrorLabel } from '@components/error-label';
 import { ErrorText } from '@components/error-text';
 import { ExternalLink } from '@components/external-link';
 import {
-  useGetAccountBalance,
+  useGetAccountBalanceQuery,
   useGetPoxInfoQuery,
 } from '@components/stacking-client-provider/stacking-client-provider';
 import { pseudoBorderLeft } from '@components/styles/pseudo-border-left';
@@ -26,7 +26,7 @@ const BigNumberFloorRound = BigNumber.clone({
 });
 
 export function Amount() {
-  const getAccountBalanceQuery = useGetAccountBalance();
+  const getAccountBalanceQuery = useGetAccountBalanceQuery();
   const getPoxInfoQuery = useGetPoxInfoQuery();
 
   const [field, meta, helpers] = useField('amount');

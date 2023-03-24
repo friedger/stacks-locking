@@ -17,7 +17,6 @@ function getAccountAddresses(userData: any, network: string) {
   const address: string = userData?.profile?.stxAddress?.[network];
   const btcAddressP2tr: string = userData?.profile?.btcAddress?.p2tr?.[network];
   const btcAddressP2wpkh: string = userData?.profile?.btcAddress?.p2wpkh?.[network];
-  console.log(userData);
 
   if (!isValidStacksAddress(address)) {
     return { address: null, btcAddressP2tr: null, btcAddressP2wpkh: null };

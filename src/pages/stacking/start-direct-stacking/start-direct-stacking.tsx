@@ -15,7 +15,7 @@ import { createHandleSubmit, createValidationSchema } from './utils';
 import { ErrorAlert } from '@components/error-alert';
 import { useNetwork } from '@components/network-provider';
 import {
-  useGetAccountBalance,
+  useGetAccountBalanceQuery,
   useGetPoxInfoQuery,
   useGetSecondsUntilNextCycleQuery,
   useStackingClient,
@@ -55,7 +55,7 @@ function StartDirectStackingLayout({ client }: StartDirectStackingLayoutProps) {
 
   const getSecondsUntilNextCycleQuery = useGetSecondsUntilNextCycleQuery();
   const getPoxInfoQuery = useGetPoxInfoQuery();
-  const getAccountBalanceQuery = useGetAccountBalance();
+  const getAccountBalanceQuery = useGetAccountBalanceQuery();
   const { btcAddressP2wpkh } = useAuth();
 
   const navigate = useNavigate();
