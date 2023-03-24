@@ -7,7 +7,7 @@ export async function openExternalLink(url: string) {
   return window.open(url);
 }
 
-const utmSource = 'utm_source=stacks-wallet';
+const utmSource = 'utm_source=stacking-app';
 
 // Explorer
 

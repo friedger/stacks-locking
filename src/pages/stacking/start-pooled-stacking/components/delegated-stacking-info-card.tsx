@@ -10,18 +10,21 @@ import {
   InfoCardValue as Value,
 } from '@components/info-card';
 import { useGetPoxInfoQuery } from '@components/stacking-client-provider/stacking-client-provider';
-import { Box, Flex, FlexProps, Text, Tooltip } from '@stacks/ui';
-import { IconHelpCircle } from '@tabler/icons-react';
+import { Box, FlexProps } from '@stacks/ui';
 import { cyclesToBurnChainHeight } from '@utils/calculate-burn-height';
 import { formatCycles } from '@utils/stacking';
 import { truncateMiddle } from '@utils/tx-utils';
 import { useFormikContext } from 'formik';
 import { pools } from './preset-pools';
 import { PoolingAmountInfo } from './pooling-amount-info';
+import { ExternalLink } from '@components/external-link';
+import { makeExplorerTxLink } from '@utils/external-links';
+import { useNetwork } from '@components/network-provider';
 
 export function PoolingInfoCard(props: FlexProps) {
   const f = useFormikContext<EditingFormValues>();
   const poxInfoQuery = useGetPoxInfoQuery();
+  const { networkName } = useNetwork();
 
   const amount = f.values.amount;
   const delegationType = f.values.delegationDurationType;
@@ -72,7 +75,7 @@ export function PoolingInfoCard(props: FlexProps) {
                 </Label>
                 <Value>
                   {delegationType === null && '—'}
-                  {delegationType === 'limited' && "Limited permission"}
+                  {delegationType === 'limited' && 'Limited permission'}
                   {delegationType === 'indefinite' && 'Indefinite'}
                 </Value>
               </Row>
@@ -94,7 +97,13 @@ export function PoolingInfoCard(props: FlexProps) {
               </Row>
               <Row>
                 <Label>Contract</Label>
-                <Value>{truncateMiddle(poxWrapperContract ?? '')}</Value>
+                <Value>
+                  {poxWrapperContract && (
+                    <ExternalLink href={makeExplorerTxLink(poxWrapperContract, networkName)}>
+                      {truncateMiddle(poxWrapperContract)}
+                    </ExternalLink>
+                  )}
+                </Value>
               </Row>
             </Section>
           </Group>

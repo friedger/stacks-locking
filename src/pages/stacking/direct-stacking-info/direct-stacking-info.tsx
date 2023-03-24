@@ -241,13 +241,12 @@ export function DirectStackingInfo() {
                     <Value>Cycle {getStatusQuery.data.details.first_reward_cycle}</Value>
                   </Row>
                   <Row>
-                    <Label explainer="This is your last stacking cycle.">
-                      End
-                    </Label>
+                    <Label explainer="This is your last stacking cycle.">End</Label>
                     <Value>
                       Cycle{' '}
                       {getStatusQuery.data.details.first_reward_cycle +
-                        getStatusQuery.data.details.lock_period - 1}{' '}
+                        getStatusQuery.data.details.lock_period -
+                        1}{' '}
                     </Value>
                   </Row>
                 </Section>
