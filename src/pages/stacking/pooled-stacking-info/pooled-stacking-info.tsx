@@ -101,11 +101,11 @@ function PooledStackingInfoLayout({ client }: CardLayoutProps) {
               </Text>
               <Text>
                 You may want to{' '}
-                <Caption display="inline" to="../start-pooled-stacking" component={Link}>
+                <Caption display="inline" to="../start-pooled-stacking" as={Link}>
                   start pooling
                 </Caption>{' '}
                 or{' '}
-                <Caption display="inline" to="../choose-stacking-method" component={Link}>
+                <Caption display="inline" to="../choose-stacking-method" as={Link}>
                   choose your stacking method
                 </Caption>
                 .
