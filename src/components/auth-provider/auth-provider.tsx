@@ -58,7 +58,7 @@ export function AuthProvider({ children }: Props) {
     showConnect({
       userSession,
       appDetails: {
-        name: 'Bitcoin Web3 Portal',
+        name: 'Stacking',
         icon: 'http://placekitten.com/200/200',
       },
       onFinish() {
