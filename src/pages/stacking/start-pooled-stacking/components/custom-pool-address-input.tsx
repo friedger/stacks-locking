@@ -12,7 +12,12 @@ export function CustomPoolAddressInput() {
         The pool will provide this address for you. Pools can have different addresses that
         correspond to particular durations.
       </Text>
-      <CryptoAddressInput fieldName="poolAddress" placeholder="Pool address" {...field}>
+      <CryptoAddressInput
+        fieldName="poolAddress"
+        addressType="STX"
+        placeholder="Pool address"
+        {...field}
+      >
         {meta.touched && meta.error && (
           <ErrorLabel>
             <ErrorText>{meta.error}</ErrorText>

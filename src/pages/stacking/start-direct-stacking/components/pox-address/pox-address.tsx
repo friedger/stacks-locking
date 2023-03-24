@@ -1,10 +1,8 @@
 import { Description, Step } from '../../../components/stacking-form-step';
-import { ErrorPeriod1, ErrorPostPeriod1 } from './components/errors';
 import { ErrorAlert } from '@components/error-alert';
 import { ErrorLabel } from '@components/error-label';
 import { ErrorText } from '@components/error-text';
 import { useGetPoxOperationInfo } from '@components/stacking-client-provider/stacking-client-provider';
-import { PoxOperationPeriod } from '@stacks/stacking/dist/constants';
 import { Spinner, Text } from '@stacks/ui';
 import { useField } from 'formik';
 import { CryptoAddressInput } from 'src/pages/stacking/components/crypto-address-form';
@@ -33,11 +31,7 @@ export function PoxAddress() {
         <Description>
           <Text>Enter the Bitcoin address where you&apos;d like to receive your rewards.</Text>
         </Description>
-        <CryptoAddressInput
-          fieldName="poxAddress"
-          placeholder="Bitcoin address (Legacy, Native SegWit or Taproot)"
-          {...field}
-        >
+        <CryptoAddressInput fieldName="poxAddress" addressType="BTC" {...field}>
           {meta.touched && errors}
         </CryptoAddressInput>
       </Step>

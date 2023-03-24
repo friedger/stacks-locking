@@ -5,6 +5,7 @@ import { ErrorLabel } from '@components/error-label';
 import { ErrorText } from '@components/error-text';
 import { Box, Input, Text, color } from '@stacks/ui';
 import { useField } from 'formik';
+import { CryptoAddressInput } from '../../components/crypto-address-form';
 
 interface Props {
   editable: boolean;
@@ -27,18 +28,13 @@ export function ChoosePoolingRewardAddress({ btcAddress, editable }: Props) {
       </Description>
 
       <Box position="relative" maxWidth="400px">
-        <Input
-          id="btcAddress"
-          mt="loose"
-          placeholder="A Bitcoin address"
-          isDisabled={!editable}
-          {...field}
-        />
-        {meta.touched && meta.error && (
-          <ErrorLabel>
-            <ErrorText>{meta.error}</ErrorText>
-          </ErrorLabel>
-        )}
+        <CryptoAddressInput fieldName="poxAddress" addressType="BTC" {...field}>
+          {meta.touched && meta.error && (
+            <ErrorLabel>
+              <ErrorText>{meta.error}</ErrorText>
+            </ErrorLabel>
+          )}
+        </CryptoAddressInput>
       </Box>
       {editable ? (
         <Box textStyle="body.small" color={color('feedback-alert')} mt="base-tight">

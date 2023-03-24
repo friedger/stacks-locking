@@ -5,11 +5,12 @@ import { useField } from 'formik';
 
 interface CryptoAddressInputProps extends Omit<InputProps, 'form'> {
   fieldName: string;
+  addressType?: 'BTC' | 'STX';
 }
 
 export const CryptoAddressInput = forwardRef<HTMLInputElement, CryptoAddressInputProps>(
   (props, ref) => {
-    const { fieldName, children, ...rest } = props;
+    const { fieldName, children, addressType, ...rest } = props;
     const [field] = useField(fieldName);
     return (
       <>
@@ -18,8 +19,15 @@ export const CryptoAddressInput = forwardRef<HTMLInputElement, CryptoAddressInpu
           name={fieldName}
           mt="loose"
           maxWidth="400px"
-          fontFamily={field.value.length ? 'monospace' : 'unset'}
+          fontFamily={field?.value?.length ? 'monospace' : 'unset'}
           ref={ref}
+          placeholder={
+            addressType === 'BTC'
+              ? 'Bitcoin address (Legacy, Native SegWit or Taproot)'
+              : addressType === 'STX'
+              ? 'Stacks address'
+              : undefined
+          }
           {...rest}
         />
         {children}
