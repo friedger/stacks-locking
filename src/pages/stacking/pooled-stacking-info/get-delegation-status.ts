@@ -14,9 +14,12 @@ import {
   cvToHex,
   cvToString,
   hexToCV,
+  PrincipalCV,
   standardPrincipalCV,
   tupleCV,
+  UIntCV,
 } from '@stacks/transactions';
+import { Pox2Contract } from '../start-pooled-stacking/types-preset-pools';
 
 function isDelegateOrRevokeDelegate(t: ContractCallTransactionMetadata) {
   return ['delegate-stx', 'revoke-delegate-stx'].includes(t.contract_call.function_name);
@@ -46,6 +49,42 @@ function findUnanchoredTransaction(
   }) as ContractCallTransaction | undefined;
 }
 
+function findFirstDelegateEvent(transaction: ContractCallTransaction) {
+  for (let event of transaction.events) {
+    if (
+      event.event_type === 'smart_contract_log' &&
+      event.contract_log.contract_id === Pox2Contract.PoX2
+    ) {
+      const eventValue = hexToCV(event.contract_log.value.hex);
+      if (
+        eventValue.type === ClarityType.ResponseOk &&
+        eventValue.value.type === ClarityType.Tuple &&
+        eventValue.value.data['name']?.type === ClarityType.StringASCII &&
+        eventValue.value.data['name']?.data === 'delegate-stx' &&
+        eventValue.value.data['data']?.type === ClarityType.Tuple
+      ) {
+        const delegateDataCV = eventValue.value.data['data'].data;
+        const amountMicroStxCV = delegateDataCV['amount-ustx'] as UIntCV;
+        const delegateToCV = delegateDataCV['delegate-to'] as PrincipalCV;
+        const untilBurnHeightCV = delegateDataCV['unlock-burn-height '] as UIntCV;
+        return [amountMicroStxCV, delegateToCV, untilBurnHeightCV];
+      }
+    }
+  }
+  return [];
+}
+
+function safeDelegateToCVToString(clarityValue: ClarityValue | undefined) {
+  if (
+    !clarityValue ||
+    (clarityValue.type !== ClarityType.PrincipalStandard &&
+      clarityValue.type !== ClarityType.PrincipalContract)
+  ) {
+    throw new Error('Expected `delegate-to` to be defined.');
+  }
+  return cvToString(clarityValue);
+}
+
 function getDelegationStatusFromTransaction(
   transaction: ContractCallTransaction | MempoolContractCallTransaction,
   burnBlockHeight: number
@@ -56,42 +95,43 @@ function getDelegationStatusFromTransaction(
 
   if (transaction.contract_call.function_name === 'delegate-stx') {
     const args = transaction.contract_call.function_args;
-    if (!Array.isArray(args) || args.length !== 3) {
+    if (!Array.isArray(args)) {
       // TODO: log error
       console.error('Detected a non-standard delegate-stx transaction.');
       return { isDelegating: false } as const;
     }
 
     const [amountMicroStxCV, delegatedToCV, untilBurnHeightCV] = args.map<
-      // The values above should be defined as long as the clarity contract and the api remain the
-      // same. Nevertheless, out of caution, marking them as possibly undefined.
+      // The values above should be partially defined as long as the clarity contract
+      // and the api follows the PoX pattern. They can be undefined.
       ClarityValue | undefined
     >(arg => hexToCV(arg.hex));
-
-    let untilBurnHeight: null | bigint = null;
-    if (
-      untilBurnHeightCV &&
-      untilBurnHeightCV.type === ClarityType.OptionalSome &&
-      untilBurnHeightCV.value.type === ClarityType.UInt
-    ) {
-      untilBurnHeight = untilBurnHeightCV.value.value;
-    }
-
-    const isExpired = untilBurnHeight !== null && burnBlockHeight > untilBurnHeight;
 
     if (!amountMicroStxCV || amountMicroStxCV.type !== ClarityType.UInt) {
       throw new Error('Expected `amount-ustx` to be defined.');
     }
     const amountMicroStx: bigint = amountMicroStxCV.value;
 
-    if (
-      !delegatedToCV ||
-      (delegatedToCV.type !== ClarityType.PrincipalStandard &&
-        delegatedToCV.type !== ClarityType.PrincipalContract)
-    ) {
-      throw new Error('Expected `delegate-to` to be defined.');
+    let untilBurnHeight: null | bigint = null;
+
+    if (transaction.contract_call.contract_id === Pox2Contract.WrapperFastPool) {
+      untilBurnHeight = null;
+    } else {
+      if (
+        untilBurnHeightCV &&
+        untilBurnHeightCV.type === ClarityType.OptionalSome &&
+        untilBurnHeightCV.value.type === ClarityType.UInt
+      ) {
+        untilBurnHeight = untilBurnHeightCV.value.value;
+      }
     }
-    const delegatedTo = cvToString(delegatedToCV);
+
+    const isExpired = untilBurnHeight !== null && burnBlockHeight > untilBurnHeight;
+
+    const delegatedTo =
+      transaction.contract_call.contract_id === Pox2Contract.WrapperFastPool
+        ? Pox2Contract.WrapperFastPool
+        : safeDelegateToCVToString(delegatedToCV);
 
     return {
       isDelegating: true,

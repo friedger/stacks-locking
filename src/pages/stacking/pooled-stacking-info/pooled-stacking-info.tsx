@@ -29,6 +29,7 @@ import { IconInfoCircle } from '@tabler/icons-react';
 import { toHumanReadableStx } from '@utils/unit-convert';
 import { StartStackingLayout } from 'src/pages/choose-stacking-method/components/start-stacking-layout';
 import { CenteredErrorAlert } from '@components/centered-error-alert';
+import { CenteredSpinner } from '@components/centered-spinner';
 
 export function PooledStackingInfo() {
   const { client } = useStackingClient();
@@ -87,8 +88,8 @@ function PooledStackingInfoLayout({ client }: CardLayoutProps) {
   }
 
   const isStacking = getStatusQuery.data.stacked;
-  const poolAddress = getPoolAddressQuery.data.address;
-
+  const poolAddress = getPoolAddressQuery.data.address || delegationStatusQuery.data.delegatedTo;
+  console.log(delegationStatusQuery.data, getStatusQuery.data, poolAddress);
   if ((!delegationStatusQuery.data.isDelegating && !isStacking) || !poolAddress) {
     return (
       <StartStackingLayout>
@@ -151,7 +152,6 @@ function PooledStackingInfoLayout({ client }: CardLayoutProps) {
       },
       onFinish() {
         setIsContractCallExtensionPageOpen(false);
-        navigate('../choose-stacking-method');
       },
     });
   }
@@ -269,23 +269,17 @@ function PooledStackingInfoLayout({ client }: CardLayoutProps) {
                         </Value>
                       </Row>
                       <Row>
-                        <Label>Type</Label>
-                        <Value>
-                          {delegationStatusQuery.data.untilBurnHeight ? 'One time' : 'Indefinite'}
-                        </Value>
-                      </Row>
-                      <Row>
                         <Label>Progress</Label>
                         <Value>{lockingProgressPercentString}%</Value>
                       </Row>
                     </Section>
 
-                    {getPoolAddressQuery.data.address && (
+                    {poolAddress && (
                       <Section>
                         <Row>
                           <Label>Pool address</Label>
                           <Value>
-                            <Address address={getPoolAddressQuery.data.address} />
+                            <Address address={poolAddress} />
                           </Value>
                         </Row>
                       </Section>
