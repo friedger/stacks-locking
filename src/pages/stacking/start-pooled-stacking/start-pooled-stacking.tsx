@@ -31,7 +31,6 @@ import { StacksNetworkName } from '@stacks/network';
 import { StackingClient } from '@stacks/stacking';
 import { useQuery } from '@tanstack/react-query';
 import { Form, Formik } from 'formik';
-import { StackingGuideInfoCard } from './components/stacking-guide-info-card';
 import { ClarityType } from '@stacks/transactions';
 import { CenteredSpinner } from '@components/centered-spinner';
 import { CenteredErrorAlert } from '@components/centered-error-alert';
@@ -188,7 +187,6 @@ function StartPooledStackingLayout({
         stackingInfoPanel={
           <StackingFormInfoPanel>
             <PoolingInfoCard />
-            <StackingGuideInfoCard />
           </StackingFormInfoPanel>
         }
         stackingForm={

@@ -1,13 +1,6 @@
-import {
-  InfoCardGroup as Group,
-  InfoCard,
-  InfoCardLabel as Label,
-  InfoCardRow as Row,
-  InfoCardSection as Section,
-  InfoCardValue as Value,
-} from '@components/info-card';
+import { InfoCardGroup as Group, InfoCard, InfoCardRow as Row } from '@components/info-card';
 import { Link } from '@components/link';
-import { Box, color, Flex, FlexProps, Text } from '@stacks/ui';
+import { Box, color, FlexProps, Text } from '@stacks/ui';
 import { IconEdit } from '@tabler/icons-react';
 
 export function StackingGuideInfoCard(props: FlexProps) {
