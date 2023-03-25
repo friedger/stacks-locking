@@ -287,8 +287,15 @@ function PooledStackingInfoLayout({ client }: CardLayoutProps) {
 
                     <Section>
                       <Alert icon={<IconInfoCircle />}>
-                        You&apos;ve revoked the pool&apos;s delegation. You&apos;ll be able to pool
-                        again when the locking period finishes.
+                        You&apos;ve revoked the pool&apos;s delegation. You may want to{' '}
+                        <Caption display="inline" to="../start-pooled-stacking" as={Link}>
+                          start pooling
+                        </Caption>{' '}
+                        again or{' '}
+                        <Caption display="inline" to="../choose-stacking-method" as={Link}>
+                          choose a different stacking method
+                        </Caption>
+                        .
                       </Alert>
                     </Section>
                   </Group>

@@ -1,15 +1,22 @@
-import { Description, Step } from '../../components/stacking-form-step';
+import { ErrorAlert } from '@components/error-alert';
 import { ErrorLabel } from '@components/error-label';
 import { ErrorText } from '@components/error-text';
-import { Box, Button, Input, Text, color } from '@stacks/ui';
+import { useGetAccountExtendedBalancesQuery } from '@components/stacking-client-provider/stacking-client-provider';
+import { intToBigInt } from '@stacks/common';
+import { Box, Button, color, Input, Spinner, Text } from '@stacks/ui';
 import { microStxToStx, toHumanReadableStx } from '@utils/unit-convert';
 import { useField } from 'formik';
+import { Description, Step } from '../../components/stacking-form-step';
 
-interface Props {
-  availableBalance: bigint;
-}
-export function ChoosePoolingAmount({ availableBalance }: Props) {
+export function ChoosePoolingAmount() {
   const [field, meta, helpers] = useField('amount');
+  const queryGetAccountExtendedBalances = useGetAccountExtendedBalancesQuery();
+  const totalAvailableBalance = queryGetAccountExtendedBalances.data?.stx.balance
+    ? intToBigInt(queryGetAccountExtendedBalances.data.stx.balance, false)
+    : undefined;
+  const lockedBalance = queryGetAccountExtendedBalances.data?.stx.locked
+    ? intToBigInt(queryGetAccountExtendedBalances.data.stx.locked, false)
+    : undefined;
   return (
     <Step title="Amount">
       <Description>
@@ -25,15 +32,26 @@ export function ChoosePoolingAmount({ availableBalance }: Props) {
         )}
       </Box>
 
-      <Box textStyle="body.small" color={color('text-caption')} mt="base-tight">
+      <Box
+        textStyle="body.small"
+        color={color('text-caption')}
+        mt="base-tight"
+        aria-busy={queryGetAccountExtendedBalances.isLoading}
+      >
         Available balance:{' '}
-        <Button
-          variant="link"
-          type="button"
-          onClick={() => helpers.setValue(microStxToStx(availableBalance))}
-        >
-          {toHumanReadableStx(availableBalance)}
-        </Button>
+        {queryGetAccountExtendedBalances.isLoading ? (
+          <Spinner />
+        ) : totalAvailableBalance ? (
+          <Button
+            variant="link"
+            type="button"
+            onClick={() => helpers.setValue(microStxToStx(totalAvailableBalance))}
+          >
+            {toHumanReadableStx(totalAvailableBalance)}{' '}
+          </Button>
+        ) : (
+          <ErrorAlert>Failed to load</ErrorAlert>
+        )}
       </Box>
     </Step>
   );

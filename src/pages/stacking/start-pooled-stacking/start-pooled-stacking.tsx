@@ -1,6 +1,19 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { useAuth } from '@components/auth-provider/auth-provider';
+import { CenteredErrorAlert } from '@components/centered-error-alert';
+import { CenteredSpinner } from '@components/centered-spinner';
+import { useNetwork } from '@components/network-provider';
+import {
+  useGetAllowanceContractCallers,
+  useGetSecondsUntilNextCycleQuery,
+  useStackingClient
+} from '@components/stacking-client-provider/stacking-client-provider';
+import { StacksNetworkName } from '@stacks/network';
+import { StackingClient } from '@stacks/stacking';
+import { ClarityType } from '@stacks/transactions';
+import { Form, Formik } from 'formik';
 import { StackingFormContainer } from '../components/stacking-form-container';
 import { StackingFormInfoPanel } from '../components/stacking-form-info-panel';
 import { StartStackingLayout } from '../components/stacking-layout';
@@ -18,22 +31,8 @@ import { createHandleSubmit } from './utils';
 import { createHandleSubmit as createHandleAllowContractCallerSubmit } from './utils-allow-contract-caller';
 import {
   createHandleSubmit as createHandleDelegateStxSubmit,
-  createValidationSchema,
+  createValidationSchema
 } from './utils-delegate-stx';
-import { useAuth } from '@components/auth-provider/auth-provider';
-import { useNetwork } from '@components/network-provider';
-import {
-  useGetAllowanceContractCallers,
-  useGetSecondsUntilNextCycleQuery,
-  useStackingClient,
-} from '@components/stacking-client-provider/stacking-client-provider';
-import { StacksNetworkName } from '@stacks/network';
-import { StackingClient } from '@stacks/stacking';
-import { useQuery } from '@tanstack/react-query';
-import { Form, Formik } from 'formik';
-import { ClarityType } from '@stacks/transactions';
-import { CenteredSpinner } from '@components/centered-spinner';
-import { CenteredErrorAlert } from '@components/centered-error-alert';
 
 const initialDelegatingFormValues: Partial<EditingFormValues> = {
   amount: '',
@@ -100,10 +99,6 @@ function StartPooledStackingLayout({
   const [rewardAddressEditable, setRewardAddressEditable] = useState(true);
   const [poolRequiresUserRewardAddress, setPoolRequiresUserRewardAddress] = useState(true);
   const [requiresAllowContractCaller, setRequiresAllowContractCaller] = useState(true);
-  // TODO: move this inside ChoosePoolingAmount, not being used elsewhere
-  const queryGetAccountBalance = useQuery(['getAccountBalance', client], () =>
-    client.getAccountBalance()
-  );
 
   const q1 = useGetSecondsUntilNextCycleQuery();
   const q2 = useGetAllowanceContractCallers(Pox2Contract.WrapperFastPool);
@@ -156,14 +151,9 @@ function StartPooledStackingLayout({
     }
   };
 
-  if (q1.isLoading || queryGetAccountBalance.isLoading) return <CenteredSpinner />;
+  if (q1.isLoading) return <CenteredSpinner />;
 
-  if (
-    q1.isError ||
-    typeof q1.data !== 'number' ||
-    queryGetAccountBalance.isError ||
-    typeof queryGetAccountBalance.data !== 'bigint'
-  ) {
+  if (q1.isError || typeof q1.data !== 'number') {
     const id = '0106e9bf-ae2f-4fcc-bf00-5fe083001adb';
     const msg = 'Failed to load necessary data.';
     // TODO: log error
@@ -194,7 +184,7 @@ function StartPooledStackingLayout({
             <Form>
               <StackingFormContainer>
                 <ChoosePoolingPool onPoolChange={onPoolChange} />
-                <ChoosePoolingAmount availableBalance={queryGetAccountBalance.data} />
+                <ChoosePoolingAmount />
                 <ChoosePoolingDuration />
                 {poolRequiresUserRewardAddress ? (
                   <ChoosePoolingRewardAddress

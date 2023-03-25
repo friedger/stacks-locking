@@ -1,6 +1,21 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { useAuth } from '@components/auth-provider/auth-provider';
+import { CenteredErrorAlert } from '@components/centered-error-alert';
+import { CenteredSpinner } from '@components/centered-spinner';
+import { useNetwork } from '@components/network-provider';
+import {
+  useGetAccountExtendedBalancesQuery,
+  useGetPoxInfoQuery,
+  useGetSecondsUntilNextCycleQuery,
+  useStackingClient
+} from '@components/stacking-client-provider/stacking-client-provider';
+import { STACKING_CONTRACT_CALL_TX_BYTES } from '@constants/app';
+import { useCalculateFee } from '@hooks/use-calculate-fee';
+import { intToBigInt } from '@stacks/common';
+import { StackingClient } from '@stacks/stacking';
+import { Form, Formik } from 'formik';
 import { StackingFormContainer } from '../components/stacking-form-container';
 import { StackingFormInfoPanel } from '../components/stacking-form-info-panel';
 import { StartStackingLayout } from '../components/stacking-layout';
@@ -12,20 +27,6 @@ import { Duration } from './components/duration';
 import { PoxAddress } from './components/pox-address/pox-address';
 import { DirectStackingFormValues } from './types';
 import { createHandleSubmit, createValidationSchema } from './utils';
-import { useNetwork } from '@components/network-provider';
-import {
-  useGetAccountBalanceQuery,
-  useGetPoxInfoQuery,
-  useGetSecondsUntilNextCycleQuery,
-  useStackingClient,
-} from '@components/stacking-client-provider/stacking-client-provider';
-import { STACKING_CONTRACT_CALL_TX_BYTES } from '@constants/app';
-import { useCalculateFee } from '@hooks/use-calculate-fee';
-import { StackingClient } from '@stacks/stacking';
-import { Form, Formik } from 'formik';
-import { useAuth } from '@components/auth-provider/auth-provider';
-import { CenteredSpinner } from '@components/centered-spinner';
-import { CenteredErrorAlert } from '@components/centered-error-alert';
 
 const initialFormValues: DirectStackingFormValues = {
   amount: '',
@@ -55,7 +56,7 @@ function StartDirectStackingLayout({ client }: StartDirectStackingLayoutProps) {
 
   const getSecondsUntilNextCycleQuery = useGetSecondsUntilNextCycleQuery();
   const getPoxInfoQuery = useGetPoxInfoQuery();
-  const getAccountBalanceQuery = useGetAccountBalanceQuery();
+  const getAccountExtendedBalancesQuery = useGetAccountExtendedBalancesQuery();
   const { btcAddressP2wpkh } = useAuth();
 
   const navigate = useNavigate();
@@ -65,7 +66,7 @@ function StartDirectStackingLayout({ client }: StartDirectStackingLayoutProps) {
   if (
     getSecondsUntilNextCycleQuery.isLoading ||
     getPoxInfoQuery.isLoading ||
-    getAccountBalanceQuery.isLoading
+    getAccountExtendedBalancesQuery.isLoading
   )
     return <CenteredSpinner />;
 
@@ -74,8 +75,8 @@ function StartDirectStackingLayout({ client }: StartDirectStackingLayoutProps) {
     typeof getSecondsUntilNextCycleQuery.data !== 'number' ||
     getPoxInfoQuery.isError ||
     !getPoxInfoQuery.data ||
-    getAccountBalanceQuery.isError ||
-    typeof getAccountBalanceQuery.data !== 'bigint'
+    getAccountExtendedBalancesQuery.isError ||
+    typeof getAccountExtendedBalancesQuery.data.stx.balance !== 'string'
   ) {
     const msg = 'Failed to load necessary data.';
     const id = '8c12f6b2-c839-4813-8471-b0fd542b845f';
@@ -86,7 +87,7 @@ function StartDirectStackingLayout({ client }: StartDirectStackingLayoutProps) {
   const validationSchema = createValidationSchema({
     minimumAmountUStx: BigInt(getPoxInfoQuery.data.min_amount_ustx),
     transactionFeeUStx,
-    availableBalanceUStx: getAccountBalanceQuery.data,
+    availableBalanceUStx: intToBigInt(getAccountExtendedBalancesQuery.data.stx.balance, false),
     network: networkName,
   });
   const handleSubmit = createHandleSubmit({

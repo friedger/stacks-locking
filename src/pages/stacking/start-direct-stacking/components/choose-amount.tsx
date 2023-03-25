@@ -1,41 +1,41 @@
 import { useCallback } from 'react';
 
-import { Description, Step } from '../../components/stacking-form-step';
-import { calculateRewardSlots, calculateStackingBuffer } from '../../utils/calc-stacking-buffer';
 import { ErrorAlert } from '@components/error-alert';
 import { ErrorLabel } from '@components/error-label';
 import { ErrorText } from '@components/error-text';
 import { ExternalLink } from '@components/external-link';
 import {
-  useGetAccountBalanceQuery,
-  useGetPoxInfoQuery,
+  useGetAccountExtendedBalancesQuery,
+  useGetPoxInfoQuery
 } from '@components/stacking-client-provider/stacking-client-provider';
 import { pseudoBorderLeft } from '@components/styles/pseudo-border-left';
 import {
   STACKING_CONTRACT_CALL_TX_BYTES,
   STACKING_LEARN_MORE_URL,
-  STACKING_MINIMIUM_FOR_NEXT_CYCLE_URL,
+  STACKING_MINIMIUM_FOR_NEXT_CYCLE_URL
 } from '@constants/app';
-import { Box, Button, Input, Spinner, Stack, Text, color } from '@stacks/ui';
+import { Box, Button, color, Input, Spinner, Stack, Text } from '@stacks/ui';
 import { microStxToStx, stxToMicroStx, toHumanReadableStx } from '@utils/unit-convert';
 import { BigNumber } from 'bignumber.js';
 import { useField } from 'formik';
+import { Description, Step } from '../../components/stacking-form-step';
+import { calculateRewardSlots, calculateStackingBuffer } from '../../utils/calc-stacking-buffer';
 
 const BigNumberFloorRound = BigNumber.clone({
   ROUNDING_MODE: BigNumber.ROUND_FLOOR,
 });
 
 export function Amount() {
-  const getAccountBalanceQuery = useGetAccountBalanceQuery();
+  const getAccountExtendedBalancesQuery = useGetAccountExtendedBalancesQuery();
   const getPoxInfoQuery = useGetPoxInfoQuery();
 
   const [field, meta, helpers] = useField('amount');
 
-  if (getAccountBalanceQuery.isLoading || getPoxInfoQuery.isLoading) return <Spinner />;
+  if (getAccountExtendedBalancesQuery.isLoading || getPoxInfoQuery.isLoading) return <Spinner />;
 
   if (
-    getAccountBalanceQuery.isError ||
-    typeof getAccountBalanceQuery.data !== 'bigint' ||
+    getAccountExtendedBalancesQuery.isError ||
+    typeof getAccountExtendedBalancesQuery.data.stx.balance !== 'string' ||
     getPoxInfoQuery.isError ||
     !getPoxInfoQuery.data
   ) {
@@ -45,7 +45,7 @@ export function Amount() {
     return <ErrorAlert id={id}>{msg}</ErrorAlert>;
   }
 
-  const availableBalance = getAccountBalanceQuery.data;
+  const availableBalance = getAccountExtendedBalancesQuery.data.stx.balance;
   const minimumAmountUstx = getPoxInfoQuery.data.min_amount_ustx;
 
   const ustxAmount = stxToMicroStx(field.value || 0);
