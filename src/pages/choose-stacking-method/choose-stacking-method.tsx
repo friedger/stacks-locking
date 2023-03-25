@@ -1,14 +1,14 @@
 import { useDelegationStatusQuery } from '../stacking/pooled-stacking-info/use-delegation-status-query';
 import { useStackingInitiatedByQuery } from './use-stacking-initiated-by';
 import { useAuth } from '@components/auth-provider/auth-provider';
-import { ErrorAlert } from '@components/error-alert';
 import {
   useGetAccountBalanceQuery,
   useGetAccountBalanceLockedQuery,
   useGetPoxInfoQuery,
 } from '@components/stacking-client-provider/stacking-client-provider';
-import { Spinner } from '@stacks/ui';
 import { ChooseStackingMethodLayout } from './choose-stacking-method.layout';
+import { CenteredSpinner } from '@components/centered-spinner';
+import { CenteredErrorAlert } from '@components/centered-error-alert';
 
 export function ChooseStackingMethod() {
   const { isSignedIn } = useAuth();
@@ -34,7 +34,7 @@ export function ChooseStackingMethodSignedIn() {
     getAccountBalanceQuery.isLoading ||
     getPoxInfoQuery.isLoading
   ) {
-    return <Spinner />;
+    return <CenteredSpinner />;
   }
 
   if (
@@ -60,7 +60,7 @@ export function ChooseStackingMethodSignedIn() {
       getAccountBalanceQuery,
       getPoxInfoQuery
     );
-    return <ErrorAlert id={id}>{msg}</ErrorAlert>;
+    return <CenteredErrorAlert id={id}>{msg}</CenteredErrorAlert>;
   }
 
   const stackingMinimumAmountUstx = BigInt(getPoxInfoQuery.data.min_amount_ustx);

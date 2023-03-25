@@ -12,7 +12,6 @@ import { Duration } from './components/duration';
 import { PoxAddress } from './components/pox-address/pox-address';
 import { DirectStackingFormValues } from './types';
 import { createHandleSubmit, createValidationSchema } from './utils';
-import { ErrorAlert } from '@components/error-alert';
 import { useNetwork } from '@components/network-provider';
 import {
   useGetAccountBalanceQuery,
@@ -23,9 +22,10 @@ import {
 import { STACKING_CONTRACT_CALL_TX_BYTES } from '@constants/app';
 import { useCalculateFee } from '@hooks/use-calculate-fee';
 import { StackingClient } from '@stacks/stacking';
-import { Spinner } from '@stacks/ui';
 import { Form, Formik } from 'formik';
 import { useAuth } from '@components/auth-provider/auth-provider';
+import { CenteredSpinner } from '@components/centered-spinner';
+import { CenteredErrorAlert } from '@components/centered-error-alert';
 
 const initialFormValues: DirectStackingFormValues = {
   amount: '',
@@ -40,7 +40,7 @@ export function StartDirectStacking() {
     const msg = 'Expected `client` to be defined.';
     const id = '32bd8efa-c6cb-4d1c-8f92-f39cd7f3cd74';
     console.error(msg);
-    return <ErrorAlert id={id}>{msg}</ErrorAlert>;
+    return <CenteredErrorAlert id={id}>{msg}</CenteredErrorAlert>;
   }
 
   return <StartDirectStackingLayout client={client} />;
@@ -67,7 +67,7 @@ function StartDirectStackingLayout({ client }: StartDirectStackingLayoutProps) {
     getPoxInfoQuery.isLoading ||
     getAccountBalanceQuery.isLoading
   )
-    return <Spinner />;
+    return <CenteredSpinner />;
 
   if (
     getSecondsUntilNextCycleQuery.isError ||
@@ -80,7 +80,7 @@ function StartDirectStackingLayout({ client }: StartDirectStackingLayoutProps) {
     const msg = 'Failed to load necessary data.';
     const id = '8c12f6b2-c839-4813-8471-b0fd542b845f';
     console.error(id, msg);
-    return <ErrorAlert id={id}>{msg}</ErrorAlert>;
+    return <CenteredErrorAlert id={id}>{msg}</CenteredErrorAlert>;
   }
 
   const validationSchema = createValidationSchema({

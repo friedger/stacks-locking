@@ -34,7 +34,7 @@ const palette = {
   gray900: '#171717',
 
   orange100: '#fff5eb',
-  orange300: '#ffeoc2',
+  orange300: '#ffe0c2',
   orange500: '#ffbd7a',
   orange600: '#f59300',
 

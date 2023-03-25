@@ -5,7 +5,6 @@ import { useDelegationStatusQuery } from './use-delegation-status-query';
 import { useGetPoolAddress } from './use-get-pool-address-query';
 import { Address } from '@components/address';
 import { Alert } from '@components/alert';
-import { ErrorAlert } from '@components/error-alert';
 import { Hr } from '@components/hr';
 import {
   InfoCardGroup as Group,
@@ -25,17 +24,18 @@ import { Caption } from '@components/typography';
 import { intToBigInt } from '@stacks/common';
 import { ContractCallRegularOptions, openContractCall } from '@stacks/connect';
 import { StackingClient } from '@stacks/stacking';
-import { Box, Button, Flex, Spinner, Stack, Text } from '@stacks/ui';
+import { Box, Button, Flex, Stack, Text } from '@stacks/ui';
 import { IconInfoCircle } from '@tabler/icons-react';
 import { toHumanReadableStx } from '@utils/unit-convert';
 import { StartStackingLayout } from 'src/pages/choose-stacking-method/components/start-stacking-layout';
+import { CenteredErrorAlert } from '@components/centered-error-alert';
 
 export function PooledStackingInfo() {
   const { client } = useStackingClient();
   if (!client) {
     const msg = 'Expected `client` to be defined.';
     console.error(msg);
-    return <ErrorAlert id="6f080d24-1e87-45ab-b8f7-41ba9bd53e97">{msg}</ErrorAlert>;
+    return <CenteredErrorAlert id="6f080d24-1e87-45ab-b8f7-41ba9bd53e97">{msg}</CenteredErrorAlert>;
   }
 
   return <PooledStackingInfoLayout client={client} />;
@@ -62,7 +62,7 @@ function PooledStackingInfoLayout({ client }: CardLayoutProps) {
     getPoolAddressQuery.isLoading ||
     getPoolAddressQuery.isFetching
   ) {
-    return <Spinner />;
+    return <CenteredSpinner />;
   }
 
   if (
@@ -80,9 +80,9 @@ function PooledStackingInfoLayout({ client }: CardLayoutProps) {
     const msg = 'Error while loading data, try reloading the page.';
     console.error(msg);
     return (
-      <ErrorAlert id="0abc083b-06c7-4795-8491-68264595f1b4">
+      <CenteredErrorAlert id="0abc083b-06c7-4795-8491-68264595f1b4">
         <Text>{msg}</Text>
-      </ErrorAlert>
+      </CenteredErrorAlert>
     );
   }
 

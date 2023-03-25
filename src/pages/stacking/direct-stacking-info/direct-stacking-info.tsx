@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { useGetHasPendingDirectStackingQuery } from './use-get-has-pending-direct-stacking';
 import { Address } from '@components/address';
 import { Alert } from '@components/alert';
-import { ErrorAlert } from '@components/error-alert';
 import { ExternalLink } from '@components/external-link';
 import { Hr } from '@components/hr';
 import {
@@ -23,11 +22,13 @@ import {
   useGetStatusQuery,
 } from '@components/stacking-client-provider/stacking-client-provider';
 import { Caption } from '@components/typography';
-import { Box, Flex, Spinner, Stack, Text, color } from '@stacks/ui';
+import { Box, Flex, Stack, Text, color } from '@stacks/ui';
 import { IconClockHour4, IconInfoCircle } from '@tabler/icons-react';
 import { makeExplorerTxLink, makeStackingClubRewardAddressLink } from '@utils/external-links';
 import { formatPoxAddressToNetwork } from '@utils/stacking';
 import { toHumanReadableStx } from '@utils/unit-convert';
+import { CenteredErrorAlert } from '@components/centered-error-alert';
+import { CenteredSpinner } from '@components/centered-spinner';
 
 export function DirectStackingInfo() {
   const { networkName } = useNetwork();
@@ -46,7 +47,7 @@ export function DirectStackingInfo() {
     getAccountBalanceLockedQuery.isLoading ||
     getHasPendingDirectStacking.isLoading
   ) {
-    return <Spinner />;
+    return <CenteredSpinner />;
   }
 
   if (
@@ -66,9 +67,9 @@ export function DirectStackingInfo() {
     const msg = 'Error while loading data, try reloading the page.';
     console.error(msg);
     return (
-      <ErrorAlert id="0abc083b-06c7-4795-8491-68264595f1b4">
+      <CenteredErrorAlert id="0abc083b-06c7-4795-8491-68264595f1b4">
         <Text>{msg}</Text>
-      </ErrorAlert>
+      </CenteredErrorAlert>
     );
   }
 
@@ -181,7 +182,7 @@ export function DirectStackingInfo() {
     const id = 'ee504e56-9cc5-49b4-ae98-a5cac5c35dbf';
     const msg = 'Expected account to be stacked';
     console.error(id, msg);
-    return <ErrorAlert id={id}>{msg}</ErrorAlert>;
+    return <CenteredErrorAlert id={id}>{msg}</CenteredErrorAlert>;
   }
 
   const elapsedCyclesSinceStackingStart = Math.max(

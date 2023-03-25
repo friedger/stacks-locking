@@ -21,7 +21,6 @@ import {
   createValidationSchema,
 } from './utils-delegate-stx';
 import { useAuth } from '@components/auth-provider/auth-provider';
-import { ErrorAlert } from '@components/error-alert';
 import { useNetwork } from '@components/network-provider';
 import {
   useGetAllowanceContractCallers,
@@ -30,11 +29,12 @@ import {
 } from '@components/stacking-client-provider/stacking-client-provider';
 import { StacksNetworkName } from '@stacks/network';
 import { StackingClient } from '@stacks/stacking';
-import { Spinner } from '@stacks/ui';
 import { useQuery } from '@tanstack/react-query';
 import { Form, Formik } from 'formik';
 import { StackingGuideInfoCard } from './components/stacking-guide-info-card';
 import { ClarityType } from '@stacks/transactions';
+import { CenteredSpinner } from '@components/centered-spinner';
+import { CenteredErrorAlert } from '@components/centered-error-alert';
 
 const initialDelegatingFormValues: Partial<EditingFormValues> = {
   amount: '',
@@ -51,27 +51,27 @@ export function StartPooledStacking() {
   if (!address) {
     const msg = 'Expected `address` to be defined.';
     console.error(msg);
-    return <ErrorAlert>{msg}</ErrorAlert>;
+    return <CenteredErrorAlert>{msg}</CenteredErrorAlert>;
   }
   if (!btcAddressP2tr) {
     const msg = 'Expected `btcAddressP2tr` to be defined.';
     console.error(msg);
-    return <ErrorAlert>{msg}</ErrorAlert>;
+    return <CenteredErrorAlert>{msg}</CenteredErrorAlert>;
   }
   if (!btcAddressP2wpkh) {
     const msg = 'Expected `btcAddressP2wpkh` to be defined.';
     console.error(msg);
-    return <ErrorAlert>{msg}</ErrorAlert>;
+    return <CenteredErrorAlert>{msg}</CenteredErrorAlert>;
   }
   if (!client) {
     const msg = 'Expected `client` to be defined.';
     console.error(msg);
-    return <ErrorAlert>{msg}</ErrorAlert>;
+    return <CenteredErrorAlert>{msg}</CenteredErrorAlert>;
   }
   if (!networkName) {
     const msg = 'Expected `networkName` to be defined.';
     console.error(msg);
-    return <ErrorAlert>{msg}</ErrorAlert>;
+    return <CenteredErrorAlert>{msg}</CenteredErrorAlert>;
   }
 
   return (
@@ -112,11 +112,9 @@ function StartPooledStackingLayout({
 
   const [hasUserConfirmedPoolWrapperContract, setHasUserConfirmedPoolWrapperContract] =
     useState<PoolWrapperAllowanceState>({
-      'ST000000000000000000002AMW42H.pox-2': true,
-      'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.pox-pool-self-service':
-        q2?.data?.type === ClarityType.OptionalSome,
-      'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.pox-pools-1-cycle':
-        q3?.data?.type === ClarityType.OptionalSome,
+      [Pox2Contract.PoX2]: true,
+      [Pox2Contract.WrapperFastPool]: q2?.data?.type === ClarityType.OptionalSome,
+      [Pox2Contract.WrapperOneCycle]: q3?.data?.type === ClarityType.OptionalSome,
     });
 
   const navigate = useNavigate();
@@ -159,7 +157,7 @@ function StartPooledStackingLayout({
     }
   };
 
-  if (q1.isLoading || queryGetAccountBalance.isLoading) return <Spinner />;
+  if (q1.isLoading || queryGetAccountBalance.isLoading) return <CenteredSpinner />;
 
   if (
     q1.isError ||
@@ -171,7 +169,7 @@ function StartPooledStackingLayout({
     const msg = 'Failed to load necessary data.';
     // TODO: log error
     console.error(id, msg);
-    return <ErrorAlert id={id}>{msg}</ErrorAlert>;
+    return <CenteredErrorAlert id={id}>{msg}</CenteredErrorAlert>;
   }
 
   return (
