@@ -36,6 +36,7 @@ export function ChoosePoolingPool({
               name={p.name}
               icon={p.icon}
               description={p.description}
+              url={p.website}
               key={index}
               activePoolName={fieldPoolName.value}
               onChange={onChange}

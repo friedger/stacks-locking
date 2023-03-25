@@ -1,6 +1,18 @@
 import { useEffect } from 'react';
-import { Navigate, Outlet, RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, Navigate, Outlet, RouterProvider } from 'react-router-dom';
 
+import { BlockchainApiClientProvider } from '@components/blockchain-api-client-provider';
+import { ExternalLink } from '@components/external-link';
+import { Stacks } from '@components/icons/stacks';
+import { Link } from '@components/link';
+import { NetworkProvider } from '@components/network-provider';
+import { StackingClientProvider } from '@components/stacking-client-provider/stacking-client-provider';
+import { figmaTheme } from '@constants/figma-theme';
+import { Box, Button, CSSReset, Flex, Text, ThemeProvider } from '@stacks/ui';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { loadFonts } from '@utils/load-fonts';
+import { truncateMiddle } from '@utils/tx-utils';
+import { useHover } from 'use-events';
 import { AuthProvider, useAuth } from './components/auth-provider/auth-provider';
 import { ChooseStackingMethod } from './pages/choose-stacking-method/choose-stacking-method';
 import { SignIn } from './pages/sign-in/sign-in';
@@ -8,16 +20,6 @@ import { DirectStackingInfo } from './pages/stacking/direct-stacking-info/direct
 import { PooledStackingInfo } from './pages/stacking/pooled-stacking-info/pooled-stacking-info';
 import { StartDirectStacking } from './pages/stacking/start-direct-stacking/start-direct-stacking';
 import { StartPooledStacking } from './pages/stacking/start-pooled-stacking/start-pooled-stacking';
-import { BlockchainApiClientProvider } from '@components/blockchain-api-client-provider';
-import { NetworkProvider } from '@components/network-provider';
-import { StackingClientProvider } from '@components/stacking-client-provider/stacking-client-provider';
-import { Box, Button, CSSReset, Flex, ThemeProvider, Text } from '@stacks/ui';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { loadFonts } from '@utils/load-fonts';
-import { Stacks } from '@components/icons/stacks';
-import { figmaTheme } from '@constants/figma-theme';
-import { truncateMiddle } from '@utils/tx-utils';
-import { useHover } from 'use-events';
 
 function Navbar() {
   const { isSignedIn, signOut, signIn, address } = useAuth();
@@ -39,22 +41,41 @@ function Navbar() {
         </Text>
       </Flex>
       <Box>
-        {isSignedIn && address ? (
-          <Flex p="sm" justify="right">
+        <Flex p="sm" justify="right" alignItems="center">
+          <ExternalLink href="https://wallet.hiro.so/wallet/faq#stacking" px="loose">
+            <Text color={figmaTheme.text} fontWeight={500}>
+              FAQ
+            </Text>
+          </ExternalLink>
+          {isSignedIn && address ? (
             <Button mode="tertiary" onClick={() => signOut()} {...bind}>
               {isHovered ? 'Sign out' : truncateMiddle(address)}
             </Button>
-          </Flex>
-        ) : (
-          <Flex p="sm" justify="right">
+          ) : (
             <Button onClick={() => signIn()}>Connect wallet</Button>
-          </Flex>
-        )}
+          )}
+        </Flex>
       </Box>
     </Flex>
   );
 }
 
+function Footer() {
+  return (
+    <Flex
+      flexDirection="row"
+      justifyContent="center"
+      p="tight"
+      borderTop={`1px solid ${figmaTheme.borderSubdued}`}
+    >
+      <Link to="https://www.hiro.so/terms" px="loose">
+        <Text color={figmaTheme.text} fontWeight={500}>
+          Terms of Use
+        </Text>
+      </Link>
+    </Flex>
+  );
+}
 function Layout() {
   return (
     <>
@@ -63,6 +84,7 @@ function Layout() {
         <Box>
           <Outlet />
         </Box>
+        <Footer />
       </Flex>
     </>
   );

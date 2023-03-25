@@ -1,20 +1,20 @@
-import { PoolName, Pox2Contract } from '../types-preset-pools';
-import { CustomPoolAddressInput } from './custom-pool-address-input';
-import { ActionsForWrapperContract } from './pool-contract-allow';
-import { Box, Flex, FlexProps, Text, color } from '@stacks/ui';
+import { ExternalLink } from '@components/external-link';
+import { Box, color, Flex, FlexProps, Text } from '@stacks/ui';
 import { useFocus } from 'use-events';
-import { IconEdit } from '@tabler/icons-react';
+import { PoolName } from '../types-preset-pools';
+import { CustomPoolAddressInput } from './custom-pool-address-input';
 
 interface PoolSelectItemProps extends Omit<FlexProps, 'onChange'> {
   name: PoolName;
   description: string;
+  url: string;
   icon: JSX.Element;
   activePoolName: PoolName;
   onChange(poolName: PoolName): void;
 }
 
 export function PoolSelectItem(props: PoolSelectItemProps) {
-  const { name, description, icon, activePoolName, onChange, ...rest } = props;
+  const { name, description, url, icon, activePoolName, onChange, ...rest } = props;
   const [isFocused, bind] = useFocus();
   return (
     <Flex
@@ -64,7 +64,24 @@ export function PoolSelectItem(props: PoolSelectItemProps) {
             >
               {description}
             </Text>
-            {name == PoolName.CustomPool && <CustomPoolAddressInput />}
+
+            {name == PoolName.CustomPool ? (
+              <CustomPoolAddressInput />
+            ) : (
+              url && (
+                <ExternalLink href={url}>
+                  <Text
+                    textStyle="body.small"
+                    color={color('text-caption')}
+                    mt="tight"
+                    display="inline-block"
+                    lineHeight="18px"
+                  >
+                    Learn more
+                  </Text>
+                </ExternalLink>
+              )
+            )}
           </Box>
         </Flex>
         <Flex ml="loose" alignItems="center">
