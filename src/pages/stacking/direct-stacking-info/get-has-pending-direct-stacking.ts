@@ -1,14 +1,14 @@
-import { isContractCallTransaction, isMempoolContractCallTransaction } from '../utils/transactions';
 import { AccountsApi, TransactionsApi } from '@stacks/blockchain-api-client';
-import { StackingClient, poxAddressToBtcAddress } from '@stacks/stacking';
+import { poxAddressToBtcAddress, StackingClient } from '@stacks/stacking';
 import {
   ContractCallTransaction,
   ContractCallTransactionMetadata,
   MempoolContractCallTransaction,
   MempoolTransaction,
-  Transaction,
+  Transaction
 } from '@stacks/stacks-blockchain-api-types';
 import { ClarityType, hexToCV } from '@stacks/transactions';
+import { isContractCallTransaction, isMempoolContractCallTransaction } from '../utils/transactions';
 
 function isStackCall(
   t: ContractCallTransactionMetadata,
@@ -33,10 +33,10 @@ function findUnanchoredTransaction(
 ): ContractCallTransaction | undefined {
   return transactions.find(t => {
     if (!isContractCallTransaction(t)) return false;
+    if (!t.is_unanchored) return false;
 
     const transactionResultCV = hexToCV(t.tx_result.hex);
     const isOk = transactionResultCV.type === ClarityType.ResponseOk;
-
     return isOk && isStackCall(t, poxContractId);
   }) as ContractCallTransaction; // Casting as type is checked in `if` statement above.
 }

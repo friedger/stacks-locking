@@ -1,4 +1,3 @@
-import { isContractCallTransaction, isMempoolContractCallTransaction } from '../utils/transactions';
 import { AccountsApi, SmartContractsApi, TransactionsApi } from '@stacks/blockchain-api-client';
 import { StackingClient } from '@stacks/stacking';
 import {
@@ -20,6 +19,7 @@ import {
   UIntCV,
 } from '@stacks/transactions';
 import { Pox2Contract } from '../start-pooled-stacking/types-preset-pools';
+import { isContractCallTransaction, isMempoolContractCallTransaction } from '../utils/transactions';
 
 function isDelegateOrRevokeDelegate(t: ContractCallTransactionMetadata) {
   return ['delegate-stx', 'revoke-delegate-stx'].includes(t.contract_call.function_name);
@@ -39,13 +39,12 @@ function findUnanchoredTransaction(
 ): ContractCallTransaction | undefined {
   return transactions.find(t => {
     if (!isContractCallTransaction(t)) return false;
-
-    const isUnanchored = t.is_unanchored;
+    if (!t.is_unanchored) return false;
 
     const transactionResultCV = hexToCV(t.tx_result.hex);
     const isOk = transactionResultCV.type === ClarityType.ResponseOk;
 
-    return isUnanchored && isOk && isDelegateOrRevokeDelegate(t);
+    return isOk && isDelegateOrRevokeDelegate(t);
   }) as ContractCallTransaction | undefined;
 }
 

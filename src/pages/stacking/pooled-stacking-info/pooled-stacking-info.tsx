@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { useDelegationStatusQuery } from './use-delegation-status-query';
-import { useGetPoolAddress } from './use-get-pool-address-query';
 import { Address } from '@components/address';
 import { Alert } from '@components/alert';
+import { CenteredErrorAlert } from '@components/centered-error-alert';
+import { CenteredSpinner } from '@components/centered-spinner';
 import { Hr } from '@components/hr';
 import {
-  InfoCardGroup as Group,
   InfoCard,
+  InfoCardGroup as Group,
   InfoCardLabel as Label,
   InfoCardRow as Row,
   InfoCardSection as Section,
@@ -24,12 +24,12 @@ import { Caption } from '@components/typography';
 import { intToBigInt } from '@stacks/common';
 import { ContractCallRegularOptions, openContractCall } from '@stacks/connect';
 import { StackingClient } from '@stacks/stacking';
-import { Box, Button, Flex, Stack, Text } from '@stacks/ui';
+import { Box, Button, color, Flex, Stack, Text } from '@stacks/ui';
 import { IconInfoCircle } from '@tabler/icons-react';
 import { toHumanReadableStx } from '@utils/unit-convert';
 import { StartStackingLayout } from 'src/pages/choose-stacking-method/components/start-stacking-layout';
-import { CenteredErrorAlert } from '@components/centered-error-alert';
-import { CenteredSpinner } from '@components/centered-spinner';
+import { useDelegationStatusQuery } from './use-delegation-status-query';
+import { useGetPoolAddress } from './use-get-pool-address-query';
 
 export function PooledStackingInfo() {
   const { client } = useStackingClient();
@@ -102,11 +102,21 @@ function PooledStackingInfoLayout({ client }: CardLayoutProps) {
               </Text>
               <Text>
                 You may want to{' '}
-                <Caption display="inline" to="../start-pooled-stacking" as={Link}>
+                <Caption
+                  display="inline"
+                  to="../start-pooled-stacking"
+                  as={Link}
+                  color={color('brand')}
+                >
                   start pooling
                 </Caption>{' '}
                 or{' '}
-                <Caption display="inline" to="../choose-stacking-method" as={Link}>
+                <Caption
+                  display="inline"
+                  to="../choose-stacking-method"
+                  as={Link}
+                  color={color('brand')}
+                >
                   choose your stacking method
                 </Caption>
                 .
@@ -288,11 +298,21 @@ function PooledStackingInfoLayout({ client }: CardLayoutProps) {
                     <Section>
                       <Alert icon={<IconInfoCircle />}>
                         You&apos;ve revoked the pool&apos;s delegation. You may want to{' '}
-                        <Caption display="inline" to="../start-pooled-stacking" as={Link}>
+                        <Caption
+                          display="inline"
+                          to="../start-pooled-stacking"
+                          as={Link}
+                          color={color('brand')}
+                        >
                           start pooling
                         </Caption>{' '}
                         again or{' '}
-                        <Caption display="inline" to="../choose-stacking-method" as={Link}>
+                        <Caption
+                          display="inline"
+                          to="../choose-stacking-method"
+                          as={Link}
+                          color={color('brand')}
+                        >
                           choose a different stacking method
                         </Caption>
                         .

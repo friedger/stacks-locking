@@ -77,7 +77,7 @@ export function DirectStackingInfo() {
 
   if (!isStacking && getHasPendingDirectStacking.data === null) {
     return (
-      <Flex justify="center" align="center">
+      <Flex justify="center" align="center" m="loose">
         <InfoCard width="420px">
           <Alert icon={<IconInfoCircle />}>
             <Stack>
