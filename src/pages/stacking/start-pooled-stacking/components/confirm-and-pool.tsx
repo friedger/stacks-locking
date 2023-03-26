@@ -12,16 +12,12 @@ interface Props {
   requiresAllowContractCaller: boolean;
   allowContractCallerTxId: string | undefined;
   hasUserConfirmedPoolWrapperContract: PoolWrapperAllowanceState;
-  setHasUserConfirmedPoolWrapperContract: React.Dispatch<
-    React.SetStateAction<PoolWrapperAllowanceState>
-  >;
 }
 export function ConfirmAndSubmit({
   isLoading,
   requiresAllowContractCaller,
   allowContractCallerTxId,
   hasUserConfirmedPoolWrapperContract,
-  setHasUserConfirmedPoolWrapperContract,
 }: Props) {
   const [hasUserConfirmed, setHasUserConfirmed] = useState(false);
   const f = useFormikContext<EditingFormValues>();

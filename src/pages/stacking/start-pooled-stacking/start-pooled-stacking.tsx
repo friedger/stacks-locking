@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useAuth } from '@components/auth-provider/auth-provider';
@@ -105,11 +105,15 @@ function StartPooledStackingLayout({
   const q3 = useGetAllowanceContractCallers(Pox2Contract.WrapperOneCycle);
 
   const [hasUserConfirmedPoolWrapperContract, setHasUserConfirmedPoolWrapperContract] =
-    useState<PoolWrapperAllowanceState>({
+    useState<PoolWrapperAllowanceState>();
+
+  useEffect(() => {
+    setHasUserConfirmedPoolWrapperContract({
       [Pox2Contract.PoX2]: true,
       [Pox2Contract.WrapperFastPool]: q2?.data?.type === ClarityType.OptionalSome,
       [Pox2Contract.WrapperOneCycle]: q3?.data?.type === ClarityType.OptionalSome,
     });
+  }, [q2?.data?.type, q3?.data?.type, setHasUserConfirmedPoolWrapperContract]);
 
   const navigate = useNavigate();
   const { network } = useNetwork();
@@ -199,7 +203,6 @@ function StartPooledStackingLayout({
                   allowContractCallerTxId={''}
                   requiresAllowContractCaller={requiresAllowContractCaller}
                   hasUserConfirmedPoolWrapperContract={hasUserConfirmedPoolWrapperContract}
-                  setHasUserConfirmedPoolWrapperContract={setHasUserConfirmedPoolWrapperContract}
                 />
               </StackingFormContainer>
             </Form>
