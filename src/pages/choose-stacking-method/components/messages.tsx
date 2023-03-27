@@ -16,7 +16,7 @@ export function Messages({
   hasExistingDirectStacking,
 }: SignedInProps) {
   return (
-    <>
+    <Stack spacing="base-tight">
       {(hasExistingDelegation || hasExistingDelegatedStacking) && (
         <Alert icon={<IconInfoCircle />}>
           <Stack>
@@ -57,6 +57,6 @@ export function Messages({
           </Stack>
         </Alert>
       )}
-    </>
+    </Stack>
   );
 }
