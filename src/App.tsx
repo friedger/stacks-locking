@@ -48,7 +48,14 @@ function Navbar() {
             </Text>
           </ExternalLink>
           {isSignedIn && address ? (
-            <Button mode="tertiary" onClick={() => signOut()} {...bind}>
+            <Button
+              width="142px"
+              boxShadow="none"
+              _hover={{ boxShadow: 'none' }}
+              mode="tertiary"
+              onClick={() => signOut()}
+              {...bind}
+            >
               {isHovered ? 'Sign out' : truncateMiddle(address)}
             </Button>
           ) : (
