@@ -24,7 +24,7 @@ export function DirectStackingButton(props: ChooseStackingMethodLayoutProps) {
       }}
       isDisabled={isDisabled}
     >
-      Stack by yourself
+      Stack independently
     </OptionButton>
   );
 }
