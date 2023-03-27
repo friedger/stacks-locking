@@ -1,6 +1,5 @@
-import { pseudoBorderLeft } from '@components/styles/pseudo-border-left';
-import { useMediaQuery, Box, Flex } from '@stacks/ui';
-import { IconLock, IconUserMinus, IconStairs } from '@tabler/icons-react';
+import { Box, Flex } from '@stacks/ui';
+import { IconLock, IconStairs } from '@tabler/icons-react';
 import { toHumanReadableStx } from '@utils/unit-convert';
 import { ChooseStackingMethodLayoutProps } from '../types';
 import { DirectStackingInsufficientStackingBalanceWarning } from './direct-stacking-insufficient-stacking-balance-warning';
@@ -13,6 +12,7 @@ import {
 } from '../components/start-stacking-layout';
 import fishBowlIllustration from '@assets/images/stack-by-yourself.svg';
 import { DirectStackingButton } from './direct-stacking-button';
+import { Unassignee } from '@components/icons/unassignee';
 
 export function DirectStackingCard(props: ChooseStackingMethodLayoutProps) {
   return (
@@ -34,7 +34,7 @@ export function DirectStackingCard(props: ChooseStackingMethodLayoutProps) {
 
       <OptionBenefitContainer>
         <OptionBenefit icon={IconLock}>Interact with the protocol directly</OptionBenefit>
-        <OptionBenefit icon={IconUserMinus}>No intermediaries</OptionBenefit>
+        <OptionBenefit icon={Unassignee}>No intermediaries</OptionBenefit>
 
         {/* TODO: this is a small hack to show this last bullet point when the user is not signed in.
         Unfortunately, the StacksClient, which is being used extensively to fetch stacking data,
@@ -43,10 +43,10 @@ export function DirectStackingCard(props: ChooseStackingMethodLayoutProps) {
         amount directly from the API without using the client. */}
         {props.isSignedIn ? (
           <OptionBenefit icon={IconStairs}>
-            Minimum required to stack is {toHumanReadableStx(props.stackingMinimumAmountUstx)}
+            Dynamic minimum (currently {toHumanReadableStx(props.stackingMinimumAmountUstx)})
           </OptionBenefit>
         ) : (
-          <OptionBenefit icon={IconStairs}>Minimum stacking amount required</OptionBenefit>
+          <OptionBenefit icon={IconStairs}>Dynamic minimum</OptionBenefit>
         )}
       </OptionBenefitContainer>
 

@@ -1,6 +1,5 @@
-import { ExplainerTooltip } from '@components/tooltip';
 import { Box, Flex } from '@stacks/ui';
-import { IconUser, IconChartLine, IconStairs } from '@tabler/icons-react';
+import { IconStairs } from '@tabler/icons-react';
 import {
   StackingOptionCard as Card,
   StackingOptionsCardDescription as Description,
@@ -12,6 +11,7 @@ import { ChooseStackingMethodLayoutProps } from '../types';
 import { PooledStackingButton } from './pooled-stacking-button';
 import { PooledStackingInsufficientStackingBalanceWarning } from './pooled-stacking-insufficient-stacking-balance-warning';
 import divingBoardIllustration from '@assets/images/stack-in-a-pool.svg';
+import { Users } from '@components/icons/users';
 
 export function PooledStackingCard(props: ChooseStackingMethodLayoutProps) {
   return (
@@ -30,18 +30,11 @@ export function PooledStackingCard(props: ChooseStackingMethodLayoutProps) {
       </Description>
 
       <OptionBenefitContainer>
-        <OptionBenefit icon={IconUser}>A pool stacks on your behalf</OptionBenefit>
-        <OptionBenefit icon={IconChartLine}>More predictable returns</OptionBenefit>
-        <OptionBenefit icon={IconStairs}>
-          <Flex>
-            No minimum required
-            <Box ml="extra-tight" alignSelf="center">
-              <ExplainerTooltip>
-                Your chosen pool may set their own minimum amount to participate
-              </ExplainerTooltip>
-            </Box>
-          </Flex>
-        </OptionBenefit>
+        <OptionBenefit icon={Users}>A pool stacks on your behalf</OptionBenefit>
+        <OptionBenefit icon={IconStairs}>No minimum required</OptionBenefit>
+
+        {/* This is just a hack to get the correct allignment for the CTA button */}
+        <OptionBenefit icon={() => null}>&nbsp;</OptionBenefit>
       </OptionBenefitContainer>
 
       <Flex alignItems="center">
