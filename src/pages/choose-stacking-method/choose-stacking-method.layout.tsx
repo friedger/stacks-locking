@@ -22,7 +22,11 @@ export function ChooseStackingMethodLayout(props: ChooseStackingMethodLayoutProp
   return (
     <Layout>
       <Stack height="100%" justifyContent="center">
-        {props.isSignedIn && <Messages {...props} />}
+        {props.isSignedIn && (
+          <Box pt="base">
+            <Messages {...props} />
+          </Box>
+        )}
         <OptionsContainer>
           <PooledStackingCard {...props} />
           <Separator />
