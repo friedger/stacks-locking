@@ -3,6 +3,7 @@ import { Stacks } from '@components/icons/stacks';
 import { figmaTheme } from '@constants/figma-theme';
 import { Box, Button, Flex, Text } from '@stacks/ui';
 import { truncateMiddle } from '@utils/tx-utils';
+import { Link } from 'react-router-dom';
 import { useHover } from 'use-events';
 import { useAuth } from './auth-provider/auth-provider';
 
@@ -18,12 +19,16 @@ export function Navbar() {
       borderBottom={`1px solid ${figmaTheme.borderSubdued}`}
     >
       <Flex alignItems="center">
-        <Box pr="extra-tight">
-          <Stacks />
-        </Box>
-        <Text color={figmaTheme.text} fontWeight={500}>
-          / Stacking
-        </Text>
+        <Link to="/">
+          <Flex alignItems="center">
+            <Box pr="extra-tight">
+              <Stacks />
+            </Box>
+            <Text color={figmaTheme.text} fontWeight={500}>
+              / Stacking
+            </Text>
+          </Flex>
+        </Link>
       </Flex>
       <Box>
         <Flex p="sm" justify="right" alignItems="center">
