@@ -1,11 +1,11 @@
 import { useState } from 'react';
 
-import { Description, Step } from '../../components/stacking-form-step';
 import { ErrorLabel } from '@components/error-label';
 import { ErrorText } from '@components/error-text';
-import { Box, Input, Text, color } from '@stacks/ui';
+import { Box, color, Text } from '@stacks/ui';
 import { useField } from 'formik';
 import { CryptoAddressInput } from '../../components/crypto-address-form';
+import { Description, Step } from '../../components/stacking-form-step';
 
 interface Props {
   editable: boolean;
@@ -19,12 +19,9 @@ export function ChoosePoolingRewardAddress({ btcAddress, editable }: Props) {
   };
 
   return (
-    <Step title="Reward address">
+    <Step title="Bitcoin address">
       <Description>
-        <Text>
-          Choose how you would like to receive your stacking rewards. Your pool might require to use
-          your own Bitcoin address only.
-        </Text>
+        <Text>Enter the Bitcoin address where you’d like to receive your rewards.</Text>
       </Description>
 
       <Box position="relative" maxWidth="400px">

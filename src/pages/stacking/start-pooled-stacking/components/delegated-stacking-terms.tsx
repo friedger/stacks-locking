@@ -1,9 +1,9 @@
-import { StackingTermItem } from '../../components/stacking-term';
+import { Stacks } from '@components/icons/stacks';
 import { StepsIcon } from '@components/icons/steps';
 import { pseudoBorderLeft } from '@components/styles/pseudo-border-left';
-import { StackProps, Text } from '@stacks/ui';
-import { Stack } from '@stacks/ui';
+import { Stack, StackProps, Text } from '@stacks/ui';
 import { IconLock } from '@tabler/icons-react';
+import { StackingTermItem } from '../../components/stacking-term';
 
 interface DelegatedStackingTermsProps extends StackProps {
   showPoxWrapperTermItem: boolean;
@@ -38,7 +38,7 @@ export function DelegatedStackingTerms({
       {showPoxWrapperTermItem && (
         <StackingTermItem
           title="Stacking with Pool Contract"
-          icon={<StepsIcon width="16px" height="16px" />}
+          icon={<Stacks width="16px" height="16px" />}
         >
           <Text>
             The pool uses a smart contract that handles your stacking. By allowing the contract to

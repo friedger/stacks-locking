@@ -6,7 +6,7 @@ export const pools: { [key in PoolName]: Pool } = {
   'FAST Pool': {
     name: PoolName.FastPool,
     description:
-      'Friedger Autonomous Self-service Trust Pool allows to manage all pool operations automatically.' +
+      'Enjoy pool operations automatically.' +
       'You can increase the locking amount for the next cycle. Locked STX will unlock 1 day after the end of the cycle.',
     duration: 1,
     website: 'https://pool.friedger.de',
@@ -19,7 +19,7 @@ export const pools: { [key in PoolName]: Pool } = {
 
   'Plan Better': {
     name: PoolName.PlanBetter,
-    description: 'Plan Better - Earn non-custodial Bitcoin yield. No wrapped tokens. Native BTC.',
+    description: 'Earn non-custodial Bitcoin yield. No wrapped tokens. Native BTC.',
     duration: 1,
     website: 'https://app.planbetter.org',
     payoutMethod: PayoutMethod.BTC,
@@ -32,7 +32,7 @@ export const pools: { [key in PoolName]: Pool } = {
   Xverse: {
     name: PoolName.Xverse,
     description:
-      'Xverse pool is a non-custodial stacking pool service from makers of Xverse wallet.',
+      'Use the non-custodial stacking pool service from makers of Xverse wallet.',
     duration: 1,
     website: 'https://pool.xverse.app/',
     payoutMethod: PayoutMethod.BTC,

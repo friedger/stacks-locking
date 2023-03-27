@@ -188,8 +188,6 @@ function StartPooledStackingLayout({
             <Form>
               <StackingFormContainer>
                 <ChoosePoolingPool onPoolChange={onPoolChange} />
-                <ChoosePoolingAmount />
-                <ChoosePoolingDuration />
                 {poolRequiresUserRewardAddress ? (
                   <ChoosePoolingRewardAddress
                     btcAddress={currentAccountAddresses.btcAddressP2wpkh}
@@ -198,6 +196,8 @@ function StartPooledStackingLayout({
                 ) : (
                   <></>
                 )}
+                <ChoosePoolingAmount />
+                <ChoosePoolingDuration />
                 <ConfirmAndSubmit
                   isLoading={isContractCallExtensionPageOpen}
                   allowContractCallerTxId={''}
