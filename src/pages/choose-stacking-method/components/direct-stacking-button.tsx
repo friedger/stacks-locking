@@ -8,23 +8,21 @@ export function DirectStackingButton(props: ChooseStackingMethodLayoutProps) {
   const navigate = useNavigate();
   const { signIn, isSigningIn } = useAuth();
 
-  if (!props.isSignedIn) {
-    return (
-      <OptionButton
-        onClick={() => {
-          signIn();
-        }}
-        isDisabled={isSigningIn}
-      >
-        Connect wallet
-      </OptionButton>
-    );
-  }
+  const isDisabled = props.isSignedIn
+    ? hasExistingCommitment(props) || !props.hasEnoughBalanceToPool
+    : isSigningIn;
 
   return (
     <OptionButton
-      onClick={() => navigate('../start-direct-stacking')}
-      isDisabled={hasExistingCommitment(props) || !props.hasEnoughBalanceToDirectStack}
+      onClick={() => {
+        if (!props.isSignedIn) {
+          signIn();
+          return;
+        }
+
+        navigate('../start-direct-stacking');
+      }}
+      isDisabled={isDisabled}
     >
       Stack by yourself
     </OptionButton>

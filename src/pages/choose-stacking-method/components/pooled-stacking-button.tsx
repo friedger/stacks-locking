@@ -8,23 +8,21 @@ export function PooledStackingButton(props: ChooseStackingMethodLayoutProps) {
   const navigate = useNavigate();
   const { signIn, isSigningIn } = useAuth();
 
-  if (!props.isSignedIn) {
-    return (
-      <OptionButton
-        onClick={() => {
-          signIn();
-        }}
-        isDisabled={isSigningIn}
-      >
-        Connect wallet
-      </OptionButton>
-    );
-  }
+  const isDisabled = props.isSignedIn
+    ? hasExistingCommitment(props) || !props.hasEnoughBalanceToPool
+    : isSigningIn;
 
   return (
     <OptionButton
-      onClick={() => navigate('../start-pooled-stacking')}
-      isDisabled={hasExistingCommitment(props) || !props.hasEnoughBalanceToPool}
+      onClick={() => {
+        if (!props.isSignedIn) {
+          signIn();
+          return;
+        }
+
+        navigate('../start-pooled-stacking');
+      }}
+      isDisabled={isDisabled}
     >
       Stack in a pool
     </OptionButton>
