@@ -3,7 +3,7 @@ import { NavigateFunction } from 'react-router-dom';
 
 import { pools } from './components/preset-pools';
 import { EditingFormValues } from './types';
-import { PoolName, Pox2Contract } from './types-preset-pools';
+import { PoolName, Pox2Contracts } from './types-preset-pools';
 import {
   MIN_DELEGATED_STACKING_AMOUNT_USTX,
   UI_IMPOSED_MAX_STACKING_AMOUNT_USTX,
@@ -110,7 +110,7 @@ function getOptions(
   } else {
     const [contractAddress, contractName] = pool.poxContract.split('.');
     const functionArgs =
-      pool.poxContract === Pox2Contract.WrapperOneCycle
+      pool.poxContract === Pox2Contracts.WrapperOneCycle
         ? [
             uintCV(stxToMicroStx(values.amount).toString()),
             principalCV(delegateTo),
@@ -118,7 +118,7 @@ function getOptions(
             noneCV(),
             poxAddressToTuple(values.rewardAddress),
           ]
-        : pool.poxContract === Pox2Contract.WrapperFastPool
+        : pool.poxContract === Pox2Contracts.WrapperFastPool
         ? [uintCV(stxToMicroStx(values.amount).toString())]
         : [];
     return {

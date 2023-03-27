@@ -20,12 +20,6 @@ export const StackingStep: FC<StackingFormStepProps> = props => {
   );
 };
 
-export const StackingStepDescription: FC = ({ children }) => (
-  <Stack display="block" textStyle="body.large" spacing="base">
-    {children}
-  </Stack>
-);
-
 export const StackingStepAction: ForwardRefExoticComponentWithAs<ButtonProps, 'button'> =
   forwardRefWithAs(({ children, ...props }, ref) => (
     <Button size="md" mt="loose" ref={ref} {...props}>

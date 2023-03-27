@@ -9,7 +9,7 @@ export function DirectStackingButton(props: ChooseStackingMethodLayoutProps) {
   const { signIn, isSigningIn } = useAuth();
 
   const isDisabled = props.isSignedIn
-    ? hasExistingCommitment(props) || !props.hasEnoughBalanceToPool
+    ? hasExistingCommitment(props) || !props.hasEnoughBalanceToDirectStack
     : isSigningIn;
 
   return (

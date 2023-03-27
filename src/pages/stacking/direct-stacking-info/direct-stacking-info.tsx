@@ -77,7 +77,7 @@ export function DirectStackingInfo() {
 
   if (!isStacking && getHasPendingDirectStacking.data === null) {
     return (
-      <Flex justify="center" align="center" m="loose">
+      <Flex height="100%" justify="center" align="center" m="loose">
         <InfoCard width="420px">
           <Alert icon={<IconInfoCircle />}>
             <Stack>
@@ -118,7 +118,7 @@ export function DirectStackingInfo() {
   if (!isStacking && getHasPendingDirectStacking.data) {
     return (
       <>
-        <Flex justify="center" align="center">
+        <Flex height="100%" justify="center" align="center">
           <InfoCard width="420px">
             <Box mx={['loose', 'extra-loose']}>
               <Flex flexDirection="column" pt="extra-loose" pb="base-loose">
@@ -201,7 +201,7 @@ export function DirectStackingInfo() {
 
   return (
     <>
-      <Flex justify="center" align="center">
+      <Flex height="100%" justify="center" align="center">
         <InfoCard width="420px">
           <Box mx={['loose', 'extra-loose']}>
             <Flex flexDirection="column" pt="extra-loose" pb="base-loose">

@@ -1,5 +1,5 @@
 import { Description, Step } from '../../components/stacking-form-step';
-import { Pool, PoolName, Pox2Contract } from '../types-preset-pools';
+import { Pool, PoolName, Pox2Contracts } from '../types-preset-pools';
 import { PoolSelectItem } from './pool-select-item';
 import { pools } from './preset-pools';
 import { ExternalLink } from '@components/external-link';
@@ -9,9 +9,7 @@ import { useField } from 'formik';
 interface ChoosePoolingPoolProps {
   onPoolChange: (val: PoolName) => void;
 }
-export function ChoosePoolingPool({
-  onPoolChange,
-}: ChoosePoolingPoolProps) {
+export function ChoosePoolingPool({ onPoolChange }: ChoosePoolingPoolProps) {
   const [fieldPoolName, , helpersPoolName] = useField('poolName');
   const onChange = (poolName: PoolName) => {
     helpersPoolName.setValue(poolName);

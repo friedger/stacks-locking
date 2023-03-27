@@ -1,16 +1,21 @@
-import { PoolName, Pox2Contract } from '../types-preset-pools';
+import { WrapperPrincipal, PoolName, Pox2Contracts } from '../types-preset-pools';
 import { Button } from '@stacks/ui';
 
 export function PoolContractDisallowButton({
-  poolName,
+  wrapperPrincipal,
   handleSubmit,
 }: {
-  poolName: PoolName;
-  handleSubmit(val: Pox2Contract): void;
+  wrapperPrincipal: WrapperPrincipal;
+  handleSubmit(val: WrapperPrincipal): void;
 }) {
   return (
     <>
-      <Button variant="link" size="sm" mx="extra-tight" onClick={() => handleSubmit(poolName)}>
+      <Button
+        variant="link"
+        size="sm"
+        mx="extra-tight"
+        onClick={() => handleSubmit(wrapperPrincipal)}
+      >
         I don't trust this contract anymore.
       </Button>
     </>

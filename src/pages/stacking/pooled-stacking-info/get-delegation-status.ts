@@ -18,7 +18,7 @@ import {
   tupleCV,
   UIntCV,
 } from '@stacks/transactions';
-import { Pox2Contract } from '../start-pooled-stacking/types-preset-pools';
+import { Pox2Contracts } from '../start-pooled-stacking/types-preset-pools';
 import { isContractCallTransaction, isMempoolContractCallTransaction } from '../utils/transactions';
 
 function isDelegateOrRevokeDelegate(t: ContractCallTransactionMetadata) {
@@ -52,7 +52,7 @@ function findFirstDelegateEvent(transaction: ContractCallTransaction) {
   for (let event of transaction.events) {
     if (
       event.event_type === 'smart_contract_log' &&
-      event.contract_log.contract_id === Pox2Contract.PoX2
+      event.contract_log.contract_id === Pox2Contracts.PoX2
     ) {
       const eventValue = hexToCV(event.contract_log.value.hex);
       if (
@@ -113,7 +113,7 @@ function getDelegationStatusFromTransaction(
 
     let untilBurnHeight: null | bigint = null;
 
-    if (transaction.contract_call.contract_id === Pox2Contract.WrapperFastPool) {
+    if (transaction.contract_call.contract_id === Pox2Contracts.WrapperFastPool) {
       untilBurnHeight = null;
     } else {
       if (
@@ -128,8 +128,8 @@ function getDelegationStatusFromTransaction(
     const isExpired = untilBurnHeight !== null && burnBlockHeight > untilBurnHeight;
 
     const delegatedTo =
-      transaction.contract_call.contract_id === Pox2Contract.WrapperFastPool
-        ? Pox2Contract.WrapperFastPool
+      transaction.contract_call.contract_id === Pox2Contracts.WrapperFastPool
+        ? Pox2Contracts.WrapperFastPool
         : safeDelegateToCVToString(delegatedToCV);
 
     return {

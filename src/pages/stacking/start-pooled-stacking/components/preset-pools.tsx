@@ -1,4 +1,4 @@
-import { PayoutMethod, Pool, PoolName, Pox2Contract } from '../types-preset-pools';
+import { PayoutMethod, Pool, PoolName, Pox2Contracts } from '../types-preset-pools';
 import { IconEdit } from '@tabler/icons-react';
 import { PoolIcon } from './pool-icon';
 
@@ -11,8 +11,8 @@ export const pools: { [key in PoolName]: Pool } = {
     duration: 1,
     website: 'https://pool.friedger.de',
     payoutMethod: PayoutMethod.STX,
-    poolAddress: Pox2Contract.WrapperFastPool, // pool address is the same as pool contract
-    poxContract: Pox2Contract.WrapperFastPool,
+    poolAddress: Pox2Contracts.WrapperFastPool, // pool address is the same as pool contract
+    poxContract: Pox2Contracts.WrapperFastPool,
     icon: <PoolIcon src="/32x32_FastPool.png" />,
     allowCustomRewardAddress: false,
   },
@@ -24,7 +24,7 @@ export const pools: { [key in PoolName]: Pool } = {
     website: 'https://app.planbetter.org',
     payoutMethod: PayoutMethod.BTC,
     poolAddress: 'SP3TDKYYRTYFE32N19484838WEJ25GX40Z24GECPZ',
-    poxContract: Pox2Contract.WrapperOneCycle,
+    poxContract: Pox2Contracts.WrapperOneCycle,
     icon: <PoolIcon src="/32x32_PlanBetter.png" />,
     allowCustomRewardAddress: false, // only for ledger users
   },
@@ -37,7 +37,7 @@ export const pools: { [key in PoolName]: Pool } = {
     website: 'https://pool.xverse.app/',
     payoutMethod: PayoutMethod.BTC,
     poolAddress: 'SPXVRSEH2BKSXAEJ00F1BY562P45D5ERPSKR4Q33',
-    poxContract: Pox2Contract.WrapperOneCycle,
+    poxContract: Pox2Contracts.WrapperOneCycle,
     icon: <PoolIcon src="/32x32_Xverse.png" />,
     allowCustomRewardAddress: true,
   },
@@ -49,7 +49,7 @@ export const pools: { [key in PoolName]: Pool } = {
     website: 'https://www.stacks.co/learn/stacking',
     payoutMethod: PayoutMethod.OTHER,
     poolAddress: undefined,
-    poxContract: Pox2Contract.PoX2,
+    poxContract: Pox2Contracts.PoX2,
     icon: <IconEdit />,
     allowCustomRewardAddress: false,
   },

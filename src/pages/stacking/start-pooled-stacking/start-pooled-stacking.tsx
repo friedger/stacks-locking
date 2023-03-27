@@ -8,7 +8,7 @@ import { useNetwork } from '@components/network-provider';
 import {
   useGetAllowanceContractCallers,
   useGetSecondsUntilNextCycleQuery,
-  useStackingClient
+  useStackingClient,
 } from '@components/stacking-client-provider/stacking-client-provider';
 import { StacksNetworkName } from '@stacks/network';
 import { StackingClient } from '@stacks/stacking';
@@ -26,12 +26,17 @@ import { PoolingInfoCard } from './components/delegated-stacking-info-card';
 import { PooledStackingIntro } from './components/pooled-stacking-intro';
 import { pools } from './components/preset-pools';
 import { EditingFormValues, PoolWrapperAllowanceState } from './types';
-import { PayoutMethod, PoolName, Pox2Contract, usesPoxWrapperContract } from './types-preset-pools';
+import {
+  PayoutMethod,
+  PoolName,
+  Pox2Contracts,
+  usesPoxWrapperContract,
+} from './types-preset-pools';
 import { createHandleSubmit } from './utils';
 import { createHandleSubmit as createHandleAllowContractCallerSubmit } from './utils-allow-contract-caller';
 import {
   createHandleSubmit as createHandleDelegateStxSubmit,
-  createValidationSchema
+  createValidationSchema,
 } from './utils-delegate-stx';
 
 const initialDelegatingFormValues: Partial<EditingFormValues> = {
@@ -101,17 +106,17 @@ function StartPooledStackingLayout({
   const [requiresAllowContractCaller, setRequiresAllowContractCaller] = useState(true);
 
   const q1 = useGetSecondsUntilNextCycleQuery();
-  const q2 = useGetAllowanceContractCallers(Pox2Contract.WrapperFastPool);
-  const q3 = useGetAllowanceContractCallers(Pox2Contract.WrapperOneCycle);
+  const q2 = useGetAllowanceContractCallers(Pox2Contracts.WrapperFastPool);
+  const q3 = useGetAllowanceContractCallers(Pox2Contracts.WrapperOneCycle);
 
   const [hasUserConfirmedPoolWrapperContract, setHasUserConfirmedPoolWrapperContract] =
-    useState<PoolWrapperAllowanceState>();
+    useState<PoolWrapperAllowanceState>({});
 
   useEffect(() => {
     setHasUserConfirmedPoolWrapperContract({
-      [Pox2Contract.PoX2]: true,
-      [Pox2Contract.WrapperFastPool]: q2?.data?.type === ClarityType.OptionalSome,
-      [Pox2Contract.WrapperOneCycle]: q3?.data?.type === ClarityType.OptionalSome,
+      [Pox2Contracts.PoX2]: true,
+      [Pox2Contracts.WrapperFastPool]: q2?.data?.type === ClarityType.OptionalSome,
+      [Pox2Contracts.WrapperOneCycle]: q3?.data?.type === ClarityType.OptionalSome,
     });
   }, [q2?.data?.type, q3?.data?.type, setHasUserConfirmedPoolWrapperContract]);
 

@@ -1,13 +1,13 @@
 import { Dispatch, SetStateAction } from 'react';
 
-import { Pox2Contract } from './types-preset-pools';
+import { WrapperPrincipal, Pox2Contracts } from './types-preset-pools';
 import { ContractCallRegularOptions, openContractCall } from '@stacks/connect';
 import { StackingClient } from '@stacks/stacking';
 import { principalCV } from '@stacks/transactions';
 import { StacksNetwork } from '@stacks/network';
 
 function getOptions(
-  poxWrapperContract: Pox2Contract,
+  poxWrapperContract: WrapperPrincipal,
   stackingContract: string,
   network: StacksNetwork
 ): ContractCallRegularOptions {
@@ -32,7 +32,7 @@ export function createHandleSubmit({
   network,
   setIsContractCallExtensionPageOpen,
 }: CreateHandleSubmitArgs) {
-  return async function handleSubmit(poxWrapperContract: Pox2Contract) {
+  return async function handleSubmit(poxWrapperContract: WrapperPrincipal) {
     // TODO: handle thrown errors
     const [stackingContract] = await Promise.all([client.getStackingContract()]);
 

@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 import { ErrorLabel } from '@components/error-label';
 import { ErrorText } from '@components/error-text';
 import { Box, color, Text } from '@stacks/ui';
@@ -11,17 +9,13 @@ interface Props {
   editable: boolean;
   btcAddress: string;
 }
-export function ChoosePoolingRewardAddress({ btcAddress, editable }: Props) {
-  const [field, meta, helpers] = useField('rewardAddress');
-  const [showBtcAddressWarning, setShowBtcAddressWarning] = useState(btcAddress === field.onChange);
-  const checkBtcAddress = (val: string) => {
-    setShowBtcAddressWarning(btcAddress !== val);
-  };
+export function ChoosePoolingRewardAddress({ editable }: Props) {
+  const [field, meta] = useField('rewardAddress');
 
   return (
     <Step title="Bitcoin address">
       <Description>
-        <Text>Enter the Bitcoin address where you’d like to receive your rewards.</Text>
+        <Text>Enter the Bitcoin address where you&apos;d like to receive your rewards.</Text>
       </Description>
 
       <Box position="relative" maxWidth="400px">

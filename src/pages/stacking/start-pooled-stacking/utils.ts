@@ -4,7 +4,7 @@ import { Dispatch, SetStateAction } from 'react';
 import { NavigateFunction } from 'react-router-dom';
 import { pools } from './components/preset-pools';
 import { EditingFormValues, PoolWrapperAllowanceState } from './types';
-import { PoolName, Pox2Contract } from './types-preset-pools';
+import { PoolName, Pox2Contracts } from './types-preset-pools';
 import { HandleAllowContractCallerArgs } from './utils-allow-contract-caller';
 
 interface CreateHandleSubmitArgs {
@@ -23,11 +23,11 @@ function requiresAllowContractCaller(values: EditingFormValues) {
   if (!values.poolName || values.poolName === PoolName.CustomPool) return false;
   let pool = pools[values.poolName];
   console.log(pool.poxContract);
-  return pool.poxContract !== Pox2Contract.PoX2;
+  return pool.poxContract !== Pox2Contracts.PoX2;
 }
 
 function getPoxWrapperContract(values: EditingFormValues) {
-  return values.poolName ? pools[values.poolName].poxContract : Pox2Contract.PoX2;
+  return values.poolName ? pools[values.poolName].poxContract : Pox2Contracts.PoX2;
 }
 
 export function createHandleSubmit({
