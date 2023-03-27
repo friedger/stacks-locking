@@ -59,7 +59,7 @@ export function AuthProvider({ children }: Props) {
       userSession,
       appDetails: {
         name: 'Stacking',
-        icon: 'http://placekitten.com/200/200',
+        icon: 'https://stacking.live/logo.svg',
       },
       onFinish() {
         setIsSigningIn(false);
