@@ -21,7 +21,7 @@ function Separator() {
 export function ChooseStackingMethodLayout(props: ChooseStackingMethodLayoutProps) {
   return (
     <Layout>
-      <Stack>
+      <Stack height="100%" justifyContent="center">
         {props.isSignedIn && <Messages {...props} />}
         <OptionsContainer>
           <PooledStackingCard {...props} />

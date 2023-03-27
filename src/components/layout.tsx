@@ -8,7 +8,7 @@ export function Layout() {
     <>
       <Flex h="100vh" flexDirection="column">
         <Navbar />
-        <Box>
+        <Box flexGrow={1}>
           <Outlet />
         </Box>
         <Footer />

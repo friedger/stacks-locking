@@ -14,22 +14,11 @@ import {
 } from '@stacks/ui';
 
 export const StartStackingLayout: FC<FlexProps> = props => (
-  <Flex
-    as="main"
-    flexDirection="row"
-    justify="center"
-    alignItems="center"
-    mx="auto"
-    minHeight="calc(100vh - 44px)"
-    px="extra-loose"
-    {...props}
-  />
+  <Box maxWidth="1200px" height="100%" as="main" mx="auto" {...props} />
 );
 
 export const StackingOptionsCardContainer: FC<FlexProps> = props => (
   <Flex
-    columnGap="150px"
-    alignItems="stretch"
     justifyContent="space-between"
     flexDirection={['column', 'column', 'column', 'row']}
     width="100%"
@@ -44,14 +33,12 @@ export const StackingOptionCard: FC<FlexProps> = ({ children, ...props }) => (
     py="extra-loose"
     as="section"
     flexDirection="column"
-    alignItems="center"
     borderRadius="6px"
     flex={1}
+    maxWidth={[null, null, '320', '420px']}
     {...props}
   >
-    <Flex flexDirection="column" maxWidth={[null, null, '320', '400px']}>
-      {children}
-    </Flex>
+    {children}
   </Flex>
 );
 
