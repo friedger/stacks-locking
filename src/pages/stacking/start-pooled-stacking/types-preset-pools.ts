@@ -22,7 +22,7 @@ const ContractMapTestnet = {
 const ContractMapMainnet = {
   PoX2: 'SP000000000000000000002Q6VF78.pox-2',
   WrapperOneCycle: 'SP001SFSMC2ZY76PD4M68P3WGX154XCH7NE3TYMX.pox-pools-1-cycle',
-  WrapperFastPool: 'SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.pox-pool-self-service',
+  WrapperFastPool: 'SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.pox-fast-pool-v1',
 } as const;
 
 export const Pox2Contracts =
