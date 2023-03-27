@@ -23,8 +23,10 @@ const Context = createContext<{
 interface Props {
   children: ReactNode;
 }
+export const initialNetworkName = NETWORK ?? 'mainnet';
+
 export function NetworkProvider({ children }: Props) {
-  const [networkName, setNetworkByName] = useState<StacksNetworkName>(NETWORK ?? 'testnet');
+  const [networkName, setNetworkByName] = useState<StacksNetworkName>(initialNetworkName);
   /* const [customNetwork, setCustomNetwork] = useState<StacksMocknet | null>(null); */
 
   let network: StacksNetwork;
