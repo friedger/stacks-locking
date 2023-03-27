@@ -27,7 +27,15 @@ export const StartStackingLayout: FC<FlexProps> = props => (
 );
 
 export const StackingOptionsCardContainer: FC<FlexProps> = props => (
-  <Flex flexDirection={['column', 'column', 'column', 'row']} width="100%" my="56px" {...props} />
+  <Flex
+    columnGap="150px"
+    alignItems="stretch"
+    justifyContent="space-between"
+    flexDirection={['column', 'column', 'column', 'row']}
+    width="100%"
+    my="56px"
+    {...props}
+  />
 );
 
 export const StackingOptionCard: FC<FlexProps> = ({ children, ...props }) => (

@@ -15,12 +15,8 @@ import fishBowlIllustration from '@assets/images/stack-by-yourself.svg';
 import { DirectStackingButton } from './direct-stacking-button';
 
 export function DirectStackingCard(props: ChooseStackingMethodLayoutProps) {
-  const [columnBreakpoint] = useMediaQuery('(min-width: 991px)');
   return (
-    <Card
-      mt={['extra-loose', null, null, 'unset']}
-      {...(columnBreakpoint ? pseudoBorderLeft('border', '1px') : {})}
-    >
+    <Card mt={['extra-loose', null, null, 'unset']}>
       <Box height="130px">
         <img
           src={fishBowlIllustration}

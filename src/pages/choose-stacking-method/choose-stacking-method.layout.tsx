@@ -1,22 +1,33 @@
 import {
-  StackingOptionsCardContainer as CardContainer,
+  StackingOptionsCardContainer as OptionsContainer,
   StartStackingLayout as Layout,
 } from './components/start-stacking-layout';
-import { Stack } from '@stacks/ui';
+import { Box, Stack } from '@stacks/ui';
 import { Messages } from './components/messages';
 import { ChooseStackingMethodLayoutProps } from './types';
 import { DirectStackingCard } from './components/direct-stacking-card';
 import { PooledStackingCard } from './components/pooled-stacking-card';
+import { figmaTheme } from '@constants/figma-theme';
+
+function Separator() {
+  return (
+    <Box
+      display={['none', 'none', 'none', 'inherit']}
+      borderLeft={`1px solid ${figmaTheme.borderSubdued}`}
+    ></Box>
+  );
+}
 
 export function ChooseStackingMethodLayout(props: ChooseStackingMethodLayoutProps) {
   return (
     <Layout>
       <Stack>
         {props.isSignedIn && <Messages {...props} />}
-        <CardContainer>
+        <OptionsContainer>
           <PooledStackingCard {...props} />
+          <Separator />
           <DirectStackingCard {...props} />
-        </CardContainer>
+        </OptionsContainer>
       </Stack>
     </Layout>
   );
