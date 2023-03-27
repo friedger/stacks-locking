@@ -166,7 +166,7 @@ function PooledStackingInfoLayout({ client }: CardLayoutProps) {
   }
   return (
     <>
-      <Flex height="100%" data-ary="here" justify="center" align="center">
+      <Flex height="100%" justify="center" align="center">
         <InfoCard width="420px">
           <Box mx={['loose', 'extra-loose']}>
             <Flex flexDirection="column" pt="extra-loose" pb="base-loose">

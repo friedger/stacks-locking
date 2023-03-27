@@ -67,13 +67,6 @@ export function ChooseStackingMethodSignedIn() {
   const hasEnoughBalanceToPool = getAccountBalanceQuery.data > 0;
   const hasEnoughBalanceToDirectStack = getAccountBalanceQuery.data > stackingMinimumAmountUstx;
 
-  console.log('ARY stackingMinimumAmountUstx', stackingMinimumAmountUstx);
-  console.log('ARY getAccountBalanceQuery.data', getAccountBalanceQuery.data);
-  console.log(
-    'ARY getAccountBalanceQuery.data > stackingMinimumAmountUstx',
-    getAccountBalanceQuery.data > stackingMinimumAmountUstx
-  );
-
   const isStacking = getAccountBalanceLockedQuery.data !== 0n;
   const hasExistingDelegation = delegationStatusQuery.data.isDelegating;
   // TODO delegated Stacking can be initiated by the user itself via self-service delegation pool
