@@ -89,7 +89,6 @@ function PooledStackingInfoLayout({ client }: CardLayoutProps) {
 
   const isStacking = getStatusQuery.data.stacked;
   const poolAddress = getPoolAddressQuery.data.address || delegationStatusQuery.data.delegatedTo;
-  console.log(delegationStatusQuery.data, getStatusQuery.data, poolAddress);
   if ((!delegationStatusQuery.data.isDelegating && !isStacking) || !poolAddress) {
     return (
       <StartStackingLayout>
