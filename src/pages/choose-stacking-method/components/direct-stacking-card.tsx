@@ -24,11 +24,12 @@ export function DirectStackingCard(props: ChooseStackingMethodLayoutProps) {
           alt="A dark fishbowl with a lone fish facing right, perhaps contemplating the benefits of Stacking, by Eugenia Digon"
         />
       </Box>
-      <Title>Stack by yourself</Title>
+      <Title>Stack independently</Title>
 
       <Description>
-        When you stack by yourself, you&apos;ll interact with the protocol directly. You don&apos;t
-        have to trust a pool if you have a sufficient amount of STX available.
+        When you stack Independently, you&apos;ll interact with the protocol directly. This approach
+        could be suitable if you prefer stacking in a trustless manner and meet the minimum
+        requirement
       </Description>
 
       <OptionBenefitContainer>

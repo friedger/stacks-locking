@@ -25,8 +25,8 @@ export function PooledStackingCard(props: ChooseStackingMethodLayoutProps) {
       </Box>
       <Title>Stack in a pool</Title>
       <Description>
-        Team up with other stackers in a pool, enabling you to stack even if you don&apos;t meet the
-        minimum. You have to trust a pool with the payment of your rewards.
+        Delegate to a Stacking pool provider, enabling you to stack even if you don&apos;t meet the
+        minimum. The Stacking provider may maintain discretion with payment of rewards.
       </Description>
 
       <OptionBenefitContainer>
