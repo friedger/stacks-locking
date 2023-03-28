@@ -50,7 +50,14 @@ export function Navbar() {
                 {isHovered ? 'Sign out' : truncateMiddle(address)}
               </Button>
             ) : (
-              <Button onClick={() => signIn()}>Connect wallet</Button>
+              <Button
+                boxShadow="none"
+                _hover={{ boxShadow: 'none' }}
+                mode="tertiary"
+                onClick={() => signIn()}
+              >
+                Connect wallet
+              </Button>
             )}
           </Box>
         </Flex>
