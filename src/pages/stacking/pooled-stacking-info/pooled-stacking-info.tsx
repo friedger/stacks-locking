@@ -30,6 +30,9 @@ import { toHumanReadableStx } from '@utils/unit-convert';
 import { StartStackingLayout } from 'src/pages/choose-stacking-method/components/start-stacking-layout';
 import { useDelegationStatusQuery } from './use-delegation-status-query';
 import { useGetPoolAddress } from './use-get-pool-address-query';
+import { ExternalLink } from '@components/external-link';
+import { makeStackingClubRewardAddressLink } from '@utils/external-links';
+import { CancelIcon } from '@components/icons/cancel';
 
 export function PooledStackingInfo() {
   const { client } = useStackingClient();
@@ -91,7 +94,7 @@ function PooledStackingInfoLayout({ client }: CardLayoutProps) {
   const poolAddress = getPoolAddressQuery.data.address || delegationStatusQuery.data.delegatedTo;
   if ((!delegationStatusQuery.data.isDelegating && !isStacking) || !poolAddress) {
     return (
-      <StartStackingLayout>
+      <Flex height="100%" justify="center" align="center" m="loose">
         <InfoCard p="extra-loose" width={['360px', '360px', '360px', '420px']}>
           <Alert icon={<IconInfoCircle />}>
             <Stack>
@@ -123,7 +126,7 @@ function PooledStackingInfoLayout({ client }: CardLayoutProps) {
             </Stack>
           </Alert>
         </InfoCard>
-      </StartStackingLayout>
+      </Flex>
     );
   }
 
@@ -179,17 +182,18 @@ function PooledStackingInfoLayout({ client }: CardLayoutProps) {
                     fontWeight={500}
                     letterSpacing="-0.02em"
                     mt="extra-tight"
+                    mb="extra-loose"
                   >
                     {toHumanReadableStx(delegationStatusQuery.data.amountMicroStx)}
                   </Text>
 
                   <Hr />
 
-                  <Group mt="base-loose" mb="extra-loose">
+                  <Group my="extra-loose">
                     <Section>
                       <Row>
                         <Label>Status</Label>
-                        <Value color={isStacking ? 'green' : undefined}>
+                        <Value color={isStacking ? 'green' : color('text-caption')}>
                           {isStacking ? 'Active' : 'Waiting on pool'}
                         </Value>
                       </Row>
@@ -208,7 +212,7 @@ function PooledStackingInfoLayout({ client }: CardLayoutProps) {
 
                   <Hr />
 
-                  <Group mt="base-loose" mb="extra-loose">
+                  <Group my="extra-loose">
                     <Section>
                       <Row>
                         <Label>Pool address</Label>
@@ -221,14 +225,37 @@ function PooledStackingInfoLayout({ client }: CardLayoutProps) {
 
                   <Hr />
 
-                  <Button
-                    isDisabled={isContractCallExtensionPageOpen}
-                    onClick={() => {
-                      handleStopPoolingClick();
-                    }}
-                  >
-                    Stop pooling
-                  </Button>
+                  <Group my="extra-loose">
+                    <Section>
+                      <Row>
+                        <Label>
+                          <ExternalLink
+                            href={makeStackingClubRewardAddressLink('')}
+                            color={color('text-caption')}
+                          >
+                            🥞 View on stacking.club
+                          </ExternalLink>
+                        </Label>
+                      </Row>
+                      <Row>
+                        <Label>
+                          <Button
+                            variant="link"
+                            isDisabled={isContractCallExtensionPageOpen}
+                            onClick={() => {
+                              handleStopPoolingClick();
+                            }}
+                            color={color('text-caption')}
+                          >
+                            <Box pr="tight">
+                              <CancelIcon />
+                            </Box>{' '}
+                            Stop pooling
+                          </Button>
+                        </Label>
+                      </Row>
+                    </Section>
+                  </Group>
                 </>
               )}
 
@@ -261,6 +288,7 @@ function PooledStackingInfoLayout({ client }: CardLayoutProps) {
                     fontWeight={500}
                     letterSpacing="-0.02em"
                     mt="extra-tight"
+                    my="extra-loose"
                   >
                     {toHumanReadableStx(
                       intToBigInt(getAccountExtendedBalancesQuery.data.stx.locked, false)
@@ -269,7 +297,7 @@ function PooledStackingInfoLayout({ client }: CardLayoutProps) {
 
                   <Hr />
 
-                  <Group mt="base-loose" mb="base-loose">
+                  <Group my="extra-loose">
                     <Section>
                       <Row>
                         <Label>Status</Label>
