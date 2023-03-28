@@ -1,11 +1,11 @@
-import { OneCycleDescriptor } from '../../components/one-cycle-descriptor';
-import { Description, Step } from '../../components/stacking-form-step';
-import { Stepper } from '../../components/stepper';
 import { ErrorLabel } from '@components/error-label';
 import { ErrorText } from '@components/error-text';
 import { MAX_STACKING_CYCLES, MIN_STACKING_CYCLES } from '@constants/app';
 import { Text } from '@stacks/ui';
 import { useField } from 'formik';
+import { OneCycleDescriptor } from '../../components/one-cycle-descriptor';
+import { Description, Step } from '../../components/stacking-form-step';
+import { Stepper } from '../../components/stepper';
 
 export function Duration() {
   const [field, meta, helpers] = useField('lockPeriod');
@@ -15,8 +15,10 @@ export function Duration() {
         <Description>
           <Text>
             Every cycle, each of your reward slots will be eligible for rewards. After your chosen
-            duration, you’ll need to wait one cycle before you can stack from this address again.
+            duration, you&apos;ll need to wait one cycle before you can stack from this address
+            again.
           </Text>
+          <Text href="">Learn more about cycles.</Text>
         </Description>
 
         <Stepper

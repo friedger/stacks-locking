@@ -6,13 +6,13 @@ import { ErrorText } from '@components/error-text';
 import { ExternalLink } from '@components/external-link';
 import {
   useGetAccountExtendedBalancesQuery,
-  useGetPoxInfoQuery
+  useGetPoxInfoQuery,
 } from '@components/stacking-client-provider/stacking-client-provider';
 import { pseudoBorderLeft } from '@components/styles/pseudo-border-left';
 import {
   STACKING_CONTRACT_CALL_TX_BYTES,
   STACKING_LEARN_MORE_URL,
-  STACKING_MINIMIUM_FOR_NEXT_CYCLE_URL
+  STACKING_MINIMIUM_FOR_NEXT_CYCLE_URL,
 } from '@constants/app';
 import { Box, Button, color, Input, Spinner, Stack, Text } from '@stacks/ui';
 import { microStxToStx, stxToMicroStx, toHumanReadableStx } from '@utils/unit-convert';
@@ -75,14 +75,14 @@ export function Amount() {
       <Description>
         <Stack alignItems="flex-start" spacing="base">
           <Text>
-            You’ll be eligible for one reward slot for every multiple of the minimum you stack.
+            You&apos;ll be eligible for one reward slot for every multiple of the minimum you stack.
           </Text>
           <Text>
             The estimated minimum per slot can change by multiples of 10,000 every cycle, so you may
             want to add a buffer to increase your chance of keeping the same number of slots.
           </Text>
           <ExternalLink href={STACKING_LEARN_MORE_URL}>
-            Learn how to choose the right amount
+            Learn more about risks of stacking at or near the minimum
           </ExternalLink>
           <ExternalLink href={STACKING_MINIMIUM_FOR_NEXT_CYCLE_URL}>
             View the minimum for next cycle

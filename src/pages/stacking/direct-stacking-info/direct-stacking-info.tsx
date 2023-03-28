@@ -1,13 +1,14 @@
 import { Link } from 'react-router-dom';
 
-import { useGetHasPendingDirectStackingQuery } from './use-get-has-pending-direct-stacking';
 import { Address } from '@components/address';
 import { Alert } from '@components/alert';
+import { CenteredErrorAlert } from '@components/centered-error-alert';
+import { CenteredSpinner } from '@components/centered-spinner';
 import { ExternalLink } from '@components/external-link';
 import { Hr } from '@components/hr';
 import {
-  InfoCardGroup as Group,
   InfoCard,
+  InfoCardGroup as Group,
   InfoCardLabel as Label,
   InfoCardRow as Row,
   InfoCardSection as Section,
@@ -22,13 +23,12 @@ import {
   useGetStatusQuery,
 } from '@components/stacking-client-provider/stacking-client-provider';
 import { Caption } from '@components/typography';
-import { Box, Flex, Stack, Text, color } from '@stacks/ui';
+import { Box, color, Flex, Stack, Text } from '@stacks/ui';
 import { IconClockHour4, IconInfoCircle } from '@tabler/icons-react';
 import { makeExplorerTxLink, makeStackingClubRewardAddressLink } from '@utils/external-links';
 import { formatPoxAddressToNetwork } from '@utils/stacking';
 import { toHumanReadableStx } from '@utils/unit-convert';
-import { CenteredErrorAlert } from '@components/centered-error-alert';
-import { CenteredSpinner } from '@components/centered-spinner';
+import { useGetHasPendingDirectStackingQuery } from './use-get-has-pending-direct-stacking';
 
 export function DirectStackingInfo() {
   const { networkName } = useNetwork();
