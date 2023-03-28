@@ -6,8 +6,11 @@ export const pools: { [key in PoolName]: Pool } = {
   'FAST Pool': {
     name: PoolName.FastPool,
     description:
-      'Enjoy pool operations automatically.' +
-      'You can increase the locking amount for the next cycle. Locked STX will unlock 1 day after the end of the cycle.',
+      'Enjoy automatic pool operations.' +
+      ' ' +
+      'You can increase the locking amount for the next cycle.' +
+      ' ' +
+      'Locked STX will unlock 1 day after the end of the cycle.',
     duration: 1,
     website: 'https://pool.friedger.de',
     payoutMethod: PayoutMethod.STX,
@@ -31,7 +34,8 @@ export const pools: { [key in PoolName]: Pool } = {
 
   Xverse: {
     name: PoolName.Xverse,
-    description: 'Use the non-custodial stacking pool service from makers of Xverse wallet.',
+    description:
+      'Xverse pool is a non-custodial stacking pool service from the makers of Xverse wallet.',
     duration: 1,
     website: 'https://pool.xverse.app/',
     payoutMethod: PayoutMethod.BTC,
