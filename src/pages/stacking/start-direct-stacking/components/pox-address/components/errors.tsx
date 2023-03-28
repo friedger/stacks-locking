@@ -1,4 +1,4 @@
-import { ExternalLink } from '@components/external-link';
+import { OpenExternalLinkInNewTab } from '@components/external-link';
 import { ExplainerLabel } from '@components/tooltip';
 import { STACKING_ADDRESS_FORMAT_HELP_URL } from '@constants/app';
 
@@ -18,7 +18,9 @@ export function ErrorPeriod1() {
         Native SegWit
       </ExplainerLabel>{' '}
       addresses are not supported.{' '}
-      <ExternalLink href={STACKING_ADDRESS_FORMAT_HELP_URL}>Learn more</ExternalLink>
+      <OpenExternalLinkInNewTab href={STACKING_ADDRESS_FORMAT_HELP_URL}>
+        Learn more
+      </OpenExternalLinkInNewTab>
     </>
   );
 }
@@ -43,14 +45,14 @@ export function ErrorPostPeriod1() {
         Taproot
       </ExplainerLabel>
       address.
-      <ExternalLink
+      <OpenExternalLinkInNewTab
         href={STACKING_ADDRESS_FORMAT_HELP_URL}
         textDecoration="underline"
         display="inline-block"
         ml="extra-tight"
       >
         Learn more
-      </ExternalLink>
+      </OpenExternalLinkInNewTab>
     </>
   );
 }

@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { ErrorAlert } from '@components/error-alert';
 import { ErrorLabel } from '@components/error-label';
 import { ErrorText } from '@components/error-text';
-import { ExternalLink } from '@components/external-link';
+import { OpenExternalLinkInNewTab } from '@components/external-link';
 import {
   useGetAccountExtendedBalancesQuery,
   useGetPoxInfoQuery,
@@ -81,12 +81,12 @@ export function Amount() {
             The estimated minimum per slot can change by multiples of 10,000 every cycle, so you may
             want to add a buffer to increase your chance of keeping the same number of slots.
           </Text>
-          <ExternalLink href={STACKING_LEARN_MORE_URL}>
+          <OpenExternalLinkInNewTab href={STACKING_LEARN_MORE_URL}>
             Learn more about risks of stacking at or near the minimum
-          </ExternalLink>
-          <ExternalLink href={STACKING_MINIMIUM_FOR_NEXT_CYCLE_URL}>
+          </OpenExternalLinkInNewTab>
+          <OpenExternalLinkInNewTab href={STACKING_MINIMIUM_FOR_NEXT_CYCLE_URL}>
             View the minimum for next cycle
-          </ExternalLink>
+          </OpenExternalLinkInNewTab>
         </Stack>
       </Description>
 

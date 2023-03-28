@@ -1,5 +1,5 @@
 import { Alert } from '@components/alert';
-import { ExternalLink } from '@components/external-link';
+import { OpenExternalLinkInNewTab } from '@components/external-link';
 import { Caption } from '@components/typography';
 import { BUY_STACKS_URL } from '@constants/app';
 import { Stack, color, Text } from '@stacks/ui';
@@ -53,7 +53,9 @@ export function Messages({
               It appears that you don&apos;t have enough funds yet. If you recently transferred
               funds to this account, you&apos;ll soon be able to stack.{' '}
             </Text>
-            <ExternalLink href={BUY_STACKS_URL}>Consider topping up your account</ExternalLink>
+            <OpenExternalLinkInNewTab display="inline" href={BUY_STACKS_URL}>
+              Consider topping up your account
+            </OpenExternalLinkInNewTab>
           </Stack>
         </Alert>
       )}

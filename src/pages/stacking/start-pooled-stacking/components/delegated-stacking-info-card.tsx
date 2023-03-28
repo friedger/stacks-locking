@@ -17,7 +17,7 @@ import { truncateMiddle } from '@utils/tx-utils';
 import { useFormikContext } from 'formik';
 import { pools } from './preset-pools';
 import { PoolingAmountInfo } from './pooling-amount-info';
-import { ExternalLink } from '@components/external-link';
+import { OpenExternalLinkInNewTab } from '@components/external-link';
 import { makeExplorerTxLink } from '@utils/external-links';
 import { useNetwork } from '@components/network-provider';
 
@@ -99,9 +99,11 @@ export function PoolingInfoCard(props: FlexProps) {
                 <Label>Contract</Label>
                 <Value>
                   {poxWrapperContract && (
-                    <ExternalLink href={makeExplorerTxLink(poxWrapperContract, networkName)}>
+                    <OpenExternalLinkInNewTab
+                      href={makeExplorerTxLink(poxWrapperContract, networkName)}
+                    >
                       {truncateMiddle(poxWrapperContract)}
-                    </ExternalLink>
+                    </OpenExternalLinkInNewTab>
                   )}
                 </Value>
               </Row>

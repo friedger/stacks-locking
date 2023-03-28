@@ -1,10 +1,10 @@
 import { Description, Step } from '../../components/stacking-form-step';
-import { Pool, PoolName, Pox2Contracts } from '../types-preset-pools';
+import { PoolName } from '../types-preset-pools';
 import { PoolSelectItem } from './pool-select-item';
 import { pools } from './preset-pools';
-import { ExternalLink } from '@components/external-link';
 import { Stack, Text } from '@stacks/ui';
 import { useField } from 'formik';
+import { OpenExternalLinkInNewTab } from '@components/external-link';
 
 interface ChoosePoolingPoolProps {
   onPoolChange: (val: PoolName) => void;
@@ -20,9 +20,9 @@ export function ChoosePoolingPool({ onPoolChange }: ChoosePoolingPoolProps) {
       <Description>
         <Text>
           Select a pool to start stacking or{' '}
-          <ExternalLink href="https://www.stacks.co/learn/stacking">
+          <OpenExternalLinkInNewTab display="inline" href="https://www.stacks.co/learn/stacking">
             discover others on stacks.co.
-          </ExternalLink>
+          </OpenExternalLinkInNewTab>
         </Text>
       </Description>
 

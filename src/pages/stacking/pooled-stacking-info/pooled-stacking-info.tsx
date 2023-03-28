@@ -30,7 +30,7 @@ import { toHumanReadableStx } from '@utils/unit-convert';
 import { StartStackingLayout } from 'src/pages/choose-stacking-method/components/start-stacking-layout';
 import { useDelegationStatusQuery } from './use-delegation-status-query';
 import { useGetPoolAddress } from './use-get-pool-address-query';
-import { ExternalLink } from '@components/external-link';
+import { OpenExternalLinkInNewTab } from '@components/external-link';
 import { makeStackingClubRewardAddressLink } from '@utils/external-links';
 import { CancelIcon } from '@components/icons/cancel';
 
@@ -229,12 +229,12 @@ function PooledStackingInfoLayout({ client }: CardLayoutProps) {
                     <Section>
                       <Row>
                         <Label>
-                          <ExternalLink
+                          <OpenExternalLinkInNewTab
                             href={makeStackingClubRewardAddressLink('')}
                             color={color('text-caption')}
                           >
                             🥞 View on stacking.club
-                          </ExternalLink>
+                          </OpenExternalLinkInNewTab>
                         </Label>
                       </Row>
                       <Row>

@@ -4,7 +4,7 @@ import { Address } from '@components/address';
 import { Alert } from '@components/alert';
 import { CenteredErrorAlert } from '@components/centered-error-alert';
 import { CenteredSpinner } from '@components/centered-spinner';
-import { ExternalLink } from '@components/external-link';
+import { OpenExternalLinkInNewTab } from '@components/external-link';
 import { Hr } from '@components/hr';
 import {
   InfoCard,
@@ -161,9 +161,11 @@ export function DirectStackingInfo() {
                   <Section>
                     <Row>
                       {transactionId && (
-                        <ExternalLink href={makeExplorerTxLink(transactionId, networkName)}>
+                        <OpenExternalLinkInNewTab
+                          href={makeExplorerTxLink(transactionId, networkName)}
+                        >
                           View transaction
-                        </ExternalLink>
+                        </OpenExternalLinkInNewTab>
                       )}
                     </Row>
                   </Section>
@@ -264,13 +266,13 @@ export function DirectStackingInfo() {
                 )}
 
                 <Section>
-                  <ExternalLink
+                  <OpenExternalLinkInNewTab
                     href={makeStackingClubRewardAddressLink(
                       String(formatPoxAddressToNetwork(getStatusQuery.data.details.pox_address))
                     )}
                   >
                     🥞 View on stacking.club
-                  </ExternalLink>
+                  </OpenExternalLinkInNewTab>
                 </Section>
               </Group>
             </Flex>

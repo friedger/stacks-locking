@@ -1,4 +1,4 @@
-import { ExternalLink } from '@components/external-link';
+import { OpenExternalLinkInNewTab } from '@components/external-link';
 import { Box, color, Flex, FlexProps, Text } from '@stacks/ui';
 import { useFocus } from 'use-events';
 import { PoolName } from '../types-preset-pools';
@@ -69,7 +69,7 @@ export function PoolSelectItem(props: PoolSelectItemProps) {
               <CustomPoolAddressInput />
             ) : (
               url && (
-                <ExternalLink href={url}>
+                <OpenExternalLinkInNewTab href={url}>
                   <Text
                     textStyle="body.small"
                     color={color('text-caption')}
@@ -79,7 +79,7 @@ export function PoolSelectItem(props: PoolSelectItemProps) {
                   >
                     Learn more
                   </Text>
-                </ExternalLink>
+                </OpenExternalLinkInNewTab>
               )
             )}
           </Box>
