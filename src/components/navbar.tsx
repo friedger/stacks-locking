@@ -15,13 +15,13 @@ export function Navbar() {
     <Flex
       flexDirection="row"
       justifyContent="space-between"
-      p="tight"
+      p="base-loose"
       borderBottom={`1px solid ${figmaTheme.borderSubdued}`}
     >
-      <Flex alignItems="center" pl="loose">
+      <Flex alignItems="center">
         <Link to="/">
           <Flex alignItems="center">
-            <Box pr="extra-tight">
+            <Box pl="12px" pr="extra-tight">
               <Stacks />
             </Box>
             <Text color={figmaTheme.text} fontWeight={500}>
@@ -37,20 +37,22 @@ export function Navbar() {
               FAQ
             </Text>
           </ExternalLink>
-          {isSignedIn && address ? (
-            <Button
-              width="142px"
-              boxShadow="none"
-              _hover={{ boxShadow: 'none' }}
-              mode="tertiary"
-              onClick={() => signOut()}
-              {...bind}
-            >
-              {isHovered ? 'Sign out' : truncateMiddle(address)}
-            </Button>
-          ) : (
-            <Button onClick={() => signIn()}>Connect wallet</Button>
-          )}
+          <Box pr="12px">
+            {isSignedIn && address ? (
+              <Button
+                width="142px"
+                boxShadow="none"
+                _hover={{ boxShadow: 'none' }}
+                mode="tertiary"
+                onClick={() => signOut()}
+                {...bind}
+              >
+                {isHovered ? 'Sign out' : truncateMiddle(address)}
+              </Button>
+            ) : (
+              <Button onClick={() => signIn()}>Connect wallet</Button>
+            )}
+          </Box>
         </Flex>
       </Box>
     </Flex>
