@@ -17,11 +17,11 @@ export const pools: { [key in PoolName]: Pool } = {
     allowCustomRewardAddress: false,
   },
 
-  'Plan Better': {
+  PlanBetter: {
     name: PoolName.PlanBetter,
     description: 'Earn non-custodial Bitcoin yield. No wrapped tokens. Native BTC.',
     duration: 1,
-    website: 'https://app.planbetter.org',
+    website: 'https://planbetter.org',
     payoutMethod: PayoutMethod.BTC,
     poolAddress: 'SP3TDKYYRTYFE32N19484838WEJ25GX40Z24GECPZ',
     poxContract: Pox2Contracts.WrapperOneCycle,
@@ -31,8 +31,7 @@ export const pools: { [key in PoolName]: Pool } = {
 
   Xverse: {
     name: PoolName.Xverse,
-    description:
-      'Use the non-custodial stacking pool service from makers of Xverse wallet.',
+    description: 'Use the non-custodial stacking pool service from makers of Xverse wallet.',
     duration: 1,
     website: 'https://pool.xverse.app/',
     payoutMethod: PayoutMethod.BTC,

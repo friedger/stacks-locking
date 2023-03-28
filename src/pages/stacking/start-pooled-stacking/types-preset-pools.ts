@@ -3,7 +3,7 @@ import { initialNetworkName } from '@components/network-provider';
 export enum PoolName {
   FastPool = 'FAST Pool',
   Xverse = 'Xverse',
-  PlanBetter = 'Plan Better',
+  PlanBetter = 'PlanBetter',
   CustomPool = 'Custom Pool',
 }
 
