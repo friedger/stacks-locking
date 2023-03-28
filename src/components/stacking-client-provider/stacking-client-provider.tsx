@@ -112,10 +112,6 @@ export function useGetAllowanceContractCallers(callingContract: string) {
 
   return useQuery(['getAllowanceContractCallers', senderAddress, callingContract, network], () => {
     if (senderAddress) {
-      // TODO remove this. Only for Demo
-      if (callingContract === Pox2Contracts.WrapperOneCycle) {
-        return Promise.resolve(someCV(noneCV()));
-      }
       const [contractAddress, contractName] = poxContractId.split('.');
       return callReadOnlyFunction({
         contractAddress,
