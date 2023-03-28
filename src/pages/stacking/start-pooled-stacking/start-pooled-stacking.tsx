@@ -57,16 +57,6 @@ export function StartPooledStacking() {
     console.error(msg);
     return <CenteredErrorAlert>{msg}</CenteredErrorAlert>;
   }
-  if (!btcAddressP2tr) {
-    const msg = 'Expected `btcAddressP2tr` to be defined.';
-    console.error(msg);
-    return <CenteredErrorAlert>{msg}</CenteredErrorAlert>;
-  }
-  if (!btcAddressP2wpkh) {
-    const msg = 'Expected `btcAddressP2wpkh` to be defined.';
-    console.error(msg);
-    return <CenteredErrorAlert>{msg}</CenteredErrorAlert>;
-  }
   if (!client) {
     const msg = 'Expected `client` to be defined.';
     console.error(msg);
@@ -91,8 +81,8 @@ interface StartPooledStackingProps {
   client: StackingClient;
   currentAccountAddresses: {
     address: string;
-    btcAddressP2tr: string;
-    btcAddressP2wpkh: string;
+    btcAddressP2tr: string | null;
+    btcAddressP2wpkh: string | null;
   };
   networkName: StacksNetworkName;
 }
@@ -196,8 +186,8 @@ function StartPooledStackingLayout({
                 <ChoosePoolingPool onPoolChange={onPoolChange} />
                 {poolRequiresUserRewardAddress ? (
                   <ChoosePoolingRewardAddress
-                    btcAddress={currentAccountAddresses.btcAddressP2wpkh}
-                    editable={rewardAddressEditable}
+                    btcAddress={currentAccountAddresses.btcAddressP2wpkh || ''}
+                    editable={rewardAddressEditable || !currentAccountAddresses.btcAddressP2wpkh}
                   />
                 ) : (
                   <PresetPoolingRewardAddressInfo />
