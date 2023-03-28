@@ -18,7 +18,7 @@ export function Navbar() {
       p="tight"
       borderBottom={`1px solid ${figmaTheme.borderSubdued}`}
     >
-      <Flex alignItems="center">
+      <Flex alignItems="center" pl="loose">
         <Link to="/">
           <Flex alignItems="center">
             <Box pr="extra-tight">
