@@ -2,7 +2,7 @@
 // https://www.figma.com/file/Li7qK8ZIG9c5dKSNOPO4iCtv/%E2%9D%96-Design-System?node-id=1909-4136&t=GGTMJo3PyBf2gns5-0
 // for a detailed description of the palette and the theme.
 
-const palette = {
+export const palette = {
   white: '#ffffff',
   black: '#ococod',
 

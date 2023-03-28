@@ -9,8 +9,19 @@ import {
 import { ChooseStackingMethodLayout } from './choose-stacking-method.layout';
 import { CenteredSpinner } from '@components/centered-spinner';
 import { CenteredErrorAlert } from '@components/centered-error-alert';
+import { Box } from '@stacks/ui';
+import { Banner } from '../sign-in/banner';
 
 export function ChooseStackingMethod() {
+  return (
+    <Box>
+      <Banner />
+      <ChooseStackingMethodAuthHandler />
+    </Box>
+  );
+}
+
+export function ChooseStackingMethodAuthHandler() {
   const { isSignedIn } = useAuth();
   return isSignedIn ? <ChooseStackingMethodSignedIn /> : <ChooseStackingMethodSignedOut />;
 }
