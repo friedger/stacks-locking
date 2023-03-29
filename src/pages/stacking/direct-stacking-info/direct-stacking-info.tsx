@@ -1,35 +1,17 @@
-import { Link } from 'react-router-dom';
-
-import { Box, Flex, Stack, Text, color } from '@stacks/ui';
-import { IconClockHour4, IconInfoCircle } from '@tabler/icons-react';
-
-import { Address } from '@components/address';
-import { Alert } from '@components/alert';
 import { CenteredErrorAlert } from '@components/centered-error-alert';
 import { CenteredSpinner } from '@components/centered-spinner';
-import { OpenExternalLinkInNewTab } from '@components/external-link';
-import { Hr } from '@components/hr';
-import {
-  InfoCardGroup as Group,
-  InfoCard,
-  InfoCardLabel as Label,
-  InfoCardRow as Row,
-  InfoCardSection as Section,
-  InfoCardValue as Value,
-} from '@components/info-card';
 import { useNetwork } from '@components/network-provider';
 import {
   useGetAccountBalanceLockedQuery,
   useGetAccountExtendedBalancesQuery,
   useGetCoreInfoQuery,
   useGetPoxInfoQuery,
-  useGetStatusQuery,
+  useGetStatusQuery
 } from '@components/stacking-client-provider/stacking-client-provider';
-import { Caption } from '@components/typography';
-import { makeExplorerTxLink, makeStackingClubRewardAddressLink } from '@utils/external-links';
-import { formatPoxAddressToNetwork } from '@utils/stacking';
-import { toHumanReadableStx } from '@utils/unit-convert';
-
+import { Text } from '@stacks/ui';
+import { ActiveStackingInfo } from './components/active-stacking-info';
+import { NoStacking } from './components/no-stacking-info';
+import { PendingStackingInfo } from './components/pending-stacking-info';
 import { useGetHasPendingDirectStackingQuery } from './use-get-has-pending-direct-stacking';
 
 export function DirectStackingInfo() {
@@ -78,105 +60,18 @@ export function DirectStackingInfo() {
   const isStacking = getStatusQuery.data.stacked;
 
   if (!isStacking && getHasPendingDirectStacking.data === null) {
-    return (
-      <Flex height="100%" justify="center" align="center" m="loose">
-        <InfoCard width="420px">
-          <Alert icon={<IconInfoCircle />}>
-            <Stack>
-              <Text>
-                It appears that you&apos;re not stacking yet. If you recently started to stack, your
-                stacking info will appear here in a few seconds.
-              </Text>
-              <Text>
-                You may want to{' '}
-                <Caption
-                  display="inline"
-                  to="../start-direct-stacking"
-                  color={color('brand')}
-                  as={Link}
-                >
-                  start stacking
-                </Caption>{' '}
-                or{' '}
-                <Caption
-                  display="inline"
-                  color={color('brand')}
-                  to="../choose-stacking-method"
-                  as={Link}
-                >
-                  choose your stacking method
-                </Caption>
-                .
-              </Text>
-            </Stack>
-          </Alert>
-        </InfoCard>
-      </Flex>
-    );
+    return <NoStacking />;
   }
 
   const transactionId = getHasPendingDirectStacking.data?.transactionId;
 
   if (!isStacking && getHasPendingDirectStacking.data) {
     return (
-      <>
-        <Flex height="100%" justify="center" align="center">
-          <InfoCard width="420px">
-            <Box mx={['loose', 'extra-loose']}>
-              <Flex flexDirection="column" pt="extra-loose" pb="base-loose">
-                <Text textStyle="body.large.medium">You&apos;re stacking</Text>
-                <Text
-                  fontSize="24px"
-                  fontFamily="Open Sauce"
-                  fontWeight={500}
-                  letterSpacing="-0.02em"
-                  mt="extra-tight"
-                  pb="base-loose"
-                >
-                  {toHumanReadableStx(getHasPendingDirectStacking.data.amountMicroStx)}
-                </Text>
-
-                <Box pb="base-loose">
-                  <Alert icon={<IconClockHour4 />} title="Waiting for transaction confirmation">
-                    A stacking request was successfully submitted to the blockchain. Once confirmed,
-                    the account will be ready to start stacking.
-                  </Alert>
-                </Box>
-
-                <Hr />
-
-                <Group mt="base-loose">
-                  <Section>
-                    <Row>
-                      <Label>Duration</Label>
-                      <Value>{getHasPendingDirectStacking.data.lockPeriod.toString()} cycles</Value>
-                    </Row>
-                  </Section>
-                  <Section>
-                    <Row>
-                      <Label>Bitcoin address</Label>
-                      <Value>
-                        <Address address={getHasPendingDirectStacking.data.poxAddress} />
-                      </Value>
-                    </Row>
-                  </Section>
-                  <Section>
-                    <Row>
-                      {transactionId && (
-                        <OpenExternalLinkInNewTab
-                          href={makeExplorerTxLink(transactionId, networkName)}
-                        >
-                          View transaction
-                        </OpenExternalLinkInNewTab>
-                      )}
-                    </Row>
-                  </Section>
-                </Group>
-              </Flex>
-            </Box>
-          </InfoCard>
-        </Flex>
-      </>
+      <PendingStackingInfo
+        data={getHasPendingDirectStacking.data}
+        transactionId={transactionId}
+        networkName={networkName}
+      />
     );
   }
 
@@ -189,98 +84,11 @@ export function DirectStackingInfo() {
     return <CenteredErrorAlert id={id}>{msg}</CenteredErrorAlert>;
   }
 
-  const elapsedCyclesSinceStackingStart = Math.max(
-    getPoxInfoQuery.data.reward_cycle_id - getStatusQuery.data.details.first_reward_cycle,
-    0
-  );
-  const elapsedStackingCycles = Math.min(
-    elapsedCyclesSinceStackingStart,
-    getStatusQuery.data.details.lock_period
-  );
-
-  const isBeforeFirstRewardCycle =
-    getPoxInfoQuery.data.reward_cycle_id < getStatusQuery.data.details.first_reward_cycle;
-
-  const poxAddress = formatPoxAddressToNetwork(getStatusQuery.data.details.pox_address);
-
   return (
-    <>
-      <Flex height="100%" justify="center" align="center">
-        <InfoCard width="420px">
-          <Box mx={['loose', 'extra-loose']}>
-            <Flex flexDirection="column" pt="extra-loose" pb="base-loose">
-              <Text textStyle="body.large.medium">You&apos;re stacking</Text>
-              <Text
-                fontSize="24px"
-                fontFamily="Open Sauce"
-                fontWeight={500}
-                letterSpacing="-0.02em"
-                mt="extra-tight"
-              >
-                {toHumanReadableStx(getAccountBalanceLockedQuery.data)}
-              </Text>
-
-              {isBeforeFirstRewardCycle && (
-                <>
-                  <Box pb="base-loose"></Box>
-                  <Alert icon={<IconClockHour4 />} title="Waiting for the cycle to start">
-                    Your STX are ready for stacking. Once the next cycle starts the network will
-                    determine if and how many slots are claimed.
-                  </Alert>
-                </>
-              )}
-
-              <Box pb="base-loose"></Box>
-
-              <Hr />
-              <Group pt="base-loose">
-                <Section>
-                  <Row>
-                    <Label>Duration</Label>
-                    <Value>
-                      {elapsedStackingCycles} / {getStatusQuery.data.details.lock_period}
-                    </Value>
-                  </Row>
-                  <Row>
-                    <Label>Start</Label>
-                    <Value>Cycle {getStatusQuery.data.details.first_reward_cycle}</Value>
-                  </Row>
-                  <Row>
-                    <Label explainer="This is your last stacking cycle.">End</Label>
-                    <Value>
-                      Cycle{' '}
-                      {getStatusQuery.data.details.first_reward_cycle +
-                        getStatusQuery.data.details.lock_period -
-                        1}{' '}
-                    </Value>
-                  </Row>
-                </Section>
-
-                {poxAddress && (
-                  <Section>
-                    <Row>
-                      <Label>Bitcoin address</Label>
-                      <Value>
-                        <Address address={poxAddress} />
-                      </Value>
-                    </Row>
-                  </Section>
-                )}
-
-                <Section>
-                  <OpenExternalLinkInNewTab
-                    href={makeStackingClubRewardAddressLink(
-                      String(formatPoxAddressToNetwork(getStatusQuery.data.details.pox_address))
-                    )}
-                  >
-                    🥞 View on stacking.club
-                  </OpenExternalLinkInNewTab>
-                </Section>
-              </Group>
-            </Flex>
-          </Box>
-        </InfoCard>
-      </Flex>
-    </>
+    <ActiveStackingInfo
+      rewardCycleId={getPoxInfoQuery.data.reward_cycle_id}
+      lockedAmount={getAccountBalanceLockedQuery.data}
+      stackerInfoDetails={getStatusQuery.data.details}
+    />
   );
 }

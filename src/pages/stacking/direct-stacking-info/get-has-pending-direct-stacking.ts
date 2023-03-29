@@ -57,7 +57,7 @@ function findMempoolTransaction(
     return isStackCall(t, poxContractId);
   }) as MempoolContractCallTransaction; // Casting as type is checked in `if` statement above.
 }
-interface ReturnGetHasPendingDirectStacking {
+export interface ReturnGetHasPendingDirectStacking {
   amountMicroStx: bigint;
   lockPeriod: bigint;
   poxAddress: string;
