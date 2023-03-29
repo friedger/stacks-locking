@@ -2,6 +2,7 @@ import { Box, Flex, FlexProps, Text, color } from '@stacks/ui';
 import { useFocus } from 'use-events';
 
 import { OpenExternalLinkInNewTab } from '@components/external-link';
+import { figmaTheme } from '@constants/figma-theme';
 
 import { PoolName } from '../types-preset-pools';
 import { CustomPoolAddressInput } from './custom-pool-address-input';
@@ -38,7 +39,7 @@ export function PoolSelectItem(props: PoolSelectItemProps) {
               right: '-1px',
               bottom: '-1px',
               borderRadius: '12px',
-              border: '2px solid #CEDAFA',
+              border: `2px solid ${figmaTheme.borderFocused}`,
             },
           }
         : {})}
