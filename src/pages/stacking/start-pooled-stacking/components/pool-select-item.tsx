@@ -24,6 +24,7 @@ export function PoolSelectItem(props: PoolSelectItemProps) {
       p="base-loose"
       as="label"
       htmlFor={name}
+      cursor="pointer"
       border={`1px solid ${color('border')}`}
       borderRadius="12px"
       position="relative"
