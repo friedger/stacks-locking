@@ -1,5 +1,6 @@
 import { Box, Flex } from '@stacks/ui';
 import { IconStairs } from '@tabler/icons-react';
+import { IconLock } from '@tabler/icons-react';
 
 import divingBoardIllustration from '@assets/images/stack-in-a-pool.svg';
 import { Users } from '@components/icons/users';
@@ -32,11 +33,9 @@ export function PooledStackingCard(props: ChooseStackingMethodLayoutProps) {
       </Description>
 
       <OptionBenefitContainer>
+        <OptionBenefit icon={IconLock}>Interact with the protocol directly</OptionBenefit>
         <OptionBenefit icon={Users}>A pool stacks on your behalf</OptionBenefit>
         <OptionBenefit icon={IconStairs}>No minimum required</OptionBenefit>
-
-        {/* This is just a hack to get the correct allignment for the CTA button */}
-        <OptionBenefit icon={() => null}>&nbsp;</OptionBenefit>
       </OptionBenefitContainer>
 
       <Flex alignItems="center">
