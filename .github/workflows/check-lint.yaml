@@ -3,6 +3,8 @@ name: Check Lint
 on:
   pull_request:
     types: [opened, synchronize]
+  merge_group:
+    types: [checks_requested]
 
 jobs:
   check-lint:
