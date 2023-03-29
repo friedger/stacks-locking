@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Box, Button, Flex, Text } from '@stacks/ui';
 import { useHover } from 'use-events';
 
-import { Stacks } from '@components/icons/stacks';
+import logo from '@assets/images/logo.svg';
 import { figmaTheme } from '@constants/figma-theme';
 import { truncateMiddle } from '@utils/tx-utils';
 
@@ -25,12 +25,7 @@ export function Navbar() {
       <Flex alignItems="center">
         <Link to="/">
           <Flex alignItems="center">
-            <Box pl="12px" pr="extra-tight">
-              <Stacks />
-            </Box>
-            <Text color={figmaTheme.text} fontWeight={500}>
-              / Stacking
-            </Text>
+            <img src={logo} alt="Site logo with Stacks symbol and Stacking text" />
           </Flex>
         </Link>
       </Flex>
