@@ -103,7 +103,7 @@ export function useGetPoxInfoQuery() {
 }
 
 // Eventually, this can be a function on the Stacking Client
-export function useGetAllowanceContractCallers(callingContract: string) {
+export function useGetAllowanceContractCallersQuery(callingContract: string) {
   const { address: senderAddress } = useAuth();
   const { network } = useNetwork();
 

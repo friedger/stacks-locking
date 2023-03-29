@@ -11,7 +11,7 @@ import { CenteredErrorAlert } from '@components/centered-error-alert';
 import { CenteredSpinner } from '@components/centered-spinner';
 import { useNetwork } from '@components/network-provider';
 import {
-  useGetAllowanceContractCallers,
+  useGetAllowanceContractCallersQuery,
   useGetSecondsUntilNextCycleQuery,
   useStackingClient,
 } from '@components/stacking-client-provider/stacking-client-provider';
@@ -98,9 +98,13 @@ function StartPooledStackingLayout({
   const [poolRequiresUserRewardAddress, setPoolRequiresUserRewardAddress] = useState(true);
   const [requiresAllowContractCaller, setRequiresAllowContractCaller] = useState(true);
 
-  const q1 = useGetSecondsUntilNextCycleQuery();
-  const q2 = useGetAllowanceContractCallers(Pox2Contracts.WrapperFastPool);
-  const q3 = useGetAllowanceContractCallers(Pox2Contracts.WrapperOneCycle);
+  const getSecondsUntilNextCycleQuery = useGetSecondsUntilNextCycleQuery();
+  const getAllowanceContractCallersFastPoolQuery = useGetAllowanceContractCallersQuery(
+    Pox2Contracts.WrapperFastPool
+  );
+  const getAllowanceContractCallersOneCycleQuery = useGetAllowanceContractCallersQuery(
+    Pox2Contracts.WrapperOneCycle
+  );
 
   const [hasUserConfirmedPoolWrapperContract, setHasUserConfirmedPoolWrapperContract] =
     useState<PoolWrapperAllowanceState>({});
@@ -108,10 +112,16 @@ function StartPooledStackingLayout({
   useEffect(() => {
     setHasUserConfirmedPoolWrapperContract({
       [Pox2Contracts.PoX2]: true,
-      [Pox2Contracts.WrapperFastPool]: q2?.data?.type === ClarityType.OptionalSome,
-      [Pox2Contracts.WrapperOneCycle]: q3?.data?.type === ClarityType.OptionalSome,
+      [Pox2Contracts.WrapperFastPool]:
+        getAllowanceContractCallersFastPoolQuery?.data?.type === ClarityType.OptionalSome,
+      [Pox2Contracts.WrapperOneCycle]:
+        getAllowanceContractCallersOneCycleQuery?.data?.type === ClarityType.OptionalSome,
     });
-  }, [q2?.data?.type, q3?.data?.type, setHasUserConfirmedPoolWrapperContract]);
+  }, [
+    getAllowanceContractCallersFastPoolQuery?.data?.type,
+    getAllowanceContractCallersOneCycleQuery?.data?.type,
+    setHasUserConfirmedPoolWrapperContract,
+  ]);
 
   const navigate = useNavigate();
   const { network } = useNetwork();
@@ -153,9 +163,12 @@ function StartPooledStackingLayout({
     }
   };
 
-  if (q1.isLoading) return <CenteredSpinner />;
+  if (getSecondsUntilNextCycleQuery.isLoading) return <CenteredSpinner />;
 
-  if (q1.isError || typeof q1.data !== 'number') {
+  if (
+    getSecondsUntilNextCycleQuery.isError ||
+    typeof getSecondsUntilNextCycleQuery.data !== 'number'
+  ) {
     const id = '0106e9bf-ae2f-4fcc-bf00-5fe083001adb';
     const msg = 'Failed to load necessary data.';
     // TODO: log error
@@ -175,7 +188,7 @@ function StartPooledStackingLayout({
       validationSchema={validationSchema}
     >
       <StartStackingLayout
-        intro={<PooledStackingIntro timeUntilNextCycle={q1.data} />}
+        intro={<PooledStackingIntro timeUntilNextCycle={getSecondsUntilNextCycleQuery.data} />}
         stackingInfoPanel={
           <StackingFormInfoPanel>
             <PoolingInfoCard />
