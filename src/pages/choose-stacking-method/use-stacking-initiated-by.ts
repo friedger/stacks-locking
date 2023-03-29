@@ -1,9 +1,12 @@
-import { Transaction } from '@stacks/stacks-blockchain-api-types';
+import { ContractCallTransaction } from '@stacks/stacks-blockchain-api-types';
 import { useQuery } from '@tanstack/react-query';
 
 import { useAuth } from '@components/auth-provider/auth-provider';
 import { useBlockchainApiClient } from '@components/blockchain-api-client-provider';
 import { useGetAccountExtendedBalancesQuery } from '@components/stacking-client-provider/stacking-client-provider';
+
+import { pools } from '../stacking/start-pooled-stacking/components/preset-pools';
+import { PoolName } from '../stacking/start-pooled-stacking/types-preset-pools';
 
 /**
  * Returns the address that initiated the current account's stacking. If the account isn't stacking,
@@ -33,9 +36,17 @@ export function useStackingInitiatedByQuery() {
       const res = (await transactionsApi.getTransactionById({
         txId,
         // https://github.com/hirosystems/stacks-blockchain-api/tree/master/client#known-issues
-      })) as Transaction;
-      return { address: res.sender_address };
+      })) as ContractCallTransaction;
+      if (isStackingWithSelfServicePool(res)) {
+        return { address: res.contract_call.contract_id };
+      } else {
+        return { address: res.sender_address };
+      }
     },
     { enabled: !q.isLoading }
   );
+}
+
+function isStackingWithSelfServicePool(t: ContractCallTransaction) {
+  return t.contract_call.contract_id === pools[PoolName.FastPool].poxContract;
 }
