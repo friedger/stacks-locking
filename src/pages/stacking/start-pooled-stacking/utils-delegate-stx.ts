@@ -8,10 +8,7 @@ import { noneCV, someCV, uintCV } from '@stacks/transactions';
 import { principalCV } from '@stacks/transactions/dist/clarity/types/principalCV';
 import * as yup from 'yup';
 
-import {
-  MIN_DELEGATED_STACKING_AMOUNT_USTX,
-  UI_IMPOSED_MAX_STACKING_AMOUNT_USTX,
-} from '@constants/app';
+import { UI_IMPOSED_MAX_STACKING_AMOUNT_USTX } from '@constants/app';
 import { cyclesToBurnChainHeight } from '@utils/calculate-burn-height';
 import { stxToMicroStx, toHumanReadableStx } from '@utils/unit-convert';
 import { stxPrincipalSchema } from '@utils/validators/stx-address-validator';
@@ -47,13 +44,21 @@ export function createValidationSchema({ currentAccountAddress, networkName }: A
     amount: stxAmountSchema()
       .test({
         name: 'test-min-allowed-delegated-stacking',
-        message: `You must delegate at least ${toHumanReadableStx(
-          MIN_DELEGATED_STACKING_AMOUNT_USTX
-        )}`,
-        test(value) {
-          if (value === undefined) return false;
-          const enteredAmount = stxToMicroStx(value);
-          return enteredAmount.isGreaterThanOrEqualTo(MIN_DELEGATED_STACKING_AMOUNT_USTX);
+        message: "You must delegate at least the pool's minimum.",
+        test(value, context) {
+          const poolName = context.parent.poolName as PoolName;
+          if (!poolName) return true;
+          const minDelegatedStackingAmount = pools[poolName].minimumDelegationAmount;
+          const enteredAmount = stxToMicroStx(value || 0);
+          if (enteredAmount.isLessThan(minDelegatedStackingAmount)) {
+            return context.createError({
+              message: `You must delegate at least ${toHumanReadableStx(
+                minDelegatedStackingAmount
+              )}`,
+            });
+          } else {
+            return true;
+          }
         },
       })
       .test({

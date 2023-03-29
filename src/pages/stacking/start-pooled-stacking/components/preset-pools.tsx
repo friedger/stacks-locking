@@ -1,5 +1,7 @@
 import { IconEdit } from '@tabler/icons-react';
 
+import { MIN_DELEGATED_STACKING_AMOUNT_USTX } from '@constants/app';
+
 import { PayoutMethod, Pool, PoolName, Pox2Contracts } from '../types-preset-pools';
 import { PoolIcon } from './pool-icon';
 
@@ -17,6 +19,7 @@ export const pools: { [key in PoolName]: Pool } = {
     payoutMethod: PayoutMethod.STX,
     poolAddress: Pox2Contracts.WrapperFastPool, // pool address is the same as pool contract
     poxContract: Pox2Contracts.WrapperFastPool,
+    minimumDelegationAmount: 40_000_000,
     icon: <PoolIcon src="/32x32_FastPool.png" />,
     allowCustomRewardAddress: false,
   },
@@ -29,6 +32,7 @@ export const pools: { [key in PoolName]: Pool } = {
     payoutMethod: PayoutMethod.BTC,
     poolAddress: 'SP3TDKYYRTYFE32N19484838WEJ25GX40Z24GECPZ',
     poxContract: Pox2Contracts.WrapperOneCycle,
+    minimumDelegationAmount: 200_000_000,
     icon: <PoolIcon src="/32x32_PlanBetter.png" />,
     allowCustomRewardAddress: false, // only for ledger users
   },
@@ -42,6 +46,7 @@ export const pools: { [key in PoolName]: Pool } = {
     payoutMethod: PayoutMethod.BTC,
     poolAddress: 'SPXVRSEH2BKSXAEJ00F1BY562P45D5ERPSKR4Q33',
     poxContract: Pox2Contracts.WrapperOneCycle,
+    minimumDelegationAmount: 100_000_000,
     icon: <PoolIcon src="/32x32_Xverse.png" />,
     allowCustomRewardAddress: true,
   },
@@ -54,6 +59,7 @@ export const pools: { [key in PoolName]: Pool } = {
     payoutMethod: PayoutMethod.OTHER,
     poolAddress: undefined,
     poxContract: Pox2Contracts.PoX2,
+    minimumDelegationAmount: MIN_DELEGATED_STACKING_AMOUNT_USTX,
     icon: <IconEdit />,
     allowCustomRewardAddress: false,
   },

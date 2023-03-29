@@ -45,6 +45,7 @@ export type Pool = {
   icon: JSX.Element;
   payoutMethod: PayoutMethod;
   poxContract: WrapperPrincipal;
+  minimumDelegationAmount: number;
   allowCustomRewardAddress: boolean;
 };
 
