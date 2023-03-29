@@ -8,6 +8,7 @@ import { figmaTheme } from '@constants/figma-theme';
 import { truncateMiddle } from '@utils/tx-utils';
 
 import { useAuth } from './auth-provider/auth-provider';
+import { NetworkInfo } from './network-info';
 import { OpenLinkInNewTab } from './open-link-in-new-tab';
 
 export function Navbar() {
@@ -35,6 +36,7 @@ export function Navbar() {
       </Flex>
       <Box>
         <Flex p="sm" justify="right" alignItems="center">
+          <NetworkInfo />
           <OpenLinkInNewTab href="https://wallet.hiro.so/wallet/faq#stacking" px="loose">
             <Text color={figmaTheme.text} fontWeight={500}>
               FAQ
