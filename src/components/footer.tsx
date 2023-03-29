@@ -1,4 +1,4 @@
-import { Flex, Text } from '@stacks/ui';
+import { Flex } from '@stacks/ui';
 
 import { figmaTheme } from '@constants/figma-theme';
 

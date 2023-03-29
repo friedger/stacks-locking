@@ -1,14 +1,11 @@
 import { Navigate } from 'react-router-dom';
 
-import { Box, Button } from '@stacks/ui';
+import { Box } from '@stacks/ui';
 
 import { useAuth } from '@components/auth-provider/auth-provider';
 
 import { Hero } from '../../components/hero';
-import {
-  ChooseStackingMethod,
-  ChooseStackingMethodAuthHandler,
-} from '../choose-stacking-method/choose-stacking-method';
+import { ChooseStackingMethodAuthHandler } from '../choose-stacking-method/choose-stacking-method';
 import { Banner } from './banner';
 
 export function SignIn() {

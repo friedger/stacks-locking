@@ -8,7 +8,6 @@ import { noneCV, someCV, uintCV } from '@stacks/transactions';
 import { principalCV } from '@stacks/transactions/dist/clarity/types/principalCV';
 import * as yup from 'yup';
 
-import { useNetwork } from '@components/network-provider';
 import {
   MIN_DELEGATED_STACKING_AMOUNT_USTX,
   UI_IMPOSED_MAX_STACKING_AMOUNT_USTX,

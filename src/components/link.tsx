@@ -1,10 +1,6 @@
 import { Link as ReactRouterLink } from 'react-router-dom';
 
-import { Box, BoxProps, Text, color } from '@stacks/ui';
-
-import { openExternalLink } from '@utils/external-links';
-
-import { LegalDisclaimerTooltip } from './legal-disclaimer-tooltip';
+import { Box, BoxProps, color } from '@stacks/ui';
 
 interface Props extends BoxProps {
   to: string;

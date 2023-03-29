@@ -1,5 +1,3 @@
-import { useCallback } from 'react';
-
 import { Box, Button, Input, Spinner, Stack, Text, color } from '@stacks/ui';
 import { BigNumber } from 'bignumber.js';
 import { useField } from 'formik';
@@ -61,9 +59,9 @@ export function Amount() {
     maxAmountUstx = new BigNumber(0);
   }
 
-  const setMax = useCallback(() => {
+  const setMax = () => {
     helpers.setValue(microStxToStx(maxAmountUstx.toString()).toFixed(0, BigNumber.ROUND_DOWN));
-  }, [maxAmountUstx, helpers]);
+  };
 
   const numberOfRewardSlots = calculateRewardSlots(
     ustxAmount,

@@ -6,7 +6,6 @@ import {
   validateStacksAddress as isValidStacksAddress,
   noneCV,
   principalCV,
-  someCV,
 } from '@stacks/transactions';
 import { useQuery } from '@tanstack/react-query';
 import { Pox2Contracts } from 'src/pages/stacking/start-pooled-stacking/types-preset-pools';

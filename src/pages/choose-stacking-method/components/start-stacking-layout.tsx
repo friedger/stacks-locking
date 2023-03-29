@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 import {
   Box,
@@ -71,7 +71,7 @@ export const StackingOptionCardBenefit: FC<StackingOptionCardBenefitProps> = pro
 };
 
 export const StackingOptionCardButton: FC<ButtonProps> = props => (
-  <Button alignSelf="flex-start" mt="base" {...(props as unknown as any)} />
+  <Button alignSelf="flex-start" mt="base" {...props} />
 );
 
 export const InsufficientStackingBalanceWarning: FC<FlexProps> = props => (

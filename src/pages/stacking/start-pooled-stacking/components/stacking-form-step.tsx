@@ -1,6 +1,6 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 
-import { Box, Button, ButtonProps, Flex, FlexProps, Stack } from '@stacks/ui';
+import { Box, Button, ButtonProps, Flex, FlexProps } from '@stacks/ui';
 import { ForwardRefExoticComponentWithAs, forwardRefWithAs } from '@stacks/ui-core';
 
 import { Title } from '@components/title';

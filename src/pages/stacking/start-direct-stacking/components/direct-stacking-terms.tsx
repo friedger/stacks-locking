@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
 import { Stack, StackProps, Text } from '@stacks/ui';
-import { IconClock, IconLock } from '@tabler/icons-react';
+import { IconLock } from '@tabler/icons-react';
 
 import { StepsIcon } from '@components/icons/steps';
 import { pseudoBorderLeft } from '@components/styles/pseudo-border-left';

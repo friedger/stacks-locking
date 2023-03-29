@@ -16,9 +16,7 @@ export function ChoosePoolingAmount() {
   const totalAvailableBalance = queryGetAccountExtendedBalances.data?.stx.balance
     ? intToBigInt(queryGetAccountExtendedBalances.data.stx.balance, false)
     : undefined;
-  const lockedBalance = queryGetAccountExtendedBalances.data?.stx.locked
-    ? intToBigInt(queryGetAccountExtendedBalances.data.stx.locked, false)
-    : undefined;
+
   return (
     <Step title="Amount">
       <Description>

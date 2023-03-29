@@ -1,12 +1,11 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import { intToBigInt } from '@stacks/common';
 import { ContractCallRegularOptions, openContractCall } from '@stacks/connect';
 import { StackingClient } from '@stacks/stacking';
 import { Box, Button, Flex, Stack, Text, color } from '@stacks/ui';
 import { IconInfoCircle } from '@tabler/icons-react';
-import { StartStackingLayout } from 'src/pages/choose-stacking-method/components/start-stacking-layout';
 
 import { Address } from '@components/address';
 import { Alert } from '@components/alert';
@@ -51,9 +50,7 @@ interface CardLayoutProps {
   client: StackingClient;
 }
 function PooledStackingInfoLayout({ client }: CardLayoutProps) {
-  // const [isModalOpen, setIsModalOpen] = useState(false);
   const [isContractCallExtensionPageOpen, setIsContractCallExtensionPageOpen] = useState(false);
-  const navigate = useNavigate();
   const delegationStatusQuery = useDelegationStatusQuery();
   const getStatusQuery = useGetStatusQuery();
   const getAccountExtendedBalancesQuery = useGetAccountExtendedBalancesQuery();

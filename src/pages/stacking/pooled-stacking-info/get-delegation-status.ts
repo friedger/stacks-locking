@@ -10,8 +10,6 @@ import {
 import {
   ClarityType,
   ClarityValue,
-  PrincipalCV,
-  UIntCV,
   cvToHex,
   cvToString,
   hexToCV,
@@ -47,31 +45,6 @@ function findUnanchoredTransaction(
 
     return isOk && isDelegateOrRevokeDelegate(t);
   }) as ContractCallTransaction | undefined;
-}
-
-function findFirstDelegateEvent(transaction: ContractCallTransaction) {
-  for (let event of transaction.events) {
-    if (
-      event.event_type === 'smart_contract_log' &&
-      event.contract_log.contract_id === Pox2Contracts.PoX2
-    ) {
-      const eventValue = hexToCV(event.contract_log.value.hex);
-      if (
-        eventValue.type === ClarityType.ResponseOk &&
-        eventValue.value.type === ClarityType.Tuple &&
-        eventValue.value.data['name']?.type === ClarityType.StringASCII &&
-        eventValue.value.data['name']?.data === 'delegate-stx' &&
-        eventValue.value.data['data']?.type === ClarityType.Tuple
-      ) {
-        const delegateDataCV = eventValue.value.data['data'].data;
-        const amountMicroStxCV = delegateDataCV['amount-ustx'] as UIntCV;
-        const delegateToCV = delegateDataCV['delegate-to'] as PrincipalCV;
-        const untilBurnHeightCV = delegateDataCV['unlock-burn-height '] as UIntCV;
-        return [amountMicroStxCV, delegateToCV, untilBurnHeightCV];
-      }
-    }
-  }
-  return [];
 }
 
 function safeDelegateToCVToString(clarityValue: ClarityValue | undefined) {

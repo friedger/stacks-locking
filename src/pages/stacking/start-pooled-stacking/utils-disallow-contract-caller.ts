@@ -5,7 +5,7 @@ import { StacksNetwork } from '@stacks/network';
 import { StackingClient } from '@stacks/stacking';
 import { principalCV } from '@stacks/transactions';
 
-import { Pox2Contracts, WrapperPrincipal } from './types-preset-pools';
+import { WrapperPrincipal } from './types-preset-pools';
 
 function getOptions(
   poxWrapperContract: WrapperPrincipal,

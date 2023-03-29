@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import { Box, Flex, color } from '@stacks/ui';
+import { color } from '@stacks/ui';
 
 import { ErrorAlert } from './error-alert';
 import { InfoCard } from './info-card';
