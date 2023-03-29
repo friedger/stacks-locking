@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom';
 
+import { Flex, Stack, Text, color } from '@stacks/ui';
+import { IconInfoCircle } from '@tabler/icons-react';
+
 import { Alert } from '@components/alert';
 import { InfoCard } from '@components/info-card';
 import { Caption } from '@components/typography';
-import { color, Flex, Stack, Text } from '@stacks/ui';
-import { IconInfoCircle } from '@tabler/icons-react';
 
 export function NoStacking() {
   return (

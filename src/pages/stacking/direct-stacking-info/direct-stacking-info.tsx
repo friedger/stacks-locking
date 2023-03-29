@@ -1,3 +1,5 @@
+import { Text } from '@stacks/ui';
+
 import { CenteredErrorAlert } from '@components/centered-error-alert';
 import { CenteredSpinner } from '@components/centered-spinner';
 import { useNetwork } from '@components/network-provider';
@@ -6,9 +8,9 @@ import {
   useGetAccountExtendedBalancesQuery,
   useGetCoreInfoQuery,
   useGetPoxInfoQuery,
-  useGetStatusQuery
+  useGetStatusQuery,
 } from '@components/stacking-client-provider/stacking-client-provider';
-import { Text } from '@stacks/ui';
+
 import { ActiveStackingInfo } from './components/active-stacking-info';
 import { NoStacking } from './components/no-stacking-info';
 import { PendingStackingInfo } from './components/pending-stacking-info';

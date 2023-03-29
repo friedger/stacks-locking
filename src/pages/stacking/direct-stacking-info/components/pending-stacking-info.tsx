@@ -1,19 +1,21 @@
+import { Box, Button, Flex, Text } from '@stacks/ui';
+import { IconClockHour4 } from '@tabler/icons-react';
+
 import { Address } from '@components/address';
 import { Alert } from '@components/alert';
 import { OpenExternalLinkInNewTab } from '@components/external-link';
 import { Hr } from '@components/hr';
 import {
-  InfoCard,
   InfoCardGroup as Group,
+  InfoCard,
   InfoCardLabel as Label,
   InfoCardRow as Row,
   InfoCardSection as Section,
   InfoCardValue as Value,
 } from '@components/info-card';
-import { Box, Button, Flex, Text } from '@stacks/ui';
-import { IconClockHour4 } from '@tabler/icons-react';
 import { makeExplorerTxLink } from '@utils/external-links';
 import { toHumanReadableStx } from '@utils/unit-convert';
+
 import { ReturnGetHasPendingDirectStacking } from '../get-has-pending-direct-stacking';
 
 interface Props {
