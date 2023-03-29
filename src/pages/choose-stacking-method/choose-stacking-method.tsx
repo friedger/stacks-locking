@@ -1,16 +1,18 @@
-import { useDelegationStatusQuery } from '../stacking/pooled-stacking-info/use-delegation-status-query';
-import { useStackingInitiatedByQuery } from './use-stacking-initiated-by';
+import { Box } from '@stacks/ui';
+
 import { useAuth } from '@components/auth-provider/auth-provider';
+import { CenteredErrorAlert } from '@components/centered-error-alert';
+import { CenteredSpinner } from '@components/centered-spinner';
 import {
-  useGetAccountBalanceQuery,
   useGetAccountBalanceLockedQuery,
+  useGetAccountBalanceQuery,
   useGetPoxInfoQuery,
 } from '@components/stacking-client-provider/stacking-client-provider';
-import { ChooseStackingMethodLayout } from './choose-stacking-method.layout';
-import { CenteredSpinner } from '@components/centered-spinner';
-import { CenteredErrorAlert } from '@components/centered-error-alert';
-import { Box } from '@stacks/ui';
+
 import { Banner } from '../sign-in/banner';
+import { useDelegationStatusQuery } from '../stacking/pooled-stacking-info/use-delegation-status-query';
+import { ChooseStackingMethodLayout } from './choose-stacking-method.layout';
+import { useStackingInitiatedByQuery } from './use-stacking-initiated-by';
 
 export function ChooseStackingMethod() {
   return (

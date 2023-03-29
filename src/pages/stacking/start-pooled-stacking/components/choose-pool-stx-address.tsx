@@ -1,10 +1,12 @@
-import { CryptoAddressInput } from '../../components/crypto-address-form';
-import { Description, Step } from '../../components/stacking-form-step';
+import { Text } from '@stacks/ui';
+import { useField } from 'formik';
+
 import { ErrorLabel } from '@components/error-label';
 import { ErrorText } from '@components/error-text';
 import { OpenExternalLinkInNewTab } from '@components/external-link';
-import { Text } from '@stacks/ui';
-import { useField } from 'formik';
+
+import { CryptoAddressInput } from '../../components/crypto-address-form';
+import { Description, Step } from '../../components/stacking-form-step';
 
 export function ChoosePoolAddress() {
   const [field, meta] = useField('poolAddress');

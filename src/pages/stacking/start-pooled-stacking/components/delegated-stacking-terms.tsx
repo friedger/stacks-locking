@@ -1,8 +1,10 @@
+import { Stack, StackProps, Text } from '@stacks/ui';
+import { IconLock } from '@tabler/icons-react';
+
 import { Stacks } from '@components/icons/stacks';
 import { StepsIcon } from '@components/icons/steps';
 import { pseudoBorderLeft } from '@components/styles/pseudo-border-left';
-import { Stack, StackProps, Text } from '@stacks/ui';
-import { IconLock } from '@tabler/icons-react';
+
 import { StackingTermItem } from '../../components/stacking-term';
 
 interface DelegatedStackingTermsProps extends StackProps {

@@ -1,5 +1,6 @@
-import { WrapperPrincipal, PoolName, Pox2Contracts } from '../types-preset-pools';
 import { Button } from '@stacks/ui';
+
+import { PoolName, Pox2Contracts, WrapperPrincipal } from '../types-preset-pools';
 
 export function PoolContractDisallowButton({
   wrapperPrincipal,

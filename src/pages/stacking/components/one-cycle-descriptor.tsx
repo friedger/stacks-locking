@@ -1,8 +1,9 @@
 import { FC } from 'react';
 
+import { BoxProps, Spinner, Text, color } from '@stacks/ui';
+
 import { ErrorAlert } from '@components/error-alert';
 import { useGetPoxInfoQuery } from '@components/stacking-client-provider/stacking-client-provider';
-import { BoxProps, Spinner, Text, color } from '@stacks/ui';
 
 type OneCycleDescriptorProps = BoxProps;
 

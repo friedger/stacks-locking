@@ -10,14 +10,15 @@ import {
 import {
   ClarityType,
   ClarityValue,
+  PrincipalCV,
+  UIntCV,
   cvToHex,
   cvToString,
   hexToCV,
-  PrincipalCV,
   standardPrincipalCV,
   tupleCV,
-  UIntCV,
 } from '@stacks/transactions';
+
 import { Pox2Contracts } from '../start-pooled-stacking/types-preset-pools';
 import { isContractCallTransaction, isMempoolContractCallTransaction } from '../utils/transactions';
 

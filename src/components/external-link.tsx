@@ -1,5 +1,6 @@
-import { LegalDisclaimerTooltip } from './legal-disclaimer-tooltip';
 import { Box, BoxProps, Text, color } from '@stacks/ui';
+
+import { LegalDisclaimerTooltip } from './legal-disclaimer-tooltip';
 import { OpenLinkInNewTab } from './open-link-in-new-tab';
 
 interface ExternalLinkProps extends BoxProps {

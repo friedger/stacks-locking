@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 
-import { Title } from '@components/title';
 import {
   Box,
   BoxProps,
@@ -12,6 +11,8 @@ import {
   Text,
   color,
 } from '@stacks/ui';
+
+import { Title } from '@components/title';
 
 export const StartStackingLayout: FC<FlexProps> = props => (
   <Box maxWidth="1200px" height="100%" as="main" mx="auto" {...props} />

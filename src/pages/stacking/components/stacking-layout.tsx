@@ -1,5 +1,6 @@
-import { Screen } from '@components/screen';
 import { Box, Flex } from '@stacks/ui';
+
+import { Screen } from '@components/screen';
 
 type Slots = 'intro' | 'stackingInfoPanel' | 'stackingForm';
 

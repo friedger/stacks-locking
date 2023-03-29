@@ -1,5 +1,6 @@
-import { Flex, Text } from '@stacks/ui';
 import { FC } from 'react';
+
+import { Flex, Text } from '@stacks/ui';
 
 interface PoolingAmountInfoProps {
   title: string;

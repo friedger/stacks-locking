@@ -1,6 +1,7 @@
-import { SUPPORTED_BTC_ADDRESS_FORMATS } from '@constants/app';
 import validate, { getAddressInfo } from 'bitcoin-address-validation';
 import * as yup from 'yup';
+
+import { SUPPORTED_BTC_ADDRESS_FORMATS } from '@constants/app';
 
 interface Args {
   network: string;

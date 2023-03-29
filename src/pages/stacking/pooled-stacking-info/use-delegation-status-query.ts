@@ -1,8 +1,10 @@
-import { getDelegationStatus } from './get-delegation-status';
+import { useQuery } from '@tanstack/react-query';
+
 import { useAuth } from '@components/auth-provider/auth-provider';
 import { useBlockchainApiClient } from '@components/blockchain-api-client-provider';
 import { useStackingClient } from '@components/stacking-client-provider/stacking-client-provider';
-import { useQuery } from '@tanstack/react-query';
+
+import { getDelegationStatus } from './get-delegation-status';
 
 export function useDelegationStatusQuery() {
   const { accountsApi, smartContractsApi, transactionsApi } = useBlockchainApiClient();

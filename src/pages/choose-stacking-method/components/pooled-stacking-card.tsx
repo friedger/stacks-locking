@@ -1,5 +1,9 @@
 import { Box, Flex } from '@stacks/ui';
 import { IconStairs } from '@tabler/icons-react';
+
+import divingBoardIllustration from '@assets/images/stack-in-a-pool.svg';
+import { Users } from '@components/icons/users';
+
 import {
   StackingOptionCard as Card,
   StackingOptionsCardDescription as Description,
@@ -10,8 +14,6 @@ import {
 import { ChooseStackingMethodLayoutProps } from '../types';
 import { PooledStackingButton } from './pooled-stacking-button';
 import { PooledStackingInsufficientStackingBalanceWarning } from './pooled-stacking-insufficient-stacking-balance-warning';
-import divingBoardIllustration from '@assets/images/stack-in-a-pool.svg';
-import { Users } from '@components/icons/users';
 
 export function PooledStackingCard(props: ChooseStackingMethodLayoutProps) {
   return (

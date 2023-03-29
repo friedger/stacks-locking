@@ -1,11 +1,13 @@
+import { intToBigInt } from '@stacks/common';
+import { Box, Button, Input, Spinner, Text, color } from '@stacks/ui';
+import { useField } from 'formik';
+
 import { ErrorAlert } from '@components/error-alert';
 import { ErrorLabel } from '@components/error-label';
 import { ErrorText } from '@components/error-text';
 import { useGetAccountExtendedBalancesQuery } from '@components/stacking-client-provider/stacking-client-provider';
-import { intToBigInt } from '@stacks/common';
-import { Box, Button, color, Input, Spinner, Text } from '@stacks/ui';
 import { microStxToStx, toHumanReadableStx } from '@utils/unit-convert';
-import { useField } from 'formik';
+
 import { Description, Step } from '../../components/stacking-form-step';
 
 export function ChoosePoolingAmount() {

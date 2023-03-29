@@ -1,6 +1,7 @@
 import { Box } from '@stacks/ui';
-import { figmaTheme } from '@constants/figma-theme';
+
 import { OpenLinkInNewTab } from '@components/open-link-in-new-tab';
+import { figmaTheme } from '@constants/figma-theme';
 
 export function Banner() {
   return (

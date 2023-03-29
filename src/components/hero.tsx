@@ -1,5 +1,6 @@
-import { figmaTheme, palette } from '@constants/figma-theme';
 import { Box } from '@stacks/ui';
+
+import { figmaTheme, palette } from '@constants/figma-theme';
 
 export function Hero() {
   return (

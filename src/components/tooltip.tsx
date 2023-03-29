@@ -1,8 +1,9 @@
 import React, { FC, ReactNode } from 'react';
 
-import { ExplainerIcon } from './icons/explainer';
 import { Box, BoxProps } from '@stacks/ui';
 import Tippy from '@tippyjs/react';
+
+import { ExplainerIcon } from './icons/explainer';
 
 interface TooltipProps extends BoxProps {
   text: string;

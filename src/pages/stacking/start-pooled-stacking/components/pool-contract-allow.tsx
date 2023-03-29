@@ -1,9 +1,10 @@
-import { PoolName } from '../types-preset-pools';
-import { pools } from './preset-pools';
 import { Stack } from '@stacks/ui';
+import { IconCheck } from '@tabler/icons-react';
+
 import { Action } from '../../components/stacking-form-step';
 import { PoolWrapperAllowanceState } from '../types';
-import { IconCheck } from '@tabler/icons-react';
+import { PoolName } from '../types-preset-pools';
+import { pools } from './preset-pools';
 
 export function ActionsForWrapperContract({
   isDisabled,

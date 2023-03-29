@@ -1,8 +1,9 @@
 import React, { cloneElement, isValidElement } from 'react';
 
-import { Hr } from '@components/hr';
 import { Box } from '@stacks/ui';
 import { BoxProps } from '@stacks/ui-core';
+
+import { Hr } from '@components/hr';
 import { increment } from '@utils/mutate-numbers';
 
 interface ChildProps extends BoxProps {

@@ -1,7 +1,8 @@
-import { validateAddressChain } from '@crypto/validate-address-net';
 import { StacksNetworkName } from '@stacks/network';
 import { validateStacksAddress } from '@stacks/transactions';
 import * as yup from 'yup';
+
+import { validateAddressChain } from '@crypto/validate-address-net';
 
 export function stxPrincipalSchema(schema: yup.StringSchema, networkName: StacksNetworkName) {
   return schema.defined('Must define a STX address').test({
@@ -11,7 +12,7 @@ export function stxPrincipalSchema(schema: yup.StringSchema, networkName: Stacks
       const [address, name] = value.split('.');
       const valid = validateStacksAddress(address);
 
-      if (!valid || name === "") {
+      if (!valid || name === '') {
         return context.createError({
           message: 'Input address is not a valid STX address',
         });

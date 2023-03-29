@@ -1,8 +1,9 @@
 import { useMemo } from 'react';
 
-import { calculateRewardSlots, calculateStackingBuffer } from '../../../utils/calc-stacking-buffer';
-import { createAmountText } from '../../../utils/create-amount-text';
-import { DirectStackingFormValues } from '../../types';
+import { Box, Flex, Text } from '@stacks/ui';
+import { BigNumber } from 'bignumber.js';
+import { useFormikContext } from 'formik';
+
 import { Hr } from '@components/hr';
 import {
   InfoCardGroup as Group,
@@ -13,12 +14,13 @@ import {
   InfoCardValue as Value,
 } from '@components/info-card';
 import { useGetPoxInfoQuery } from '@components/stacking-client-provider/stacking-client-provider';
-import { Box, Flex, Text } from '@stacks/ui';
 import { parseNumericalFormInput } from '@utils/form/parse-numerical-form-input';
 import { truncateMiddle } from '@utils/tx-utils';
 import { stxToMicroStx, toHumanReadableStx } from '@utils/unit-convert';
-import { BigNumber } from 'bignumber.js';
-import { useFormikContext } from 'formik';
+
+import { calculateRewardSlots, calculateStackingBuffer } from '../../../utils/calc-stacking-buffer';
+import { createAmountText } from '../../../utils/create-amount-text';
+import { DirectStackingFormValues } from '../../types';
 
 export function InfoPanel() {
   const f = useFormikContext<DirectStackingFormValues>();

@@ -1,24 +1,26 @@
 import { Dispatch, SetStateAction } from 'react';
 import { NavigateFunction } from 'react-router-dom';
 
-import { pools } from './components/preset-pools';
-import { EditingFormValues } from './types';
-import { PoolName, Pox2Contracts } from './types-preset-pools';
-import {
-  MIN_DELEGATED_STACKING_AMOUNT_USTX,
-  UI_IMPOSED_MAX_STACKING_AMOUNT_USTX,
-} from '@constants/app';
 import { ContractCallRegularOptions, openContractCall } from '@stacks/connect';
 import { StacksNetwork, StacksNetworkName } from '@stacks/network';
 import { PoxInfo, StackingClient, poxAddressToTuple } from '@stacks/stacking';
 import { noneCV, someCV, uintCV } from '@stacks/transactions';
 import { principalCV } from '@stacks/transactions/dist/clarity/types/principalCV';
+import * as yup from 'yup';
+
+import { useNetwork } from '@components/network-provider';
+import {
+  MIN_DELEGATED_STACKING_AMOUNT_USTX,
+  UI_IMPOSED_MAX_STACKING_AMOUNT_USTX,
+} from '@constants/app';
 import { cyclesToBurnChainHeight } from '@utils/calculate-burn-height';
 import { stxToMicroStx, toHumanReadableStx } from '@utils/unit-convert';
 import { stxPrincipalSchema } from '@utils/validators/stx-address-validator';
 import { stxAmountSchema } from '@utils/validators/stx-amount-validator';
-import * as yup from 'yup';
-import { useNetwork } from '@components/network-provider';
+
+import { pools } from './components/preset-pools';
+import { EditingFormValues } from './types';
+import { PoolName, Pox2Contracts } from './types-preset-pools';
 
 interface Args {
   /**

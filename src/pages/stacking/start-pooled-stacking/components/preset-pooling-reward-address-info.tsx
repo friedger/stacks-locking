@@ -1,5 +1,6 @@
 import { Text } from '@stacks/ui';
 import { useFormikContext } from 'formik';
+
 import { Description, Step } from '../../components/stacking-form-step';
 import { EditingFormValues } from '../types';
 import { PayoutMethod } from '../types-preset-pools';

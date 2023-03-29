@@ -1,6 +1,7 @@
-import { ClockIcon } from '@components/icons/clock';
 import { Flex, FlexProps, Text, color } from '@stacks/ui';
 import { addSeconds, formatDistanceToNow } from 'date-fns';
+
+import { ClockIcon } from '@components/icons/clock';
 
 interface NextCycleStartTimeProps extends FlexProps {
   /**

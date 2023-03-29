@@ -1,11 +1,13 @@
-import { Description, Step } from '../../../components/stacking-form-step';
+import { Spinner, Text } from '@stacks/ui';
+import { useField } from 'formik';
+import { CryptoAddressInput } from 'src/pages/stacking/components/crypto-address-form';
+
 import { ErrorAlert } from '@components/error-alert';
 import { ErrorLabel } from '@components/error-label';
 import { ErrorText } from '@components/error-text';
 import { useGetPoxOperationInfo } from '@components/stacking-client-provider/stacking-client-provider';
-import { Spinner, Text } from '@stacks/ui';
-import { useField } from 'formik';
-import { CryptoAddressInput } from 'src/pages/stacking/components/crypto-address-form';
+
+import { Description, Step } from '../../../components/stacking-form-step';
 
 export function PoxAddress() {
   const [field, meta] = useField('poxAddress');

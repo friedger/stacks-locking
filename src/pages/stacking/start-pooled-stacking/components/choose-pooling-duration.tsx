@@ -1,7 +1,9 @@
+import { Box, Flex, Stack, Text, color } from '@stacks/ui';
+import { useField } from 'formik';
+
 import { ErrorLabel } from '@components/error-label';
 import { ErrorText } from '@components/error-text';
-import { Box, color, Flex, Stack, Text } from '@stacks/ui';
-import { useField } from 'formik';
+
 import { Description, Step } from '../../components/stacking-form-step';
 import { DurationCyclesField } from './duration-cycles-field';
 import { DurationSelectItem } from './duration-select-item';

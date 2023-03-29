@@ -1,8 +1,10 @@
+import { Flex } from '@stacks/ui';
+
+import { Title } from '@components/title';
+
 import { EstimatedMinimumLabel } from '../../components/estimated-minimum-label';
 import { NextCycleStartTime } from '../../components/next-cycle-start-time';
 import { StackingDescription } from '../../components/stacking-description';
-import { Title } from '@components/title';
-import { Flex } from '@stacks/ui';
 
 interface StackingIntroProps {
   /**

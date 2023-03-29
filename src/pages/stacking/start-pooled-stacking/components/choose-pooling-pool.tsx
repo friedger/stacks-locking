@@ -1,10 +1,12 @@
+import { Stack, Text } from '@stacks/ui';
+import { useField } from 'formik';
+
+import { OpenExternalLinkInNewTab } from '@components/external-link';
+
 import { Description, Step } from '../../components/stacking-form-step';
 import { PoolName } from '../types-preset-pools';
 import { PoolSelectItem } from './pool-select-item';
 import { pools } from './preset-pools';
-import { Stack, Text } from '@stacks/ui';
-import { useField } from 'formik';
-import { OpenExternalLinkInNewTab } from '@components/external-link';
 
 interface ChoosePoolingPoolProps {
   onPoolChange: (val: PoolName) => void;

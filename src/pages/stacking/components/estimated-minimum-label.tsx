@@ -1,5 +1,6 @@
-import { StepsIcon } from '@components/icons/steps';
 import { Flex, FlexProps, Text, color } from '@stacks/ui';
+
+import { StepsIcon } from '@components/icons/steps';
 import { toHumanReadableStx } from '@utils/unit-convert';
 
 interface EstimatedMinimumLabelProps extends FlexProps {

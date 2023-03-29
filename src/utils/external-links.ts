@@ -1,6 +1,7 @@
-import { EXPLORER_URL, STACKING_CLUB_URL } from '@constants/app';
 import urljoin from 'url-join';
 import { isWebUri } from 'valid-url';
+
+import { EXPLORER_URL, STACKING_CLUB_URL } from '@constants/app';
 
 export async function openExternalLink(url: string) {
   if (!isWebUri(url)) return;

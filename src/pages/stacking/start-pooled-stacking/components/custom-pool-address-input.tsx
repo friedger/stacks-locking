@@ -1,7 +1,9 @@
+import { Text, color } from '@stacks/ui';
+import { useField } from 'formik';
+
 import { ErrorLabel } from '@components/error-label';
 import { ErrorText } from '@components/error-text';
-import { color, Text } from '@stacks/ui';
-import { useField } from 'formik';
+
 import { CryptoAddressInput } from '../../components/crypto-address-form';
 
 export function CustomPoolAddressInput() {

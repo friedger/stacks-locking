@@ -1,8 +1,10 @@
+import { Text } from '@stacks/ui';
+import { useField } from 'formik';
+
 import { ErrorLabel } from '@components/error-label';
 import { ErrorText } from '@components/error-text';
 import { MAX_STACKING_CYCLES, MIN_STACKING_CYCLES } from '@constants/app';
-import { Text } from '@stacks/ui';
-import { useField } from 'formik';
+
 import { OneCycleDescriptor } from '../../components/one-cycle-descriptor';
 import { Description, Step } from '../../components/stacking-form-step';
 import { Stepper } from '../../components/stepper';

@@ -1,9 +1,10 @@
 import { ReactNode, createContext, useContext, useState } from 'react';
 
-import { useNetwork } from '@components/network-provider';
 import { UserData } from '@stacks/auth';
 import { AppConfig, UserSession, showConnect } from '@stacks/connect';
 import { validateStacksAddress as isValidStacksAddress } from '@stacks/transactions';
+
+import { useNetwork } from '@components/network-provider';
 
 const appConfig = new AppConfig(['store_write']);
 const userSession = new UserSession({ appConfig });

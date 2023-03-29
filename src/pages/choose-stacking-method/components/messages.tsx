@@ -1,10 +1,13 @@
+import { Link } from 'react-router-dom';
+
+import { Stack, Text, color } from '@stacks/ui';
+import { IconInfoCircle } from '@tabler/icons-react';
+
 import { Alert } from '@components/alert';
 import { OpenExternalLinkInNewTab } from '@components/external-link';
 import { Caption } from '@components/typography';
 import { BUY_STACKS_URL } from '@constants/app';
-import { Stack, color, Text } from '@stacks/ui';
-import { IconInfoCircle } from '@tabler/icons-react';
-import { Link } from 'react-router-dom';
+
 import { SignedInProps } from '../types';
 import { hasExistingCommitment } from '../utils';
 

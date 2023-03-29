@@ -1,9 +1,12 @@
+import { Link } from 'react-router-dom';
+
+import { Box, Button, Flex, Text } from '@stacks/ui';
+import { useHover } from 'use-events';
+
 import { Stacks } from '@components/icons/stacks';
 import { figmaTheme } from '@constants/figma-theme';
-import { Box, Button, Flex, Text } from '@stacks/ui';
 import { truncateMiddle } from '@utils/tx-utils';
-import { Link } from 'react-router-dom';
-import { useHover } from 'use-events';
+
 import { useAuth } from './auth-provider/auth-provider';
 import { OpenLinkInNewTab } from './open-link-in-new-tab';
 

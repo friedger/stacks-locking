@@ -1,5 +1,6 @@
-import { stxToMicroStx } from '@utils/unit-convert';
 import BigNumber from 'bignumber.js';
+
+import { stxToMicroStx } from '@utils/unit-convert';
 
 export function stxBalanceValidator(balance: bigint) {
   return {

@@ -1,8 +1,9 @@
 import React, { FC } from 'react';
 
+import { Box, BoxProps, Flex, FlexProps, Text, color } from '@stacks/ui';
+
 import { DecrementIcon } from '@components/icons/decrement';
 import { IncrementIcon } from '@components/icons/increment';
-import { Box, BoxProps, Flex, FlexProps, Text, color } from '@stacks/ui';
 import { decrement, increment } from '@utils/mutate-numbers';
 import { formatCycles } from '@utils/stacking';
 

@@ -1,5 +1,6 @@
-import { PayoutMethod, Pool, PoolName, Pox2Contracts } from '../types-preset-pools';
 import { IconEdit } from '@tabler/icons-react';
+
+import { PayoutMethod, Pool, PoolName, Pox2Contracts } from '../types-preset-pools';
 import { PoolIcon } from './pool-icon';
 
 export const pools: { [key in PoolName]: Pool } = {

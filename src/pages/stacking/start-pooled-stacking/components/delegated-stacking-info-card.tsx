@@ -1,5 +1,7 @@
-import { createAmountText } from '../../utils/create-amount-text';
-import { EditingFormValues } from '../types';
+import { Box, FlexProps } from '@stacks/ui';
+import { useFormikContext } from 'formik';
+
+import { OpenExternalLinkInNewTab } from '@components/external-link';
 import { Hr } from '@components/hr';
 import {
   InfoCardGroup as Group,
@@ -9,17 +11,17 @@ import {
   InfoCardSection as Section,
   InfoCardValue as Value,
 } from '@components/info-card';
+import { useNetwork } from '@components/network-provider';
 import { useGetPoxInfoQuery } from '@components/stacking-client-provider/stacking-client-provider';
-import { Box, FlexProps } from '@stacks/ui';
 import { cyclesToBurnChainHeight } from '@utils/calculate-burn-height';
+import { makeExplorerTxLink } from '@utils/external-links';
 import { formatCycles } from '@utils/stacking';
 import { truncateMiddle } from '@utils/tx-utils';
-import { useFormikContext } from 'formik';
-import { pools } from './preset-pools';
+
+import { createAmountText } from '../../utils/create-amount-text';
+import { EditingFormValues } from '../types';
 import { PoolingAmountInfo } from './pooling-amount-info';
-import { OpenExternalLinkInNewTab } from '@components/external-link';
-import { makeExplorerTxLink } from '@utils/external-links';
-import { useNetwork } from '@components/network-provider';
+import { pools } from './preset-pools';
 
 export function PoolingInfoCard(props: FlexProps) {
   const f = useFormikContext<EditingFormValues>();

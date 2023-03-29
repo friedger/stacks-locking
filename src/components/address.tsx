@@ -1,5 +1,6 @@
 import { Box, Text, useClipboard } from '@stacks/ui';
 import { IconCopy } from '@tabler/icons-react';
+
 import { truncateMiddle } from '@utils/tx-utils';
 
 interface AddressArgs {

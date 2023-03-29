@@ -1,8 +1,9 @@
+import { Transaction } from '@stacks/stacks-blockchain-api-types';
+import { useQuery } from '@tanstack/react-query';
+
 import { useAuth } from '@components/auth-provider/auth-provider';
 import { useBlockchainApiClient } from '@components/blockchain-api-client-provider';
 import { useGetAccountExtendedBalancesQuery } from '@components/stacking-client-provider/stacking-client-provider';
-import { Transaction } from '@stacks/stacks-blockchain-api-types';
-import { useQuery } from '@tanstack/react-query';
 
 /**
  * Returns the address that initiated the current account's stacking. If the account isn't stacking,

@@ -1,5 +1,9 @@
 import { useCallback } from 'react';
 
+import { Box, Button, Input, Spinner, Stack, Text, color } from '@stacks/ui';
+import { BigNumber } from 'bignumber.js';
+import { useField } from 'formik';
+
 import { ErrorAlert } from '@components/error-alert';
 import { ErrorLabel } from '@components/error-label';
 import { ErrorText } from '@components/error-text';
@@ -14,10 +18,8 @@ import {
   STACKING_LEARN_MORE_URL,
   STACKING_MINIMIUM_FOR_NEXT_CYCLE_URL,
 } from '@constants/app';
-import { Box, Button, color, Input, Spinner, Stack, Text } from '@stacks/ui';
 import { microStxToStx, stxToMicroStx, toHumanReadableStx } from '@utils/unit-convert';
-import { BigNumber } from 'bignumber.js';
-import { useField } from 'formik';
+
 import { Description, Step } from '../../components/stacking-form-step';
 import { calculateRewardSlots, calculateStackingBuffer } from '../../utils/calc-stacking-buffer';
 

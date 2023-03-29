@@ -1,6 +1,8 @@
-import { LegalDisclaimerTooltip } from './legal-disclaimer-tooltip';
 import { Box, BoxProps, Text, color } from '@stacks/ui';
+
 import { openExternalLink } from '@utils/external-links';
+
+import { LegalDisclaimerTooltip } from './legal-disclaimer-tooltip';
 
 interface Props extends BoxProps {
   href: string;

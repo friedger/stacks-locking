@@ -1,8 +1,9 @@
 import React, { FC, cloneElement, isValidElement } from 'react';
 
+import { Box, BoxProps, Flex, FlexProps, Stack, StackProps, Text, color } from '@stacks/ui';
+
 import { Hr } from '@components/hr';
 import { ExplainerTooltip } from '@components/tooltip';
-import { Box, BoxProps, Flex, FlexProps, Stack, StackProps, Text, color } from '@stacks/ui';
 
 export function InfoCard(props: FlexProps) {
   return (

@@ -1,7 +1,8 @@
 import { useCallback } from 'react';
 
-import { useFeeRate } from './use-fee-rate';
 import BigNumber from 'bignumber.js';
+
+import { useFeeRate } from './use-fee-rate';
 
 /**
  * Returns a function calculating how much of a fee should be set

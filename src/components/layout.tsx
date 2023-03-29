@@ -1,7 +1,9 @@
 import { Outlet } from 'react-router-dom';
+
 import { Box, Flex } from '@stacks/ui';
-import { Navbar } from './navbar';
+
 import { Footer } from './footer';
+import { Navbar } from './navbar';
 
 export function Layout() {
   return (

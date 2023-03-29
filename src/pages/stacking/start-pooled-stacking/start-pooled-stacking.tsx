@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { StacksNetworkName } from '@stacks/network';
+import { StackingClient } from '@stacks/stacking';
+import { ClarityType } from '@stacks/transactions';
+import { Form, Formik } from 'formik';
+
 import { useAuth } from '@components/auth-provider/auth-provider';
 import { CenteredErrorAlert } from '@components/centered-error-alert';
 import { CenteredSpinner } from '@components/centered-spinner';
@@ -10,10 +15,7 @@ import {
   useGetSecondsUntilNextCycleQuery,
   useStackingClient,
 } from '@components/stacking-client-provider/stacking-client-provider';
-import { StacksNetworkName } from '@stacks/network';
-import { StackingClient } from '@stacks/stacking';
-import { ClarityType } from '@stacks/transactions';
-import { Form, Formik } from 'formik';
+
 import { StackingFormContainer } from '../components/stacking-form-container';
 import { StackingFormInfoPanel } from '../components/stacking-form-info-panel';
 import { StartStackingLayout } from '../components/stacking-layout';

@@ -1,7 +1,9 @@
-import { StackingClient } from '@stacks/stacking';
-import { QueryClient } from '@tanstack/react-query';
 import { Dispatch, SetStateAction } from 'react';
 import { NavigateFunction } from 'react-router-dom';
+
+import { StackingClient } from '@stacks/stacking';
+import { QueryClient } from '@tanstack/react-query';
+
 import { pools } from './components/preset-pools';
 import { EditingFormValues, PoolWrapperAllowanceState } from './types';
 import { PoolName, Pox2Contracts } from './types-preset-pools';

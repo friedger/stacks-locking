@@ -1,14 +1,23 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
+import { intToBigInt } from '@stacks/common';
+import { ContractCallRegularOptions, openContractCall } from '@stacks/connect';
+import { StackingClient } from '@stacks/stacking';
+import { Box, Button, Flex, Stack, Text, color } from '@stacks/ui';
+import { IconInfoCircle } from '@tabler/icons-react';
+import { StartStackingLayout } from 'src/pages/choose-stacking-method/components/start-stacking-layout';
+
 import { Address } from '@components/address';
 import { Alert } from '@components/alert';
 import { CenteredErrorAlert } from '@components/centered-error-alert';
 import { CenteredSpinner } from '@components/centered-spinner';
+import { OpenExternalLinkInNewTab } from '@components/external-link';
 import { Hr } from '@components/hr';
+import { CancelIcon } from '@components/icons/cancel';
 import {
-  InfoCard,
   InfoCardGroup as Group,
+  InfoCard,
   InfoCardLabel as Label,
   InfoCardRow as Row,
   InfoCardSection as Section,
@@ -21,18 +30,11 @@ import {
   useStackingClient,
 } from '@components/stacking-client-provider/stacking-client-provider';
 import { Caption } from '@components/typography';
-import { intToBigInt } from '@stacks/common';
-import { ContractCallRegularOptions, openContractCall } from '@stacks/connect';
-import { StackingClient } from '@stacks/stacking';
-import { Box, Button, color, Flex, Stack, Text } from '@stacks/ui';
-import { IconInfoCircle } from '@tabler/icons-react';
+import { makeStackingClubRewardAddressLink } from '@utils/external-links';
 import { toHumanReadableStx } from '@utils/unit-convert';
-import { StartStackingLayout } from 'src/pages/choose-stacking-method/components/start-stacking-layout';
+
 import { useDelegationStatusQuery } from './use-delegation-status-query';
 import { useGetPoolAddress } from './use-get-pool-address-query';
-import { OpenExternalLinkInNewTab } from '@components/external-link';
-import { makeStackingClubRewardAddressLink } from '@utils/external-links';
-import { CancelIcon } from '@components/icons/cancel';
 
 export function PooledStackingInfo() {
   const { client } = useStackingClient();

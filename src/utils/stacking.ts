@@ -1,9 +1,10 @@
-import { NETWORK } from '@constants/app';
 import { sha256 } from '@noble/hashes/sha256';
 import { base58check } from '@scure/base';
 import { AddressHashMode } from '@stacks/transactions';
 import BN from 'bn.js';
 import { Buffer } from 'buffer';
+
+import { NETWORK } from '@constants/app';
 
 // TODO: Can't figure out the right types
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

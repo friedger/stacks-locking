@@ -1,8 +1,10 @@
 import { Box, Flex } from '@stacks/ui';
 import { IconLock, IconStairs } from '@tabler/icons-react';
+
+import fishBowlIllustration from '@assets/images/stack-by-yourself.svg';
+import { Unassignee } from '@components/icons/unassignee';
 import { toHumanReadableStx } from '@utils/unit-convert';
-import { ChooseStackingMethodLayoutProps } from '../types';
-import { DirectStackingInsufficientStackingBalanceWarning } from './direct-stacking-insufficient-stacking-balance-warning';
+
 import {
   StackingOptionCard as Card,
   StackingOptionsCardDescription as Description,
@@ -10,9 +12,9 @@ import {
   StackingOptionCardBenefitContainer as OptionBenefitContainer,
   StackingOptionCardTitle as Title,
 } from '../components/start-stacking-layout';
-import fishBowlIllustration from '@assets/images/stack-by-yourself.svg';
+import { ChooseStackingMethodLayoutProps } from '../types';
 import { DirectStackingButton } from './direct-stacking-button';
-import { Unassignee } from '@components/icons/unassignee';
+import { DirectStackingInsufficientStackingBalanceWarning } from './direct-stacking-insufficient-stacking-balance-warning';
 
 export function DirectStackingCard(props: ChooseStackingMethodLayoutProps) {
   return (

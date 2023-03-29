@@ -1,5 +1,6 @@
-import { useFormikContext } from 'formik';
 import { useState } from 'react';
+
+import { useFormikContext } from 'formik';
 
 import { Action, Step } from '../../components/stacking-form-step';
 import { StackingUserConfirm } from '../../components/stacking-user-confirm';

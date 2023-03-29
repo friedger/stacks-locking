@@ -1,10 +1,11 @@
 import { Dispatch, SetStateAction } from 'react';
 
-import { WrapperPrincipal, Pox2Contracts } from './types-preset-pools';
 import { ContractCallRegularOptions, openContractCall } from '@stacks/connect';
+import { StacksNetwork } from '@stacks/network';
 import { StackingClient } from '@stacks/stacking';
 import { principalCV } from '@stacks/transactions';
-import { StacksNetwork } from '@stacks/network';
+
+import { Pox2Contracts, WrapperPrincipal } from './types-preset-pools';
 
 function getOptions(
   poxWrapperContract: WrapperPrincipal,

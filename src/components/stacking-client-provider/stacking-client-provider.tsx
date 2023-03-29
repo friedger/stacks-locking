@@ -1,17 +1,18 @@
 import { ReactNode, createContext, useContext } from 'react';
 
-import { useAuth } from '@components/auth-provider/auth-provider';
-import { useNetwork } from '@components/network-provider';
 import { StackingClient } from '@stacks/stacking';
 import {
   callReadOnlyFunction,
+  validateStacksAddress as isValidStacksAddress,
   noneCV,
   principalCV,
   someCV,
-  validateStacksAddress as isValidStacksAddress,
 } from '@stacks/transactions';
 import { useQuery } from '@tanstack/react-query';
 import { Pox2Contracts } from 'src/pages/stacking/start-pooled-stacking/types-preset-pools';
+
+import { useAuth } from '@components/auth-provider/auth-provider';
+import { useNetwork } from '@components/network-provider';
 
 interface StackingClientContext {
   client: null | StackingClient;

@@ -1,7 +1,5 @@
 import { Dispatch, ReactNode, SetStateAction, createContext, useContext, useState } from 'react';
 
-import { ErrorAlert } from './error-alert';
-import { NETWORK } from '@constants/app';
 import {
   StacksMainnet,
   /* StacksMocknet, */
@@ -9,6 +7,10 @@ import {
   StacksNetworkName,
   StacksTestnet,
 } from '@stacks/network';
+
+import { NETWORK } from '@constants/app';
+
+import { ErrorAlert } from './error-alert';
 
 const Context = createContext<{
   network: StacksNetwork;

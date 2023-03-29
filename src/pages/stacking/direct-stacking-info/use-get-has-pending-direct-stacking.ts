@@ -1,9 +1,11 @@
-import { getHasPendingDirectStacking } from './get-has-pending-direct-stacking';
+import { useQuery } from '@tanstack/react-query';
+
 import { useAuth } from '@components/auth-provider/auth-provider';
 import { useBlockchainApiClient } from '@components/blockchain-api-client-provider';
 import { useNetwork } from '@components/network-provider';
 import { useStackingClient } from '@components/stacking-client-provider/stacking-client-provider';
-import { useQuery } from '@tanstack/react-query';
+
+import { getHasPendingDirectStacking } from './get-has-pending-direct-stacking';
 
 export function useGetHasPendingDirectStackingQuery() {
   const { accountsApi, transactionsApi } = useBlockchainApiClient();

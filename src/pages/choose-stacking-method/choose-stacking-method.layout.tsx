@@ -1,13 +1,15 @@
-import {
-  StackingOptionsCardContainer as OptionsContainer,
-  StartStackingLayout as Layout,
-} from './components/start-stacking-layout';
 import { Box, Stack } from '@stacks/ui';
-import { Messages } from './components/messages';
-import { ChooseStackingMethodLayoutProps } from './types';
-import { DirectStackingCard } from './components/direct-stacking-card';
-import { PooledStackingCard } from './components/pooled-stacking-card';
+
 import { figmaTheme } from '@constants/figma-theme';
+
+import { DirectStackingCard } from './components/direct-stacking-card';
+import { Messages } from './components/messages';
+import { PooledStackingCard } from './components/pooled-stacking-card';
+import {
+  StartStackingLayout as Layout,
+  StackingOptionsCardContainer as OptionsContainer,
+} from './components/start-stacking-layout';
+import { ChooseStackingMethodLayoutProps } from './types';
 
 function Separator() {
   return (

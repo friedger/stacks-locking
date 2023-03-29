@@ -1,11 +1,12 @@
-import { getStxTxDirection } from './get-stx-transfer-direction';
-import { isMempoolTx, isStackingTx } from './tx-utils';
 import type {
   MempoolTransaction,
   Transaction,
   TransactionEvent,
 } from '@stacks/stacks-blockchain-api-types';
 import BigNumber from 'bignumber.js';
+
+import { getStxTxDirection } from './get-stx-transfer-direction';
+import { isMempoolTx, isStackingTx } from './tx-utils';
 
 export function sumStxTxTotal(
   address: string,

@@ -5,8 +5,8 @@ module.exports = {
   importOrder: [
     '^react',
     '<THIRD_PARTY_MODULES>',
-    '^@(app|content-script|inpage|background)/(.*)$',
-    '^.',
+    '^@(assets|components|constants|crypto|hooks|utils)/(.*)$',
+    '^[./]',
   ],
   importOrderSeparation: true,
   importOrderSortSpecifiers: true,

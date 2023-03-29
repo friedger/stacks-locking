@@ -1,10 +1,12 @@
 import { FC } from 'react';
 
-import { StackingTermItem } from '../../components/stacking-term';
-import { StepsIcon } from '@components/icons/steps';
-import { pseudoBorderLeft } from '@components/styles/pseudo-border-left';
 import { Stack, StackProps, Text } from '@stacks/ui';
 import { IconClock, IconLock } from '@tabler/icons-react';
+
+import { StepsIcon } from '@components/icons/steps';
+import { pseudoBorderLeft } from '@components/styles/pseudo-border-left';
+
+import { StackingTermItem } from '../../components/stacking-term';
 
 export const DirectStackingTerms: FC<StackProps> = props => (
   <Stack

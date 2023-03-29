@@ -1,8 +1,9 @@
 import { ReactElement, ReactNode } from 'react';
 
-import { Title } from '@components/title';
 import { Box, Button, ButtonProps, Flex, Stack } from '@stacks/ui';
 import { ForwardRefExoticComponentWithAs, forwardRefWithAs } from '@stacks/ui-core';
+
+import { Title } from '@components/title';
 
 interface StepProps {
   title: string;

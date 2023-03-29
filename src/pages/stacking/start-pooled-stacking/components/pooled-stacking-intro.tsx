@@ -1,5 +1,6 @@
-import { NextCycleStartTime } from '../../components/next-cycle-start-time';
 import { Title } from '@components/title';
+
+import { NextCycleStartTime } from '../../components/next-cycle-start-time';
 
 interface PooledStackingIntroProps {
   /**

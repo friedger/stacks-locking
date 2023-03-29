@@ -1,5 +1,7 @@
-import { figmaTheme } from '@constants/figma-theme';
 import { Flex, Text } from '@stacks/ui';
+
+import { figmaTheme } from '@constants/figma-theme';
+
 import { OpenLinkInNewTab } from './open-link-in-new-tab';
 
 export function Footer() {

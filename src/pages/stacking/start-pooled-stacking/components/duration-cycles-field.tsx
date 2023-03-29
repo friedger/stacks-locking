@@ -1,14 +1,15 @@
 import { useMemo } from 'react';
 
+import { Box, Flex, Spinner, Text, color } from '@stacks/ui';
+import { addSeconds, formatDistanceToNow } from 'date-fns';
+import { useField } from 'formik';
+
 import { CircleButton } from '@components/circle-button';
 import { ErrorAlert } from '@components/error-alert';
 import { useGetCycleDurationQuery } from '@components/stacking-client-provider/stacking-client-provider';
 import { MAX_STACKING_CYCLES, MIN_STACKING_CYCLES } from '@constants/app';
-import { Box, Flex, Spinner, Text, color } from '@stacks/ui';
 import { decrement, increment } from '@utils/mutate-numbers';
 import { formatCycles } from '@utils/stacking';
-import { addSeconds, formatDistanceToNow } from 'date-fns';
-import { useField } from 'formik';
 
 const createCycleArray = () => new Array(12).fill(null).map((_, i) => i + 1);
 const durationWithDefault = (duration: number | null) => duration ?? 1;

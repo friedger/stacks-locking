@@ -1,16 +1,18 @@
 import { Dispatch, SetStateAction } from 'react';
 import { NavigateFunction } from 'react-router-dom';
 
-import { DirectStackingFormValues } from './types';
 import { ContractCallRegularOptions, openContractCall } from '@stacks/connect';
 import { StackingClient } from '@stacks/stacking';
+import BigNumber from 'bignumber.js';
+import * as yup from 'yup';
+
 import { validateDecimalPrecision } from '@utils/form/validate-decimals';
 import { stxToMicroStx, toHumanReadableStx } from '@utils/unit-convert';
 import { createBtcAddressSchema } from '@utils/validators/btc-address-validator';
 import { stxAmountSchema } from '@utils/validators/stx-amount-validator';
 import { stxBalanceValidator } from '@utils/validators/stx-balance-validator';
-import BigNumber from 'bignumber.js';
-import * as yup from 'yup';
+
+import { DirectStackingFormValues } from './types';
 
 interface CreateValidationSchemaArgs {
   /**
