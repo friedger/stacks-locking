@@ -11,8 +11,8 @@ export function OpenLinkInNewTab({ href, children, ...props }: Props) {
   return (
     <Text
       onClick={openUrl}
-      as="button"
-      type="button"
+      as="a"
+      type="a"
       cursor="pointer"
       display="block"
       outline={0}
