@@ -1,0 +1,27 @@
+name: Check Lint
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  check-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: latest
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Check lint
+        run: pnpm run check:lint
