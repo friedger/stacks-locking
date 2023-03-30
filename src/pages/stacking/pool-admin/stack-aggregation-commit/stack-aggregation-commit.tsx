@@ -6,15 +6,15 @@ import { Form, Formik } from 'formik';
 
 import { CenteredErrorAlert } from '@components/centered-error-alert';
 import { CenteredSpinner } from '@components/centered-spinner';
+import { FinishedTxResultInfo } from '@components/finished-tx-result-info';
 import { useNetwork } from '@components/network-provider';
 import {
   useGetAccountExtendedBalancesQuery,
   useGetPoxInfoQuery,
   useGetSecondsUntilNextCycleQuery,
-  useStackingClient
+  useStackingClient,
 } from '@components/stacking-client-provider/stacking-client-provider';
 
-import { FinishedTxResultInfo } from '@components/finished-tx-result-info';
 import { StackingFormContainer } from '../../components/stacking-form-container';
 import { StackingFormInfoPanel } from '../../components/stacking-form-info-panel';
 import { PoxAddress } from '../../start-direct-stacking/components/pox-address/pox-address';

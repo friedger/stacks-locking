@@ -1,5 +1,6 @@
 import { FinishedTxData } from '@stacks/connect';
 import { Box, Stack, Text } from '@stacks/ui';
+
 import { Alert } from './alert';
 
 interface FinishedTxResultInfoProps {
