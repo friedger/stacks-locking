@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { Text } from '@stacks/ui';
 
 import { CenteredErrorAlert } from '@components/centered-error-alert';
@@ -17,6 +19,8 @@ import { PendingStackingInfo } from './components/pending-stacking-info';
 import { useGetHasPendingDirectStackingQuery } from './use-get-has-pending-direct-stacking';
 
 export function DirectStackingInfo() {
+  const [isContractCallExtensionPageOpen, setIsContractCallExtensionPageOpen] = useState(false);
+
   const { networkName } = useNetwork();
   const getStatusQuery = useGetStatusQuery();
   const getAccountExtendedBalancesQuery = useGetAccountExtendedBalancesQuery();
