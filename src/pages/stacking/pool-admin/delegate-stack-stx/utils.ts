@@ -93,7 +93,6 @@ export function createHandleSubmit({
       cycles: values.lockPeriod,
       poxAddress: values.poxAddress,
       burnBlockHeight: values.startBurnHt,
-      network,
     });
 
     openContractCall({
@@ -105,6 +104,7 @@ export function createHandleSubmit({
       // See
       // https://github.com/hirosystems/stacks.js/blob/0e1f9f19dfa45788236c9e481f9a476d9948d86d/packages/stacking/src/index.ts#L1054
       ...(delegateStackStxOptions as ContractCallRegularOptions),
+      network,
       onFinish(data) {
         setTxResult(data);
         setIsContractCallExtensionPageOpen(false);
