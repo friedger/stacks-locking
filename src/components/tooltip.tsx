@@ -72,7 +72,9 @@ export const ExplainerTooltip: FC<BoxProps> = ({ children, ...props }) => {
         </Box>
       }
     >
-      <ExplainerIcon mt="1px" cursor="help" />
+      <Box>
+        <ExplainerIcon cursor="help" />
+      </Box>
     </Tippy>
   );
 };
