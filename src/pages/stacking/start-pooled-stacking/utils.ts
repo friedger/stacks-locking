@@ -18,7 +18,6 @@ interface CreateHandleSubmitArgs {
 function requiresAllowContractCaller(values: EditingFormValues) {
   if (!values.poolName || values.poolName === PoolName.CustomPool) return false;
   const pool = pools[values.poolName];
-  console.log(pool.poxContract);
   return pool.poxContract !== Pox2Contracts.PoX2;
 }
 
@@ -33,7 +32,6 @@ export function createHandleSubmit({
   setHasUserConfirmedPoolWrapperContract,
 }: CreateHandleSubmitArgs) {
   return async function handleSubmit(values: EditingFormValues) {
-    console.log('SUBMIT', values.poolName);
     if (requiresAllowContractCaller(values)) {
       const poxWrapperContract = getPoxWrapperContract(values);
       if (hasUserConfirmedPoolWrapperContract[poxWrapperContract]) {

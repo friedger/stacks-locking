@@ -37,12 +37,10 @@ export function createHandleSubmit({
     // TODO: handle thrown errors
     const [stackingContract] = await Promise.all([client.getStackingContract()]);
 
-    const allowContractCallerOptions = getOptions(poxWrapperContract, stackingContract, network);
-
-    console.log(allowContractCallerOptions);
+    const disAllowContracCallerOptions = getOptions(poxWrapperContract, stackingContract, network);
 
     openContractCall({
-      ...allowContractCallerOptions,
+      ...disAllowContracCallerOptions,
       onFinish() {
         setIsContractCallExtensionPageOpen(false);
       },

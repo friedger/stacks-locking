@@ -157,8 +157,6 @@ export function createHandleSubmit({
 
     const delegateStxOptions = getOptions(values, poxInfo, stackingContract, client, network);
 
-    console.log(delegateStxOptions);
-
     openContractCall({
       ...delegateStxOptions,
       onFinish() {
