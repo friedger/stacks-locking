@@ -3,10 +3,8 @@ import { useState } from 'react';
 import { intToBigInt } from '@stacks/common';
 import { FinishedTxData } from '@stacks/connect';
 import { StackingClient } from '@stacks/stacking';
-import { Box, Stack, Text } from '@stacks/ui';
 import { Form, Formik } from 'formik';
 
-import { Alert } from '@components/alert';
 import { CenteredErrorAlert } from '@components/centered-error-alert';
 import { CenteredSpinner } from '@components/centered-spinner';
 import { useNetwork } from '@components/network-provider';
@@ -14,10 +12,11 @@ import {
   useGetAccountExtendedBalancesQuery,
   useGetPoxInfoQuery,
   useGetSecondsUntilNextCycleQuery,
-  useStackingClient,
+  useStackingClient
 } from '@components/stacking-client-provider/stacking-client-provider';
 import { UI_IMPOSED_MAX_STACKING_AMOUNT_USTX } from '@constants/app';
 
+import { FinishedTxResultInfo } from '@components/finished-tx-result-info';
 import { StackingFormContainer } from '../../components/stacking-form-container';
 import { StackingFormInfoPanel } from '../../components/stacking-form-info-panel';
 import { PoxAddress } from '../../start-direct-stacking/components/pox-address/pox-address';
@@ -139,15 +138,7 @@ function DelegateStackStxLayout({ client }: DelegateStackStxLayoutProps) {
                 <PoxAddress />
                 <ConfirmAndSubmit isLoading={isContractCallExtensionPageOpen} />
               </StackingFormContainer>
-              {(true || txResult) && (
-                <Box my="loose">
-                  <Alert title="Last tx result">
-                    <Stack>
-                      <Text>{txResult?.txId || '12309283409382409832049'}</Text>
-                    </Stack>
-                  </Alert>
-                </Box>
-              )}
+              {txResult && <FinishedTxResultInfo txResult={txResult} />}
             </>
           </Form>
         }

@@ -1,11 +1,9 @@
 import { useState } from 'react';
 
-import { intToBigInt } from '@stacks/common';
 import { FinishedTxData } from '@stacks/connect';
 import { StackingClient } from '@stacks/stacking';
 import { Form, Formik } from 'formik';
 
-import { Alert } from '@components/alert';
 import { CenteredErrorAlert } from '@components/centered-error-alert';
 import { CenteredSpinner } from '@components/centered-spinner';
 import { useNetwork } from '@components/network-provider';
@@ -13,9 +11,10 @@ import {
   useGetAccountExtendedBalancesQuery,
   useGetPoxInfoQuery,
   useGetSecondsUntilNextCycleQuery,
-  useStackingClient,
+  useStackingClient
 } from '@components/stacking-client-provider/stacking-client-provider';
 
+import { FinishedTxResultInfo } from '@components/finished-tx-result-info';
 import { StackingFormContainer } from '../../components/stacking-form-container';
 import { StackingFormInfoPanel } from '../../components/stacking-form-info-panel';
 import { PoxAddress } from '../../start-direct-stacking/components/pox-address/pox-address';
@@ -122,7 +121,7 @@ function StackAggregationCommitLayout({ client }: StackAggregationCommitLayoutPr
                 <PoxAddress />
                 <ConfirmAndSubmit isLoading={isContractCallExtensionPageOpen} />
               </StackingFormContainer>
-              {txResult && <Alert title="Last tx result">{txResult.txId}</Alert>}
+              {txResult && <FinishedTxResultInfo txResult={txResult} />}
             </>
           </Form>
         }
