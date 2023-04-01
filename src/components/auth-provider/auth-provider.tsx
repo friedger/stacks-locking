@@ -60,7 +60,7 @@ export function AuthProvider({ children }: Props) {
       userSession,
       appDetails: {
         name: 'Stacking',
-        icon: 'https://stacking.live/logo.svg',
+        icon: `${window.location.origin}/logo.svg`,
       },
       onFinish() {
         setIsSigningIn(false);
