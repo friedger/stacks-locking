@@ -104,7 +104,7 @@ export function truncateMiddle(input: string, offset = 5): string {
   }
 
   // for short inputs
-  if (input.length <= 2* offset) {
+  if (input.length <= 2 * offset) {
     return input;
   }
 
