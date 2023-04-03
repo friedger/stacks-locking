@@ -3,10 +3,13 @@ import { useNavigate } from 'react-router-dom';
 
 import { StackerInfo } from '@stacks/stacking';
 import { Box, Button, Flex, Input, Text } from '@stacks/ui';
-import BigNumber from 'bignumber.js';
+import { IconLock } from '@tabler/icons-react';
+import { useField } from 'formik';
 
 import { Address } from '@components/address';
 import { BaseDrawer } from '@components/drawer/base-drawer';
+import { ErrorLabel } from '@components/error-label';
+import { ErrorText } from '@components/error-text';
 import { Hr } from '@components/hr';
 import {
   InfoCardGroup as Group,
@@ -16,28 +19,32 @@ import {
   InfoCardSection as Section,
   InfoCardValue as Value,
 } from '@components/info-card';
+import { MAX_STACKING_CYCLES, MIN_STACKING_CYCLES } from '@constants/app';
 import routes from '@constants/routes';
 import { formatPoxAddressToNetwork } from '@utils/stacking';
-import { stxToMicroStx } from '@utils/unit-convert';
+
+import { OneCycleDescriptor } from '../../components/one-cycle-descriptor';
+import { Description } from '../../components/stacking-form-step';
+import { Stepper } from '../../components/stepper';
 
 interface ChangeDirectStackingLayoutProps {
   title: string;
   details: (StackerInfo & { stacked: true })['details'];
   rewardCycleId: number;
-  handleLockMore: ({ increaseBy }: { increaseBy: BigNumber }) => Promise<void>;
   isContractCallExtensionPageOpen: boolean;
 }
 export function ChangeDirectStackingLayout(props: ChangeDirectStackingLayoutProps) {
-  const { title, details, rewardCycleId, handleLockMore, isContractCallExtensionPageOpen } = props;
+  const { title, details, rewardCycleId, isContractCallExtensionPageOpen } = props;
   const navigate = useNavigate();
-  const elapsedCyclesSinceStackingStart = Math.max(rewardCycleId - details.first_reward_cycle, 0);
-  const elapsedStackingCycles = Math.min(elapsedCyclesSinceStackingStart, details.lock_period);
   const isBeforeFirstRewardCycle = rewardCycleId < details.first_reward_cycle;
   const poxAddress = formatPoxAddressToNetwork(details.pox_address);
 
-  const [increaseBy, setIncreaseBy] = useState<string>('1');
+  const [field, meta, helpers] = useField('extendCycles');
+  const onClose = () => {
+    navigate(routes.DIRECT_STACKING_INFO);
+  };
   return (
-    <BaseDrawer title={title} isShowing onClose={() => navigate(routes.HOME)}>
+    <BaseDrawer title={title} isShowing onClose={onClose}>
       <Flex alignItems="center" flexDirection="column" pb={['loose', '48px']} px="loose">
         <InfoCard width="420px">
           <Box mx={['loose', 'extra-loose']}>
@@ -50,25 +57,42 @@ export function ChangeDirectStackingLayout(props: ChangeDirectStackingLayoutProp
                 letterSpacing="-0.02em"
                 mt="extra-tight"
               >
-                since cycle {details.first_reward_cycle}
+                for {details.lock_period} cycles
               </Text>
             </Flex>
             <Hr />
 
+            <Description>
+              <Text>
+                Increase the amount of cycles you want to lock your STX. Currently each cycle lasts
+                around 15 days and the maximum locked period is 12 cycles.
+              </Text>
+            </Description>
+
+            <Flex justifyContent="center">
+              <Stepper
+                mt="loose"
+                amount={field.value}
+                onIncrement={cycle => {
+                  if (cycle > MAX_STACKING_CYCLES) return;
+                  helpers.setValue(cycle);
+                }}
+                onDecrement={cycle => {
+                  if (cycle < MIN_STACKING_CYCLES) return;
+                  helpers.setValue(cycle);
+                }}
+              />
+            </Flex>
+            {meta.touched && meta.error && (
+              <ErrorLabel>
+                <ErrorText>{meta.error}</ErrorText>
+              </ErrorLabel>
+            )}
+            <OneCycleDescriptor mt="loose" />
             <Group pt="base-loose">
               <Section>
                 <Row>
-                  <Label>Duration</Label>
-                  <Value>
-                    {elapsedStackingCycles} / {details.lock_period}
-                  </Value>
-                </Row>
-                <Row>
-                  <Label>Start</Label>
-                  <Value>Cycle {details.first_reward_cycle}</Value>
-                </Row>
-                <Row>
-                  <Label>End</Label>
+                  <Label explainer="STX will unlock after that cycle">End</Label>
                   <Value>Cycle {details.first_reward_cycle + details.lock_period - 1} </Value>
                 </Row>
                 <Row>
@@ -77,21 +101,15 @@ export function ChangeDirectStackingLayout(props: ChangeDirectStackingLayoutProp
                     <Address address={poxAddress} />
                   </Value>
                 </Row>
-                <Row>
-                  <Text>Amount of STX to add</Text>
-                </Row>
-                <Row>
-                  <Input
-                    onChange={e => setIncreaseBy((e.target as HTMLInputElement).value)}
-                  ></Input>
-                </Row>
-
-                <Row m="loose" justifyContent="space-evenly">
-                  <Button
-                    onClick={() => handleLockMore({ increaseBy: stxToMicroStx(increaseBy) })}
-                    isLoading={isContractCallExtensionPageOpen}
-                  >
-                    Lock more STX
+                <Row m="loose" justifyContent="space-between">
+                  <Button mode="tertiary" onClick={onClose}>
+                    Cancel
+                  </Button>
+                  <Button isLoading={isContractCallExtensionPageOpen}>
+                    <Box mr="loose">
+                      <IconLock />
+                    </Box>
+                    Continue Stacking
                   </Button>
                 </Row>
               </Section>

@@ -14,11 +14,12 @@ import { AuthProvider } from './components/auth-provider/auth-provider';
 import { Layout } from './components/layout';
 import { ChooseStackingMethod } from './pages/choose-stacking-method/choose-stacking-method';
 import { SignIn } from './pages/sign-in/sign-in';
-import { StackIncrease } from './pages/stacking/change-direct-stacking/stack-increase';
 import { DirectStackingInfo } from './pages/stacking/direct-stacking-info/direct-stacking-info';
 import { DelegateStackStx } from './pages/stacking/pool-admin/delegate-stack-stx/delegate-stack-stx';
 import { StackAggregationCommit } from './pages/stacking/pool-admin/stack-aggregation-commit/stack-aggregation-commit';
 import { PooledStackingInfo } from './pages/stacking/pooled-stacking-info/pooled-stacking-info';
+import { StackExtend } from './pages/stacking/stack-extend/stack-extend';
+import { StackIncrease } from './pages/stacking/stack-increase/stack-increase';
 import { StartDirectStacking } from './pages/stacking/start-direct-stacking/start-direct-stacking';
 import { StartPooledStacking } from './pages/stacking/start-pooled-stacking/start-pooled-stacking';
 
@@ -86,8 +87,12 @@ const router = createBrowserRouter([
                 element: <DirectStackingInfo />,
               },
               {
-                path: 'lock-more',
+                path: 'lock-more-stx',
                 element: <StackIncrease />,
+              },
+              {
+                path: 'extend-stacking',
+                element: <StackExtend />,
               },
               {
                 path: 'pool-admin',
@@ -96,7 +101,6 @@ const router = createBrowserRouter([
                   { path: 'stack-aggregation-commit', element: <StackAggregationCommit /> },
                 ],
               },
-
             ],
           },
         ],

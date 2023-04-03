@@ -48,7 +48,7 @@ export function ActiveStackingInfo({
   const poxAddress = formatPoxAddressToNetwork(details.pox_address);
 
   async function handleLockMoreClick() {
-    navigate('../lock-more');
+    navigate('../lock-more-stx');
   }
 
   async function handleExtendStackingClick() {
