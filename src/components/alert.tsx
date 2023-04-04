@@ -11,11 +11,7 @@ interface Props {
 export function Alert({ title, children: body, icon }: Props) {
   let bodyEl = undefined;
   if (typeof body === 'string') {
-    bodyEl = (
-      <Text textStyle="body.small" color={color('text-caption')} lineHeight="22px" mt="extra-tight">
-        {body}
-      </Text>
-    );
+    bodyEl = <AlertText>{body}</AlertText>;
   } else {
     bodyEl = body;
   }
@@ -31,5 +27,13 @@ export function Alert({ title, children: body, icon }: Props) {
         </Box>
       </Flex>
     </Box>
+  );
+}
+
+export function AlertText({ children }: { children?: ReactNode }) {
+  return (
+    <Text textStyle="body.small" color={color('text-caption')} lineHeight="22px" mt="extra-tight">
+      {children}
+    </Text>
   );
 }

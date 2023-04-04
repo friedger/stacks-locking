@@ -1,8 +1,8 @@
-import { Box, Button, Flex, Text } from '@stacks/ui';
+import { Box, Flex, Text } from '@stacks/ui';
 import { IconClockHour4 } from '@tabler/icons-react';
 
 import { Address } from '@components/address';
-import { Alert } from '@components/alert';
+import { Alert, AlertText } from '@components/alert';
 import { OpenExternalLinkInNewTab } from '@components/external-link';
 import { Hr } from '@components/hr';
 import {
@@ -44,8 +44,10 @@ export function PendingStackingInfo({ data, transactionId, networkName }: Props)
 
               <Box pb="base-loose">
                 <Alert icon={<IconClockHour4 />} title="Waiting for transaction confirmation">
-                  A stacking request was successfully submitted to the blockchain. Once confirmed,
-                  the account will be ready to start stacking.
+                  <AlertText>
+                    A stacking request was successfully submitted to the blockchain. Once confirmed,
+                    the account will be ready to start stacking.
+                  </AlertText>
                 </Alert>
               </Box>
 
@@ -62,10 +64,6 @@ export function PendingStackingInfo({ data, transactionId, networkName }: Props)
                     <Value>
                       <Address address={data.poxAddress} />
                     </Value>
-                  </Row>
-                  <Row>
-                    <Button>Lock more STX</Button>
-                    <Button>Increase cycles</Button>
                   </Row>
                 </Section>
                 <Section>

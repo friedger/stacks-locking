@@ -1,15 +1,12 @@
-import { AccountsApi, TransactionsApi } from '@stacks/blockchain-api-client';
-import { StackingClient, poxAddressToBtcAddress } from '@stacks/stacking';
+import { poxAddressToBtcAddress } from '@stacks/stacking';
 import {
   ContractCallTransaction,
   ContractCallTransactionMetadata,
   MempoolContractCallTransaction,
-  MempoolTransaction,
-  Transaction,
 } from '@stacks/stacks-blockchain-api-types';
 import { ClarityType, hexToCV } from '@stacks/transactions';
 
-import { isContractCallTransaction, isMempoolContractCallTransaction } from '../utils/transactions';
+import { PendingTransactionArgs, getHasPendingTransaction } from './utils-pending-txs';
 
 function isStackCall(
   t: ContractCallTransactionMetadata,
@@ -21,41 +18,6 @@ function isStackCall(
   return (
     t.contract_call.function_name === 'stack-stx' && t.contract_call.contract_id === poxContractId
   );
-}
-/**
- * Given an array of transactions, ordered from most recent to least recent, returns the most recent
- * successful unanchored transaction calling the PoX's `stack-stx` function in a microblock.
- */
-function findUnanchoredTransaction(
-  transactions: Transaction[],
-  // Until PoX 2 has been fully activated, using this arg to determine the PoX contract id. Once
-  // active, this value can be set to a constant.
-  poxContractId: string
-): ContractCallTransaction | undefined {
-  return transactions.find(t => {
-    if (!isContractCallTransaction(t)) return false;
-    if (!t.is_unanchored) return false;
-
-    const transactionResultCV = hexToCV(t.tx_result.hex);
-    const isOk = transactionResultCV.type === ClarityType.ResponseOk;
-    return isOk && isStackCall(t, poxContractId);
-  }) as ContractCallTransaction; // Casting as type is checked in `if` statement above.
-}
-/**
- * Given an array of transactions, ordered from most recent to least recent, returns the most recent
- * transaction calling the PoX's `stack-stx` function in the mempool.
- */
-function findMempoolTransaction(
-  transactions: MempoolTransaction[],
-  // Until PoX 2 has been fully activated, using this arg to determine the PoX contract id. Once
-  // active, this value can be set to a constant.
-  poxContractId: string
-) {
-  return transactions.find(t => {
-    if (!isMempoolContractCallTransaction(t)) return false;
-
-    return isStackCall(t, poxContractId);
-  }) as MempoolContractCallTransaction; // Casting as type is checked in `if` statement above.
 }
 export interface ReturnGetHasPendingDirectStacking {
   amountMicroStx: bigint;
@@ -109,58 +71,20 @@ function getDirectStackingStatusFromTransaction(
   };
 }
 
-interface Args {
-  stackingClient: StackingClient;
-  accountsApi: AccountsApi;
-  address: string;
-  transactionsApi: TransactionsApi;
-  network: 'mainnet' | 'testnet';
-}
-
 export async function getHasPendingDirectStacking({
   stackingClient,
   accountsApi,
   address,
   transactionsApi,
   network,
-}: Args): Promise<null | ReturnGetHasPendingDirectStacking> {
-  const [contractPrincipal, accountTransactions, mempoolTransactions] = await Promise.all([
-    stackingClient.getStackingContract(),
-    accountsApi.getAccountTransactions({
-      principal: address,
-      unanchored: true,
-      limit: 50,
-    }),
-    transactionsApi.getAddressMempoolTransactions({
-      address,
-      unanchored: true,
-    }),
-  ]);
-
-  // NOTE: `results` needs to be cast due to known issues with types,
-  // https://github.com/hirosystems/stacks-blockchain-api/tree/master/client#known-issues
-  const accountTransaction = findUnanchoredTransaction(
-    accountTransactions.results as Transaction[],
-    contractPrincipal
-  );
-  const mempoolTransaction = findMempoolTransaction(
-    mempoolTransactions.results as MempoolTransaction[],
-    contractPrincipal
-  );
-
-  let transaction: undefined | ContractCallTransaction | MempoolContractCallTransaction;
-  if (!accountTransaction && mempoolTransaction) {
-    transaction = mempoolTransaction;
-  } else if (accountTransaction && !mempoolTransaction) {
-    transaction = accountTransaction;
-  } else if (accountTransaction && mempoolTransaction) {
-    transaction =
-      accountTransaction.nonce > mempoolTransaction.nonce ? accountTransaction : mempoolTransaction;
-  }
-
-  if (transaction) {
-    return getDirectStackingStatusFromTransaction(transaction, network);
-  }
-
-  return null;
+}: PendingTransactionArgs): Promise<null | ReturnGetHasPendingDirectStacking> {
+  return getHasPendingTransaction({
+    stackingClient,
+    accountsApi,
+    address,
+    transactionsApi,
+    network,
+    transactionPredicate: isStackCall,
+    transactionConverter: getDirectStackingStatusFromTransaction,
+  });
 }

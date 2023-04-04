@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { StackerInfo } from '@stacks/stacking';
 import { Box, Button, Flex, Input, Text } from '@stacks/ui';
 import { IconLock } from '@tabler/icons-react';
-import { useField } from 'formik';
+import { useField, useFormikContext } from 'formik';
 
 import { Address } from '@components/address';
 import { BaseDrawer } from '@components/drawer/base-drawer';
@@ -21,28 +21,32 @@ import {
 } from '@components/info-card';
 import { MAX_STACKING_CYCLES, MIN_STACKING_CYCLES } from '@constants/app';
 import routes from '@constants/routes';
+import { hasErrors } from '@utils/form/has-errors';
 import { formatPoxAddressToNetwork } from '@utils/stacking';
 
 import { OneCycleDescriptor } from '../../components/one-cycle-descriptor';
+import { PendingStackExtendAlert } from '../../components/pending-stack-extend-alert';
 import { Description } from '../../components/stacking-form-step';
 import { Stepper } from '../../components/stepper';
+import { StackExtendInfo } from '../../direct-stacking-info/get-has-pending-stack-extend';
+import { EditingFormValues } from '../utils';
 
-interface ChangeDirectStackingLayoutProps {
+interface StackExtendLayoutProps {
   title: string;
   details: (StackerInfo & { stacked: true })['details'];
-  rewardCycleId: number;
+  pendingStackExtend: StackExtendInfo | undefined | null;
   isContractCallExtensionPageOpen: boolean;
 }
-export function ChangeDirectStackingLayout(props: ChangeDirectStackingLayoutProps) {
-  const { title, details, rewardCycleId, isContractCallExtensionPageOpen } = props;
+export function StackExtendLayout(props: StackExtendLayoutProps) {
+  const { title, details, pendingStackExtend, isContractCallExtensionPageOpen } = props;
   const navigate = useNavigate();
-  const isBeforeFirstRewardCycle = rewardCycleId < details.first_reward_cycle;
   const poxAddress = formatPoxAddressToNetwork(details.pox_address);
-
+  const { errors } = useFormikContext<EditingFormValues>();
   const [field, meta, helpers] = useField('extendCycles');
   const onClose = () => {
     navigate(routes.DIRECT_STACKING_INFO);
   };
+  console.log({ meta });
   return (
     <BaseDrawer title={title} isShowing onClose={onClose}>
       <Flex alignItems="center" flexDirection="column" pb={['loose', '48px']} px="loose">
@@ -61,7 +65,9 @@ export function ChangeDirectStackingLayout(props: ChangeDirectStackingLayoutProp
               </Text>
             </Flex>
             <Hr />
-
+            {pendingStackExtend && (
+              <PendingStackExtendAlert pendingStackExtend={pendingStackExtend} />
+            )}
             <Description>
               <Text>
                 Increase the amount of cycles you want to lock your STX. Currently each cycle lasts
@@ -75,10 +81,12 @@ export function ChangeDirectStackingLayout(props: ChangeDirectStackingLayoutProp
                 amount={field.value}
                 onIncrement={cycle => {
                   if (cycle > MAX_STACKING_CYCLES) return;
+                  helpers.setTouched(true);
                   helpers.setValue(cycle);
                 }}
                 onDecrement={cycle => {
                   if (cycle < MIN_STACKING_CYCLES) return;
+                  helpers.setTouched(true);
                   helpers.setValue(cycle);
                 }}
               />
@@ -105,7 +113,10 @@ export function ChangeDirectStackingLayout(props: ChangeDirectStackingLayoutProp
                   <Button mode="tertiary" onClick={onClose}>
                     Cancel
                   </Button>
-                  <Button isLoading={isContractCallExtensionPageOpen}>
+                  <Button
+                    isLoading={isContractCallExtensionPageOpen}
+                    isDisabled={hasErrors(errors)}
+                  >
                     <Box mr="loose">
                       <IconLock />
                     </Box>

@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { ContractCallRegularOptions, openContractCall } from '@stacks/connect';
 import { Text } from '@stacks/ui';
 import BigNumber from 'bignumber.js';
 import { Form, Formik } from 'formik';
@@ -10,34 +9,43 @@ import { CenteredErrorAlert } from '@components/centered-error-alert';
 import { CenteredSpinner } from '@components/centered-spinner';
 import {
   useGetAccountExtendedBalancesQuery,
-  useGetPoxInfoQuery,
   useGetStatusQuery,
   useStackingClient,
 } from '@components/stacking-client-provider/stacking-client-provider';
-import routes from '@constants/routes';
-import { stxToMicroStx } from '@utils/unit-convert';
+import { STACKING_CONTRACT_CALL_TX_BYTES } from '@constants/app';
+import { useCalculateFee } from '@hooks/use-calculate-fee';
+import { microStxToStxRounded } from '@utils/unit-convert';
 
-import { ChangeDirectStackingLayout } from './components/stack-increase-layout';
+import { useGetHasPendingStackingTransactionQuery } from '../direct-stacking-info/use-get-has-pending-tx-query';
+import { StackIncreaseLayout } from './components/stack-increase-layout';
+import { createHandleSubmit, createValidationSchema, getAvailableAmountUstx } from './utils';
 
 export function StackIncrease() {
+  const calcFee = useCalculateFee();
+  const transactionFeeUStx = calcFee(STACKING_CONTRACT_CALL_TX_BYTES);
+
   const navigate = useNavigate();
   const getStatusQuery = useGetStatusQuery();
-  const getPoxInfoQuery = useGetPoxInfoQuery();
   const getAccountExtendedBalancesQuery = useGetAccountExtendedBalancesQuery();
+  const { getHasPendingStackIncreaseQuery } = useGetHasPendingStackingTransactionQuery();
 
   const { client } = useStackingClient();
   const [isContractCallExtensionPageOpen, setIsContractCallExtensionPageOpen] = useState(false);
-  if (getStatusQuery.isLoading || getPoxInfoQuery.isLoading) {
+  if (
+    getStatusQuery.isLoading ||
+    getAccountExtendedBalancesQuery.isLoading ||
+    getHasPendingStackIncreaseQuery.isLoading
+  ) {
     return <CenteredSpinner />;
   }
 
   if (
     getStatusQuery.isError ||
     !getStatusQuery.data ||
-    getPoxInfoQuery.isError ||
-    !getPoxInfoQuery.data ||
     getAccountExtendedBalancesQuery.isError ||
     !getAccountExtendedBalancesQuery.data ||
+    getHasPendingStackIncreaseQuery.isError ||
+    getHasPendingStackIncreaseQuery.data === undefined ||
     !client
   ) {
     const msg = 'Error while loading data, try reloading the page.';
@@ -50,56 +58,43 @@ export function StackIncrease() {
   }
 
   if (!getStatusQuery.data.stacked) {
-    navigate('../direct-stacking-info');
-    return <></>;
-  }
-
-  async function handleLockMore({ increaseBy }: { increaseBy: BigNumber }) {
-    if (!client) return;
-    const stackingContract = await client.getStackingContract();
-    const stackIncreaseOptions = client.getStackIncreaseOptions({
-      contract: stackingContract,
-      increaseBy: stxToMicroStx(increaseBy).toString(),
-    });
-    setIsContractCallExtensionPageOpen(true);
-    openContractCall({
-      // Type coercion necessary because the `network` property returned by
-      // `client.getStackingContract()` has a wider type than allowed by `openContractCall`. Despite
-      // the wider type, the actual value of `network` is always of the type `StacksNetwork`
-      // expected by `openContractCall`.
-      //
-      // See
-      // https://github.com/hirosystems/stacks.js/blob/0e1f9f19dfa45788236c9e481f9a476d9948d86d/packages/stacking/src/index.ts#L1054
-      ...(stackIncreaseOptions as ContractCallRegularOptions),
-      onCancel() {
-        setIsContractCallExtensionPageOpen(false);
-      },
-      onFinish() {
-        setIsContractCallExtensionPageOpen(false);
-        navigate(routes.DIRECT_STACKING_INFO);
-      },
-    });
+    return (
+      <CenteredErrorAlert>
+        <Text>Not stacking</Text>
+      </CenteredErrorAlert>
+    );
   }
 
   const extendedStxBalances = getAccountExtendedBalancesQuery.data.stx;
+  const availableBalanceUStx = getAvailableAmountUstx(
+    extendedStxBalances,
+    getHasPendingStackIncreaseQuery.data
+  );
+
+  const handleSubmit = createHandleSubmit({
+    client,
+    navigate,
+    setIsContractCallExtensionPageOpen,
+  });
+
+  const validationSchema = createValidationSchema({
+    availableBalanceUStx: availableBalanceUStx,
+    transactionFeeUStx,
+  });
+
   return (
     <Formik
       initialValues={{
-        increaseBy: new BigNumber(extendedStxBalances.balance.toString())
-          .minus(new BigNumber(extendedStxBalances.locked.toString()))
-          .dividedToIntegerBy(1_000_000),
+        increaseBy: microStxToStxRounded(availableBalanceUStx),
       }}
-      onSubmit={values => {
-        handleLockMore(values);
-      }}
-      //validationSchema={validationSchema}
+      onSubmit={handleSubmit}
+      validationSchema={validationSchema}
     >
       <Form>
-        <ChangeDirectStackingLayout
+        <StackIncreaseLayout
           title="Lock more STX"
-          details={getStatusQuery.data.details}
           extendedStxBalances={getAccountExtendedBalancesQuery.data.stx}
-          rewardCycleId={getPoxInfoQuery.data.reward_cycle_id}
+          pendingStackIncrease={getHasPendingStackIncreaseQuery.data}
           isContractCallExtensionPageOpen={isContractCallExtensionPageOpen}
         />
       </Form>

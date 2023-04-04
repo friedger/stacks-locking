@@ -16,18 +16,20 @@ import {
 import { ActiveStackingInfo } from './components/active-stacking-info';
 import { NoStacking } from './components/no-stacking-info';
 import { PendingStackingInfo } from './components/pending-stacking-info';
-import { useGetHasPendingDirectStackingQuery } from './use-get-has-pending-direct-stacking';
+import { useGetHasPendingStackingTransactionQuery } from './use-get-has-pending-tx-query';
 
 export function DirectStackingInfo() {
-  const [isContractCallExtensionPageOpen, setIsContractCallExtensionPageOpen] = useState(false);
-
   const { networkName } = useNetwork();
   const getStatusQuery = useGetStatusQuery();
   const getAccountExtendedBalancesQuery = useGetAccountExtendedBalancesQuery();
   const getCoreInfoQuery = useGetCoreInfoQuery();
   const getAccountBalanceLockedQuery = useGetAccountBalanceLockedQuery();
   const getPoxInfoQuery = useGetPoxInfoQuery();
-  const getHasPendingDirectStacking = useGetHasPendingDirectStackingQuery();
+  const {
+    getHasPendingDirectStackingQuery,
+    getHasPendingStackIncreaseQuery,
+    getHasPendingStackExtendQuery,
+  } = useGetHasPendingStackingTransactionQuery();
 
   if (
     getStatusQuery.isLoading ||
@@ -35,7 +37,9 @@ export function DirectStackingInfo() {
     getCoreInfoQuery.isLoading ||
     getPoxInfoQuery.isLoading ||
     getAccountBalanceLockedQuery.isLoading ||
-    getHasPendingDirectStacking.isLoading
+    getHasPendingDirectStackingQuery.isLoading ||
+    getHasPendingStackIncreaseQuery.isLoading ||
+    getHasPendingStackExtendQuery.isLoading
   ) {
     return <CenteredSpinner />;
   }
@@ -51,8 +55,12 @@ export function DirectStackingInfo() {
     !getCoreInfoQuery.data ||
     getPoxInfoQuery.isError ||
     !getPoxInfoQuery.data ||
-    getHasPendingDirectStacking.isError ||
-    getHasPendingDirectStacking.data === undefined
+    getHasPendingDirectStackingQuery.isError ||
+    getHasPendingDirectStackingQuery.data === undefined ||
+    getHasPendingStackIncreaseQuery.isError ||
+    getHasPendingStackIncreaseQuery.data === undefined ||
+    getHasPendingStackExtendQuery.isLoading ||
+    getHasPendingStackExtendQuery.data === undefined
   ) {
     const msg = 'Error while loading data, try reloading the page.';
     console.error(msg);
@@ -65,16 +73,16 @@ export function DirectStackingInfo() {
 
   const isStacking = getStatusQuery.data.stacked;
 
-  if (!isStacking && getHasPendingDirectStacking.data === null) {
+  if (!isStacking && getHasPendingDirectStackingQuery.data === null) {
     return <NoStacking />;
   }
 
-  const transactionId = getHasPendingDirectStacking.data?.transactionId;
+  const transactionId = getHasPendingDirectStackingQuery.data?.transactionId;
 
-  if (!isStacking && getHasPendingDirectStacking.data) {
+  if (!isStacking && getHasPendingDirectStackingQuery.data) {
     return (
       <PendingStackingInfo
-        data={getHasPendingDirectStacking.data}
+        data={getHasPendingDirectStackingQuery.data}
         transactionId={transactionId}
         networkName={networkName}
       />
@@ -95,6 +103,8 @@ export function DirectStackingInfo() {
       rewardCycleId={getPoxInfoQuery.data.reward_cycle_id}
       lockedAmount={getAccountBalanceLockedQuery.data}
       stackerInfoDetails={getStatusQuery.data.details}
+      pendingStackIncrease={getHasPendingStackIncreaseQuery.data}
+      pendingStackExtend={getHasPendingStackExtendQuery.data}
     />
   );
 }

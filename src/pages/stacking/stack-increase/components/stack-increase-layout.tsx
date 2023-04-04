@@ -2,8 +2,10 @@ import { useNavigate } from 'react-router-dom';
 
 import { AccountExtendedBalances, StackerInfo } from '@stacks/stacking';
 import { Box, Button, Flex, Text } from '@stacks/ui';
-import { IconLock } from '@tabler/icons-react';
+import { IconClockHour4, IconLock } from '@tabler/icons-react';
+import { useFormikContext } from 'formik';
 
+import { Alert, AlertText } from '@components/alert';
 import { BaseDrawer } from '@components/drawer/base-drawer';
 import { Hr } from '@components/hr';
 import {
@@ -13,24 +15,25 @@ import {
   InfoCardSection as Section,
 } from '@components/info-card';
 import routes from '@constants/routes';
+import { hasErrors } from '@utils/form/has-errors';
 import { toHumanReadableStx } from '@utils/unit-convert';
 
+import { PendingStackIncreaseAlert } from '../../components/pending-stack-increase-alert';
+import { StackIncreaseInfo } from '../../direct-stacking-info/get-has-pending-stack-increase';
+import { EditingFormValues } from '../utils';
 import { Amount } from './choose-amount';
 
-interface ChangeDirectStackingLayoutProps {
+interface StackIncreaseLayoutProps {
   title: string;
-  details: (StackerInfo & { stacked: true })['details'];
   extendedStxBalances: AccountExtendedBalances['stx'];
-  rewardCycleId: number;
+  pendingStackIncrease: StackIncreaseInfo | undefined | null;
   isContractCallExtensionPageOpen: boolean;
 }
-export function ChangeDirectStackingLayout(props: ChangeDirectStackingLayoutProps) {
-  const { title, details, extendedStxBalances, rewardCycleId, isContractCallExtensionPageOpen } =
+export function StackIncreaseLayout(props: StackIncreaseLayoutProps) {
+  const { title, extendedStxBalances, pendingStackIncrease, isContractCallExtensionPageOpen } =
     props;
   const navigate = useNavigate();
-  const elapsedCyclesSinceStackingStart = Math.max(rewardCycleId - details.first_reward_cycle, 0);
-  const elapsedStackingCycles = Math.min(elapsedCyclesSinceStackingStart, details.lock_period);
-  const isBeforeFirstRewardCycle = rewardCycleId < details.first_reward_cycle;
+  const { errors } = useFormikContext<EditingFormValues>();
   const onClose = () => {
     navigate(routes.DIRECT_STACKING_INFO);
   };
@@ -53,6 +56,10 @@ export function ChangeDirectStackingLayout(props: ChangeDirectStackingLayoutProp
             </Flex>
             <Hr />
 
+            {pendingStackIncrease && (
+              <PendingStackIncreaseAlert pendingStackIncrease={pendingStackIncrease} />
+            )}
+
             <Group pt="base-loose">
               <Section>
                 <Row>
@@ -63,7 +70,10 @@ export function ChangeDirectStackingLayout(props: ChangeDirectStackingLayoutProp
                   <Button mode="tertiary" onClick={onClose}>
                     Cancel
                   </Button>
-                  <Button isLoading={isContractCallExtensionPageOpen}>
+                  <Button
+                    isLoading={isContractCallExtensionPageOpen}
+                    isDisabled={hasErrors(errors)}
+                  >
                     <Box mr="loose">
                       <IconLock />
                     </Box>

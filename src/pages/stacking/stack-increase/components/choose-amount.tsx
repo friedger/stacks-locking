@@ -8,14 +8,18 @@ import { useGetAccountExtendedBalancesQuery } from '@components/stacking-client-
 import { microStxToStx } from '@utils/unit-convert';
 
 import { Description } from '../../components/stacking-form-step';
+import { useGetHasPendingStackingTransactionQuery } from '../../direct-stacking-info/use-get-has-pending-tx-query';
+import { getAvailableAmountUstx } from '../utils';
 
 export function Amount() {
   const getAccountExtendedBalancesQuery = useGetAccountExtendedBalancesQuery();
+  const { getHasPendingStackIncreaseQuery } = useGetHasPendingStackingTransactionQuery();
 
   const [field, meta, helpers] = useField('increaseBy');
   const maxAmountUstx = getAccountExtendedBalancesQuery.data?.stx
-    ? new BigNumber(getAccountExtendedBalancesQuery.data.stx.balance.toString()).minus(
-        new BigNumber(getAccountExtendedBalancesQuery.data.stx.locked.toString())
+    ? getAvailableAmountUstx(
+        getAccountExtendedBalancesQuery.data.stx,
+        getHasPendingStackIncreaseQuery.data
       )
     : undefined;
   const setMax = () => {

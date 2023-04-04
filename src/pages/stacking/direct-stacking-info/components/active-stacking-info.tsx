@@ -1,13 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { ContractCallRegularOptions, openContractCall } from '@stacks/connect';
 import { StackerInfo } from '@stacks/stacking';
-import { Box, Button, Flex, Text } from '@stacks/ui';
+import { Box, Flex, Text } from '@stacks/ui';
 import { IconClockHour4 } from '@tabler/icons-react';
 
 import { Address } from '@components/address';
-import { Alert } from '@components/alert';
+import { Alert, AlertText } from '@components/alert';
 import { OpenExternalLinkInNewTab } from '@components/external-link';
 import { Hr } from '@components/hr';
 import {
@@ -18,10 +17,16 @@ import {
   InfoCardSection as Section,
   InfoCardValue as Value,
 } from '@components/info-card';
-import { useStackingClient } from '@components/stacking-client-provider/stacking-client-provider';
+import { Caption } from '@components/typography';
 import { makeStackingClubRewardAddressLink } from '@utils/external-links';
 import { formatPoxAddressToNetwork } from '@utils/stacking';
 import { toHumanReadableStx } from '@utils/unit-convert';
+
+import { PendingStackExtendAlert } from '../../components/pending-stack-extend-alert';
+import { StackExtendInfo } from '../get-has-pending-stack-extend';
+import { StackIncreaseInfo } from '../get-has-pending-stack-increase';
+import { ActionButtonsRow } from './action-buttons-row';
+import { PendingStackingInfo } from './pending-stacking-info';
 
 type ActiveStackerInfo = StackerInfo & {
   stacked: true;
@@ -31,29 +36,21 @@ interface Props {
   lockedAmount: bigint;
   stackerInfoDetails: ActiveStackerInfo['details'];
   rewardCycleId: number;
+  pendingStackIncrease: StackIncreaseInfo | undefined | null;
+  pendingStackExtend: StackExtendInfo | undefined | null;
 }
 
 export function ActiveStackingInfo({
   lockedAmount,
   stackerInfoDetails: details,
   rewardCycleId,
+  pendingStackExtend,
+  pendingStackIncrease,
 }: Props) {
-  const { client } = useStackingClient();
-  const navigate = useNavigate();
-  const [isContractCallExtensionPageOpen, setIsContractCallExtensionPageOpen] = useState(false);
-
   const elapsedCyclesSinceStackingStart = Math.max(rewardCycleId - details.first_reward_cycle, 0);
   const elapsedStackingCycles = Math.min(elapsedCyclesSinceStackingStart, details.lock_period);
   const isBeforeFirstRewardCycle = rewardCycleId < details.first_reward_cycle;
   const poxAddress = formatPoxAddressToNetwork(details.pox_address);
-
-  async function handleLockMoreClick() {
-    navigate('../lock-more-stx');
-  }
-
-  async function handleExtendStackingClick() {
-    navigate('../extend-stacking');
-  }
 
   return (
     <Flex height="100%" justify="center" align="center">
@@ -72,13 +69,28 @@ export function ActiveStackingInfo({
             </Text>
 
             {isBeforeFirstRewardCycle && (
-              <>
-                <Box pb="base-loose"></Box>
+              <Box pb="base-loose">
                 <Alert icon={<IconClockHour4 />} title="Waiting for the cycle to start">
                   Your STX are ready for stacking. Once the next cycle starts the network will
                   determine if and how many slots are claimed.
                 </Alert>
-              </>
+              </Box>
+            )}
+
+            {pendingStackIncrease && (
+              <Box pb="base-loose">
+                <Alert icon={<IconClockHour4 />} title="Waiting for transaction confirmation">
+                  <AlertText>
+                    A stacking request was successfully submitted to the blockchain. Once confirmed,
+                    an additional amount of {toHumanReadableStx(pendingStackIncrease.increaseBy)}{' '}
+                    will be stacking.
+                  </AlertText>
+                </Alert>
+              </Box>
+            )}
+
+            {pendingStackExtend && (
+              <PendingStackExtendAlert pendingStackExtend={pendingStackExtend} />
             )}
 
             <Hr />
@@ -105,22 +117,7 @@ export function ActiveStackingInfo({
                     <Address address={poxAddress} />
                   </Value>
                 </Row>
-                <Row mt="loose" justifyContent="space-evenly">
-                  <Button
-                    mode="tertiary"
-                    onClick={handleLockMoreClick}
-                    isLoading={isContractCallExtensionPageOpen}
-                  >
-                    Lock more STX
-                  </Button>
-                  <Button
-                    mode="tertiary"
-                    onClick={handleExtendStackingClick}
-                    isLoading={isContractCallExtensionPageOpen}
-                  >
-                    Extend stacking
-                  </Button>
-                </Row>
+                <ActionButtonsRow />
               </Section>
 
               <Section>
