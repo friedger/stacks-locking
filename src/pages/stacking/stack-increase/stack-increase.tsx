@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Text } from '@stacks/ui';
-import BigNumber from 'bignumber.js';
 import { Form, Formik } from 'formik';
 
 import { CenteredErrorAlert } from '@components/centered-error-alert';

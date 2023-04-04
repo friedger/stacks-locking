@@ -1,5 +1,5 @@
 import { FinishedTxData } from '@stacks/connect';
-import { Box, Stack, Text } from '@stacks/ui';
+import { Box } from '@stacks/ui';
 
 import { Alert, AlertText } from './alert';
 

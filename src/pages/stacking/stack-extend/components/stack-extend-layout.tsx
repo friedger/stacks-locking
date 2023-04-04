@@ -1,8 +1,7 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { StackerInfo } from '@stacks/stacking';
-import { Box, Button, Flex, Input, Text } from '@stacks/ui';
+import { Box, Button, Flex, Text } from '@stacks/ui';
 import { IconLock } from '@tabler/icons-react';
 import { useField, useFormikContext } from 'formik';
 

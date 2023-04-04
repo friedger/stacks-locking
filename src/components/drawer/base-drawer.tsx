@@ -38,7 +38,7 @@ interface BaseDrawerProps extends Omit<FlexProps, 'title'> {
   title?: string;
   waitingOnPerformedActionMessage?: string;
 }
-export const BaseDrawer = memo((props: BaseDrawerProps) => {
+const BaseDrawerComponent = (props: BaseDrawerProps) => {
   const {
     children,
     enableGoBack,
@@ -51,7 +51,15 @@ export const BaseDrawer = memo((props: BaseDrawerProps) => {
     waitingOnPerformedActionMessage,
     ...rest
   } = props;
-  const ref = useDrawer(isShowing, onClose ? onClose : () => {}, pauseOnClickOutside);
+  const ref = useDrawer(
+    isShowing,
+    onClose
+      ? onClose
+      : () => {
+          return;
+        },
+    pauseOnClickOutside
+  );
   const navigate = useNavigate();
 
   const onGoBack = () => navigate(-1);
@@ -120,4 +128,5 @@ export const BaseDrawer = memo((props: BaseDrawerProps) => {
       </Flex>
     </Flex>
   );
-});
+};
+export const BaseDrawer = memo(BaseDrawerComponent);

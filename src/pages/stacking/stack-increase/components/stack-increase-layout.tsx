@@ -1,11 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 
-import { AccountExtendedBalances, StackerInfo } from '@stacks/stacking';
+import { AccountExtendedBalances } from '@stacks/stacking';
 import { Box, Button, Flex, Text } from '@stacks/ui';
-import { IconClockHour4, IconLock } from '@tabler/icons-react';
+import { IconLock } from '@tabler/icons-react';
 import { useFormikContext } from 'formik';
 
-import { Alert, AlertText } from '@components/alert';
 import { BaseDrawer } from '@components/drawer/base-drawer';
 import { Hr } from '@components/hr';
 import {

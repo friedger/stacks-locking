@@ -1,6 +1,3 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-
 import { StackerInfo } from '@stacks/stacking';
 import { Box, Flex, Text } from '@stacks/ui';
 import { IconClockHour4 } from '@tabler/icons-react';
@@ -17,7 +14,6 @@ import {
   InfoCardSection as Section,
   InfoCardValue as Value,
 } from '@components/info-card';
-import { Caption } from '@components/typography';
 import { makeStackingClubRewardAddressLink } from '@utils/external-links';
 import { formatPoxAddressToNetwork } from '@utils/stacking';
 import { toHumanReadableStx } from '@utils/unit-convert';
@@ -26,7 +22,6 @@ import { PendingStackExtendAlert } from '../../components/pending-stack-extend-a
 import { StackExtendInfo } from '../get-has-pending-stack-extend';
 import { StackIncreaseInfo } from '../get-has-pending-stack-increase';
 import { ActionButtonsRow } from './action-buttons-row';
-import { PendingStackingInfo } from './pending-stacking-info';
 
 type ActiveStackerInfo = StackerInfo & {
   stacked: true;
