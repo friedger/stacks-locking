@@ -7,11 +7,11 @@ export enum PoolName {
   CustomPool = 'Custom Pool',
 }
 
-// const ContractMapDevnet = {
-//   PoX2: 'ST000000000000000000002AMW42H.pox-2',
-//   WrapperOneCycle: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.pox-pools-1-cycle',
-//   WrapperFastPool: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.pox-pool-self-service',
-// } as const;
+const ContractMapDevnet = {
+  PoX2: 'ST000000000000000000002AMW42H.pox-2',
+  WrapperOneCycle: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.pox-pools-1-cycle',
+  WrapperFastPool: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.pox-pool-self-service',
+} as const;
 
 const ContractMapTestnet = {
   PoX2: 'ST000000000000000000002AMW42H.pox-2',
@@ -26,7 +26,7 @@ const ContractMapMainnet = {
 } as const;
 
 export const Pox2Contracts =
-  initialNetworkName === 'testnet' ? ContractMapTestnet : ContractMapMainnet;
+  initialNetworkName === 'testnet' ? ContractMapDevnet : ContractMapMainnet;
 
 export enum PayoutMethod {
   BTC = 'BTC',

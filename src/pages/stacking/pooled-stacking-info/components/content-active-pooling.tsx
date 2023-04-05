@@ -82,7 +82,7 @@ export function ActivePoolingContent({
               <Address address={poolAddress} />
             </Value>
           </Row>
-          {isSelfService && !showIncreasePoolingAmount && <SelfServiceRows />}
+
           {showIncreasePoolingAmount ? (
             <IncreasePoolingAmount
               handleStopPoolingClick={() => {
@@ -98,6 +98,7 @@ export function ActivePoolingContent({
               </Button>
             </Row>
           )}
+          {isSelfService && <SelfServiceRows />}
         </Section>
       </Group>
 
