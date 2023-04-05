@@ -29,6 +29,14 @@ export function Footer() {
       >
         FAQ
       </OpenLinkInNewTab>
+      <OpenLinkInNewTab
+        color={figmaTheme.text}
+        fontWeight={500}
+        sx={{ textDecoration: 'underline' }}
+        href={'https://github.com/hirosystems/btcweb3'}
+      >
+        Source Code
+      </OpenLinkInNewTab>
     </Flex>
   );
 }
