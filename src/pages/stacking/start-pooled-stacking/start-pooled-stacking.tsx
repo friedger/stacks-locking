@@ -26,7 +26,6 @@ import { ChoosePoolingRewardAddress } from './components/choose-pooling-reward-a
 import { ConfirmAndSubmit } from './components/confirm-and-pool';
 import { PoolingInfoCard } from './components/delegated-stacking-info-card';
 import { PooledStackingIntro } from './components/pooled-stacking-intro';
-import { PresetPoolingRewardAddressInfo } from './components/preset-pooling-reward-address-info';
 import { pools } from './components/preset-pools';
 import { EditingFormValues, PoolWrapperAllowanceState } from './types';
 import {
