@@ -204,9 +204,7 @@ function StartPooledStackingLayout({
                     btcAddress={currentAccountAddresses.btcAddressP2wpkh || ''}
                     editable={rewardAddressEditable || !currentAccountAddresses.btcAddressP2wpkh}
                   />
-                ) : (
-                  <PresetPoolingRewardAddressInfo />
-                )}
+                ) : null}
                 <ChoosePoolingAmount />
                 <ChoosePoolingDuration />
                 <ConfirmAndSubmit

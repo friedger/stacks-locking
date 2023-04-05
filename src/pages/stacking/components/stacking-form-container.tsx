@@ -10,7 +10,7 @@ interface ChildProps extends BoxProps {
   step: number;
 }
 
-type TChild = React.ReactElement<ChildProps>;
+type TChild = React.ReactElement<ChildProps> | null;
 
 interface Props {
   children: TChild | TChild[];
