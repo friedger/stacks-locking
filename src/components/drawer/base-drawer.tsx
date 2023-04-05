@@ -1,10 +1,10 @@
 import { ReactNode, Suspense, memo, useCallback, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { css } from '@emotion/react';
 import { Box, Flex, FlexProps, transition, useEventListener } from '@stacks/ui';
 
 import { hideScrollbarStyle } from '@components/styles/hide-scrollbar';
+import { useNavigate } from '@hooks/use-navigate';
 import { useOnClickOutside } from '@hooks/use-onclickoutside';
 
 import { DrawerHeader } from './components/drawer-header';

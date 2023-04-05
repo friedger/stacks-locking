@@ -1,7 +1,12 @@
-import { pools } from './components/preset-pools';
+import { StacksNetwork } from '@stacks/network';
+
 import { EditingFormValues, PoolWrapperAllowanceState } from './types';
-import { PoolName, Pox2Contracts } from './types-preset-pools';
 import { HandleAllowContractCallerArgs } from './utils-allow-contract-caller';
+import {
+  getNetworkInstance,
+  getPoxWrapperContract,
+  requiresAllowContractCaller,
+} from './utils-preset-pools';
 
 interface CreateHandleSubmitArgs {
   hasUserConfirmedPoolWrapperContract: PoolWrapperAllowanceState;
@@ -13,16 +18,7 @@ interface CreateHandleSubmitArgs {
     poxWrapperContract,
     onFinish,
   }: HandleAllowContractCallerArgs) => Promise<void>;
-}
-
-function requiresAllowContractCaller(values: EditingFormValues) {
-  if (!values.poolName || values.poolName === PoolName.CustomPool) return false;
-  const pool = pools[values.poolName];
-  return pool.poxContract !== Pox2Contracts.PoX2;
-}
-
-function getPoxWrapperContract(values: EditingFormValues) {
-  return values.poolName ? pools[values.poolName].poxContract : Pox2Contracts.PoX2;
+  network: StacksNetwork;
 }
 
 export function createHandleSubmit({
@@ -30,11 +26,13 @@ export function createHandleSubmit({
   handleAllowContractCallerSubmit,
   hasUserConfirmedPoolWrapperContract,
   setHasUserConfirmedPoolWrapperContract,
+  network,
 }: CreateHandleSubmitArgs) {
   return async function handleSubmit(values: EditingFormValues) {
-    if (requiresAllowContractCaller(values)) {
-      const poxWrapperContract = getPoxWrapperContract(values);
-      if (hasUserConfirmedPoolWrapperContract[poxWrapperContract]) {
+    if (values.poolName && requiresAllowContractCaller(values.poolName)) {
+      const poxWrapperContract = getPoxWrapperContract(values.poolName, network);
+      const networkInstance = getNetworkInstance(network);
+      if (hasUserConfirmedPoolWrapperContract[networkInstance]?.[poxWrapperContract]) {
         handleDelegateStxSubmit(values);
         return;
       } else {

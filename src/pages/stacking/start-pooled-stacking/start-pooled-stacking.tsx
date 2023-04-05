@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { StacksNetworkName } from '@stacks/network';
 import { StackingClient } from '@stacks/stacking';
@@ -9,12 +8,13 @@ import { Form, Formik } from 'formik';
 import { useAuth } from '@components/auth-provider/auth-provider';
 import { CenteredErrorAlert } from '@components/centered-error-alert';
 import { CenteredSpinner } from '@components/centered-spinner';
-import { useNetwork } from '@components/network-provider';
 import {
   useGetAllowanceContractCallersQuery,
   useGetSecondsUntilNextCycleQuery,
   useStackingClient,
 } from '@components/stacking-client-provider/stacking-client-provider';
+import { useNavigate } from '@hooks/use-navigate';
+import { useStacksNetwork } from '@hooks/use-stacks-network';
 
 import { StackingFormContainer } from '../components/stacking-form-container';
 import { StackingFormInfoPanel } from '../components/stacking-form-info-panel';
@@ -28,18 +28,14 @@ import { PoolingInfoCard } from './components/delegated-stacking-info-card';
 import { PooledStackingIntro } from './components/pooled-stacking-intro';
 import { pools } from './components/preset-pools';
 import { EditingFormValues, PoolWrapperAllowanceState } from './types';
-import {
-  PayoutMethod,
-  PoolName,
-  Pox2Contracts,
-  usesPoxWrapperContract,
-} from './types-preset-pools';
+import { PayoutMethod, PoolName, PoxContractName } from './types-preset-pools';
 import { createHandleSubmit } from './utils';
 import { createHandleSubmit as createHandleAllowContractCallerSubmit } from './utils-allow-contract-caller';
 import {
   createHandleSubmit as createHandleDelegateStxSubmit,
   createValidationSchema,
 } from './utils-delegate-stx';
+import { getPox2Contracts, usesPoxWrapperContract } from './utils-preset-pools';
 
 const initialDelegatingFormValues: Partial<EditingFormValues> = {
   amount: '',
@@ -51,7 +47,7 @@ const initialDelegatingFormValues: Partial<EditingFormValues> = {
 export function StartPooledStacking() {
   const { client } = useStackingClient();
   const { address, btcAddressP2tr, btcAddressP2wpkh } = useAuth();
-  const { networkName } = useNetwork();
+  const { networkName } = useStacksNetwork();
 
   if (!address) {
     const msg = 'Expected `address` to be defined.';
@@ -92,6 +88,8 @@ function StartPooledStackingLayout({
   networkName,
   currentAccountAddresses,
 }: StartPooledStackingProps) {
+  const { network, networkInstance } = useStacksNetwork();
+  const pox2Contracts = getPox2Contracts(network);
   const [isContractCallExtensionPageOpen, setIsContractCallExtensionPageOpen] = useState(false);
   const [rewardAddressEditable, setRewardAddressEditable] = useState(true);
   const [poolRequiresUserRewardAddress, setPoolRequiresUserRewardAddress] = useState(true);
@@ -99,10 +97,10 @@ function StartPooledStackingLayout({
 
   const getSecondsUntilNextCycleQuery = useGetSecondsUntilNextCycleQuery();
   const getAllowanceContractCallersFastPoolQuery = useGetAllowanceContractCallersQuery(
-    Pox2Contracts.WrapperFastPool
+    pox2Contracts[PoxContractName.WrapperFastPool]
   );
   const getAllowanceContractCallersOneCycleQuery = useGetAllowanceContractCallersQuery(
-    Pox2Contracts.WrapperOneCycle
+    pox2Contracts[PoxContractName.WrapperOneCycle]
   );
 
   const [hasUserConfirmedPoolWrapperContract, setHasUserConfirmedPoolWrapperContract] =
@@ -110,20 +108,24 @@ function StartPooledStackingLayout({
 
   useEffect(() => {
     setHasUserConfirmedPoolWrapperContract({
-      [Pox2Contracts.PoX2]: true,
-      [Pox2Contracts.WrapperFastPool]:
-        getAllowanceContractCallersFastPoolQuery?.data?.type === ClarityType.OptionalSome,
-      [Pox2Contracts.WrapperOneCycle]:
-        getAllowanceContractCallersOneCycleQuery?.data?.type === ClarityType.OptionalSome,
+      ...hasUserConfirmedPoolWrapperContract,
+      [networkInstance]: {
+        [PoxContractName.Pox2]: true,
+        [PoxContractName.WrapperFastPool]:
+          getAllowanceContractCallersFastPoolQuery?.data?.type === ClarityType.OptionalSome,
+        [PoxContractName.WrapperOneCycle]:
+          getAllowanceContractCallersOneCycleQuery?.data?.type === ClarityType.OptionalSome,
+      },
     });
   }, [
+    networkInstance,
     getAllowanceContractCallersFastPoolQuery?.data?.type,
     getAllowanceContractCallersOneCycleQuery?.data?.type,
+    hasUserConfirmedPoolWrapperContract,
     setHasUserConfirmedPoolWrapperContract,
   ]);
 
   const navigate = useNavigate();
-  const { network } = useNetwork();
 
   const validationSchema = createValidationSchema({
     currentAccountAddress: currentAccountAddresses.address,
@@ -145,6 +147,7 @@ function StartPooledStackingLayout({
     handleAllowContractCallerSubmit,
     hasUserConfirmedPoolWrapperContract,
     setHasUserConfirmedPoolWrapperContract,
+    network,
   });
 
   const onPoolChange = (poolName: PoolName) => {

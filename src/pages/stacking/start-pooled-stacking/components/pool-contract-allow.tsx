@@ -1,6 +1,8 @@
 import { Stack } from '@stacks/ui';
 import { IconCheck } from '@tabler/icons-react';
 
+import { useStacksNetwork } from '@hooks/use-stacks-network';
+
 import { Action } from '../../components/stacking-form-step';
 import { PoolWrapperAllowanceState } from '../types';
 import { PoolName } from '../types-preset-pools';
@@ -15,9 +17,11 @@ export function ActionsForWrapperContract({
   hasUserConfirmedPoolWrapperContract: PoolWrapperAllowanceState;
   poolName: PoolName;
 }) {
+  const { networkInstance } = useStacksNetwork();
   const pool = pools[poolName];
   const poxWrapperContract = pool.poxContract;
-  const hasUserConfirmed = hasUserConfirmedPoolWrapperContract[poxWrapperContract];
+  const hasUserConfirmed =
+    hasUserConfirmedPoolWrapperContract[networkInstance]?.[poxWrapperContract];
 
   return (
     <Stack>

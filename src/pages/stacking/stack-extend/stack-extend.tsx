@@ -1,16 +1,16 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { Text } from '@stacks/ui';
 import { Form, Formik } from 'formik';
 
 import { CenteredErrorAlert } from '@components/centered-error-alert';
 import { CenteredSpinner } from '@components/centered-spinner';
-import { useNetwork } from '@components/network-provider';
 import {
   useGetStatusQuery,
   useStackingClient,
 } from '@components/stacking-client-provider/stacking-client-provider';
+import { useNavigate } from '@hooks/use-navigate';
+import { useStacksNetwork } from '@hooks/use-stacks-network';
 import { formatPoxAddressToNetwork } from '@utils/stacking';
 
 import { useGetHasPendingStackingTransactionQuery } from '../direct-stacking-info/use-get-has-pending-tx-query';
@@ -23,7 +23,7 @@ export function StackExtend() {
   const { getHasPendingStackExtendQuery } = useGetHasPendingStackingTransactionQuery();
 
   const { client } = useStackingClient();
-  const { networkName } = useNetwork();
+  const { networkName } = useStacksNetwork();
 
   const [isContractCallExtensionPageOpen, setIsContractCallExtensionPageOpen] = useState(false);
 

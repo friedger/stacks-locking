@@ -7,4 +7,6 @@ export default {
   POOLED_STACKING_INFO: '/pooled-stacking-info',
   LOCK_MORE: '/lock-more',
   SELF_SERVICE_EXTEND: '/self-service-extend',
+  SETTINGS_NETWORK: '/settings/network',
+  ADD_NETWORK: '/settings/add-network',
 };

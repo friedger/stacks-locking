@@ -1,6 +1,7 @@
-import { Navigate, Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 
 import { useAuth } from './auth-provider/auth-provider';
+import { Navigate } from './navigate';
 
 export function AuthGuard() {
   const { isSignedIn } = useAuth();

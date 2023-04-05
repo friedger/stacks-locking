@@ -1,5 +1,3 @@
-import { useNavigate } from 'react-router-dom';
-
 import { AccountExtendedBalances } from '@stacks/stacking';
 import { Box, Button, Flex, Text } from '@stacks/ui';
 
@@ -12,6 +10,7 @@ import {
   InfoCardSection as Section,
 } from '@components/info-card';
 import routes from '@constants/routes';
+import { useNavigate } from '@hooks/use-navigate';
 import { toHumanReadableStx } from '@utils/unit-convert';
 
 interface StackIncreaseLayoutProps {
@@ -21,6 +20,7 @@ interface StackIncreaseLayoutProps {
 export function StackIncreaseLayout(props: StackIncreaseLayoutProps) {
   const { title, extendedStxBalances } = props;
   const navigate = useNavigate();
+
   const onClose = () => {
     navigate(routes.DIRECT_STACKING_INFO);
   };

@@ -1,14 +1,21 @@
 import { Text, color } from '@stacks/ui';
+import { NetworkBadge } from 'src/pages/settings/network/network-items';
 
-import { initialNetworkName } from './network-provider';
+import routes from '@constants/routes';
+import { useNavigate } from '@hooks/use-navigate';
+import { useStacksNetwork } from '@hooks/use-stacks-network';
+
+import { Caption } from './typography';
 
 export function NetworkInfo() {
-  if (initialNetworkName === 'mainnet') {
-    return null;
-  }
+  const { networkName, networkLabel } = useStacksNetwork();
+  const navigate = useNavigate();
   return (
-    <Text color={color('text-caption')}>
-      {initialNetworkName === 'testnet' ? 'Testnet' : 'Devnet'}
-    </Text>
+    <Caption cursor="pointer" onClick={() => navigate(routes.SETTINGS_NETWORK)}>
+      <Text textAlign="center" color={color('text-caption')}>
+        {networkLabel}
+        <NetworkBadge mode={networkName} />
+      </Text>
+    </Caption>
   );
 }

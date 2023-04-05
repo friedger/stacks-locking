@@ -1,6 +1,5 @@
-import { useNavigate } from 'react-router-dom';
-
 import { useAuth } from '@components/auth-provider/auth-provider';
+import { useNavigate } from '@hooks/use-navigate';
 
 import { StackingOptionCardButton as OptionButton } from '../components/start-stacking-layout';
 import { ChooseStackingMethodLayoutProps } from '../types';

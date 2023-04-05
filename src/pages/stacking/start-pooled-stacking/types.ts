@@ -1,4 +1,4 @@
-import { PoolName, WrapperPrincipal } from './types-preset-pools';
+import { NetworkInstance, PoolName, WrapperPrincipal } from './types-preset-pools';
 
 interface DelegatingFormIndefiniteValues<N> {
   delegationDurationType: 'indefinite';
@@ -31,5 +31,5 @@ export type PresetPool = {
 };
 
 export type PoolWrapperAllowanceState = Partial<{
-  [K in WrapperPrincipal]: boolean;
+  [key in NetworkInstance]: Partial<{ [K in WrapperPrincipal]: boolean }>;
 }>;

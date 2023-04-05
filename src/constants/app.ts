@@ -1,4 +1,4 @@
-import { stxToMicroStx } from '../utils/unit-convert';
+import { stxToMicroStx } from '@utils/unit-convert';
 
 function isValidNetValue(maybeNetwork: unknown): maybeNetwork is 'testnet' | 'mainnet' {
   return maybeNetwork === 'testnet' || maybeNetwork === 'mainnet';

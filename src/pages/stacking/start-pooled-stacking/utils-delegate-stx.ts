@@ -16,7 +16,8 @@ import { stxAmountSchema } from '@utils/validators/stx-amount-validator';
 
 import { pools } from './components/preset-pools';
 import { EditingFormValues } from './types';
-import { PoolName, Pox2Contracts } from './types-preset-pools';
+import { PoolName, PoxContractName } from './types-preset-pools';
+import { getNetworkInstance, getPoxContractAddressAndName } from './utils-preset-pools';
 
 interface Args {
   /**
@@ -94,8 +95,8 @@ function getOptions(
       : undefined;
   const pool = values.poolName ? pools[values.poolName] : undefined;
   if (!pool) throw new Error('Invalid Pool Name');
-
-  const delegateTo = pool.poolAddress || values.poolAddress;
+  const networkMode = getNetworkInstance(network);
+  const delegateTo = pool.poolAddress?.[networkMode] || values.poolAddress;
 
   if (values.poolName === PoolName.CustomPool) {
     return client.getDelegateOptions(
@@ -114,9 +115,12 @@ function getOptions(
       // https://github.com/hirosystems/stacks.js/blob/0e1f9f19dfa45788236c9e481f9a476d9948d86d/packages/stacking/src/index.ts#L1054
     ) as ContractCallRegularOptions;
   } else {
-    const [contractAddress, contractName] = pool.poxContract.split('.');
+    const [contractAddress, contractName] = getPoxContractAddressAndName(
+      networkMode,
+      pool.poxContract
+    );
     const functionArgs =
-      pool.poxContract === Pox2Contracts.WrapperOneCycle
+      pool.poxContract === PoxContractName.WrapperOneCycle
         ? [
             uintCV(stxToMicroStx(values.amount).toString()),
             principalCV(delegateTo),
@@ -124,7 +128,7 @@ function getOptions(
             noneCV(),
             poxAddressToTuple(values.rewardAddress),
           ]
-        : pool.poxContract === Pox2Contracts.WrapperFastPool
+        : pool.poxContract === PoxContractName.WrapperFastPool
         ? [uintCV(stxToMicroStx(values.amount).toString())]
         : [];
     return {

@@ -14,10 +14,12 @@ import {
   InfoCardSection as Section,
   InfoCardValue as Value,
 } from '@components/info-card';
+import { useStacksNetwork } from '@hooks/use-stacks-network';
 import { makeStackingClubRewardAddressLink } from '@utils/external-links';
 import { toHumanReadableStx } from '@utils/unit-convert';
 
-import { Pox2Contracts } from '../../start-pooled-stacking/types-preset-pools';
+import { PoxContractName } from '../../start-pooled-stacking/types-preset-pools';
+import { getPox2Contracts } from '../../start-pooled-stacking/utils-preset-pools';
 import { DelegationStatus } from '../get-delegation-status';
 import { IncreasePoolingAmount } from './increase-pooling-amount';
 import { PercentageRow } from './percentage-row';
@@ -42,7 +44,10 @@ export function ActivePoolingContent({
 }: ActivePoolingContentProps) {
   const isStacking = stackerInfo.stacked;
   const [showIncreasePoolingAmount, setShowIncreasePoolingAmount] = useState(false);
-  const isSelfService = delegationStatusDetails.delegatedTo === Pox2Contracts.WrapperFastPool;
+  const { network } = useStacksNetwork();
+  const isSelfService =
+    delegationStatusDetails.delegatedTo ===
+    getPox2Contracts(network)[PoxContractName.WrapperFastPool];
   return (
     <>
       <Text textStyle="body.large.medium">You&apos;re pooling</Text>
@@ -82,7 +87,7 @@ export function ActivePoolingContent({
               <Address address={poolAddress} />
             </Value>
           </Row>
-
+          {isSelfService && !showIncreasePoolingAmount && <SelfServiceRows />}
           {showIncreasePoolingAmount ? (
             <IncreasePoolingAmount
               handleStopPoolingClick={() => {
@@ -98,7 +103,6 @@ export function ActivePoolingContent({
               </Button>
             </Row>
           )}
-          {isSelfService && <SelfServiceRows />}
         </Section>
       </Group>
 

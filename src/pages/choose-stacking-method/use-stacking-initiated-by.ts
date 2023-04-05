@@ -5,8 +5,7 @@ import { useAuth } from '@components/auth-provider/auth-provider';
 import { useBlockchainApiClient } from '@components/blockchain-api-client-provider';
 import { useGetAccountExtendedBalancesQuery } from '@components/stacking-client-provider/stacking-client-provider';
 
-import { pools } from '../stacking/start-pooled-stacking/components/preset-pools';
-import { PoolName } from '../stacking/start-pooled-stacking/types-preset-pools';
+import { isSelfServicePool } from '../stacking/start-pooled-stacking/utils-preset-pools';
 
 /**
  * Returns the address that initiated the current account's stacking. If the account isn't stacking,
@@ -48,5 +47,5 @@ export function useStackingInitiatedByQuery() {
 }
 
 function isStackingWithSelfServicePool(t: ContractCallTransaction) {
-  return t.contract_call.contract_id === pools[PoolName.FastPool].poxContract;
+  return isSelfServicePool(t.contract_call.contract_id);
 }

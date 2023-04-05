@@ -2,7 +2,6 @@ import { Text } from '@stacks/ui';
 
 import { CenteredErrorAlert } from '@components/centered-error-alert';
 import { CenteredSpinner } from '@components/centered-spinner';
-import { useNetwork } from '@components/network-provider';
 import {
   useGetAccountBalanceLockedQuery,
   useGetAccountExtendedBalancesQuery,
@@ -10,6 +9,7 @@ import {
   useGetPoxInfoQuery,
   useGetStatusQuery,
 } from '@components/stacking-client-provider/stacking-client-provider';
+import { useStacksNetwork } from '@hooks/use-stacks-network';
 
 import { ActiveStackingInfo } from './components/active-stacking-info';
 import { NoStacking } from './components/no-stacking-info';
@@ -17,7 +17,7 @@ import { PendingStackingInfo } from './components/pending-stacking-info';
 import { useGetHasPendingStackingTransactionQuery } from './use-get-has-pending-tx-query';
 
 export function DirectStackingInfo() {
-  const { networkName } = useNetwork();
+  const { networkName } = useStacksNetwork();
   const getStatusQuery = useGetStatusQuery();
   const getAccountExtendedBalancesQuery = useGetAccountExtendedBalancesQuery();
   const getCoreInfoQuery = useGetCoreInfoQuery();

@@ -7,13 +7,13 @@ import { Form, Formik } from 'formik';
 import { CenteredErrorAlert } from '@components/centered-error-alert';
 import { CenteredSpinner } from '@components/centered-spinner';
 import { FinishedTxResultInfo } from '@components/finished-tx-result-info';
-import { useNetwork } from '@components/network-provider';
 import {
   useGetAccountExtendedBalancesQuery,
   useGetPoxInfoQuery,
   useGetSecondsUntilNextCycleQuery,
   useStackingClient,
 } from '@components/stacking-client-provider/stacking-client-provider';
+import { useStacksNetwork } from '@hooks/use-stacks-network';
 
 import { StackingFormContainer } from '../../components/stacking-form-container';
 import { StackingFormInfoPanel } from '../../components/stacking-form-info-panel';
@@ -52,7 +52,7 @@ function StackAggregationCommitLayout({ client }: StackAggregationCommitLayoutPr
   const [isContractCallExtensionPageOpen, setIsContractCallExtensionPageOpen] = useState(false);
   const [txResult, setTxResult] = useState<FinishedTxData | undefined>();
 
-  const { networkName } = useNetwork();
+  const { networkName } = useStacksNetwork();
 
   const getSecondsUntilNextCycleQuery = useGetSecondsUntilNextCycleQuery();
   const getPoxInfoQuery = useGetPoxInfoQuery();

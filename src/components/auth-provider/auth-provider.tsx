@@ -3,8 +3,9 @@ import { ReactNode, createContext, useContext, useState } from 'react';
 import { UserData } from '@stacks/auth';
 import { AppConfig, UserSession, showConnect } from '@stacks/connect';
 import { validateStacksAddress as isValidStacksAddress } from '@stacks/transactions';
+import { APP_DETAILS } from 'src/constants';
 
-import { useNetwork } from '@components/network-provider';
+import { useStacksNetwork } from '@hooks/use-stacks-network';
 
 const appConfig = new AppConfig(['store_write']);
 const userSession = new UserSession({ appConfig });
@@ -48,7 +49,7 @@ export function AuthProvider({ children }: Props) {
   const [isSigningIn, setIsSigningIn] = useState(false);
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [hasSearchedForExistingSession, setHasSearchedForExistingSession] = useState(false);
-  const { networkName } = useNetwork();
+  const { networkName } = useStacksNetwork();
 
   function signIn() {
     if (isSigningIn) {
@@ -58,10 +59,7 @@ export function AuthProvider({ children }: Props) {
     setIsSigningIn(true);
     showConnect({
       userSession,
-      appDetails: {
-        name: 'Stacking',
-        icon: `${window.location.origin}/logo.svg`,
-      },
+      appDetails: APP_DETAILS,
       onFinish() {
         setIsSigningIn(false);
         setIsSignedIn(true);

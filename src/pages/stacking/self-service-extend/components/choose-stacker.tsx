@@ -4,7 +4,7 @@ import { useField } from 'formik';
 import { ErrorLabel } from '@components/error-label';
 import { ErrorText } from '@components/error-text';
 import { Hr } from '@components/hr';
-import { useNetwork } from '@components/network-provider';
+import { useStacksNetwork } from '@hooks/use-stacks-network';
 
 import { StackerDetailsRowsForUser } from './stacker-details-rows';
 
@@ -14,7 +14,7 @@ interface Props {
 }
 export function Stacker({ nextRewardCycleId, preview }: Props) {
   const [field, meta] = useField('stacker');
-  const { network } = useNetwork();
+  const { network } = useStacksNetwork();
   return (
     <>
       {preview ? (

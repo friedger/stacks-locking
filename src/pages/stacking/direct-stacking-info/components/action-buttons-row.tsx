@@ -1,8 +1,7 @@
-import { useNavigate } from 'react-router-dom';
-
 import { Button } from '@stacks/ui';
 
 import { InfoCardRow as Row } from '@components/info-card';
+import { useNavigate } from '@hooks/use-navigate';
 
 export function ActionButtonsRow() {
   const navigate = useNavigate();

@@ -2,10 +2,16 @@ import { IconEdit } from '@tabler/icons-react';
 
 import { MIN_DELEGATED_STACKING_AMOUNT_USTX } from '@constants/app';
 
-import { PayoutMethod, Pool, PoolName, Pox2Contracts } from '../types-preset-pools';
+import {
+  NetworkInstance,
+  NetworkInstanceToPoxContractMap,
+  PayoutMethod,
+  PoolName,
+  PoxContractName,
+} from '../types-preset-pools';
 import { PoolIcon } from './pool-icon';
 
-export const pools: { [key in PoolName]: Pool } = {
+export const pools = {
   'FAST Pool': {
     name: PoolName.FastPool,
     description:
@@ -17,8 +23,15 @@ export const pools: { [key in PoolName]: Pool } = {
     duration: 1,
     website: 'https://pool.friedger.de',
     payoutMethod: PayoutMethod.STX,
-    poolAddress: Pox2Contracts.WrapperFastPool, // pool address is the same as pool contract
-    poxContract: Pox2Contracts.WrapperFastPool,
+    poolAddress: {
+      [NetworkInstance.mainnet]:
+        NetworkInstanceToPoxContractMap[NetworkInstance.mainnet][PoxContractName.WrapperFastPool],
+      [NetworkInstance.testnet]:
+        NetworkInstanceToPoxContractMap[NetworkInstance.testnet][PoxContractName.WrapperFastPool],
+      [NetworkInstance.devnet]:
+        NetworkInstanceToPoxContractMap[NetworkInstance.devnet][PoxContractName.WrapperFastPool],
+    }, // pool address is the same as pool contract
+    poxContract: PoxContractName.WrapperFastPool,
     minimumDelegationAmount: 40_000_000,
     icon: <PoolIcon src="/32x32_FastPool.png" />,
     allowCustomRewardAddress: false,
@@ -30,8 +43,12 @@ export const pools: { [key in PoolName]: Pool } = {
     duration: 1,
     website: 'https://planbetter.org',
     payoutMethod: PayoutMethod.BTC,
-    poolAddress: 'SP3TDKYYRTYFE32N19484838WEJ25GX40Z24GECPZ',
-    poxContract: Pox2Contracts.WrapperOneCycle,
+    poolAddress: {
+      [NetworkInstance.mainnet]: 'SP3TDKYYRTYFE32N19484838WEJ25GX40Z24GECPZ',
+      [NetworkInstance.testnet]: 'SP3TDKYYRTYFE32N19484838WEJ25GX40Z24GECPZ',
+      [NetworkInstance.devnet]: 'SP3TDKYYRTYFE32N19484838WEJ25GX40Z24GECPZ',
+    },
+    poxContract: PoxContractName.WrapperOneCycle,
     minimumDelegationAmount: 200_000_000,
     icon: <PoolIcon src="/32x32_PlanBetter.png" />,
     allowCustomRewardAddress: false, // only for ledger users
@@ -44,8 +61,12 @@ export const pools: { [key in PoolName]: Pool } = {
     duration: 1,
     website: 'https://pool.xverse.app/',
     payoutMethod: PayoutMethod.BTC,
-    poolAddress: 'SPXVRSEH2BKSXAEJ00F1BY562P45D5ERPSKR4Q33',
-    poxContract: Pox2Contracts.WrapperOneCycle,
+    poolAddress: {
+      [NetworkInstance.mainnet]: 'SPXVRSEH2BKSXAEJ00F1BY562P45D5ERPSKR4Q33',
+      [NetworkInstance.testnet]: 'SPXVRSEH2BKSXAEJ00F1BY562P45D5ERPSKR4Q33',
+      [NetworkInstance.devnet]: 'SPXVRSEH2BKSXAEJ00F1BY562P45D5ERPSKR4Q33',
+    },
+    poxContract: PoxContractName.WrapperOneCycle,
     minimumDelegationAmount: 100_000_000,
     icon: <PoolIcon src="/32x32_Xverse.png" />,
     allowCustomRewardAddress: true,
@@ -58,7 +79,7 @@ export const pools: { [key in PoolName]: Pool } = {
     website: 'https://www.stacks.co/learn/stacking',
     payoutMethod: PayoutMethod.OTHER,
     poolAddress: undefined,
-    poxContract: Pox2Contracts.PoX2,
+    poxContract: PoxContractName.Pox2,
     minimumDelegationAmount: MIN_DELEGATED_STACKING_AMOUNT_USTX,
     icon: <IconEdit />,
     allowCustomRewardAddress: false,

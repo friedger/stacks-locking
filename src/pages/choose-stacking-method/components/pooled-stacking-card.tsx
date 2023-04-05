@@ -1,6 +1,5 @@
 import { Box, Flex } from '@stacks/ui';
-import { IconStairs } from '@tabler/icons-react';
-import { IconLock } from '@tabler/icons-react';
+import { IconLock, IconStairs } from '@tabler/icons-react';
 
 import divingBoardIllustration from '@assets/images/stack-in-a-pool.svg';
 import { Users } from '@components/icons/users';

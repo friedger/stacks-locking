@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { intToBigInt } from '@stacks/common';
 import { StackingClient } from '@stacks/stacking';
@@ -8,7 +7,6 @@ import { Form, Formik } from 'formik';
 import { useAuth } from '@components/auth-provider/auth-provider';
 import { CenteredErrorAlert } from '@components/centered-error-alert';
 import { CenteredSpinner } from '@components/centered-spinner';
-import { useNetwork } from '@components/network-provider';
 import {
   useGetAccountExtendedBalancesQuery,
   useGetPoxInfoQuery,
@@ -17,6 +15,8 @@ import {
 } from '@components/stacking-client-provider/stacking-client-provider';
 import { STACKING_CONTRACT_CALL_TX_BYTES } from '@constants/app';
 import { useCalculateFee } from '@hooks/use-calculate-fee';
+import { useNavigate } from '@hooks/use-navigate';
+import { useStacksNetwork } from '@hooks/use-stacks-network';
 
 import { StackingFormContainer } from '../components/stacking-form-container';
 import { StackingFormInfoPanel } from '../components/stacking-form-info-panel';
@@ -54,7 +54,7 @@ interface StartDirectStackingLayoutProps {
 }
 function StartDirectStackingLayout({ client }: StartDirectStackingLayoutProps) {
   const [isContractCallExtensionPageOpen, setIsContractCallExtensionPageOpen] = useState(false);
-  const { networkName } = useNetwork();
+  const { networkName } = useStacksNetwork();
 
   const getSecondsUntilNextCycleQuery = useGetSecondsUntilNextCycleQuery();
   const getPoxInfoQuery = useGetPoxInfoQuery();

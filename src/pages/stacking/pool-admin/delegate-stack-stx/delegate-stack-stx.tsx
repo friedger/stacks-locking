@@ -8,7 +8,6 @@ import { Form, Formik } from 'formik';
 import { CenteredErrorAlert } from '@components/centered-error-alert';
 import { CenteredSpinner } from '@components/centered-spinner';
 import { FinishedTxResultInfo } from '@components/finished-tx-result-info';
-import { useNetwork } from '@components/network-provider';
 import {
   useGetAccountExtendedBalancesQuery,
   useGetPoxInfoQuery,
@@ -16,6 +15,7 @@ import {
   useStackingClient,
 } from '@components/stacking-client-provider/stacking-client-provider';
 import { UI_IMPOSED_MAX_STACKING_AMOUNT_USTX } from '@constants/app';
+import { useStacksNetwork } from '@hooks/use-stacks-network';
 
 import { StackingFormContainer } from '../../components/stacking-form-container';
 import { StackingFormInfoPanel } from '../../components/stacking-form-info-panel';
@@ -60,7 +60,7 @@ function DelegateStackStxLayout({ client }: DelegateStackStxLayoutProps) {
   const [isContractCallExtensionPageOpen, setIsContractCallExtensionPageOpen] = useState(false);
   const [txResult, setTxResult] = useState<FinishedTxData | undefined>();
 
-  const { networkName, network } = useNetwork();
+  const { networkName, network } = useStacksNetwork();
 
   const getSecondsUntilNextCycleQuery = useGetSecondsUntilNextCycleQuery();
   const getPoxInfoQuery = useGetPoxInfoQuery();

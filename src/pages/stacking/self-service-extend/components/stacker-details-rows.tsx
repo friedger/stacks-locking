@@ -20,7 +20,7 @@ import { formatPoxAddressToNetwork } from '@utils/stacking';
 import { truncateMiddle } from '@utils/tx-utils';
 
 import { useDelegationStatusForUserQuery } from '../../pooled-stacking-info/use-delegation-status-query';
-import { Pox2Contracts } from '../../start-pooled-stacking/types-preset-pools';
+import { isSelfServicePool } from '../../start-pooled-stacking/utils-preset-pools';
 
 interface StackerDetailsRowsForUserProps {
   address: string;
@@ -36,7 +36,7 @@ export function StackerDetailsRowsForUser({
   const client = new StackingClient(address, network);
   const getStatusQuery = useGetStatusWithClientQuery(client);
   const getDelegationStatusQuery = useGetConfirmedDelegationStatus(client);
-  const getDelegationStatusQuery2 = useDelegationStatusForUserQuery({ client, address });
+  const getDelegationStatusQuery2 = useDelegationStatusForUserQuery({ client, address, network });
   if (
     getPoxInfoQuery.isError ||
     !getPoxInfoQuery.data ||
@@ -146,8 +146,4 @@ function isAfterEndOfCycle(unlock_height: number, cycleId: number, poxInfo: PoxI
   const endOfCycle = // equals beginning of the next cycle
     (cycleId + 1) * poxInfo.reward_cycle_length + poxInfo.first_burnchain_block_height;
   return unlock_height >= endOfCycle;
-}
-
-function isSelfServicePool(delegatedTo: string) {
-  return delegatedTo === Pox2Contracts.WrapperFastPool;
 }

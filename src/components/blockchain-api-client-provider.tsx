@@ -18,7 +18,7 @@ import {
   TransactionsApi,
 } from '@stacks/blockchain-api-client';
 
-import { useNetwork } from './network-provider';
+import { useStacksNetwork } from '../hooks/use-stacks-network';
 
 const Context = createContext<{
   accountsApi: AccountsApi;
@@ -44,7 +44,7 @@ interface Props {
   children: ReactNode;
 }
 export function BlockchainApiClientProvider({ children }: Props) {
-  const { network } = useNetwork();
+  const { network } = useStacksNetwork();
   const config = new Configuration({ basePath: network.coreApiUrl });
 
   return (

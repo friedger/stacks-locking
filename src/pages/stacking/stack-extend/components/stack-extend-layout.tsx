@@ -1,5 +1,3 @@
-import { useNavigate } from 'react-router-dom';
-
 import { StackerInfo } from '@stacks/stacking';
 import { Box, Button, Flex, Text } from '@stacks/ui';
 import { IconLock } from '@tabler/icons-react';
@@ -20,6 +18,7 @@ import {
 } from '@components/info-card';
 import { MAX_STACKING_CYCLES, MIN_STACKING_CYCLES } from '@constants/app';
 import routes from '@constants/routes';
+import { useNavigate } from '@hooks/use-navigate';
 import { hasErrors } from '@utils/form/has-errors';
 import { formatPoxAddressToNetwork } from '@utils/stacking';
 

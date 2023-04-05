@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 import { Text } from '@stacks/ui';
 import { Form, Formik } from 'formik';
@@ -7,13 +6,14 @@ import { Form, Formik } from 'formik';
 import { useAuth } from '@components/auth-provider/auth-provider';
 import { CenteredErrorAlert } from '@components/centered-error-alert';
 import { CenteredSpinner } from '@components/centered-spinner';
-import { useNetwork } from '@components/network-provider';
 import {
   useGetAccountBalanceLockedQuery,
   useGetPoxInfoQuery,
   useGetStatusQuery,
   useStackingClient,
 } from '@components/stacking-client-provider/stacking-client-provider';
+import { useNavigate } from '@hooks/use-navigate';
+import { useStacksNetwork } from '@hooks/use-stacks-network';
 
 import { SelfServiceLayout } from './components/self-service-extend-layout';
 import { createHandleSubmit, createValidationSchema } from './utils';
@@ -26,7 +26,7 @@ export function SelfServiceExtend() {
 
   const { client } = useStackingClient();
   const { address: stacker } = useAuth();
-  const { network, networkName } = useNetwork();
+  const { network, networkName } = useStacksNetwork();
 
   const [isContractCallExtensionPageOpen, setIsContractCallExtensionPageOpen] = useState(false);
 

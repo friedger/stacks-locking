@@ -1,5 +1,3 @@
-import { useNavigate } from 'react-router-dom';
-
 import { Button } from '@stacks/ui';
 
 import {
@@ -12,6 +10,7 @@ import {
   useGetPoxInfoQuery,
 } from '@components/stacking-client-provider/stacking-client-provider';
 import routes from '@constants/routes';
+import { useNavigate } from '@hooks/use-navigate';
 
 import { nextExtendWindow } from '../../self-service-extend/utils';
 

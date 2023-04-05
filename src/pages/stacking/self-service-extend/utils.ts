@@ -9,7 +9,8 @@ import * as yup from 'yup';
 import routes from '@constants/routes';
 import { stxPrincipalSchema } from '@utils/validators/stx-address-validator';
 
-import { Pox2Contracts } from '../start-pooled-stacking/types-preset-pools';
+import { PoxContractName } from '../start-pooled-stacking/types-preset-pools';
+import { getPox2Contracts } from '../start-pooled-stacking/utils-preset-pools';
 
 export interface EditingFormValues {
   stacker: string;
@@ -36,7 +37,8 @@ export function createHandleSubmit({
 }: CreateHandleSubmitArgs) {
   return async ({ stacker }: EditingFormValues) => {
     if (!client) return;
-    const [contractAddress, contractName] = Pox2Contracts.WrapperFastPool.split('.');
+    const [contractAddress, contractName] =
+      getPox2Contracts(network)[PoxContractName.WrapperFastPool].split('.');
     const delegateStackStxOptions: ContractCallRegularOptions = {
       contractAddress,
       contractName,

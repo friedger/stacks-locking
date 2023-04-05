@@ -1,4 +1,5 @@
 import { AccountsApi, SmartContractsApi, TransactionsApi } from '@stacks/blockchain-api-client';
+import { StacksNetwork } from '@stacks/network';
 import { StackingClient } from '@stacks/stacking';
 import {
   ContractCallTransaction,
@@ -16,7 +17,8 @@ import {
 } from '@stacks/transactions';
 
 import { getHasPendingTransaction } from '../direct-stacking-info/utils-pending-txs';
-import { Pox2Contracts } from '../start-pooled-stacking/types-preset-pools';
+import { PoxContractName } from '../start-pooled-stacking/types-preset-pools';
+import { getPox2Contracts } from '../start-pooled-stacking/utils-preset-pools';
 
 function isDelegateOrRevokeDelegate(t: ContractCallTransactionMetadata) {
   return ['delegate-stx', 'revoke-delegate-stx'].includes(t.contract_call.function_name);
@@ -33,10 +35,12 @@ function safeDelegateToCVToString(clarityValue: ClarityValue | undefined) {
   return cvToString(clarityValue);
 }
 
-function getDelegationStatusFromTransaction(burnBlockHeight: number) {
+function getDelegationStatusFromTransaction(burnBlockHeight: number, network: StacksNetwork) {
   return (
     transaction: ContractCallTransaction | MempoolContractCallTransaction
   ): DelegationStatus => {
+    const pox2Contracts = getPox2Contracts(network);
+
     if (transaction.contract_call.function_name === 'revoke-delegate-stx') {
       return { isDelegating: false } as const;
     }
@@ -62,7 +66,9 @@ function getDelegationStatusFromTransaction(burnBlockHeight: number) {
 
       let untilBurnHeight: null | bigint = null;
 
-      if (transaction.contract_call.contract_id === Pox2Contracts.WrapperFastPool) {
+      if (
+        transaction.contract_call.contract_id === pox2Contracts[PoxContractName.WrapperFastPool]
+      ) {
         untilBurnHeight = null;
       } else {
         if (
@@ -77,8 +83,8 @@ function getDelegationStatusFromTransaction(burnBlockHeight: number) {
       const isExpired = untilBurnHeight !== null && burnBlockHeight > untilBurnHeight;
 
       const delegatedTo =
-        transaction.contract_call.contract_id === Pox2Contracts.WrapperFastPool
-          ? Pox2Contracts.WrapperFastPool
+        transaction.contract_call.contract_id === pox2Contracts[PoxContractName.WrapperFastPool]
+          ? pox2Contracts[PoxContractName.WrapperFastPool]
           : safeDelegateToCVToString(delegatedToCV);
 
       return {
@@ -190,6 +196,7 @@ interface Args {
   smartContractsApi: SmartContractsApi;
   address: string;
   transactionsApi: TransactionsApi;
+  network: StacksNetwork;
 }
 export async function getDelegationStatus({
   stackingClient,
@@ -197,6 +204,7 @@ export async function getDelegationStatus({
   address,
   smartContractsApi,
   transactionsApi,
+  network,
 }: Args): Promise<DelegationStatus> {
   const [poxStackingContract, coreInfo] = await Promise.all([
     stackingClient.getStackingContract(),
@@ -207,7 +215,7 @@ export async function getDelegationStatus({
     accountsApi,
     address,
     transactionsApi,
-    transactionConverter: getDelegationStatusFromTransaction(coreInfo.burn_block_height),
+    transactionConverter: getDelegationStatusFromTransaction(coreInfo.burn_block_height, network),
     transactionPredicate: isDelegateOrRevokeDelegate,
   });
   if (delegationStatus !== null) {

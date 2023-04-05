@@ -2,8 +2,8 @@ import { useQuery } from '@tanstack/react-query';
 
 import { useAuth } from '@components/auth-provider/auth-provider';
 import { useBlockchainApiClient } from '@components/blockchain-api-client-provider';
-import { useNetwork } from '@components/network-provider';
 import { useStackingClient } from '@components/stacking-client-provider/stacking-client-provider';
+import { useStacksNetwork } from '@hooks/use-stacks-network';
 
 import { getHasPendingDirectStacking } from './get-has-pending-direct-stacking';
 import { getHasPendingStackExtend } from './get-has-pending-stack-extend';
@@ -13,7 +13,7 @@ export function useGetHasPendingStackingTransactionQuery() {
   const { accountsApi, transactionsApi } = useBlockchainApiClient();
   const { client } = useStackingClient();
   const { address } = useAuth();
-  const { networkName } = useNetwork();
+  const { networkName } = useStacksNetwork();
   if (!client) {
     // TODO: report error
     throw new Error('Expected to have a StackingClient available in the context.');

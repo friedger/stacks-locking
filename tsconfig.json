@@ -19,6 +19,8 @@
       "@utils/*": ["src/utils/*"]
     },
 
+    "resolveJsonModule": true,
+
     // Emit
     "noEmit": true,
 

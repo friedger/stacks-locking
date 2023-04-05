@@ -11,8 +11,8 @@ import {
   InfoCardSection as Section,
   InfoCardValue as Value,
 } from '@components/info-card';
-import { useNetwork } from '@components/network-provider';
 import { useGetPoxInfoQuery } from '@components/stacking-client-provider/stacking-client-provider';
+import { useStacksNetwork } from '@hooks/use-stacks-network';
 import { cyclesToBurnChainHeight } from '@utils/calculate-burn-height';
 import { makeExplorerTxLink } from '@utils/external-links';
 import { formatCycles } from '@utils/stacking';
@@ -20,20 +20,24 @@ import { truncateMiddle } from '@utils/tx-utils';
 
 import { createAmountText } from '../../utils/create-amount-text';
 import { EditingFormValues } from '../types';
+import { getPoxWrapperContract2 } from '../utils-preset-pools';
 import { PoolingAmountInfo } from './pooling-amount-info';
 import { pools } from './preset-pools';
 
 export function PoolingInfoCard(props: FlexProps) {
   const f = useFormikContext<EditingFormValues>();
   const poxInfoQuery = useGetPoxInfoQuery();
-  const { networkName } = useNetwork();
+  const { networkName, networkInstance } = useStacksNetwork();
 
   const amount = f.values.amount;
   const delegationType = f.values.delegationDurationType;
   const poolName = f.values.poolName;
   const pool = poolName ? pools[poolName] : undefined;
-  const poolStxAddress = pool?.poolAddress || f.values.poolAddress;
-  const poxWrapperContract = pool?.poxContract || poxInfoQuery.data?.contract_id;
+  const poolStxAddress =
+    (pool?.poolAddress ? pool.poolAddress[networkInstance] : undefined) || f.values.poolAddress;
+  const poxWrapperContract =
+    (pool?.poxContract ? getPoxWrapperContract2(networkInstance, pool.poxContract) : undefined) ||
+    poxInfoQuery.data?.contract_id;
   const durationInCycles =
     f.values.delegationDurationType === 'limited' ? f.values.numberOfCycles : null;
 

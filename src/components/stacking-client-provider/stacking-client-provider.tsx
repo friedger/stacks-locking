@@ -8,10 +8,11 @@ import {
   principalCV,
 } from '@stacks/transactions';
 import { useQuery } from '@tanstack/react-query';
-import { Pox2Contracts } from 'src/pages/stacking/start-pooled-stacking/types-preset-pools';
+import { PoxContractName } from 'src/pages/stacking/start-pooled-stacking/types-preset-pools';
+import { getPox2Contracts } from 'src/pages/stacking/start-pooled-stacking/utils-preset-pools';
 
 import { useAuth } from '@components/auth-provider/auth-provider';
-import { useNetwork } from '@components/network-provider';
+import { useStacksNetwork } from '@hooks/use-stacks-network';
 
 interface StackingClientContext {
   client: null | StackingClient;
@@ -25,7 +26,7 @@ interface Props {
 }
 export function StackingClientProvider({ children }: Props) {
   const { address } = useAuth();
-  const { network } = useNetwork();
+  const { network } = useStacksNetwork();
 
   let client: StackingClient | null = null;
 
@@ -115,10 +116,9 @@ export function useGetConfirmedDelegationStatus(client: StackingClient) {
 // Eventually, this can be a function on the Stacking Client
 export function useGetAllowanceContractCallersQuery(callingContract: string) {
   const { address: senderAddress } = useAuth();
-  const { network } = useNetwork();
+  const { network } = useStacksNetwork();
 
-  // TODO use correct pox contract id
-  const poxContractId = Pox2Contracts.PoX2;
+  const poxContractId = getPox2Contracts(network)[PoxContractName.Pox2];
 
   return useQuery(['getAllowanceContractCallers', senderAddress, callingContract, network], () => {
     if (senderAddress) {
