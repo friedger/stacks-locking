@@ -52,14 +52,12 @@ export async function getHasPendingStackIncrease({
   accountsApi,
   address,
   transactionsApi,
-  network,
 }: PendingTransactionArgs): Promise<null | StackIncreaseInfo> {
   return getHasPendingTransaction({
     stackingClient,
     accountsApi,
     address,
     transactionsApi,
-    network,
     transactionPredicate: isStackIncreaseCall,
     transactionConverter: getStackIncreaseFromTransaction,
   });

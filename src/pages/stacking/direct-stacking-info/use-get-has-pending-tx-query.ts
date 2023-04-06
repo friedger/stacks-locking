@@ -46,7 +46,6 @@ export function useGetHasPendingStackingTransactionQuery() {
         accountsApi,
         address,
         transactionsApi,
-        network: networkName,
       }),
     { refetchInterval: 5000 }
   );

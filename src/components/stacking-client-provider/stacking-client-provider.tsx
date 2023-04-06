@@ -50,6 +50,11 @@ export function useGetCycleDurationQuery() {
   return useQuery(['getCycleDuration', client], () => client.getCycleDuration());
 }
 
+export function useGetStatusWithClientQuery(client: StackingClient) {
+  if (!client) throw new Error('Expected client to be defined.');
+  return useQuery(['getStatus', client], () => client.getStatus());
+}
+
 export function useGetStatusQuery() {
   const { client } = useStackingClient();
   if (!client) throw new Error('Expected client to be defined.');
@@ -100,6 +105,11 @@ export function useGetPoxInfoQuery() {
   const { client } = useStackingClient();
   if (!client) throw new Error('Expected client to be defined.');
   return useQuery(['getPoxInfo', client], () => client.getPoxInfo());
+}
+
+export function useGetConfirmedDelegationStatus(client: StackingClient) {
+  if (!client) throw new Error('Expected client to be defined.');
+  return useQuery(['getConfirmedDelegationStatus', client], () => client.getDelegationStatus());
 }
 
 // Eventually, this can be a function on the Stacking Client

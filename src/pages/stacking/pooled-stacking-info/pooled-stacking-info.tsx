@@ -1,37 +1,24 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 
-import { intToBigInt } from '@stacks/common';
 import { ContractCallRegularOptions, openContractCall } from '@stacks/connect';
 import { StackingClient } from '@stacks/stacking';
-import { Box, Button, Flex, Stack, Text, color } from '@stacks/ui';
-import { IconInfoCircle } from '@tabler/icons-react';
+import { Box, Flex, Text } from '@stacks/ui';
 
-import { Address } from '@components/address';
-import { Alert } from '@components/alert';
 import { CenteredErrorAlert } from '@components/centered-error-alert';
 import { CenteredSpinner } from '@components/centered-spinner';
-import { OpenExternalLinkInNewTab } from '@components/external-link';
-import { Hr } from '@components/hr';
-import { CancelIcon } from '@components/icons/cancel';
-import {
-  InfoCardGroup as Group,
-  InfoCard,
-  InfoCardLabel as Label,
-  InfoCardRow as Row,
-  InfoCardSection as Section,
-  InfoCardValue as Value,
-} from '@components/info-card';
+import { InfoCard } from '@components/info-card';
 import {
   useGetAccountExtendedBalancesQuery,
   useGetCoreInfoQuery,
+  useGetPoxInfoQuery,
   useGetStatusQuery,
   useStackingClient,
 } from '@components/stacking-client-provider/stacking-client-provider';
-import { Caption } from '@components/typography';
-import { makeStackingClubRewardAddressLink } from '@utils/external-links';
-import { toHumanReadableStx } from '@utils/unit-convert';
 
+import { ActivePoolingContent } from './components/content-active-pooling';
+import { ExpiredPoolingContent } from './components/content-expired-pooling';
+import { RevokedWhileStackingContent } from './components/content-revoked-while-stacking';
+import { NoPooling } from './components/no-pooling';
 import { useDelegationStatusQuery } from './use-delegation-status-query';
 import { useGetPoolAddress } from './use-get-pool-address-query';
 
@@ -55,6 +42,7 @@ function PooledStackingInfoLayout({ client }: CardLayoutProps) {
   const getStatusQuery = useGetStatusQuery();
   const getAccountExtendedBalancesQuery = useGetAccountExtendedBalancesQuery();
   const getCoreInfoQuery = useGetCoreInfoQuery();
+  const getPoxInfoQuery = useGetPoxInfoQuery();
   const getPoolAddressQuery = useGetPoolAddress();
 
   if (
@@ -63,7 +51,8 @@ function PooledStackingInfoLayout({ client }: CardLayoutProps) {
     getAccountExtendedBalancesQuery.isLoading ||
     getCoreInfoQuery.isLoading ||
     getPoolAddressQuery.isLoading ||
-    getPoolAddressQuery.isFetching
+    getPoolAddressQuery.isFetching ||
+    getPoxInfoQuery.isLoading
   ) {
     return <CenteredSpinner />;
   }
@@ -78,7 +67,9 @@ function PooledStackingInfoLayout({ client }: CardLayoutProps) {
     getPoolAddressQuery.isError ||
     !getPoolAddressQuery.data ||
     getCoreInfoQuery.isError ||
-    !getCoreInfoQuery.data
+    !getCoreInfoQuery.data ||
+    getPoxInfoQuery.isError ||
+    !getPoxInfoQuery.data
   ) {
     const msg = 'Error while loading data, try reloading the page.';
     console.error(msg);
@@ -90,59 +81,13 @@ function PooledStackingInfoLayout({ client }: CardLayoutProps) {
   }
 
   const isStacking = getStatusQuery.data.stacked;
-  const poolAddress = getPoolAddressQuery.data.address || delegationStatusQuery.data.delegatedTo;
+  const poolAddress =
+    getPoolAddressQuery.data.address ||
+    (delegationStatusQuery.data.isDelegating
+      ? delegationStatusQuery.data.details.delegatedTo
+      : undefined);
   if ((!delegationStatusQuery.data.isDelegating && !isStacking) || !poolAddress) {
-    return (
-      <Flex height="100%" justify="center" align="center" m="loose">
-        <InfoCard p="extra-loose" width={['360px', '360px', '360px', '420px']}>
-          <Alert icon={<IconInfoCircle />}>
-            <Stack>
-              <Text>
-                It appears that you&apos;re not pooling yet. If you recently started to pool, your
-                pooling info will appear here in a few seconds.
-              </Text>
-              <Text>
-                You may want to{' '}
-                <Caption
-                  display="inline"
-                  to="../start-pooled-stacking"
-                  as={Link}
-                  color={color('brand')}
-                >
-                  start pooling
-                </Caption>{' '}
-                or{' '}
-                <Caption
-                  display="inline"
-                  to="../choose-stacking-method"
-                  as={Link}
-                  color={color('brand')}
-                >
-                  choose your stacking method
-                </Caption>
-                .
-              </Text>
-            </Stack>
-          </Alert>
-        </InfoCard>
-      </Flex>
-    );
-  }
-
-  let lockingProgressPercentString = '0';
-  if (getStatusQuery.data.stacked) {
-    const cycleLengthInBlocks =
-      getAccountExtendedBalancesQuery.data.stx.burnchain_unlock_height -
-      getAccountExtendedBalancesQuery.data.stx.burnchain_lock_height;
-
-    const blocksUntilUnlocked =
-      getAccountExtendedBalancesQuery.data.stx.burnchain_unlock_height -
-      getCoreInfoQuery.data.burn_block_height;
-
-    lockingProgressPercentString = Math.max(
-      ((cycleLengthInBlocks - blocksUntilUnlocked) / cycleLengthInBlocks) * 100,
-      0
-    ).toFixed(2);
+    return <NoPooling />;
   }
 
   async function handleStopPoolingClick() {
@@ -172,181 +117,34 @@ function PooledStackingInfoLayout({ client }: CardLayoutProps) {
         <InfoCard width="420px">
           <Box mx={['loose', 'extra-loose']}>
             <Flex flexDirection="column" pt="extra-loose" pb="base-loose">
-              {delegationStatusQuery.data.isDelegating && !delegationStatusQuery.data.isExpired && (
-                <>
-                  <Text textStyle="body.large.medium">You&apos;re pooling</Text>
-                  <Text
-                    fontSize="24px"
-                    fontFamily="Open Sauce"
-                    fontWeight={500}
-                    letterSpacing="-0.02em"
-                    mt="extra-tight"
-                    mb="extra-loose"
-                  >
-                    {toHumanReadableStx(delegationStatusQuery.data.amountMicroStx)}
-                  </Text>
+              {delegationStatusQuery.data.isDelegating &&
+                !delegationStatusQuery.data.details.isExpired && (
+                  <ActivePoolingContent
+                    delegationStatusDetails={delegationStatusQuery.data.details}
+                    isStacking={isStacking}
+                    poolAddress={poolAddress}
+                    stackerInfo={getStatusQuery.data}
+                    extendedStxBalance={getAccountExtendedBalancesQuery.data.stx}
+                    isContractCallExtensionPageOpen={isContractCallExtensionPageOpen}
+                    handleStopPoolingClick={handleStopPoolingClick}
+                  />
+                )}
 
-                  <Hr />
+              {delegationStatusQuery.data.isDelegating &&
+                delegationStatusQuery.data.details.isExpired && (
+                  <ExpiredPoolingContent
+                    isContractCallExtensionPageOpen={isContractCallExtensionPageOpen}
+                    handleStopPoolingClick={handleStopPoolingClick}
+                  />
+                )}
 
-                  <Group my="extra-loose">
-                    <Section>
-                      <Row>
-                        <Label>Status</Label>
-                        <Value color={isStacking ? 'green' : color('text-caption')}>
-                          {isStacking ? 'Active' : 'Waiting on pool'}
-                        </Value>
-                      </Row>
-                      <Row>
-                        <Label>Type</Label>
-                        <Value>
-                          {delegationStatusQuery.data.untilBurnHeight ? 'One time' : 'Indefinite'}
-                        </Value>
-                      </Row>
-                      <Row>
-                        <Label>Progress</Label>
-                        <Value>{lockingProgressPercentString}%</Value>
-                      </Row>
-                    </Section>
-                  </Group>
-
-                  <Hr />
-
-                  <Group my="extra-loose">
-                    <Section>
-                      <Row>
-                        <Label>Pool address</Label>
-                        <Value>
-                          <Address address={poolAddress} />
-                        </Value>
-                      </Row>
-                    </Section>
-                  </Group>
-
-                  <Hr />
-
-                  <Group my="extra-loose">
-                    <Section>
-                      <Row>
-                        <Label>
-                          <OpenExternalLinkInNewTab
-                            href={makeStackingClubRewardAddressLink('')}
-                            color={color('text-caption')}
-                          >
-                            🥞 View on stacking.club
-                          </OpenExternalLinkInNewTab>
-                        </Label>
-                      </Row>
-                      <Row>
-                        <Label>
-                          <Button
-                            variant="link"
-                            isDisabled={isContractCallExtensionPageOpen}
-                            onClick={() => {
-                              handleStopPoolingClick();
-                            }}
-                            color={color('text-caption')}
-                          >
-                            <Box pr="tight">
-                              <CancelIcon />
-                            </Box>{' '}
-                            Stop pooling
-                          </Button>
-                        </Label>
-                      </Row>
-                    </Section>
-                  </Group>
-                </>
-              )}
-
-              {delegationStatusQuery.data.isDelegating && delegationStatusQuery.data.isExpired && (
-                <>
-                  <Text textStyle="display.large">You&apos;ve finished pooling</Text>
-                  <Text pb="base-loose">
-                    Revoke the pool&apos;s permission to stack on your behalf to start stacking
-                    again.
-                  </Text>
-                  <Box>
-                    <Button
-                      disabled={isContractCallExtensionPageOpen}
-                      onClick={() => {
-                        handleStopPoolingClick();
-                      }}
-                    >
-                      Revoke permission
-                    </Button>
-                  </Box>
-                </>
-              )}
-
-              {!delegationStatusQuery.data.isDelegating && (
-                <>
-                  <Text testStyle="display.large">You&apos;re pooling</Text>
-                  <Text
-                    fontSize="24px"
-                    fontFamily="Open Sauce"
-                    fontWeight={500}
-                    letterSpacing="-0.02em"
-                    mt="extra-tight"
-                    my="extra-loose"
-                  >
-                    {toHumanReadableStx(
-                      intToBigInt(getAccountExtendedBalancesQuery.data.stx.locked, false)
-                    )}
-                  </Text>
-
-                  <Hr />
-
-                  <Group my="extra-loose">
-                    <Section>
-                      <Row>
-                        <Label>Status</Label>
-                        <Value color={isStacking ? 'green' : undefined}>
-                          {isStacking ? 'Active' : 'Waiting on pool'}
-                        </Value>
-                      </Row>
-                      <Row>
-                        <Label>Progress</Label>
-                        <Value>{lockingProgressPercentString}%</Value>
-                      </Row>
-                    </Section>
-
-                    {poolAddress && (
-                      <Section>
-                        <Row>
-                          <Label>Pool address</Label>
-                          <Value>
-                            <Address address={poolAddress} />
-                          </Value>
-                        </Row>
-                      </Section>
-                    )}
-
-                    <Section>
-                      <Alert icon={<IconInfoCircle />}>
-                        You&apos;ve revoked the pool&apos;s delegation. You may want to{' '}
-                        <Caption
-                          display="inline"
-                          to="../start-pooled-stacking"
-                          as={Link}
-                          color={color('brand')}
-                        >
-                          start pooling
-                        </Caption>{' '}
-                        again or{' '}
-                        <Caption
-                          display="inline"
-                          to="../choose-stacking-method"
-                          as={Link}
-                          color={color('brand')}
-                        >
-                          choose a different stacking method
-                        </Caption>
-                        .
-                      </Alert>
-                    </Section>
-                  </Group>
-                </>
-              )}
+              {!delegationStatusQuery.data.isDelegating &&
+                isStacking && ( // all cases covered by now
+                  <RevokedWhileStackingContent
+                    extendedStxBalances={getAccountExtendedBalancesQuery.data.stx}
+                    poolAddress={poolAddress}
+                  />
+                )}
             </Flex>
           </Box>
         </InfoCard>

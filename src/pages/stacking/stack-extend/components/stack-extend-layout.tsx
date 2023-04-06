@@ -45,7 +45,6 @@ export function StackExtendLayout(props: StackExtendLayoutProps) {
   const onClose = () => {
     navigate(routes.DIRECT_STACKING_INFO);
   };
-  console.log({ meta });
   return (
     <BaseDrawer title={title} isShowing onClose={onClose}>
       <Flex alignItems="center" flexDirection="column" pb={['loose', '48px']} px="loose">

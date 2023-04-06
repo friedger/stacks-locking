@@ -33,24 +33,25 @@ export interface StackExtendInfo {
 }
 
 // TODO: Types. For now assuming callers only provide a `stack-stx` pox call transaction.
-function getStackExtendFromTransaction(
-  transaction: ContractCallTransaction | MempoolContractCallTransaction,
-  network: StacksNetworkName
-): StackExtendInfo {
-  const args = transaction.contract_call.function_args;
-  if (!args) {
-    // TODO: log error
-    throw new Error('Expected `args` to be defined.');
-  }
-  const [extendCyclesCV, poxAddressCV] = args.map(arg => hexToCV(arg.hex));
+function getStackExtendFromTransaction(network: StacksNetworkName) {
+  return (
+    transaction: ContractCallTransaction | MempoolContractCallTransaction
+  ): StackExtendInfo => {
+    const args = transaction.contract_call.function_args;
+    if (!args) {
+      // TODO: log error
+      throw new Error('Expected `args` to be defined.');
+    }
+    const [extendCyclesCV, poxAddressCV] = args.map(arg => hexToCV(arg.hex));
 
-  const extendCycles = expectUintCV(extendCyclesCV, 'extendCycles');
-  const poxAddress = poxAddressToBtcAddress(poxAddressCV, network);
+    const extendCycles = expectUintCV(extendCyclesCV, 'extendCycles');
+    const poxAddress = poxAddressToBtcAddress(poxAddressCV, network);
 
-  return {
-    transactionId: transaction.tx_id,
-    extendCycles,
-    poxAddress,
+    return {
+      transactionId: transaction.tx_id,
+      extendCycles,
+      poxAddress,
+    };
   };
 }
 
@@ -60,14 +61,13 @@ export async function getHasPendingStackExtend({
   address,
   transactionsApi,
   network,
-}: PendingTransactionArgs): Promise<null | StackExtendInfo> {
+}: PendingTransactionArgs & { network: StacksNetworkName }): Promise<null | StackExtendInfo> {
   return getHasPendingTransaction({
     stackingClient,
     accountsApi,
     address,
     transactionsApi,
-    network,
     transactionPredicate: isStackExtendCall,
-    transactionConverter: getStackExtendFromTransaction,
+    transactionConverter: getStackExtendFromTransaction(network),
   });
 }

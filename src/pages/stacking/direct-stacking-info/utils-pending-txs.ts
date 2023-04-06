@@ -1,5 +1,4 @@
 import { AccountsApi, TransactionsApi } from '@stacks/blockchain-api-client';
-import { StacksNetworkName } from '@stacks/network';
 import { StackingClient } from '@stacks/stacking';
 import {
   ContractCallTransaction,
@@ -17,8 +16,7 @@ export type TransactionPredicate = (
   poxContractId: string
 ) => boolean;
 export type TransactionConverter<T> = (
-  t: ContractCallTransaction | MempoolContractCallTransaction,
-  networkName: StacksNetworkName
+  t: ContractCallTransaction | MempoolContractCallTransaction
 ) => T;
 
 export interface PendingTransactionArgs {
@@ -26,7 +24,6 @@ export interface PendingTransactionArgs {
   accountsApi: AccountsApi;
   address: string;
   transactionsApi: TransactionsApi;
-  network: StacksNetworkName;
 }
 
 /**
@@ -77,7 +74,6 @@ export async function getHasPendingTransaction<T>({
   accountsApi,
   address,
   transactionsApi,
-  network,
   transactionPredicate,
   transactionConverter: txToDataConverter,
 }: GetHasPendingTransactionArgs<T>): Promise<null | T> {
@@ -110,7 +106,7 @@ export async function getHasPendingTransaction<T>({
   const transaction = getBestTransaction(accountTransaction, mempoolTransaction);
 
   if (transaction) {
-    return txToDataConverter(transaction, network);
+    return txToDataConverter(transaction);
   }
 
   return null;

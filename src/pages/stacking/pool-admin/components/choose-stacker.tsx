@@ -1,4 +1,4 @@
-import { Box, Input, Stack } from '@stacks/ui';
+import { Box, Input, Stack, Text } from '@stacks/ui';
 import { useField } from 'formik';
 
 import { ErrorLabel } from '@components/error-label';
@@ -13,7 +13,7 @@ export function Stacker() {
     <Step title="Stacker">
       <Description>
         <Stack alignItems="flex-start" spacing="base">
-          The stacks address of your pool member.
+          <Text>The stacks address of your pool member.</Text>
         </Stack>
       </Description>
 

@@ -35,8 +35,9 @@ export const StackingOptionCard: FC<FlexProps> = ({ children, ...props }) => (
     as="section"
     flexDirection="column"
     borderRadius="6px"
+    margin="auto"
     flex={1}
-    maxWidth={[null, null, '320', '420px']}
+    maxWidth={[null, null, '320px', '420px']}
     {...props}
   >
     {children}

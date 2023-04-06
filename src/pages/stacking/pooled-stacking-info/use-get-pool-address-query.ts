@@ -51,12 +51,13 @@ export function useGetPoolAddress() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const txId = (q.data?.stx as any)?.lock_tx_id as string | undefined;
 
+  const poolAddress = q2.data?.isDelegating ? q2.data?.details.delegatedTo : undefined;
   return useQuery(
-    ['stacker', { txId, address: q2.data?.delegatedTo }] as const,
+    ['stacker', { txId, poolAddress }] as const,
     async ({ queryKey }) => {
-      const { txId, address } = queryKey[1];
-      if (address) {
-        return { address };
+      const { txId, poolAddress } = queryKey[1];
+      if (poolAddress) {
+        return { poolAddress };
       }
       if (!txId) {
         return { address: null };
