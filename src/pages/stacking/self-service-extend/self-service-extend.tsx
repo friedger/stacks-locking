@@ -42,7 +42,7 @@ export function SelfServiceExtend() {
     getStatusQuery.isError ||
     !getStatusQuery.data ||
     getAccountBalanceLockedQuery.isError ||
-    !getAccountBalanceLockedQuery.data ||
+    typeof getAccountBalanceLockedQuery.data !== 'bigint' ||
     getPoxInfoQuery.isError ||
     !getPoxInfoQuery.data ||
     !client
