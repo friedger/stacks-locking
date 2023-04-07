@@ -89,7 +89,7 @@ export function SelfServiceLayout(props: SelfServiceLayoutProps) {
                         <Hr />
                       </>
                     )}
-                    <Text py="loose">Lock your STX for the next cycle {nextRewardCycleId}.</Text>
+                    <Text py="loose">Lock your STX for the 1 more cycle.</Text>
                   </>
                 )}
                 <Row m="loose" justifyContent="space-between">

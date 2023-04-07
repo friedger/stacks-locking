@@ -26,12 +26,11 @@ export function Stacker({ nextRewardCycleId, preview }: Props) {
           />
           <Hr />
 
-          <Text>Lock their delegated STX for cycle {nextRewardCycleId}.</Text>
+          <Text>Lock their delegated STX for 1 more cycle.</Text>
         </>
       ) : (
         <Text>
-          Enter the Stacks address of a pool member to lock their delegated STX for cycle{' '}
-          {nextRewardCycleId}.
+          Enter the Stacks address of a pool member to lock their delegated STX for 1 more cycle.
         </Text>
       )}
 
