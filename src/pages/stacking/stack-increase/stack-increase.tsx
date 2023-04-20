@@ -1,4 +1,3 @@
-
 import { Text } from '@stacks/ui';
 
 import { CenteredErrorAlert } from '@components/centered-error-alert';

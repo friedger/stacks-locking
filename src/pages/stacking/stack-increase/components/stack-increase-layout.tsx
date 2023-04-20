@@ -41,15 +41,18 @@ export function StackIncreaseLayout(props: StackIncreaseLayoutProps) {
                 {toHumanReadableStx(extendedStxBalances.locked.toString())}
               </Text>
             </Flex>
+
             <Hr />
 
-            <Text>
-              Increasing stacking amount for direct stackers was disabled in preparation of Stacks
-              2.2.
-            </Text>
-            <Text>
-              To increase the stacking amount, you can use pooled stacking with a pool address that you control.
-            </Text>
+            <Group py="loose">
+              <Text>
+                Increasing stacking amount for direct stackers was disabled in preparation of Stacks
+                2.2.
+                <br />
+                You can use pooled stacking with a pool address that you control if you want to lock
+                more STX.
+              </Text>
+            </Group>
             <Group pt="base-loose">
               <Section>
                 <Row m="loose" justifyContent="space-between">

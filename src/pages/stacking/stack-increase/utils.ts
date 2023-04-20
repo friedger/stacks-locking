@@ -1,4 +1,3 @@
-
 import { AccountExtendedBalances } from '@stacks/stacking';
 import BigNumber from 'bignumber.js';
 import * as yup from 'yup';
