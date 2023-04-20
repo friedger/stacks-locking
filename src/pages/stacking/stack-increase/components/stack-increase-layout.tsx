@@ -48,7 +48,7 @@ export function StackIncreaseLayout(props: StackIncreaseLayoutProps) {
               2.2.
             </Text>
             <Text>
-              To increase the stacking amount you need to pool to your an address that you control.
+              To increase the stacking amount, you can use pooled stacking with a pool address that you control.
             </Text>
             <Group pt="base-loose">
               <Section>
