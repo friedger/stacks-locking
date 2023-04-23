@@ -21,7 +21,12 @@ export function ChoosePoolingRewardAddress({ editable }: Props) {
       </Description>
 
       <Box position="relative" maxWidth="400px">
-        <CryptoAddressInput fieldName="poxAddress" addressType="BTC" {...field}>
+        <CryptoAddressInput
+          fieldName="poxAddress"
+          addressType="BTC"
+          isDisabled={!editable}
+          {...field}
+        >
           {meta.touched && meta.error && (
             <ErrorLabel>
               <ErrorText>{meta.error}</ErrorText>
@@ -31,7 +36,7 @@ export function ChoosePoolingRewardAddress({ editable }: Props) {
       </Box>
       {editable ? (
         <Box textStyle="body.small" color={color('feedback-alert')} mt="base-tight">
-          Make sure you controll this BTC address. It is written on-chain and pool operators use the
+          Make sure you control this BTC address. It is written on-chain and pool operators use the
           address as is.
         </Box>
       ) : (
