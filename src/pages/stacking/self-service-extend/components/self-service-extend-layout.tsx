@@ -40,7 +40,7 @@ export function SelfServiceLayout(props: SelfServiceLayoutProps) {
   const title = stackerInfoDetails ? 'Extend stacking' : 'Stack again';
   const nextRewardCycleId = poxInfo.reward_cycle_id + 1;
   return (
-    <BaseDrawer title={title} isShowing onClose={onClose}>
+    <BaseDrawer title={title} isShowing={false} onClose={onClose}>
       <Flex alignItems="center" flexDirection="column" pb={['loose', '48px']} px="loose">
         <InfoCard width="420px">
           <Box mx={['loose', 'extra-loose']}>

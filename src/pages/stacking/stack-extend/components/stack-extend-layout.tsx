@@ -45,7 +45,7 @@ export function StackExtendLayout(props: StackExtendLayoutProps) {
     navigate(routes.DIRECT_STACKING_INFO);
   };
   return (
-    <BaseDrawer title={title} isShowing onClose={onClose}>
+    <BaseDrawer title={title} isShowing={false} onClose={onClose}>
       <Flex alignItems="center" flexDirection="column" pb={['loose', '48px']} px="loose">
         <InfoCard width="420px">
           <Box mx={['loose', 'extra-loose']}>

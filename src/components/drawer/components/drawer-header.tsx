@@ -57,12 +57,14 @@ export function DrawerHeader({
           {waitingOnPerformedActionMessage}
         </Caption>
       )}
-      {onClose && (
+      {onClose ? (
         <HeaderActionButton
           icon={IconX}
           isWaitingOnPerformedAction={isWaitingOnPerformedAction}
           onAction={onClose}
         />
+      ) : (
+        <Box size="36px" />
       )}
     </Flex>
   );
