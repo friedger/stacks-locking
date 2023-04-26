@@ -18,7 +18,8 @@ export function PoxDisabledLayout() {
       <Card p="loose">
         <Box mt={['tight', 'base', 'base', 'extra-loose']} mb="extra-loose">
           <ExplainerItem>
-            There was an issue with stack-increase that caused an emergency.
+            There was an issue in the Stacking protocol&apos;s contract with the
+            &quot;stack-increase&quot; function that has required an emergency network upgrade.
           </ExplainerItem>
           <ExplainerItem>
             Do not interact with current stacking (pox-2) now. It is just a waste of transaction
