@@ -19,6 +19,7 @@ import {
 import { MAX_STACKING_CYCLES, MIN_STACKING_CYCLES } from '@constants/app';
 import routes from '@constants/routes';
 import { useNavigate } from '@hooks/use-navigate';
+import { useSIP22 } from '@hooks/use-sip-22';
 import { hasErrors } from '@utils/form/has-errors';
 import { formatPoxAddressToNetwork } from '@utils/stacking';
 
@@ -37,6 +38,7 @@ interface StackExtendLayoutProps {
 }
 export function StackExtendLayout(props: StackExtendLayoutProps) {
   const { title, details, pendingStackExtend, isContractCallExtensionPageOpen } = props;
+  const { poxDisabled } = useSIP22();
   const navigate = useNavigate();
   const poxAddress = formatPoxAddressToNetwork(details.pox_address);
   const { errors } = useFormikContext<EditingFormValues>();
@@ -45,7 +47,7 @@ export function StackExtendLayout(props: StackExtendLayoutProps) {
     navigate(routes.DIRECT_STACKING_INFO);
   };
   return (
-    <BaseDrawer title={title} isShowing={false} onClose={onClose}>
+    <BaseDrawer title={title} isShowing={!poxDisabled} onClose={onClose}>
       <Flex alignItems="center" flexDirection="column" pb={['loose', '48px']} px="loose">
         <InfoCard width="420px">
           <Box mx={['loose', 'extra-loose']}>

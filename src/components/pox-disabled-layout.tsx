@@ -1,13 +1,20 @@
 import { Box, BoxProps, Flex, Text, color } from '@stacks/ui';
 import { IconAlertCircle } from '@tabler/icons-react';
 
+import { useSIP22 } from '@hooks/use-sip-22';
+
 import { Card } from './card';
 import { BaseDrawer } from './drawer/base-drawer';
 import { OpenExternalLinkInNewTab } from './external-link';
 
 export function PoxDisabledLayout() {
+  const { poxDisabled } = useSIP22();
   return (
-    <BaseDrawer title="PoX Disabled During Cycle #58" isShowing icon={<IconAlertCircle />}>
+    <BaseDrawer
+      title="PoX Disabled During Cycle #58"
+      isShowing={poxDisabled}
+      icon={<IconAlertCircle />}
+    >
       <Card p="loose">
         <Box mt={['tight', 'base', 'base', 'extra-loose']} mb="extra-loose">
           <ExplainerItem>

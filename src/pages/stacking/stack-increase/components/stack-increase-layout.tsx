@@ -11,6 +11,7 @@ import {
 } from '@components/info-card';
 import routes from '@constants/routes';
 import { useNavigate } from '@hooks/use-navigate';
+import { useSIP22 } from '@hooks/use-sip-22';
 import { toHumanReadableStx } from '@utils/unit-convert';
 
 interface StackIncreaseLayoutProps {
@@ -19,13 +20,14 @@ interface StackIncreaseLayoutProps {
 }
 export function StackIncreaseLayout(props: StackIncreaseLayoutProps) {
   const { title, extendedStxBalances } = props;
+  const { poxDisabled } = useSIP22();
   const navigate = useNavigate();
 
   const onClose = () => {
     navigate(routes.DIRECT_STACKING_INFO);
   };
   return (
-    <BaseDrawer title={title} isShowing={false} onClose={onClose}>
+    <BaseDrawer title={title} isShowing={!poxDisabled} onClose={onClose}>
       <Flex alignItems="center" flexDirection="column" pb={['loose', '48px']} px="loose">
         <InfoCard width="420px">
           <Box mx={['loose', 'extra-loose']}>
