@@ -38,7 +38,10 @@ export function PoxDisabledLayout() {
             There will be two upgrades from Stacks 2.1 to Stacks 2.2 at the end of cycle #57 and
             from Stacks 2.2 to Stacks 2.3 planned for the end of cycle #58. The details are
             described in the governance proposal 22. See{' '}
-            <OpenExternalLinkInNewTab href="https://github.com/stacksgov/sips/blob/main/sips/sip-022/sip-022-emergency-pox-fix.md#enroll-beta">SIP-22</OpenExternalLinkInNewTab>.
+            <OpenExternalLinkInNewTab href="https://github.com/stacksgov/sips/blob/main/sips/sip-022/sip-022-emergency-pox-fix.md#enroll-beta">
+              SIP-22
+            </OpenExternalLinkInNewTab>
+            .
           </ExplainerItem>
         </Box>
       </Card>
