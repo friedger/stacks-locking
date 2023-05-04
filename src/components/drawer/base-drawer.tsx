@@ -1,7 +1,7 @@
 import { ReactNode, Suspense, memo, useCallback, useRef } from 'react';
 
 import { css } from '@emotion/react';
-import { Box, Flex, FlexProps, transition, useEventListener } from '@stacks/ui';
+import { Box, Flex, FlexProps, color, transition, useEventListener } from '@stacks/ui';
 
 import { hideScrollbarStyle } from '@components/styles/hide-scrollbar';
 import { useNavigate } from '@hooks/use-navigate';
@@ -97,7 +97,7 @@ const BaseDrawerComponent = (props: BaseDrawerProps) => {
         willChange="transform, opacity"
         width="100%"
         maxWidth="472px"
-        bg="white"
+        bg={color('bg')}
         borderTopLeftRadius="16px"
         borderTopRightRadius="16px"
         borderBottomLeftRadius={[0, '16px', '16px', '16px']}
