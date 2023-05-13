@@ -11,7 +11,7 @@ export function PoxDisabledLayout() {
   const { poxDisabled } = useSIP22();
   return (
     <BaseDrawer
-      title="PoX Disabled During Cycle #58"
+      title="PoX Disabled During Cycle #59"
       isShowing={poxDisabled}
       icon={<IconAlertCircle />}
     >
@@ -26,18 +26,22 @@ export function PoxDisabledLayout() {
             fees.
           </ExplainerItem>
           <ExplainerItem>
-            During cycle #58 your STX are unlocked. Enjoy your liquid STX! Wait until the new
-            stacking (pox-3) is live and available here. Estimated date: 10th May 2023.
+            During cycle #58 and #59 your STX are unlocked. Enjoy your liquid STX! Wait until the
+            new stacking (pox-3) is live and available here. Estimated date:{' '}
+            <OpenExternalLinkInNewTab href="https://stacks-network.github.io/when-activation/2.4/">
+              end of May 2023
+            </OpenExternalLinkInNewTab>
+            .
           </ExplainerItem>
           <ExplainerItem>
-            There will be no stacking rewards for #58 because disabling PoX means a switch to Proof
-            of Burn. Rewards for cycle #57 are reduced due to the stack-increase issue. The stacked
-            amount for each reward slot has been calculated incorrectly as 180k STX.
+            There will be no stacking rewards for #58 and #59 because disabling PoX means a switch
+            to Proof of Burn. Rewards for cycle #57 are reduced due to the stack-increase issue. The
+            stacked amount for each reward slot has been calculated incorrectly as 180k STX.
           </ExplainerItem>
           <ExplainerItem>
-            There will be two upgrades from Stacks 2.1 to Stacks 2.2 at the end of cycle #57 and
-            from Stacks 2.2 to Stacks 2.3 planned for the end of cycle #58. The details are
-            described in the governance proposal 22. See{' '}
+            The Stacks blockchain has been upgraded to Stacks 2.3 and there will be another upgrade
+            from Stacks 2.3 to Stacks 2.4 at the end of cycle #59. The details are described in the
+            governance proposal 22. See{' '}
             <OpenExternalLinkInNewTab href="https://github.com/stacksgov/sips/blob/main/sips/sip-022/sip-022-emergency-pox-fix.md#enroll-beta">
               SIP-22
             </OpenExternalLinkInNewTab>
