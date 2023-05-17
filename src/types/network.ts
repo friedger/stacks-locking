@@ -20,6 +20,7 @@ export function whenStacksChainId(chainId: ChainID) {
 interface WhenStacksModeMap<T> {
   mainnet: T;
   testnet: T;
+  regtest: T;
 }
 export function whenStacksNetworkMode(mode: StacksNetworkName) {
   return <T>(modeMap: WhenStacksModeMap<T>): T => modeMap[mode];

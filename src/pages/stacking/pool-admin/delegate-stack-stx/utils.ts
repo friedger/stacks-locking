@@ -63,8 +63,6 @@ export function createValidationSchema({
     }),
     poxAddress: createBtcAddressSchema({
       network,
-      // TODO
-      isPostPeriod1: true,
     }),
   });
 }

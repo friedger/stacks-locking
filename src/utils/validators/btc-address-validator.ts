@@ -5,14 +5,8 @@ import { SUPPORTED_BTC_ADDRESS_FORMATS } from '@constants/app';
 
 interface Args {
   network: string;
-
-  /**
-   * Whether the chain has moved on from Period 1, as described in
-   * https://docs.hiro.so/stacks-2.1-upgrades#pox-2-periods
-   */
-  isPostPeriod1: boolean; // TODO
 }
-export function createBtcAddressSchema({ network /*, isPostPeriod1 */ }: Args) {
+export function createBtcAddressSchema({ network }: Args) {
   return yup
     .string()
     .defined(`Enter the BTC address where you'd like to recieve your rewards`)

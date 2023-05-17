@@ -26,7 +26,7 @@ export const NetworkInstanceToPoxContractMap = {
       'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.pox-pool-self-service',
   },
   [NetworkInstance.testnet]: {
-    [PoxContractName.Pox2]: 'ST000000000000000000002AMW42H.pox-2',
+    [PoxContractName.Pox2]: 'ST000000000000000000002AMW42H.pox-3',
     [PoxContractName.WrapperOneCycle]:
       'ST2PABAF9FTAJYNFZH93XENAJ8FVY99RRM4DF2YCW.pox-pools-1-cycle',
     [PoxContractName.WrapperFastPool]:

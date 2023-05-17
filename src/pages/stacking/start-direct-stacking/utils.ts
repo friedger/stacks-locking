@@ -72,8 +72,6 @@ export function createValidationSchema({
     lockPeriod: yup.number().defined(),
     poxAddress: createBtcAddressSchema({
       network,
-      // TODO
-      isPostPeriod1: true,
     }),
   });
 }

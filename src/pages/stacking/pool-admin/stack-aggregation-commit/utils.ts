@@ -19,8 +19,6 @@ export function createValidationSchema({ network }: CreateValidationSchemaArgs) 
     rewardCycleId: yup.number().defined(),
     poxAddress: createBtcAddressSchema({
       network,
-      // TODO
-      isPostPeriod1: true,
     }),
   });
 }
