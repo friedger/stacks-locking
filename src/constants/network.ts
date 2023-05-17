@@ -15,7 +15,8 @@ export const NetworkIdModeMap: { [key in ChainID]: StacksNetworkName } = {
 export const NetworkModeUrlMap: Record<StacksNetworkName, string> = {
   mainnet: DEFAULT_MAINNET_SERVER,
   testnet: DEFAULT_TESTNET_SERVER,
-  regtest: DEFAULT_DEVNET_SERVER,
+  devnet: DEFAULT_DEVNET_SERVER,
+  mocknet: DEFAULT_DEVNET_SERVER,
 };
 
 export const CustomNetworksLSKey = 'CustomNetworks';

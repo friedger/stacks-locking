@@ -1,4 +1,10 @@
-import { StacksDevnet, StacksMainnet, StacksNetworkName, StacksTestnet } from '@stacks/network';
+import {
+  StacksDevnet,
+  StacksMainnet,
+  StacksMocknet,
+  StacksNetworkName,
+  StacksTestnet,
+} from '@stacks/network';
 import { NetworkInstance } from 'src/pages/stacking/start-pooled-stacking/types-preset-pools';
 import { getNetworkInstance } from 'src/pages/stacking/start-pooled-stacking/utils-preset-pools';
 import { whenStacksNetworkMode } from 'src/types/network';
@@ -19,7 +25,8 @@ export const useStacksNetwork = (): {
   const Network = whenStacksNetworkMode(networkMode)({
     mainnet: StacksMainnet,
     testnet: StacksTestnet,
-    regtest: StacksDevnet,
+    devnet: StacksDevnet,
+    mocknet: StacksMocknet,
   });
   const network = new Network({ url: apiServer, fetchFn: fetchWithApiKey });
   const networkInstance = getNetworkInstance(network);
