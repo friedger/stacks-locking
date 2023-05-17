@@ -21,7 +21,7 @@ interface WhenStacksModeMap<T> {
   mainnet: T;
   testnet: T;
   devnet: T;
-  mocknet: T
+  mocknet: T;
 }
 export function whenStacksNetworkMode(mode: StacksNetworkName) {
   return <T>(modeMap: WhenStacksModeMap<T>): T => modeMap[mode];
