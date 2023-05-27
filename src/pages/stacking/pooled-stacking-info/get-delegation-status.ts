@@ -18,7 +18,7 @@ import {
 
 import { getHasPendingTransaction } from '../direct-stacking-info/utils-pending-txs';
 import { PoxContractName } from '../start-pooled-stacking/types-preset-pools';
-import { getPox2Contracts } from '../start-pooled-stacking/utils-preset-pools';
+import { getPox3Contracts } from '../start-pooled-stacking/utils-preset-pools';
 
 function isDelegateOrRevokeDelegate(t: ContractCallTransactionMetadata) {
   return ['delegate-stx', 'revoke-delegate-stx'].includes(t.contract_call.function_name);
@@ -39,7 +39,7 @@ function getDelegationStatusFromTransaction(burnBlockHeight: number, network: St
   return (
     transaction: ContractCallTransaction | MempoolContractCallTransaction
   ): DelegationStatus => {
-    const pox2Contracts = getPox2Contracts(network);
+    const pox3Contracts = getPox3Contracts(network);
 
     if (transaction.contract_call.function_name === 'revoke-delegate-stx') {
       return { isDelegating: false } as const;
@@ -67,7 +67,7 @@ function getDelegationStatusFromTransaction(burnBlockHeight: number, network: St
       let untilBurnHeight: null | bigint = null;
 
       if (
-        transaction.contract_call.contract_id === pox2Contracts[PoxContractName.WrapperFastPool]
+        transaction.contract_call.contract_id === pox3Contracts[PoxContractName.WrapperFastPool]
       ) {
         untilBurnHeight = null;
       } else {
@@ -83,8 +83,8 @@ function getDelegationStatusFromTransaction(burnBlockHeight: number, network: St
       const isExpired = untilBurnHeight !== null && burnBlockHeight > untilBurnHeight;
 
       const delegatedTo =
-        transaction.contract_call.contract_id === pox2Contracts[PoxContractName.WrapperFastPool]
-          ? pox2Contracts[PoxContractName.WrapperFastPool]
+        transaction.contract_call.contract_id === pox3Contracts[PoxContractName.WrapperFastPool]
+          ? pox3Contracts[PoxContractName.WrapperFastPool]
           : safeDelegateToCVToString(delegatedToCV);
 
       return {

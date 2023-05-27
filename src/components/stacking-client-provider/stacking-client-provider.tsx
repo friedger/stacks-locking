@@ -9,7 +9,7 @@ import {
 } from '@stacks/transactions';
 import { useQuery } from '@tanstack/react-query';
 import { PoxContractName } from 'src/pages/stacking/start-pooled-stacking/types-preset-pools';
-import { getPox2Contracts } from 'src/pages/stacking/start-pooled-stacking/utils-preset-pools';
+import { getPox3Contracts } from 'src/pages/stacking/start-pooled-stacking/utils-preset-pools';
 
 import { useAuth } from '@components/auth-provider/auth-provider';
 import { useStacksNetwork } from '@hooks/use-stacks-network';
@@ -118,7 +118,7 @@ export function useGetAllowanceContractCallersQuery(callingContract: string) {
   const { address: senderAddress } = useAuth();
   const { network } = useStacksNetwork();
 
-  const poxContractId = getPox2Contracts(network)[PoxContractName.Pox2];
+  const poxContractId = getPox3Contracts(network)[PoxContractName.Pox3];
 
   return useQuery(['getAllowanceContractCallers', senderAddress, callingContract, network], () => {
     if (senderAddress) {

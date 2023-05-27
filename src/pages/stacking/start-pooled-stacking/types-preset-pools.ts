@@ -12,30 +12,30 @@ export const enum PoolName {
 }
 
 export const enum PoxContractName {
-  Pox2,
+  Pox3,
   WrapperOneCycle,
   WrapperFastPool,
 }
 
 export const NetworkInstanceToPoxContractMap = {
   [NetworkInstance.devnet]: {
-    [PoxContractName.Pox2]: 'ST000000000000000000002AMW42H.pox-2',
+    [PoxContractName.Pox3]: 'ST000000000000000000002AMW42H.pox-3',
     [PoxContractName.WrapperOneCycle]:
       'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.pox-pools-1-cycle',
     [PoxContractName.WrapperFastPool]:
       'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.pox-pool-self-service',
   },
   [NetworkInstance.testnet]: {
-    [PoxContractName.Pox2]: 'ST000000000000000000002AMW42H.pox-3',
+    [PoxContractName.Pox3]: 'ST000000000000000000002AMW42H.pox-3',
     [PoxContractName.WrapperOneCycle]:
-      'ST2PABAF9FTAJYNFZH93XENAJ8FVY99RRM4DF2YCW.pox-pools-1-cycle',
+      'ST2PABAF9FTAJYNFZH93XENAJ8FVY99RRM4DF2YCW.pox-pools-1-cycle-v2',
     [PoxContractName.WrapperFastPool]:
-      'ST2PABAF9FTAJYNFZH93XENAJ8FVY99RRM4DF2YCW.pox-pool-self-service',
+      'ST2PABAF9FTAJYNFZH93XENAJ8FVY99RRM4DF2YCW.pox-pool-self-service-v2',
   },
   [NetworkInstance.mainnet]: {
-    [PoxContractName.Pox2]: 'SP000000000000000000002Q6VF78.pox-2',
-    [PoxContractName.WrapperOneCycle]: 'SP001SFSMC2ZY76PD4M68P3WGX154XCH7NE3TYMX.pox-pools-1-cycle',
-    [PoxContractName.WrapperFastPool]: 'SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.pox-fast-pool-v1',
+    [PoxContractName.Pox3]: 'SP000000000000000000002Q6VF78.pox-3',
+    [PoxContractName.WrapperOneCycle]: 'SP001SFSMC2ZY76PD4M68P3WGX154XCH7NE3TYMX.pox-pools-1-cycle-v2',
+    [PoxContractName.WrapperFastPool]: 'SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.pox-fast-pool-v2',
   },
 } as const;
 

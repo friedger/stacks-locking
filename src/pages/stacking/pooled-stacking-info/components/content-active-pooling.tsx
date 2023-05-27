@@ -19,7 +19,7 @@ import { makeStackingClubRewardAddressLink } from '@utils/external-links';
 import { toHumanReadableStx } from '@utils/unit-convert';
 
 import { PoxContractName } from '../../start-pooled-stacking/types-preset-pools';
-import { getPox2Contracts } from '../../start-pooled-stacking/utils-preset-pools';
+import { getPox3Contracts } from '../../start-pooled-stacking/utils-preset-pools';
 import { DelegationStatus } from '../get-delegation-status';
 import { IncreasePoolingAmount } from './increase-pooling-amount';
 import { PercentageRow } from './percentage-row';
@@ -47,7 +47,7 @@ export function ActivePoolingContent({
   const { network } = useStacksNetwork();
   const isSelfService =
     delegationStatusDetails.delegatedTo ===
-    getPox2Contracts(network)[PoxContractName.WrapperFastPool];
+    getPox3Contracts(network)[PoxContractName.WrapperFastPool];
   return (
     <>
       <Text textStyle="body.large.medium">You&apos;re pooling</Text>

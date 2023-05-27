@@ -23,13 +23,13 @@ export function getNetworkInstance(network: StacksNetwork) {
   }
 }
 
-export function getPox2Contracts(network: StacksNetwork): PoxContractType {
+export function getPox3Contracts(network: StacksNetwork): PoxContractType {
   const mode = getNetworkInstance(network);
   return NetworkInstanceToPoxContractMap[mode];
 }
 
 export function usesPoxWrapperContract(pool: Pool) {
-  return pool.poxContract !== PoxContractName.Pox2;
+  return pool.poxContract !== PoxContractName.Pox3;
 }
 
 export function requiresAllowContractCaller(poolName: PoolName) {
@@ -42,7 +42,7 @@ export function getPoxWrapperContract(
   poolName: PoolName,
   network: StacksNetwork
 ): WrapperPrincipal {
-  return getPox2Contracts(network)[pools[poolName].poxContract];
+  return getPox3Contracts(network)[pools[poolName].poxContract];
 }
 
 export function getPoxWrapperContract2(

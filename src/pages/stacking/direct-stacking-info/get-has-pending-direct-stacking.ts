@@ -12,7 +12,7 @@ import { PendingTransactionArgs, getHasPendingTransaction } from './utils-pendin
 function isStackCall(
   t: ContractCallTransactionMetadata,
 
-  // Until PoX 2 has been fully activated, using this arg to determine the PoX contract id. Once
+  // Until PoX 3 has been fully activated, using this arg to determine the PoX contract id. Once
   // active, this value can be set to a constant.
   poxContractId: string
 ) {

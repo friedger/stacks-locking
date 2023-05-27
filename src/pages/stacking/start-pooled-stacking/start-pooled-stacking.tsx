@@ -35,7 +35,7 @@ import {
   createHandleSubmit as createHandleDelegateStxSubmit,
   createValidationSchema,
 } from './utils-delegate-stx';
-import { getPox2Contracts, usesPoxWrapperContract } from './utils-preset-pools';
+import { getPox3Contracts, usesPoxWrapperContract } from './utils-preset-pools';
 
 const initialDelegatingFormValues: Partial<EditingFormValues> = {
   amount: '',
@@ -89,7 +89,7 @@ function StartPooledStackingLayout({
   currentAccountAddresses,
 }: StartPooledStackingProps) {
   const { network, networkInstance } = useStacksNetwork();
-  const pox2Contracts = getPox2Contracts(network);
+  const pox3Contracts = getPox3Contracts(network);
   const [isContractCallExtensionPageOpen, setIsContractCallExtensionPageOpen] = useState(false);
   const [rewardAddressEditable, setRewardAddressEditable] = useState(true);
   const [poolRequiresUserRewardAddress, setPoolRequiresUserRewardAddress] = useState(true);
@@ -97,10 +97,10 @@ function StartPooledStackingLayout({
 
   const getSecondsUntilNextCycleQuery = useGetSecondsUntilNextCycleQuery();
   const getAllowanceContractCallersFastPoolQuery = useGetAllowanceContractCallersQuery(
-    pox2Contracts[PoxContractName.WrapperFastPool]
+    pox3Contracts[PoxContractName.WrapperFastPool]
   );
   const getAllowanceContractCallersOneCycleQuery = useGetAllowanceContractCallersQuery(
-    pox2Contracts[PoxContractName.WrapperOneCycle]
+    pox3Contracts[PoxContractName.WrapperOneCycle]
   );
 
   const [hasUserConfirmedPoolWrapperContract, setHasUserConfirmedPoolWrapperContract] =
@@ -110,7 +110,7 @@ function StartPooledStackingLayout({
     setHasUserConfirmedPoolWrapperContract({
       ...hasUserConfirmedPoolWrapperContract,
       [networkInstance]: {
-        [PoxContractName.Pox2]: true,
+        [PoxContractName.Pox3]: true,
         [PoxContractName.WrapperFastPool]:
           getAllowanceContractCallersFastPoolQuery?.data?.type === ClarityType.OptionalSome,
         [PoxContractName.WrapperOneCycle]:

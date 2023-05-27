@@ -79,7 +79,7 @@ export const pools = {
     website: 'https://www.stacks.co/learn/stacking',
     payoutMethod: PayoutMethod.OTHER,
     poolAddress: undefined,
-    poxContract: PoxContractName.Pox2,
+    poxContract: PoxContractName.Pox3,
     minimumDelegationAmount: MIN_DELEGATED_STACKING_AMOUNT_USTX,
     icon: <IconEdit />,
     allowCustomRewardAddress: false,
