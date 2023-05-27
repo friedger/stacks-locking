@@ -14,6 +14,8 @@ import {
   InfoCardSection as Section,
   InfoCardValue as Value,
 } from '@components/info-card';
+import routes from '@constants/routes';
+import { useNavigate } from '@hooks/use-navigate';
 import { useStacksNetwork } from '@hooks/use-stacks-network';
 import { makeStackingClubRewardAddressLink } from '@utils/external-links';
 import { toHumanReadableStx } from '@utils/unit-convert';
@@ -42,6 +44,7 @@ export function ActivePoolingContent({
   extendedStxBalance,
   stackerInfo,
 }: ActivePoolingContentProps) {
+  const navigate = useNavigate();
   const isStacking = stackerInfo.stacked;
   const [showIncreasePoolingAmount, setShowIncreasePoolingAmount] = useState(false);
   const { network } = useStacksNetwork();
@@ -87,14 +90,16 @@ export function ActivePoolingContent({
               <Address address={poolAddress} />
             </Value>
           </Row>
-          {isSelfService && !showIncreasePoolingAmount && <SelfServiceRows />}
+          {isSelfService && isStacking && !showIncreasePoolingAmount && <SelfServiceRows />}
           {showIncreasePoolingAmount ? (
             <IncreasePoolingAmount
+              isSelfService={isSelfService}
               handleStopPoolingClick={() => {
                 setShowIncreasePoolingAmount(false);
                 handleStopPoolingClick();
               }}
               handleKeepPoolingClick={() => setShowIncreasePoolingAmount(false)}
+              handleDelegateAgainClick={() => navigate(routes.START_POOLED_STACKING)}
             />
           ) : (
             <Row justifyContent="space-evenly">

@@ -34,7 +34,8 @@ export const NetworkInstanceToPoxContractMap = {
   },
   [NetworkInstance.mainnet]: {
     [PoxContractName.Pox3]: 'SP000000000000000000002Q6VF78.pox-3',
-    [PoxContractName.WrapperOneCycle]: 'SP001SFSMC2ZY76PD4M68P3WGX154XCH7NE3TYMX.pox-pools-1-cycle-v2',
+    [PoxContractName.WrapperOneCycle]:
+      'SP001SFSMC2ZY76PD4M68P3WGX154XCH7NE3TYMX.pox-pools-1-cycle-v2',
     [PoxContractName.WrapperFastPool]: 'SP21YTSM60CAY6D011EZVEVNKXVW8FVZE198XEFFP.pox-fast-pool-v2',
   },
 } as const;

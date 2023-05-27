@@ -6,6 +6,7 @@ import { useStacksNetwork } from '@hooks/use-stacks-network';
 import { Action } from '../../components/stacking-form-step';
 import { PoolWrapperAllowanceState } from '../types';
 import { PoolName } from '../types-preset-pools';
+import { getPox3Contracts } from '../utils-preset-pools';
 import { pools } from './preset-pools';
 
 export function ActionsForWrapperContract({
@@ -17,11 +18,12 @@ export function ActionsForWrapperContract({
   hasUserConfirmedPoolWrapperContract: PoolWrapperAllowanceState;
   poolName: PoolName;
 }) {
-  const { networkInstance } = useStacksNetwork();
+  const { network, networkInstance } = useStacksNetwork();
+  const pox3Contracts = getPox3Contracts(network);
   const pool = pools[poolName];
   const poxWrapperContract = pool.poxContract;
   const hasUserConfirmed =
-    hasUserConfirmedPoolWrapperContract[networkInstance]?.[poxWrapperContract];
+    hasUserConfirmedPoolWrapperContract[networkInstance]?.[pox3Contracts[poxWrapperContract]];
 
   return (
     <Stack>

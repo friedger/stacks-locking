@@ -38,11 +38,15 @@ export function createHandleSubmit({
       } else {
         handleAllowContractCallerSubmit({
           poxWrapperContract,
-          onFinish: () =>
+          onFinish: () => {
             setHasUserConfirmedPoolWrapperContract({
               ...hasUserConfirmedPoolWrapperContract,
-              [poxWrapperContract]: true,
-            }),
+              [networkInstance]: {
+                ...hasUserConfirmedPoolWrapperContract[networkInstance],
+                [poxWrapperContract]: true,
+              },
+            });
+          },
         });
         return;
       }

@@ -107,21 +107,23 @@ function StartPooledStackingLayout({
     useState<PoolWrapperAllowanceState>({});
 
   useEffect(() => {
-    setHasUserConfirmedPoolWrapperContract({
-      ...hasUserConfirmedPoolWrapperContract,
-      [networkInstance]: {
-        [PoxContractName.Pox3]: true,
-        [PoxContractName.WrapperFastPool]:
-          getAllowanceContractCallersFastPoolQuery?.data?.type === ClarityType.OptionalSome,
-        [PoxContractName.WrapperOneCycle]:
-          getAllowanceContractCallersOneCycleQuery?.data?.type === ClarityType.OptionalSome,
-      },
+    setHasUserConfirmedPoolWrapperContract(confirmed => {
+      return {
+        ...confirmed,
+        [networkInstance]: {
+          [pox3Contracts[PoxContractName.Pox3]]: true,
+          [pox3Contracts[PoxContractName.WrapperFastPool]]:
+            getAllowanceContractCallersFastPoolQuery?.data?.type === ClarityType.OptionalSome,
+          [pox3Contracts[PoxContractName.WrapperOneCycle]]:
+            getAllowanceContractCallersOneCycleQuery?.data?.type === ClarityType.OptionalSome,
+        },
+      };
     });
   }, [
+    pox3Contracts,
     networkInstance,
     getAllowanceContractCallersFastPoolQuery?.data?.type,
     getAllowanceContractCallersOneCycleQuery?.data?.type,
-    hasUserConfirmedPoolWrapperContract,
     setHasUserConfirmedPoolWrapperContract,
   ]);
 
