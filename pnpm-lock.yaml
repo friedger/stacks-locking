@@ -17,11 +17,11 @@ dependencies:
     specifier: 1.1.1
     version: 1.1.1
   '@stacks/auth':
-    specifier: 6.5.2
-    version: 6.5.2
+    specifier: 6.5.4
+    version: 6.5.4
   '@stacks/blockchain-api-client':
-    specifier: 7.1.10
-    version: 7.1.10
+    specifier: 7.2.1
+    version: 7.2.1
   '@stacks/common':
     specifier: 6.5.2
     version: 6.5.2
@@ -32,14 +32,14 @@ dependencies:
     specifier: 22.1.1
     version: 22.1.1(react-dom@18.2.0)(react@18.2.0)
   '@stacks/network':
-    specifier: 6.5.4-beta.0
-    version: 6.5.4-beta.0
+    specifier: 6.5.4
+    version: 6.5.4
   '@stacks/stacking':
-    specifier: 6.5.4-beta.0
-    version: 6.5.4-beta.0
+    specifier: 6.5.4
+    version: 6.5.4
   '@stacks/transactions':
-    specifier: 6.5.2
-    version: 6.5.2
+    specifier: 6.5.4
+    version: 6.5.4
   '@stacks/ui':
     specifier: 7.10.0
     version: 7.10.0(@emotion/core@11.0.0)(@emotion/react@11.10.6)(@types/react-dom@18.0.11)(@types/react@18.0.28)(react-dom@18.2.0)(react@18.2.0)
@@ -2428,21 +2428,21 @@ packages:
     resolution: {integrity: sha512-+9jVqKhRSpsc591z5vX+X5Yyw+he/HCB4iQ/RYxw35CEPaY1gnsNE43nf9n9AaYjAQrTiI/mOwKUKdUs9vf7Xg==}
     dev: false
 
-  /@stacks/auth@6.5.2:
-    resolution: {integrity: sha512-kIdfpoPAIyJ/WBvJKaBLW/87A2ew8dKIUnv4T1qeZfcJwWc6qyR3bcI5gCMvYlJ460SVi1ajSnyANPWU3qIGaQ==}
+  /@stacks/auth@6.5.4:
+    resolution: {integrity: sha512-8Zw+fdKMHdnyDv6EpNnXXTLMWQq31xUYDnFJtFlmr1AnZYPJUbquiqUNTS6Cf2Fk3FSZpsBRDNfWiqss1yGycw==}
     dependencies:
       '@stacks/common': 6.5.2
-      '@stacks/encryption': 6.5.2
-      '@stacks/network': 6.5.2
-      '@stacks/profile': 6.5.2
+      '@stacks/encryption': 6.5.4
+      '@stacks/network': 6.5.4
+      '@stacks/profile': 6.5.4
       cross-fetch: 3.1.5
       jsontokens: 4.0.1
     transitivePeerDependencies:
       - encoding
     dev: false
 
-  /@stacks/blockchain-api-client@7.1.10:
-    resolution: {integrity: sha512-0LVfX2pottYNldzt+Fihj6G7DZUmnDXmzsh5yIGaQw2Dm/lZSUUh8Ml1WURGdxYFDeEU1J9/gSp/jPc+KfCb8g==}
+  /@stacks/blockchain-api-client@7.2.1:
+    resolution: {integrity: sha512-psYxIvVYdEgbnhGOmCS4TfGXJiZ+vZhtR9NynkVpXZvGIyusjk2FNaj7aUeDruhI+DwFehtplZB7u0nPgcP2HA==}
     dependencies:
       '@stacks/stacks-blockchain-api-types': 7.1.1
       '@types/ws': 7.4.7
@@ -2460,13 +2460,6 @@ packages:
 
   /@stacks/common@6.5.2:
     resolution: {integrity: sha512-tnkyEIA7YgX9GIkqlHocQPPax25uaboJ4aTX5wVs6kAGXY10+XI7VamRG4o+4DqnFVKwvIHR2fGcxdhtxNb/+Q==}
-    dependencies:
-      '@types/bn.js': 5.1.1
-      '@types/node': 18.15.3
-    dev: false
-
-  /@stacks/common@6.5.4-pr.af5c701.0:
-    resolution: {integrity: sha512-WmyliwehC44gUmpnc1EPY6vO33ZJv8F6nkNFkmMM2SniHn+NC/AwkY9G9EKkt2z3fjMqUDz2ylOB24yq1kcgPQ==}
     dependencies:
       '@types/bn.js': 5.1.1
       '@types/node': 18.15.3
@@ -2495,18 +2488,18 @@ packages:
   /@stacks/connect@7.3.1:
     resolution: {integrity: sha512-A2G6kVqx+noCaVl5n9HW+jJtZzxdDRTb93VvtONUl76ZMUhjcYl5b42rZiEQ3kGLBnBUp38R1WrFEUQ57AaXCA==}
     dependencies:
-      '@stacks/auth': 6.5.2
+      '@stacks/auth': 6.5.4
       '@stacks/connect-ui': 6.1.1
-      '@stacks/network': 6.5.2
+      '@stacks/network': 6.5.4
       '@stacks/profile': 6.4.0
-      '@stacks/transactions': 6.5.2
+      '@stacks/transactions': 6.5.4
       jsontokens: 4.0.1
     transitivePeerDependencies:
       - encoding
     dev: false
 
-  /@stacks/encryption@6.5.2:
-    resolution: {integrity: sha512-+xh0aEIal9XZ/E3XEKP7KklbhWYcaXUmDboJdj2cCKlVv3g7gzKWNgCEsc8+6asbKjy2ClAYvIEFaQRDDjFljw==}
+  /@stacks/encryption@6.5.4:
+    resolution: {integrity: sha512-osZGQXuY0BtqwiXZHMPgObg4QlqktDp2OYzbkln7A/7B1hwkjPruJ7yMK44wr0SprjaL9JCA8tKhpXxGd/tO8A==}
     dependencies:
       '@noble/hashes': 1.1.5
       '@noble/secp256k1': 1.7.1
@@ -2519,42 +2512,10 @@ packages:
       varuint-bitcoin: 1.1.2
     dev: false
 
-  /@stacks/encryption@6.5.4-pr.af5c701.0:
-    resolution: {integrity: sha512-hqEa/WjiwfqjRXIOsA8AOFMUcUAO0P/fWtmILobKHTn9hWFxwivx1a4V5R8cfF4jOB+omYMzmlbq7Zbiyc/4IQ==}
-    dependencies:
-      '@noble/hashes': 1.1.5
-      '@noble/secp256k1': 1.7.1
-      '@scure/bip39': 1.1.0
-      '@stacks/common': 6.5.4-pr.af5c701.0
-      '@types/node': 18.15.3
-      base64-js: 1.5.1
-      bs58: 5.0.0
-      ripemd160-min: 0.0.6
-      varuint-bitcoin: 1.1.2
-    dev: false
-
-  /@stacks/network@6.5.2:
-    resolution: {integrity: sha512-+XNneecXCitis7OGDoCMqfKp0j4SICaij6XN9JTq+pAoaCbuJqLRZrrVP/ApkWbotTzeVZIbrZPqMLqkdgGTrg==}
+  /@stacks/network@6.5.4:
+    resolution: {integrity: sha512-nONCBkTkYyH5yqO80Ith4QHC9PhipObKIGhlZETXd/csdRUkAYzE8/vJCx7LWPh4AiIVMjbEgBrGsjNR3YpGdw==}
     dependencies:
       '@stacks/common': 6.5.2
-      cross-fetch: 3.1.5
-    transitivePeerDependencies:
-      - encoding
-    dev: false
-
-  /@stacks/network@6.5.4-beta.0:
-    resolution: {integrity: sha512-2axt8ajADRUQ24ZeiHcepfbpxpr0bUNDDfZBXxpH22nm+DvJq/X6fQ/lkZW0dj+LByNExvYhEtp5bl31hL/mkw==}
-    dependencies:
-      '@stacks/common': 6.5.4-pr.af5c701.0
-      cross-fetch: 3.1.5
-    transitivePeerDependencies:
-      - encoding
-    dev: false
-
-  /@stacks/network@6.5.4-pr.af5c701.0:
-    resolution: {integrity: sha512-riYKy4X3GsmqeCYwvbdlAY6Z5Xacg1EEgOqoD37lTlWXBzEIoI3PQ+Jyz7ZBduijPBoPxWU2rvYdlIUUZkAltw==}
-    dependencies:
-      '@stacks/common': 6.5.4-pr.af5c701.0
       cross-fetch: 3.1.5
     transitivePeerDependencies:
       - encoding
@@ -2570,8 +2531,8 @@ packages:
     resolution: {integrity: sha512-mI24iryqQ8u3960LhpSAK2bQSZIKy8TWwgcwh88Ww3qkByGtCY6cK4cq+JdiQxQ4Hnokc2B0lPg55cApn2t/iA==}
     dependencies:
       '@stacks/common': 6.5.2
-      '@stacks/network': 6.5.2
-      '@stacks/transactions': 6.5.2
+      '@stacks/network': 6.5.4
+      '@stacks/transactions': 6.5.4
       jsontokens: 4.0.1
       schema-inspector: 2.0.2
       zone-file: 2.0.0-beta.3
@@ -2579,12 +2540,12 @@ packages:
       - encoding
     dev: false
 
-  /@stacks/profile@6.5.2:
-    resolution: {integrity: sha512-OtVHmqyMK/Iumo/sXHswqEZIIj/ZBgKyR5Wc609rcC1ZPpN60kXmLLzMq9cCKYZWxFLM1utjYskkGL0FcU5wQw==}
+  /@stacks/profile@6.5.4:
+    resolution: {integrity: sha512-YEnt2ACOuPFydNKpxYmZ2c/+UrcuusrNHTChePLyXKmU9u3cX3uBNSvdl1H13H6b2CW3G7inxMerRgssXDzTEA==}
     dependencies:
       '@stacks/common': 6.5.2
-      '@stacks/network': 6.5.2
-      '@stacks/transactions': 6.5.2
+      '@stacks/network': 6.5.4
+      '@stacks/transactions': 6.5.4
       jsontokens: 4.0.1
       schema-inspector: 2.0.2
       zone-file: 2.0.0-beta.3
@@ -2592,15 +2553,15 @@ packages:
       - encoding
     dev: false
 
-  /@stacks/stacking@6.5.4-beta.0:
-    resolution: {integrity: sha512-tKRNszQxBn9WyNmd9R02/ZulneKle2uhzlEEQNHtqq0UXC85x/qwznfu7Bc5nqBZo7/xYI4ZD0iEWRs9RAmv1Q==}
+  /@stacks/stacking@6.5.4:
+    resolution: {integrity: sha512-im/PVpi8tozm5tQo/Zs+dcZIpylxgk9DEIALblsGKloTxtSniVvSRPrRgx50jnw+FBC2V31fawEXo88RpaaoZA==}
     dependencies:
       '@scure/base': 1.1.1
-      '@stacks/common': 6.5.4-pr.af5c701.0
-      '@stacks/encryption': 6.5.4-pr.af5c701.0
-      '@stacks/network': 6.5.4-beta.0
+      '@stacks/common': 6.5.2
+      '@stacks/encryption': 6.5.4
+      '@stacks/network': 6.5.4
       '@stacks/stacks-blockchain-api-types': 0.61.0
-      '@stacks/transactions': 6.5.4-pr.af5c701.0
+      '@stacks/transactions': 6.5.4
       bs58: 5.0.0
     transitivePeerDependencies:
       - encoding
@@ -2613,26 +2574,13 @@ packages:
   /@stacks/stacks-blockchain-api-types@7.1.1:
     resolution: {integrity: sha512-YI9e4aYFaPG/RT4fJ+XbuF2OhNencKMHF4ma/s567yp43tOCtWWH5JRzMzTPFiuOxkM1K5zHD6p8gsgN4OfYBQ==}
 
-  /@stacks/transactions@6.5.2:
-    resolution: {integrity: sha512-xL4XF4xSFFJ+VMzeahBenGdg1T+y0Q0fSNA09jz7knTnnXvdAzzC+RP59xzuIjrAY/IWYO3X1sf0MGm9IIhYOg==}
+  /@stacks/transactions@6.5.4:
+    resolution: {integrity: sha512-yQhywPQ5cospYpVPbEMFRTUBZhVvyuI+meJ3fqHpu10IXX4CdURKLtW7N64c71YNXmE1tnsN7hWaPzrwjX0Dyw==}
     dependencies:
       '@noble/hashes': 1.1.5
       '@noble/secp256k1': 1.7.1
       '@stacks/common': 6.5.2
-      '@stacks/network': 6.5.2
-      c32check: 2.0.0
-      lodash.clonedeep: 4.5.0
-    transitivePeerDependencies:
-      - encoding
-    dev: false
-
-  /@stacks/transactions@6.5.4-pr.af5c701.0:
-    resolution: {integrity: sha512-uqmGeJ5ZZN5RRFizroAshtqYWYWYFdyG3dMJZN/j3C9VODBCvG3KAmeTKoE9EJX3o5poo7Fo8WKq9LkKxuS52w==}
-    dependencies:
-      '@noble/hashes': 1.1.5
-      '@noble/secp256k1': 1.7.1
-      '@stacks/common': 6.5.4-pr.af5c701.0
-      '@stacks/network': 6.5.4-pr.af5c701.0
+      '@stacks/network': 6.5.4
       c32check: 2.0.0
       lodash.clonedeep: 4.5.0
     transitivePeerDependencies:
