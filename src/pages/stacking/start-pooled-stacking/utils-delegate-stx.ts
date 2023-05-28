@@ -127,6 +127,7 @@ function getOptions(
             untilBurnBlockHeight ? someCV(uintCV(untilBurnBlockHeight)) : noneCV(),
             noneCV(),
             poxAddressToTuple(values.rewardAddress),
+            noneCV(),
           ]
         : pool.poxContract === PoxContractName.WrapperFastPool
         ? [uintCV(stxToMicroStx(values.amount).toString())]
