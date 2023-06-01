@@ -53,14 +53,12 @@ export function getPoxWrapperContract2(
 }
 
 export function isSelfServicePool(poolAddress: string) {
-  return (
-    poolAddress in
-    [
-      NetworkInstanceToPoxContractMap[NetworkInstance.mainnet][PoxContractName.WrapperFastPool],
-      NetworkInstanceToPoxContractMap[NetworkInstance.testnet][PoxContractName.WrapperFastPool],
-      NetworkInstanceToPoxContractMap[NetworkInstance.devnet][PoxContractName.WrapperFastPool],
-    ]
-  );
+  const allSelfServicePools: string[] = [
+    NetworkInstanceToPoxContractMap[NetworkInstance.mainnet][PoxContractName.WrapperFastPool],
+    NetworkInstanceToPoxContractMap[NetworkInstance.testnet][PoxContractName.WrapperFastPool],
+    NetworkInstanceToPoxContractMap[NetworkInstance.devnet][PoxContractName.WrapperFastPool],
+  ];
+  return allSelfServicePools.includes(poolAddress);
 }
 
 export function getPoxContractAddressAndName(
