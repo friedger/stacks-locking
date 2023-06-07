@@ -1,5 +1,5 @@
 import { intToBigInt } from '@stacks/common';
-import { Box, Button, Input, Spinner, Text, color } from '@stacks/ui';
+import { Box, Button, Flex, Input, Spinner, Text, color } from '@stacks/ui';
 import { useField } from 'formik';
 
 import { ErrorAlert } from '@components/error-alert';
@@ -15,6 +15,9 @@ export function ChoosePoolingAmount() {
   const queryGetAccountExtendedBalances = useGetAccountExtendedBalancesQuery();
   const totalAvailableBalance = queryGetAccountExtendedBalances.data?.stx.balance
     ? intToBigInt(queryGetAccountExtendedBalances.data.stx.balance, false)
+    : undefined;
+  const lockedBalance = queryGetAccountExtendedBalances.data?.stx.locked
+    ? intToBigInt(queryGetAccountExtendedBalances.data.stx.locked, false)
     : undefined;
 
   return (
@@ -53,6 +56,40 @@ export function ChoosePoolingAmount() {
           <ErrorAlert>Failed to load</ErrorAlert>
         )}
       </Box>
+
+      {lockedBalance ? (
+        <>
+          <Box
+            textStyle="body.small"
+            color={color('text-caption')}
+            mt="base-tight"
+            aria-busy={queryGetAccountExtendedBalances.isLoading}
+          >
+            Minimum amount:{' '}
+            <Button
+              variant="link"
+              type="button"
+              onClick={() => helpers.setValue(microStxToStx(lockedBalance))}
+            >
+              {toHumanReadableStx(lockedBalance)}{' '}
+            </Button>
+          </Box>
+          <Box
+            background={color('bg-alt')}
+            my="tight"
+            py="tight"
+            px="base-loose"
+            borderRadius="10px"
+          >
+            <Flex>
+              <Box textStyle="body.small" color={color('text-caption')}>
+                The minimum amount is what is already stacked. For continuous stacking, you will
+                have to pool this amount or more.
+              </Box>
+            </Flex>
+          </Box>
+        </>
+      ) : null}
     </Step>
   );
 }
