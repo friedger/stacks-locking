@@ -1,7 +1,8 @@
 import { useState } from 'react';
 
-import { PoxInfo, StackerInfo } from '@stacks/stacking';
+import { PoxInfo } from '@stacks/stacking';
 import { Box, Flex } from '@stacks/ui';
+import { StackerInfoDetails } from 'src/types/stacking';
 
 import { BaseDrawer } from '@components/drawer/base-drawer';
 import { Hr } from '@components/hr';
@@ -20,7 +21,7 @@ import { SelfServiceExtendHeader } from './self-service-extend-header';
 
 interface SelfServiceLayoutProps {
   currentUser: string;
-  stackerInfoDetails: (StackerInfo & { stacked: true })['details'] | undefined;
+  stackerInfoDetails: StackerInfoDetails | undefined;
   lockedBalance: bigint;
   poxInfo: PoxInfo;
   isContractCallExtensionPageOpen: boolean;

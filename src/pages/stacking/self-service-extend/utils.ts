@@ -2,8 +2,9 @@ import { NavigateFunction } from 'react-router-dom';
 
 import { ContractCallRegularOptions, openContractCall } from '@stacks/connect';
 import { StacksNetwork, StacksNetworkName } from '@stacks/network';
-import { PoxInfo, StackerInfo } from '@stacks/stacking';
+import { PoxInfo } from '@stacks/stacking';
 import { principalCV } from '@stacks/transactions';
+import { StackerInfoDetails } from 'src/types/stacking';
 import * as yup from 'yup';
 
 import routes from '@constants/routes';
@@ -85,10 +86,7 @@ export function nextExtendWindow(burnBlockHeight: number, poxInfo: PoxInfo) {
   };
 }
 
-export function isAtEndOfStackingPeriod(
-  stackerInfoDetails: (StackerInfo & { stacked: true })['details'],
-  poxInfo: PoxInfo
-) {
+export function isAtEndOfStackingPeriod(stackerInfoDetails: StackerInfoDetails, poxInfo: PoxInfo) {
   const lastCycle = stackerInfoDetails.first_reward_cycle + stackerInfoDetails.lock_period - 1;
   return poxInfo.current_cycle.id >= lastCycle;
 }

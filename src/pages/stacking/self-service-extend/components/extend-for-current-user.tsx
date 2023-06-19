@@ -1,6 +1,7 @@
-import { PoxInfo, StackerInfo, StackingClient } from '@stacks/stacking';
+import { PoxInfo, StackingClient } from '@stacks/stacking';
 import { Box, Button, Text } from '@stacks/ui';
 import { IconLock } from '@tabler/icons-react';
+import { StackerInfoDetails } from 'src/types/stacking';
 
 import { CenteredSpinner } from '@components/centered-spinner';
 import { Hr } from '@components/hr';
@@ -16,7 +17,7 @@ import { isAtEndOfStackingPeriod } from '../utils';
 interface Props {
   poxInfo: PoxInfo;
   address: string;
-  stackerInfoDetails: (StackerInfo & { stacked: true })['details'] | undefined;
+  stackerInfoDetails: StackerInfoDetails | undefined;
   onClose: () => void;
   isContractCallExtensionPageOpen: boolean;
   setShowExtendForOtherUser: React.Dispatch<React.SetStateAction<boolean>>;

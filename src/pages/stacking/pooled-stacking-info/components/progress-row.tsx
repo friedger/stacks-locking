@@ -1,4 +1,5 @@
 import { StackerInfo } from '@stacks/stacking';
+import { StackerInfoDetails } from 'src/types/stacking';
 
 import {
   InfoCardLabel as Label,
@@ -30,7 +31,7 @@ export function ProgressRow({ stackerInfo, rewardCycleId }: ProgressRowProps) {
 }
 
 interface StackingDurationProps {
-  stackerInfoDetails: (StackerInfo & { stacked: true })['details'];
+  stackerInfoDetails: StackerInfoDetails;
   rewardCycleId: number;
 }
 

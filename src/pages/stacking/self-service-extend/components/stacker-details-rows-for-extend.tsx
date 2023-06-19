@@ -1,5 +1,6 @@
-import { DelegationInfo, StackerInfo } from '@stacks/stacking';
+import { DelegationInfo } from '@stacks/stacking';
 import { Text } from '@stacks/ui';
+import { StackerInfoDetails } from 'src/types/stacking';
 
 import { Address } from '@components/address';
 import { Alert, AlertText } from '@components/alert';
@@ -20,7 +21,7 @@ import { isSelfServicePool } from '../../start-pooled-stacking/utils-preset-pool
 
 interface StackerDetailsRowsForUserExtendProps {
   address: string;
-  stackerInfoDetails: (StackerInfo & { stacked: true })['details'] | undefined;
+  stackerInfoDetails: StackerInfoDetails | undefined;
   delegationStatus: DelegationInfo;
   delegationStatus2: DelegationStatus;
   requiresExtension: boolean;

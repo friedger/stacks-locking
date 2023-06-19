@@ -1,5 +1,5 @@
-import { StackerInfo } from '@stacks/stacking';
 import { Flex, Text } from '@stacks/ui';
+import { StackerInfoDetails } from 'src/types/stacking';
 
 import { toHumanReadableStx } from '@utils/unit-convert';
 
@@ -8,7 +8,7 @@ export function SelfServiceExtendHeader({
   showExtendForOtherUser,
   lockedBalance,
 }: {
-  stackerInfoDetails: (StackerInfo & { stacked: true })['details'] | undefined;
+  stackerInfoDetails: StackerInfoDetails | undefined;
   showExtendForOtherUser: boolean;
   lockedBalance: bigint;
 }) {

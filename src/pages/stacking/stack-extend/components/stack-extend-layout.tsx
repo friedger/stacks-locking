@@ -1,7 +1,7 @@
-import { StackerInfo } from '@stacks/stacking';
 import { Box, Button, Flex, Text } from '@stacks/ui';
 import { IconLock } from '@tabler/icons-react';
 import { useField, useFormikContext } from 'formik';
+import { StackerInfoDetails } from 'src/types/stacking';
 
 import { Address } from '@components/address';
 import { BaseDrawer } from '@components/drawer/base-drawer';
@@ -33,7 +33,7 @@ import { EditingFormValues } from '../utils';
 
 interface StackExtendLayoutProps {
   title: string;
-  details: (StackerInfo & { stacked: true })['details'];
+  details: StackerInfoDetails;
   pendingStackExtend: StackExtendInfo | undefined | null;
   isContractCallExtensionPageOpen: boolean;
 }

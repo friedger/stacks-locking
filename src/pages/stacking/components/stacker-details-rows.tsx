@@ -1,5 +1,5 @@
-import { StackerInfo } from '@stacks/stacking';
 import { color } from '@stacks/ui';
+import { StackerInfoDetails } from 'src/types/stacking';
 
 import { Address } from '@components/address';
 import {
@@ -10,7 +10,7 @@ import {
 import { useGetPoxInfoQuery } from '@components/stacking-client-provider/stacking-client-provider';
 
 interface StackerDetailsRowsProps {
-  stackerInfoDetails: (StackerInfo & { stacked: true })['details'];
+  stackerInfoDetails: StackerInfoDetails;
   poxAddress: string;
 }
 export function StackerDetailsRows({ stackerInfoDetails, poxAddress }: StackerDetailsRowsProps) {

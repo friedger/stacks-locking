@@ -1,7 +1,8 @@
 import { NavigateFunction } from 'react-router-dom';
 
 import { ContractCallRegularOptions, openContractCall } from '@stacks/connect';
-import { StackerInfo, StackingClient } from '@stacks/stacking';
+import { StackingClient } from '@stacks/stacking';
+import { StackerInfoDetails } from 'src/types/stacking';
 import * as yup from 'yup';
 
 import routes from '@constants/routes';
@@ -17,7 +18,7 @@ export function createValidationSchema({
   stackerInfoDetails,
 }: {
   network: string;
-  stackerInfoDetails: (StackerInfo & { stacked: true })['details'];
+  stackerInfoDetails: StackerInfoDetails;
 }) {
   return yup.object().shape({
     extendCycles: yup
