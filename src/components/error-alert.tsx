@@ -14,6 +14,7 @@ export function ErrorAlert({ id, children }: Props) {
       icon={<IconAlertCircle size={16} />}
       title={`Error ${id ? id : ''}`}
       color={color('text-body')}
+      px={'loose'}
     >
       {children}
     </Box>
