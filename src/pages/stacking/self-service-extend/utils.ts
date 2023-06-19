@@ -2,7 +2,7 @@ import { NavigateFunction } from 'react-router-dom';
 
 import { ContractCallRegularOptions, openContractCall } from '@stacks/connect';
 import { StacksNetwork, StacksNetworkName } from '@stacks/network';
-import { PoxInfo, StackingClient } from '@stacks/stacking';
+import { PoxInfo, StackerInfo } from '@stacks/stacking';
 import { principalCV } from '@stacks/transactions';
 import * as yup from 'yup';
 
@@ -23,20 +23,17 @@ export function createValidationSchema({ networkName }: { networkName: StacksNet
 }
 
 interface CreateHandleSubmitArgs {
-  client: StackingClient;
   navigate: NavigateFunction;
   setIsContractCallExtensionPageOpen: React.Dispatch<React.SetStateAction<boolean>>;
   network: StacksNetwork;
 }
 
 export function createHandleSubmit({
-  client,
   navigate,
   setIsContractCallExtensionPageOpen,
   network,
 }: CreateHandleSubmitArgs) {
   return async ({ stacker }: EditingFormValues) => {
-    if (!client) return;
     const [contractAddress, contractName] =
       getPox3Contracts(network)[PoxContractName.WrapperFastPool].split('.');
     const delegateStackStxOptions: ContractCallRegularOptions = {
@@ -86,4 +83,18 @@ export function nextExtendWindow(burnBlockHeight: number, poxInfo: PoxInfo) {
     tooEarly,
     tooLate,
   };
+}
+
+export function isAtEndOfStackingPeriod(
+  stackerInfoDetails: (StackerInfo & { stacked: true })['details'],
+  poxInfo: PoxInfo
+) {
+  const lastCycle = stackerInfoDetails.first_reward_cycle + stackerInfoDetails.lock_period - 1;
+  return poxInfo.current_cycle.id >= lastCycle;
+}
+
+export function isAfterEndOfCycle(unlock_height: number, cycleId: number, poxInfo: PoxInfo) {
+  const endOfCycle = // equals beginning of the next cycle
+    (cycleId + 1) * poxInfo.reward_cycle_length + poxInfo.first_burnchain_block_height;
+  return unlock_height >= endOfCycle;
 }

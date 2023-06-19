@@ -38,6 +38,14 @@ export function SelfServiceExtend() {
     return <CenteredSpinner />;
   }
 
+  if (stacker === null) {
+    return (
+      <CenteredErrorAlert>
+        <Text> Authentication required</Text>
+      </CenteredErrorAlert>
+    );
+  }
+
   if (
     getStatusQuery.isError ||
     !getStatusQuery.data ||
@@ -62,7 +70,6 @@ export function SelfServiceExtend() {
 
   const validationSchema = createValidationSchema({ networkName });
   const handleSubmit = createHandleSubmit({
-    client,
     navigate,
     setIsContractCallExtensionPageOpen,
     network,
@@ -75,6 +82,7 @@ export function SelfServiceExtend() {
     >
       <Form>
         <SelfServiceLayout
+          currentUser={stacker}
           stackerInfoDetails={stackerInfoDetails}
           lockedBalance={getAccountBalanceLockedQuery.data}
           poxInfo={getPoxInfoQuery.data}

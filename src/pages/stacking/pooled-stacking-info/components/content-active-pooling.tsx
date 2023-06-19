@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import { intToBigInt } from '@stacks/common';
 import { AccountExtendedBalances, StackerInfo } from '@stacks/stacking';
 import { Box, Button, Text, color } from '@stacks/ui';
 
@@ -18,8 +19,10 @@ import routes from '@constants/routes';
 import { useNavigate } from '@hooks/use-navigate';
 import { useStacksNetwork } from '@hooks/use-stacks-network';
 import { makeStackingClubRewardAddressLink } from '@utils/external-links';
+import { formatPoxAddressToNetwork } from '@utils/stacking';
 import { toHumanReadableStx } from '@utils/unit-convert';
 
+import { StackerDetailsRows } from '../../components/stacker-details-rows';
 import { PoxContractName } from '../../start-pooled-stacking/types-preset-pools';
 import { getPox3Contracts } from '../../start-pooled-stacking/utils-preset-pools';
 import { DelegationStatus } from '../get-delegation-status';
@@ -76,6 +79,18 @@ export function ActivePoolingContent({
             </Value>
           </Row>
           <PercentageRow extendedStxBalances={extendedStxBalance} />
+          {isStacking && (
+            <>
+              <StackerDetailsRows
+                stackerInfoDetails={stackerInfo.details}
+                poxAddress={formatPoxAddressToNetwork(stackerInfo.details.pox_address)}
+              />
+              <Row>
+                <Label>Stacked amount</Label>
+                <Value>{toHumanReadableStx(intToBigInt(extendedStxBalance.locked, false))}</Value>
+              </Row>
+            </>
+          )}
           <Row>
             <Label>Type</Label>
             <Value>
