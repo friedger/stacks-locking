@@ -20,6 +20,7 @@ import { MAX_STACKING_CYCLES, MIN_STACKING_CYCLES } from '@constants/app';
 import routes from '@constants/routes';
 import { useNavigate } from '@hooks/use-navigate';
 import { useSIP22 } from '@hooks/use-sip-22';
+import { useStacksNetwork } from '@hooks/use-stacks-network';
 import { hasErrors } from '@utils/form/has-errors';
 import { formatPoxAddressToNetwork } from '@utils/stacking';
 
@@ -40,7 +41,8 @@ export function StackExtendLayout(props: StackExtendLayoutProps) {
   const { title, details, pendingStackExtend, isContractCallExtensionPageOpen } = props;
   const { poxDisabled } = useSIP22();
   const navigate = useNavigate();
-  const poxAddress = formatPoxAddressToNetwork(details.pox_address);
+  const { network } = useStacksNetwork();
+  const poxAddress = formatPoxAddressToNetwork(network, details.pox_address);
   const { errors } = useFormikContext<EditingFormValues>();
   const [field, meta, helpers] = useField('extendCycles');
   const onClose = () => {

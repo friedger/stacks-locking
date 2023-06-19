@@ -23,7 +23,7 @@ export function StackExtend() {
   const { getHasPendingStackExtendQuery } = useGetHasPendingStackingTransactionQuery();
 
   const { client } = useStackingClient();
-  const { networkName } = useStacksNetwork();
+  const { network, networkName } = useStacksNetwork();
 
   const [isContractCallExtensionPageOpen, setIsContractCallExtensionPageOpen] = useState(false);
 
@@ -69,7 +69,7 @@ export function StackExtend() {
   return (
     <Formik
       initialValues={{
-        poxAddress: formatPoxAddressToNetwork(stackerInfoDetails.pox_address),
+        poxAddress: formatPoxAddressToNetwork(network, stackerInfoDetails.pox_address),
         extendCycles: 12 - stackerInfoDetails.lock_period,
       }}
       onSubmit={handleSubmit}

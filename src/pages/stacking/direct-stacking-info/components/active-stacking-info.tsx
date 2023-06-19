@@ -14,6 +14,7 @@ import {
   InfoCardSection as Section,
   InfoCardValue as Value,
 } from '@components/info-card';
+import { useStacksNetwork } from '@hooks/use-stacks-network';
 import { makeStackingClubRewardAddressLink } from '@utils/external-links';
 import { formatPoxAddressToNetwork } from '@utils/stacking';
 import { toHumanReadableStx } from '@utils/unit-convert';
@@ -42,10 +43,11 @@ export function ActiveStackingInfo({
   pendingStackExtend,
   pendingStackIncrease,
 }: Props) {
+  const { network } = useStacksNetwork();
   const elapsedCyclesSinceStackingStart = Math.max(rewardCycleId - details.first_reward_cycle, 0);
   const elapsedStackingCycles = Math.min(elapsedCyclesSinceStackingStart, details.lock_period);
   const isBeforeFirstRewardCycle = rewardCycleId < details.first_reward_cycle;
-  const poxAddress = formatPoxAddressToNetwork(details.pox_address);
+  const poxAddress = formatPoxAddressToNetwork(network, details.pox_address);
 
   return (
     <Flex height="100%" justify="center" align="center">
@@ -118,7 +120,7 @@ export function ActiveStackingInfo({
               <Section>
                 <OpenExternalLinkInNewTab
                   href={makeStackingClubRewardAddressLink(
-                    String(formatPoxAddressToNetwork(details.pox_address))
+                    String(formatPoxAddressToNetwork(network, details.pox_address))
                   )}
                 >
                   🥞 View on stacking.club

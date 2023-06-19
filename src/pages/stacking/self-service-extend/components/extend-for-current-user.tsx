@@ -45,7 +45,7 @@ export function ExtendForCurrentUser({
   }
 
   const poxAddress = stackerInfoDetails
-    ? formatPoxAddressToNetwork(stackerInfoDetails.pox_address)
+    ? formatPoxAddressToNetwork(network, stackerInfoDetails.pox_address)
     : undefined;
 
   const requiresExtension =

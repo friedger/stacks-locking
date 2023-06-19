@@ -26,8 +26,6 @@ interface ImportMetaEnv {
    * `"mainnet"` or `"testnet"`. When performing a network-related opeartion,
    * the app should query this value and target the specified network.
    */
-  readonly VITE_STX_NETWORK?: string;
-
   readonly VITE_DEFAULT_TESTNET_STACKS_NODE_URL?: string;
 }
 

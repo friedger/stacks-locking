@@ -10,6 +10,7 @@ import {
   InfoCardRow as Row,
   InfoCardValue as Value,
 } from '@components/info-card';
+import { useStacksNetwork } from '@hooks/use-stacks-network';
 import { formatPoxAddressToNetwork } from '@utils/stacking';
 import { truncateMiddle } from '@utils/tx-utils';
 
@@ -31,6 +32,7 @@ export function StackerDetailsRowsForUserExtend({
   delegationStatus2,
   requiresExtension,
 }: StackerDetailsRowsForUserExtendProps) {
+  const { network } = useStacksNetwork();
   if (!delegationStatus.delegated || !delegationStatus2.isDelegating) {
     return (
       <CenteredErrorAlert>
@@ -43,10 +45,10 @@ export function StackerDetailsRowsForUserExtend({
   const canExtend = isSelfServicePool(poolStxAddress);
 
   const requiredPoxAddress = delegationStatus.details.pox_address
-    ? formatPoxAddressToNetwork(delegationStatus.details.pox_address)
+    ? formatPoxAddressToNetwork(network, delegationStatus.details.pox_address)
     : undefined;
   const stackedPoxAddress = stackerInfoDetails?.pox_address
-    ? formatPoxAddressToNetwork(stackerInfoDetails.pox_address)
+    ? formatPoxAddressToNetwork(network, stackerInfoDetails.pox_address)
     : undefined;
 
   if (!requiresExtension) {

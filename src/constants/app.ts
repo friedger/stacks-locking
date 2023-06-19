@@ -1,12 +1,5 @@
 import { stxToMicroStx } from '@utils/unit-convert';
 
-function isValidNetValue(maybeNetwork: unknown): maybeNetwork is 'testnet' | 'mainnet' {
-  return maybeNetwork === 'testnet' || maybeNetwork === 'mainnet';
-}
-if (!isValidNetValue(import.meta.env.VITE_STX_NETWORK))
-  throw new Error('Invalid `VITE_STX_NETWORK` value provided.');
-export const NETWORK: 'testnet' | 'mainnet' = import.meta.env.VITE_STX_NETWORK;
-
 export const EXPLORER_URL = 'https://explorer.stacks.co';
 
 export const STACKING_ADDRESS_FORMAT_HELP_URL =

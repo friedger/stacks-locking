@@ -83,7 +83,7 @@ export function ActivePoolingContent({
             <>
               <StackerDetailsRows
                 stackerInfoDetails={stackerInfo.details}
-                poxAddress={formatPoxAddressToNetwork(stackerInfo.details.pox_address)}
+                poxAddress={formatPoxAddressToNetwork(network, stackerInfo.details.pox_address)}
               />
               <Row>
                 <Label>Stacked amount</Label>
