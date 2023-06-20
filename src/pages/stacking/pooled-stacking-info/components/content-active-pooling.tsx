@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { intToBigInt } from '@stacks/common';
 import { AccountExtendedBalances, StackerInfo } from '@stacks/stacking';
 import { Box, Button, Text, color } from '@stacks/ui';
+import { DelegationInfoDetails } from 'src/types/stacking';
 
 import { Address } from '@components/address';
 import { OpenExternalLinkInNewTab } from '@components/external-link';
@@ -25,13 +26,12 @@ import { toHumanReadableStx } from '@utils/unit-convert';
 import { StackerDetailsRows } from '../../components/stacker-details-rows';
 import { PoxContractName } from '../../start-pooled-stacking/types-preset-pools';
 import { getPox3Contracts } from '../../start-pooled-stacking/utils-preset-pools';
-import { DelegationStatus } from '../get-delegation-status';
 import { IncreasePoolingAmount } from './increase-pooling-amount';
 import { PercentageRow } from './percentage-row';
 import { SelfServiceRows } from './self-service-rows';
 
 interface ActivePoolingContentProps {
-  delegationStatusDetails: (DelegationStatus & { isDelegating: true })['details'];
+  delegationInfoDetails: DelegationInfoDetails;
   isStacking: boolean;
   poolAddress: string;
   isContractCallExtensionPageOpen: boolean;
@@ -40,7 +40,7 @@ interface ActivePoolingContentProps {
   handleStopPoolingClick: () => void;
 }
 export function ActivePoolingContent({
-  delegationStatusDetails,
+  delegationInfoDetails,
   poolAddress,
   isContractCallExtensionPageOpen,
   handleStopPoolingClick,
@@ -52,7 +52,7 @@ export function ActivePoolingContent({
   const [showIncreasePoolingAmount, setShowIncreasePoolingAmount] = useState(false);
   const { network } = useStacksNetwork();
   const isSelfService =
-    delegationStatusDetails.delegatedTo ===
+    delegationInfoDetails.delegated_to ===
     getPox3Contracts(network)[PoxContractName.WrapperFastPool];
   return (
     <>
@@ -65,7 +65,7 @@ export function ActivePoolingContent({
         mt="extra-tight"
         mb="extra-loose"
       >
-        {toHumanReadableStx(delegationStatusDetails.amountMicroStx)}
+        {toHumanReadableStx(delegationInfoDetails.amount_micro_stx)}
       </Text>
 
       <Hr />
@@ -94,9 +94,7 @@ export function ActivePoolingContent({
           <Row>
             <Label>Type</Label>
             <Value>
-              {delegationStatusDetails.untilBurnHeight
-                ? 'Limted permission'
-                : 'Indefinite permission'}
+              {delegationInfoDetails.until_burn_ht ? 'Limted permission' : 'Indefinite permission'}
             </Value>
           </Row>
           <Row>

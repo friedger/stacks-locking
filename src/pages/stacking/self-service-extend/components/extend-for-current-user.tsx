@@ -6,7 +6,6 @@ import { StackerInfoDetails } from 'src/types/stacking';
 import { CenteredSpinner } from '@components/centered-spinner';
 import { Hr } from '@components/hr';
 import { InfoCardRow as Row } from '@components/info-card';
-import { useGetConfirmedDelegationStatus } from '@components/stacking-client-provider/stacking-client-provider';
 import { useStacksNetwork } from '@hooks/use-stacks-network';
 import { formatPoxAddressToNetwork } from '@utils/stacking';
 
@@ -33,15 +32,9 @@ export function ExtendForCurrentUser({
 }: Props) {
   const { network } = useStacksNetwork();
   const client = new StackingClient(address, network);
-  const getDelegationStatusQuery = useGetConfirmedDelegationStatus(client);
-  const getDelegationStatusQuery2 = useDelegationStatusForUserQuery({ client, address, network });
+  const getDelegationStatusQuery = useDelegationStatusForUserQuery({ client, address, network });
 
-  if (
-    getDelegationStatusQuery.isError ||
-    !getDelegationStatusQuery.data ||
-    getDelegationStatusQuery2.isError ||
-    !getDelegationStatusQuery2.data
-  ) {
+  if (getDelegationStatusQuery.isError || !getDelegationStatusQuery.data) {
     return <CenteredSpinner />;
   }
 
@@ -53,9 +46,8 @@ export function ExtendForCurrentUser({
     stackerInfoDetails && poxInfo ? isAtEndOfStackingPeriod(stackerInfoDetails, poxInfo) : true;
 
   const delegationStatus = getDelegationStatusQuery.data;
-  const delegationStatus2 = getDelegationStatusQuery2.data;
 
-  if (!delegationStatus.delegated || !delegationStatus2.isDelegating) {
+  if (!delegationStatus.delegated) {
     return (
       <>
         <Text py="loose">You are not part of a pool.</Text>

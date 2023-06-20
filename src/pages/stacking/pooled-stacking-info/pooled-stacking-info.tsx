@@ -83,12 +83,18 @@ function PooledStackingInfoLayout({ client }: CardLayoutProps) {
   const isStacking = getStatusQuery.data.stacked;
   const poolAddress =
     getPoolAddressQuery.data.address ||
-    (delegationStatusQuery.data.isDelegating
-      ? delegationStatusQuery.data.details.delegatedTo
+    (delegationStatusQuery.data.delegated
+      ? delegationStatusQuery.data.details.delegated_to
       : undefined);
-  if ((!delegationStatusQuery.data.isDelegating && !isStacking) || !poolAddress) {
+  if ((!delegationStatusQuery.data.delegated && !isStacking) || !poolAddress) {
     return <NoPooling />;
   }
+
+  const isExpired =
+    delegationStatusQuery.data.delegated &&
+    delegationStatusQuery.data.details.until_burn_ht &&
+    !Number.isNaN(delegationStatusQuery.data.details.until_burn_ht) &&
+    delegationStatusQuery.data.details.until_burn_ht < getCoreInfoQuery.data.burn_block_height;
 
   async function handleStopPoolingClick() {
     const stackingContract = await client.getStackingContract();
@@ -117,28 +123,26 @@ function PooledStackingInfoLayout({ client }: CardLayoutProps) {
         <InfoCard width="420px">
           <Box mx={['loose', 'extra-loose']}>
             <Flex flexDirection="column" pt="extra-loose" pb="base-loose">
-              {delegationStatusQuery.data.isDelegating &&
-                !delegationStatusQuery.data.details.isExpired && (
-                  <ActivePoolingContent
-                    delegationStatusDetails={delegationStatusQuery.data.details}
-                    isStacking={isStacking}
-                    poolAddress={poolAddress}
-                    stackerInfo={getStatusQuery.data}
-                    extendedStxBalance={getAccountExtendedBalancesQuery.data.stx}
-                    isContractCallExtensionPageOpen={isContractCallExtensionPageOpen}
-                    handleStopPoolingClick={handleStopPoolingClick}
-                  />
-                )}
+              {delegationStatusQuery.data.delegated && !isExpired && (
+                <ActivePoolingContent
+                  delegationInfoDetails={delegationStatusQuery.data.details}
+                  isStacking={isStacking}
+                  poolAddress={poolAddress}
+                  stackerInfo={getStatusQuery.data}
+                  extendedStxBalance={getAccountExtendedBalancesQuery.data.stx}
+                  isContractCallExtensionPageOpen={isContractCallExtensionPageOpen}
+                  handleStopPoolingClick={handleStopPoolingClick}
+                />
+              )}
 
-              {delegationStatusQuery.data.isDelegating &&
-                delegationStatusQuery.data.details.isExpired && (
-                  <ExpiredPoolingContent
-                    isContractCallExtensionPageOpen={isContractCallExtensionPageOpen}
-                    handleStopPoolingClick={handleStopPoolingClick}
-                  />
-                )}
+              {delegationStatusQuery.data.delegated && isExpired && (
+                <ExpiredPoolingContent
+                  isContractCallExtensionPageOpen={isContractCallExtensionPageOpen}
+                  handleStopPoolingClick={handleStopPoolingClick}
+                />
+              )}
 
-              {!delegationStatusQuery.data.isDelegating &&
+              {!delegationStatusQuery.data.delegated &&
                 isStacking && ( // all cases covered by now
                   <RevokedWhileStackingContent
                     extendedStxBalances={getAccountExtendedBalancesQuery.data.stx}

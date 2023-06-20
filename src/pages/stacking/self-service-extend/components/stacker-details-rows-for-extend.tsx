@@ -16,33 +16,29 @@ import { formatPoxAddressToNetwork } from '@utils/stacking';
 import { truncateMiddle } from '@utils/tx-utils';
 
 import { StackerDetailsRows } from '../../components/stacker-details-rows';
-import { DelegationStatus } from '../../pooled-stacking-info/get-delegation-status';
 import { isSelfServicePool } from '../../start-pooled-stacking/utils-preset-pools';
 
 interface StackerDetailsRowsForUserExtendProps {
   address: string;
   stackerInfoDetails: StackerInfoDetails | undefined;
   delegationStatus: DelegationInfo;
-  delegationStatus2: DelegationStatus;
   requiresExtension: boolean;
 }
 export function StackerDetailsRowsForUserExtend({
   address,
   stackerInfoDetails,
   delegationStatus,
-  delegationStatus2,
   requiresExtension,
 }: StackerDetailsRowsForUserExtendProps) {
   const { network } = useStacksNetwork();
-  if (!delegationStatus.delegated || !delegationStatus2.isDelegating) {
+  if (!delegationStatus.delegated) {
     return (
       <CenteredErrorAlert>
         User {truncateMiddle(address)} is not part of any pool.
       </CenteredErrorAlert>
     );
   }
-  // getDelegationStatusQuery.data.delegated_to only return the contract address
-  const poolStxAddress = delegationStatus2.details.delegatedTo;
+  const poolStxAddress = delegationStatus.details.delegated_to;
   const canExtend = isSelfServicePool(poolStxAddress);
 
   const requiredPoxAddress = delegationStatus.details.pox_address

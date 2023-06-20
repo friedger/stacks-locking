@@ -10,7 +10,6 @@ import { ErrorLabel } from '@components/error-label';
 import { ErrorText } from '@components/error-text';
 import { InfoCardRow as Row } from '@components/info-card';
 import {
-  useGetConfirmedDelegationStatus,
   useGetPoxInfoQuery,
   useGetStatusWithClientQuery,
 } from '@components/stacking-client-provider/stacking-client-provider';
@@ -32,15 +31,12 @@ export function ExtendForOtherUser({ onClose, isContractCallExtensionPageOpen }:
   const client = new StackingClient(address, network);
   const getStatusQuery = useGetStatusWithClientQuery(client);
   const getPoxInfoQuery = useGetPoxInfoQuery();
-  const getDelegationStatusQuery = useGetConfirmedDelegationStatus(client);
-  const getDelegationStatusQuery2 = useDelegationStatusForUserQuery({ client, address, network });
+  const getDelegationStatusQuery = useDelegationStatusForUserQuery({ client, address, network });
   if (
     getPoxInfoQuery.isError ||
     !getPoxInfoQuery.data ||
     getDelegationStatusQuery.isError ||
     !getDelegationStatusQuery.data ||
-    getDelegationStatusQuery2.isError ||
-    !getDelegationStatusQuery2.data ||
     getStatusQuery.isError ||
     !getStatusQuery.data
   ) {
@@ -52,7 +48,6 @@ export function ExtendForOtherUser({ onClose, isContractCallExtensionPageOpen }:
     ? isAtEndOfStackingPeriod(stackerInfoDetails, getPoxInfoQuery.data)
     : true;
   const delegationStatus = getDelegationStatusQuery.data;
-  const delegationStatus2 = getDelegationStatusQuery2.data;
   return (
     <>
       {showPreview ? (
@@ -60,7 +55,6 @@ export function ExtendForOtherUser({ onClose, isContractCallExtensionPageOpen }:
           address={address}
           stackerInfoDetails={stackerInfoDetails}
           delegationStatus={delegationStatus}
-          delegationStatus2={delegationStatus2}
           requiresExtension={requiresExtension}
         />
       ) : (
@@ -92,9 +86,7 @@ export function ExtendForOtherUser({ onClose, isContractCallExtensionPageOpen }:
           <Button
             type="submit"
             isLoading={isContractCallExtensionPageOpen}
-            isDisabled={
-              !requiresExtension || !delegationStatus.delegated || !delegationStatus2.isDelegating
-            }
+            isDisabled={!requiresExtension || !delegationStatus.delegated}
           >
             <Box mr="loose">
               <IconLock />

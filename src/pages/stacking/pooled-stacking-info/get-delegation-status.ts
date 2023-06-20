@@ -1,20 +1,16 @@
 import { AccountsApi, SmartContractsApi, TransactionsApi } from '@stacks/blockchain-api-client';
 import { StacksNetwork } from '@stacks/network';
-import { StackingClient } from '@stacks/stacking';
+import {
+  DelegationInfo,
+  StackingClient,
+  extractPoxAddressFromClarityValue,
+} from '@stacks/stacking';
 import {
   ContractCallTransaction,
   ContractCallTransactionMetadata,
   MempoolContractCallTransaction,
 } from '@stacks/stacks-blockchain-api-types';
-import {
-  ClarityType,
-  ClarityValue,
-  cvToHex,
-  cvToString,
-  hexToCV,
-  standardPrincipalCV,
-  tupleCV,
-} from '@stacks/transactions';
+import { ClarityType, ClarityValue, cvToString, hexToCV } from '@stacks/transactions';
 
 import { getHasPendingTransaction } from '../direct-stacking-info/utils-pending-txs';
 import { PoxContractName } from '../start-pooled-stacking/types-preset-pools';
@@ -35,25 +31,24 @@ function safeDelegateToCVToString(clarityValue: ClarityValue | undefined) {
   return cvToString(clarityValue);
 }
 
-function getDelegationStatusFromTransaction(burnBlockHeight: number, network: StacksNetwork) {
+function getDelegationStatusFromTransaction(network: StacksNetwork) {
   return (
     transaction: ContractCallTransaction | MempoolContractCallTransaction
-  ): DelegationStatus => {
+  ): DelegationInfo => {
     const pox3Contracts = getPox3Contracts(network);
 
     if (transaction.contract_call.function_name === 'revoke-delegate-stx') {
-      return { isDelegating: false } as const;
+      return { delegated: false } as const;
     }
 
     if (transaction.contract_call.function_name === 'delegate-stx') {
       const args = transaction.contract_call.function_args;
       if (!Array.isArray(args)) {
-        // TODO: log error
         console.error('Detected a non-standard delegate-stx transaction.');
-        return { isDelegating: false } as const;
+        return { delegated: false } as const;
       }
 
-      const [amountMicroStxCV, delegatedToCV, untilBurnHeightCV] = args.map<
+      const [amountMicroStxCV, delegatedToCV, untilBurnHeightCV, poxAddressCV] = args.map<
         // The values above should be partially defined as long as the clarity contract
         // and the api follows the PoX pattern. They can be undefined.
         ClarityValue | undefined
@@ -64,36 +59,42 @@ function getDelegationStatusFromTransaction(burnBlockHeight: number, network: St
       }
       const amountMicroStx: bigint = amountMicroStxCV.value;
 
-      let untilBurnHeight: null | bigint = null;
+      let untilBurnHeight: undefined | number = undefined;
 
       if (
         transaction.contract_call.contract_id === pox3Contracts[PoxContractName.WrapperFastPool]
       ) {
-        untilBurnHeight = null;
+        untilBurnHeight = undefined;
       } else {
         if (
           untilBurnHeightCV &&
           untilBurnHeightCV.type === ClarityType.OptionalSome &&
           untilBurnHeightCV.value.type === ClarityType.UInt
         ) {
-          untilBurnHeight = untilBurnHeightCV.value.value;
+          untilBurnHeight = Number(untilBurnHeightCV.value.value);
         }
       }
-
-      const isExpired = untilBurnHeight !== null && burnBlockHeight > untilBurnHeight;
 
       const delegatedTo =
         transaction.contract_call.contract_id === pox3Contracts[PoxContractName.WrapperFastPool]
           ? pox3Contracts[PoxContractName.WrapperFastPool]
           : safeDelegateToCVToString(delegatedToCV);
 
+      const extractPoxAddressFromClarityValue2 = (poxAddrCV: ClarityValue) => {
+        const { version, hashBytes } = extractPoxAddressFromClarityValue(poxAddrCV);
+        return { version: new Uint8Array([version]), hashbytes: hashBytes };
+      };
+
+      const poxAddress =
+        poxAddressCV !== undefined ? extractPoxAddressFromClarityValue2(poxAddressCV) : undefined;
+
       return {
-        isDelegating: true,
+        delegated: true,
         details: {
-          isExpired,
-          amountMicroStx,
-          delegatedTo,
-          untilBurnHeight,
+          amount_micro_stx: amountMicroStx,
+          delegated_to: delegatedTo,
+          until_burn_ht: untilBurnHeight,
+          pox_address: poxAddress,
         },
       } as const;
     }
@@ -102,93 +103,9 @@ function getDelegationStatusFromTransaction(burnBlockHeight: number, network: St
     console.error(
       'Processed a non-delegation transaction. Only delegation-related transaction should be used with this function.'
     );
-    return { isDelegating: false } as const;
+    return { delegated: false } as const;
   };
 }
-
-function getDelegationStatusFromMapEntry(
-  mapEntryCV: ClarityValue,
-  burnBlockHeight: number
-): DelegationStatus {
-  if (mapEntryCV.type === ClarityType.OptionalNone) {
-    return { isDelegating: false } as const;
-  }
-
-  if (mapEntryCV.type !== ClarityType.OptionalSome || mapEntryCV.value.type !== ClarityType.Tuple) {
-    throw new Error('Expected to receive an `OptionalSome` value containing a `Tuple`.');
-  }
-
-  const tupleCVData = mapEntryCV.value.data;
-
-  let untilBurnHeight = null;
-  if (
-    tupleCVData['until-burn-ht'] &&
-    tupleCVData['until-burn-ht'].type === ClarityType.OptionalSome &&
-    tupleCVData['until-burn-ht'].value.type === ClarityType.UInt
-  ) {
-    untilBurnHeight = tupleCVData['until-burn-ht'].value.value;
-  }
-  const isExpired = untilBurnHeight !== null && burnBlockHeight > untilBurnHeight;
-
-  if (!tupleCVData['amount-ustx'] || tupleCVData['amount-ustx'].type !== ClarityType.UInt) {
-    throw new Error('Expected `amount-ustx` to be defined.');
-  }
-  const amountMicroStx = tupleCVData['amount-ustx'].value;
-
-  if (
-    !tupleCVData['delegated-to'] ||
-    (tupleCVData['delegated-to'].type !== ClarityType.PrincipalStandard &&
-      tupleCVData['delegated-to'].type !== ClarityType.PrincipalContract)
-  ) {
-    throw new Error('Expected `delegated-to` to be defined.');
-  }
-  const delegatedTo = cvToString(tupleCVData['delegated-to']);
-
-  return {
-    isDelegating: true,
-    details: {
-      isExpired,
-      amountMicroStx,
-      delegatedTo,
-      untilBurnHeight,
-    },
-  } as const;
-}
-
-interface GetOnChainPoxDelegationMapEntryCVArgs {
-  address: string;
-  contractPrincipal: string;
-  smartContractsApi: SmartContractsApi;
-}
-async function getOnChainPoxDelegationMapEntryCV({
-  address,
-  contractPrincipal,
-  smartContractsApi,
-}: GetOnChainPoxDelegationMapEntryCVArgs) {
-  const key = cvToHex(tupleCV({ stacker: standardPrincipalCV(address) }));
-  const [contractAddress, contractName] = contractPrincipal.split('.');
-
-  const args = {
-    contractAddress,
-    contractName,
-    key,
-    mapName: 'delegation-state',
-  };
-  const res = await smartContractsApi.getContractDataMapEntry(args);
-  return hexToCV(res.data);
-}
-
-export type DelegationStatus =
-  | { isDelegating: false }
-  | {
-      isDelegating: true;
-      details: {
-        isExpired: boolean;
-        amountMicroStx: bigint;
-        delegatedTo: string;
-        untilBurnHeight: bigint | null;
-      };
-    };
 
 interface Args {
   stackingClient: StackingClient;
@@ -202,31 +119,19 @@ export async function getDelegationStatus({
   stackingClient,
   accountsApi,
   address,
-  smartContractsApi,
   transactionsApi,
   network,
-}: Args): Promise<DelegationStatus> {
-  const [poxStackingContract, coreInfo] = await Promise.all([
-    stackingClient.getStackingContract(),
-    stackingClient.getCoreInfo(),
-  ]);
+}: Args): Promise<DelegationInfo> {
   const delegationStatus = await getHasPendingTransaction({
     stackingClient,
     accountsApi,
     address,
     transactionsApi,
-    transactionConverter: getDelegationStatusFromTransaction(coreInfo.burn_block_height, network),
+    transactionConverter: getDelegationStatusFromTransaction(network),
     transactionPredicate: isDelegateOrRevokeDelegate,
   });
   if (delegationStatus !== null) {
     return delegationStatus;
   }
-
-  const mapEntryCV = await getOnChainPoxDelegationMapEntryCV({
-    address,
-    contractPrincipal: poxStackingContract,
-    smartContractsApi,
-  });
-
-  return getDelegationStatusFromMapEntry(mapEntryCV, coreInfo.burn_block_height);
+  return stackingClient.getDelegationStatus();
 }

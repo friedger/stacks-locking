@@ -81,7 +81,7 @@ export function ChooseStackingMethodSignedIn() {
   const hasEnoughBalanceToDirectStack = getAccountBalanceQuery.data > stackingMinimumAmountUstx;
 
   const isStacking = getAccountBalanceLockedQuery.data !== 0n;
-  const hasExistingDelegation = delegationStatusQuery.data.isDelegating;
+  const hasExistingDelegation = delegationStatusQuery.data.delegated;
   // TODO delegated Stacking can be initiated by the user itself via self-service delegation pool
   const hasExistingDelegatedStacking =
     isStacking && address !== stackingInitiatedByQuery.data.address;
