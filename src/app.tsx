@@ -121,8 +121,8 @@ const router = createBrowserRouter([
               { path: 'pool/:poolAddress', element: <PoolInfo /> },
               {
                 path: 'pool-admin',
-                element: <PoolInfo />,
                 children: [
+                  { index: true, element: <PoolInfo /> },
                   { path: 'delegate-stack-stx', element: <DelegateStackStx /> },
                   { path: 'delegate-stack-extend', element: <DelegateStackExtend /> },
                   { path: 'delegate-stack-increase', element: <DelegateStackIncrease /> },
