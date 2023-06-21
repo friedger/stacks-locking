@@ -9,4 +9,8 @@ export default {
   SELF_SERVICE_EXTEND: '/self-service-extend',
   SETTINGS_NETWORK: '/settings/network',
   ADD_NETWORK: '/settings/add-network',
+  DELEGATE_STACK_STX: '/pool-admin/delegate-stack-stx',
+  DELEGATE_STACK_INCREASE: '/pool-admin/delegate-stack-increase',
+  DELEGATE_STACK_EXTEND: '/pool-admin/delegate-stack-extend',
+  STACK_AGGREGATION_COMMIT: '/pool-admin/stack-aggregation-commit',
 };

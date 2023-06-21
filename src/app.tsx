@@ -24,6 +24,7 @@ import { DirectStackingInfo } from './pages/stacking/direct-stacking-info/direct
 import { DelegateStackExtend } from './pages/stacking/pool-admin/delegate-stack-extend/delegate-stack-extend';
 import { DelegateStackIncrease } from './pages/stacking/pool-admin/delegate-stack-increase/delegate-stack-increase';
 import { DelegateStackStx } from './pages/stacking/pool-admin/delegate-stack-stx/delegate-stack-stx';
+import { PoolInfo } from './pages/stacking/pool-admin/pool-info/pool-info';
 import { StackAggregationCommit } from './pages/stacking/pool-admin/stack-aggregation-commit/stack-aggregation-commit';
 import { PooledStackingInfo } from './pages/stacking/pooled-stacking-info/pooled-stacking-info';
 import { SelfServiceExtend } from './pages/stacking/self-service-extend/self-service-extend';
@@ -117,8 +118,10 @@ const router = createBrowserRouter([
                 path: 'self-service-extend',
                 element: <SelfServiceExtend />,
               },
+              { path: 'pool/:poolAddress', element: <PoolInfo /> },
               {
                 path: 'pool-admin',
+                element: <PoolInfo />,
                 children: [
                   { path: 'delegate-stack-stx', element: <DelegateStackStx /> },
                   { path: 'delegate-stack-extend', element: <DelegateStackExtend /> },
