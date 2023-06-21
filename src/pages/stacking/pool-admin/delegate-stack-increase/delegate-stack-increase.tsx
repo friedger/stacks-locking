@@ -16,22 +16,30 @@ import {
 import { useStacksNetwork } from '@hooks/use-stacks-network';
 
 import { ConfirmAndSubmit } from '../../components/confirm-and-submit';
-import { StackingFormContainer } from '../../components/stacking-form-container';
 import { StackingFormInfoPanel } from '../../components/stacking-form-info-panel';
 import { PoxAddress } from '../../start-direct-stacking/components/pox-address/pox-address';
-import { RewardCycle } from '../components/choose-reward-cycle';
+import { Amount } from '../components/choose-amount';
+import { Stacker } from '../components/choose-stacker';
 import { PoolAdminIntro } from '../components/pool-admin-intro';
 import { PoolAdminLayout } from '../components/pool-admin-layout';
-import { InfoPanel } from './components/stack-aggregate-commit-info-card';
-import { StackAggregationCommitFormValues as StackAggreagtionCommitFormValues } from './types';
+import { PooledStackingFormContainer } from '../components/pooled-stacking-form-container';
+import { InfoPanel } from './components/delegate-stack-increase-info-card';
+import { DelegateStackIncreaseFormValues } from './types';
 import { createHandleSubmit, createValidationSchema } from './utils';
 
-const initialFormValues: StackAggreagtionCommitFormValues = {
+const initialFormValues: DelegateStackIncreaseFormValues = {
+  stacker: '',
+  amount: '',
   poxAddress: '',
-  rewardCycleId: 0,
+  totalAmount: undefined,
+  lockedAmount: undefined,
+  unlockHeight: undefined,
+  delegated: undefined,
+  delegatedTo: undefined,
+  delegatedAmount: undefined,
 };
 
-export function StackAggregationCommit() {
+export function DelegateStackIncrease() {
   const { client } = useStackingClient();
 
   if (!client) {
@@ -41,18 +49,18 @@ export function StackAggregationCommit() {
     return <CenteredErrorAlert id={id}>{msg}</CenteredErrorAlert>;
   }
 
-  return <StackAggregationCommitLayout client={client} />;
+  return <DelegateStackIncreaseLayout client={client} />;
 }
 
-interface StackAggregationCommitLayoutProps {
+interface DelegateStackIncreaseLayoutProps {
   client: StackingClient;
 }
 
-function StackAggregationCommitLayout({ client }: StackAggregationCommitLayoutProps) {
+function DelegateStackIncreaseLayout({ client }: DelegateStackIncreaseLayoutProps) {
   const [isContractCallExtensionPageOpen, setIsContractCallExtensionPageOpen] = useState(false);
   const [txResult, setTxResult] = useState<FinishedTxData | undefined>();
 
-  const { networkName } = useStacksNetwork();
+  const { networkName, network } = useStacksNetwork();
 
   const getSecondsUntilNextCycleQuery = useGetSecondsUntilNextCycleQuery();
   const getPoxInfoQuery = useGetPoxInfoQuery();
@@ -86,13 +94,16 @@ function StackAggregationCommitLayout({ client }: StackAggregationCommitLayoutPr
     client,
     setIsContractCallExtensionPageOpen,
     setTxResult,
+    network,
   });
 
   return (
     <Formik
       initialValues={{
         ...initialFormValues,
-        rewardCycleId: getPoxInfoQuery.data.reward_cycle_id + 1,
+        startBurnHt: getPoxInfoQuery.data.current_burnchain_block_height
+          ? getPoxInfoQuery.data.current_burnchain_block_height + 10
+          : 0,
       }}
       onSubmit={values => {
         handleSubmit(values);
@@ -105,7 +116,8 @@ function StackAggregationCommitLayout({ client }: StackAggregationCommitLayoutPr
             estimatedStackingMinimum={BigInt(getPoxInfoQuery.data.min_amount_ustx)}
             timeUntilNextCycle={getSecondsUntilNextCycleQuery.data}
           >
-            You need to finalized each cycle.
+            You can increase the locked amount for an existing pool member. The amount will be used
+            from the next cycle onwards.
           </PoolAdminIntro>
         }
         poolAdminPanel={
@@ -118,15 +130,16 @@ function StackAggregationCommitLayout({ client }: StackAggregationCommitLayoutPr
         poolAdminForm={
           <Form>
             <>
-              <StackingFormContainer>
-                <RewardCycle />
+              <PooledStackingFormContainer>
+                <Stacker />
+                <Amount />
                 <PoxAddress />
                 <ConfirmAndSubmit
                   isLoading={isContractCallExtensionPageOpen}
-                  title="Stack Aggregation Commit"
-                  actionLabel="Finalize cycle"
+                  title="Increase stacking amount"
+                  actionLabel="Confirm and lock more"
                 />
-              </StackingFormContainer>
+              </PooledStackingFormContainer>
               {txResult && <FinishedTxResultInfo txResult={txResult} />}
             </>
           </Form>

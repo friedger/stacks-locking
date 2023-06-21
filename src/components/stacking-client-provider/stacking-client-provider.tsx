@@ -88,6 +88,10 @@ export function useGetCoreInfoQuery() {
 
 export function useGetAccountExtendedBalancesQuery() {
   const { client } = useStackingClient();
+  return useGetAccountExtendedBalancesWithClientQuery(client);
+}
+
+export function useGetAccountExtendedBalancesWithClientQuery(client: StackingClient | null) {
   if (!client) throw new Error('Expected client to be defined.');
   return useQuery(['getAccountExtendedBalances', client], () =>
     client.getAccountExtendedBalances()

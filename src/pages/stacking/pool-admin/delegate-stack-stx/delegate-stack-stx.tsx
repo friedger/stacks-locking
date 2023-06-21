@@ -9,7 +9,6 @@ import { CenteredErrorAlert } from '@components/centered-error-alert';
 import { CenteredSpinner } from '@components/centered-spinner';
 import { FinishedTxResultInfo } from '@components/finished-tx-result-info';
 import {
-  useGetAccountExtendedBalancesQuery,
   useGetPoxInfoQuery,
   useGetSecondsUntilNextCycleQuery,
   useStackingClient,
@@ -17,7 +16,7 @@ import {
 import { UI_IMPOSED_MAX_STACKING_AMOUNT_USTX } from '@constants/app';
 import { useStacksNetwork } from '@hooks/use-stacks-network';
 
-import { StackingFormContainer } from '../../components/stacking-form-container';
+import { ConfirmAndSubmit } from '../../components/confirm-and-submit';
 import { StackingFormInfoPanel } from '../../components/stacking-form-info-panel';
 import { PoxAddress } from '../../start-direct-stacking/components/pox-address/pox-address';
 import { Amount } from '../components/choose-amount';
@@ -26,7 +25,7 @@ import { Stacker } from '../components/choose-stacker';
 import { StartBurnHeight } from '../components/choose-start-burn-height';
 import { PoolAdminIntro } from '../components/pool-admin-intro';
 import { PoolAdminLayout } from '../components/pool-admin-layout';
-import { ConfirmAndSubmit } from './components/confirm-and-submit';
+import { PooledStackingFormContainer } from '../components/pooled-stacking-form-container';
 import { InfoPanel } from './components/delegate-stack-stx-info-card';
 import { DelegateStackStxFormValues } from './types';
 import { createHandleSubmit, createValidationSchema } from './utils';
@@ -37,6 +36,12 @@ const initialFormValues: DelegateStackStxFormValues = {
   lockPeriod: 12,
   poxAddress: '',
   startBurnHt: 0,
+  totalAmount: undefined,
+  lockedAmount: undefined,
+  unlockHeight: undefined,
+  delegated: undefined,
+  delegatedTo: undefined,
+  delegatedAmount: undefined,
 };
 
 export function DelegateStackStx() {
@@ -64,22 +69,15 @@ function DelegateStackStxLayout({ client }: DelegateStackStxLayoutProps) {
 
   const getSecondsUntilNextCycleQuery = useGetSecondsUntilNextCycleQuery();
   const getPoxInfoQuery = useGetPoxInfoQuery();
-  const getAccountExtendedBalancesQuery = useGetAccountExtendedBalancesQuery();
 
-  if (
-    getSecondsUntilNextCycleQuery.isLoading ||
-    getPoxInfoQuery.isLoading ||
-    getAccountExtendedBalancesQuery.isLoading
-  )
+  if (getSecondsUntilNextCycleQuery.isLoading || getPoxInfoQuery.isLoading)
     return <CenteredSpinner />;
 
   if (
     getSecondsUntilNextCycleQuery.isError ||
     typeof getSecondsUntilNextCycleQuery.data !== 'number' ||
     getPoxInfoQuery.isError ||
-    !getPoxInfoQuery.data ||
-    getAccountExtendedBalancesQuery.isError ||
-    typeof getAccountExtendedBalancesQuery.data.stx.balance !== 'string'
+    !getPoxInfoQuery.data
   ) {
     const msg = 'Failed to load necessary data.';
     const id = '8c12f6b2-c839-4813-8471-b0fd542b845f';
@@ -118,7 +116,10 @@ function DelegateStackStxLayout({ client }: DelegateStackStxLayoutProps) {
           <PoolAdminIntro
             estimatedStackingMinimum={BigInt(getPoxInfoQuery.data.min_amount_ustx)}
             timeUntilNextCycle={getSecondsUntilNextCycleQuery.data}
-          />
+          >
+            You need to lock STX for your pool members for 1 or more cycles. You also need to
+            finalized each cycle.
+          </PoolAdminIntro>
         }
         poolAdminPanel={
           <>
@@ -130,14 +131,18 @@ function DelegateStackStxLayout({ client }: DelegateStackStxLayoutProps) {
         poolAdminForm={
           <Form>
             <>
-              <StackingFormContainer>
+              <PooledStackingFormContainer>
                 <Stacker />
                 <Amount />
                 <Duration />
                 <StartBurnHeight />
                 <PoxAddress />
-                <ConfirmAndSubmit isLoading={isContractCallExtensionPageOpen} />
-              </StackingFormContainer>
+                <ConfirmAndSubmit
+                  isLoading={isContractCallExtensionPageOpen}
+                  title="Lock STX for pool member"
+                  actionLabel="Confirm and lock STX"
+                />
+              </PooledStackingFormContainer>
               {txResult && <FinishedTxResultInfo txResult={txResult} />}
             </>
           </Form>

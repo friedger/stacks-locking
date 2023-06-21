@@ -1,9 +1,17 @@
 import { PooledStackerFormValues } from 'src/types/stacking';
 
-export interface DelegateStackStxFormValues extends PooledStackerFormValues {
+export interface DelegateStackIncreaseFormValues extends PooledStackerFormValues {
+  /**
+   * Pool member who delegated
+   * https://github.com/stacks-network/stacks-blockchain/blob/2.1.0.0.0/src/chainstate/stacks/boot/pox-2.clar#L814
+   */
+  stacker: string;
+
   /**
    * Amount of STX to lock for the stacker. Note that this amount is expressed in STX, while the PoX contract uses uSTX.
    * Must be less or equal than the delegated amount and the stacker's balance.
+   * Must be more than the currently stacked amount.
+   * The contract accepts an increaseBy value that needs to calculated using the locked balance.
    * https://github.com/stacks-network/stacks-blockchain/blob/2.1.0.0.0/src/chainstate/stacks/boot/pox-2.clar#L815
    */
   amount: string;
@@ -15,17 +23,4 @@ export interface DelegateStackStxFormValues extends PooledStackerFormValues {
    * Must be of a supported address type
    */
   poxAddress: string;
-
-  /**
-   * The expected bitcoin block height for the next cycle.
-   * Must be in the future and before the start of the next cycle.
-   * https://github.com/stacks-network/stacks-blockchain/blob/feat/2.1.0.0.0/src/chainstate/stacks/boot/pox-2.clar#L817
-   */
-  startBurnHt: number;
-
-  /**
-   * The number of cycles to lock up the funds for,
-   * https://github.com/stacks-network/stacks-blockchain/blob/feat/2.1.0.0.0/src/chainstate/stacks/boot/pox-2.clar#L818
-   */
-  lockPeriod: number;
 }

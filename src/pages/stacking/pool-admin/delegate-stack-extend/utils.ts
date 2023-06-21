@@ -1,24 +1,16 @@
 import { Dispatch, SetStateAction } from 'react';
 
 import { ContractCallRegularOptions, FinishedTxData, openContractCall } from '@stacks/connect';
-import { StacksNetwork } from '@stacks/network';
+import { StacksNetwork, StacksNetworkName } from '@stacks/network';
 import { StackingClient } from '@stacks/stacking';
 import * as yup from 'yup';
 
-import { validateDecimalPrecision } from '@utils/form/validate-decimals';
-import { stxToMicroStx } from '@utils/unit-convert';
 import { createBtcAddressSchema } from '@utils/validators/btc-address-validator';
-import { validateDelegatedStxAmount } from '@utils/validators/delegated-stx-amount-validator';
-import { stxAmountSchema } from '@utils/validators/stx-amount-validator';
+import { stxPrincipalSchema } from '@utils/validators/stx-address-validator';
 
-import { DelegateStackStxFormValues } from './types';
+import { DelegateStackExtendFormValues } from './types';
 
 interface CreateValidationSchemaArgs {
-  /**
-   * Available balance of the current account. Used to ensure users don't try to stack more than is available.
-   */
-  availableBalanceUStx: bigint;
-
   /**
    * The current burn height
    */
@@ -27,27 +19,18 @@ interface CreateValidationSchemaArgs {
   /**
    * The name of the network the app is live on, e.g., mainnet or testnet.
    */
-  network: string;
+  network: StacksNetworkName;
 }
-export function createValidationSchema({ currentBurnHt, network }: CreateValidationSchemaArgs) {
+export function createValidationSchema({ network }: CreateValidationSchemaArgs) {
   return yup.object().shape({
-    amount: stxAmountSchema()
-      .test('test-precision', 'You cannot stack with a precision of less than 1 STX', value => {
-        // If `undefined`, throws `required` error
-        if (value === undefined) return true;
-        return validateDecimalPrecision(0)(value);
-      })
-      .test(validateDelegatedStxAmount()),
-    lockPeriod: yup.number().defined(),
-    startBurnHt: yup.number().test({
-      name: 'test-future-start-burn-height',
-      message: 'Start burn height must be in the future.',
-      test: value => {
-        if (value === null || value === undefined) return false;
-        return value > currentBurnHt;
-      },
-    }),
-    stacker: yup.string().defined(),
+    stacker: stxPrincipalSchema(yup.string(), network),
+    extendCount: yup
+      .number()
+      .defined()
+      .positive()
+      .integer()
+      .min(1) // TODO test for total locking period of max 12 cycles.
+      .max(12),
     poxAddress: createBtcAddressSchema({
       network,
     }),
@@ -66,19 +49,17 @@ export function createHandleSubmit({
   setTxResult,
   network,
 }: CreateHandleSubmitArgs) {
-  return async function handleSubmit(values: DelegateStackStxFormValues) {
-    if (values.amount === null) throw new Error('Expected a non-null amount to be submitted.');
-
+  return async function handleSubmit(values: DelegateStackExtendFormValues) {
     // TODO: handle thrown errors
     const [stackingContract] = await Promise.all([client.getStackingContract()]);
-    const delegateStackStxOptions = client.getDelegateStackOptions({
+    const delegateStackExtendOptions = client.getDelegateStackExtendOptions({
       contract: stackingContract,
       stacker: values.stacker,
-      amountMicroStx: stxToMicroStx(values.amount).toString(),
-      cycles: values.lockPeriod,
       poxAddress: values.poxAddress,
-      burnBlockHeight: values.startBurnHt,
+      extendCount: values.extendCount,
     });
+
+    console.log(delegateStackExtendOptions);
 
     openContractCall({
       // Type coercion necessary because the `network` property returned by
@@ -88,7 +69,7 @@ export function createHandleSubmit({
       //
       // See
       // https://github.com/hirosystems/stacks.js/blob/0e1f9f19dfa45788236c9e481f9a476d9948d86d/packages/stacking/src/index.ts#L1054
-      ...(delegateStackStxOptions as ContractCallRegularOptions),
+      ...(delegateStackExtendOptions as ContractCallRegularOptions),
       network,
       onFinish(data) {
         setTxResult(data);

@@ -9,13 +9,13 @@ import { OneCycleDescriptor } from '../../components/one-cycle-descriptor';
 import { Description, Step } from '../../components/stacking-form-step';
 import { Stepper } from '../../components/stepper';
 
-export function Duration() {
-  const [field, meta, helpers] = useField('lockPeriod');
+export function Duration({ fieldName, description }: { fieldName?: string; description?: string }) {
+  const [field, meta, helpers] = useField(fieldName || 'lockPeriod');
   return (
     <>
       <Step title="Duration">
         <Description>
-          <Text>Number of cycles to lock STX for this stacker</Text>
+          <Text>{description || 'Number of cycles to lock STX for this stacker'}</Text>
         </Description>
 
         <Stepper

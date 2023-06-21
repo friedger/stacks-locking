@@ -10,10 +10,10 @@ interface ChildProps extends BoxProps {
   step: number;
 }
 
-type TChild = React.ReactElement<ChildProps> | null;
+export type StackingFormChild = React.ReactElement<ChildProps> | null;
 
 interface Props {
-  children: TChild | TChild[];
+  children: StackingFormChild | StackingFormChild[];
 }
 
 export function StackingFormContainer({ children }: Props) {

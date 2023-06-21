@@ -21,6 +21,8 @@ import { AddNetwork } from './pages/settings/add-network';
 import { Network } from './pages/settings/network/network';
 import { SignIn } from './pages/sign-in/sign-in';
 import { DirectStackingInfo } from './pages/stacking/direct-stacking-info/direct-stacking-info';
+import { DelegateStackExtend } from './pages/stacking/pool-admin/delegate-stack-extend/delegate-stack-extend';
+import { DelegateStackIncrease } from './pages/stacking/pool-admin/delegate-stack-increase/delegate-stack-increase';
 import { DelegateStackStx } from './pages/stacking/pool-admin/delegate-stack-stx/delegate-stack-stx';
 import { StackAggregationCommit } from './pages/stacking/pool-admin/stack-aggregation-commit/stack-aggregation-commit';
 import { PooledStackingInfo } from './pages/stacking/pooled-stacking-info/pooled-stacking-info';
@@ -119,6 +121,8 @@ const router = createBrowserRouter([
                 path: 'pool-admin',
                 children: [
                   { path: 'delegate-stack-stx', element: <DelegateStackStx /> },
+                  { path: 'delegate-stack-extend', element: <DelegateStackExtend /> },
+                  { path: 'delegate-stack-increase', element: <DelegateStackIncrease /> },
                   { path: 'stack-aggregation-commit', element: <StackAggregationCommit /> },
                 ],
               },

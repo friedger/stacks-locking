@@ -1,53 +1,49 @@
 import { Dispatch, SetStateAction } from 'react';
 
+import { intToBigInt } from '@stacks/common';
 import { ContractCallRegularOptions, FinishedTxData, openContractCall } from '@stacks/connect';
-import { StacksNetwork } from '@stacks/network';
+import { StacksNetwork, StacksNetworkName } from '@stacks/network';
 import { StackingClient } from '@stacks/stacking';
+import BigNumber from 'bignumber.js';
 import * as yup from 'yup';
 
 import { validateDecimalPrecision } from '@utils/form/validate-decimals';
 import { stxToMicroStx } from '@utils/unit-convert';
 import { createBtcAddressSchema } from '@utils/validators/btc-address-validator';
 import { validateDelegatedStxAmount } from '@utils/validators/delegated-stx-amount-validator';
+import { stxPrincipalSchema } from '@utils/validators/stx-address-validator';
 import { stxAmountSchema } from '@utils/validators/stx-amount-validator';
 
-import { DelegateStackStxFormValues } from './types';
+import { DelegateStackIncreaseFormValues } from './types';
 
 interface CreateValidationSchemaArgs {
   /**
-   * Available balance of the current account. Used to ensure users don't try to stack more than is available.
-   */
-  availableBalanceUStx: bigint;
-
-  /**
-   * The current burn height
-   */
-  currentBurnHt: number;
-
-  /**
    * The name of the network the app is live on, e.g., mainnet or testnet.
    */
-  network: string;
+  network: StacksNetworkName;
 }
-export function createValidationSchema({ currentBurnHt, network }: CreateValidationSchemaArgs) {
-  return yup.object().shape({
+export function createValidationSchema({ network }: CreateValidationSchemaArgs) {
+  return yup.object<DelegateStackIncreaseFormValues>().shape({
     amount: stxAmountSchema()
       .test('test-precision', 'You cannot stack with a precision of less than 1 STX', value => {
         // If `undefined`, throws `required` error
         if (value === undefined) return true;
         return validateDecimalPrecision(0)(value);
       })
+      .test({
+        name: 'test-increase',
+        message: 'You must stack more than the currently locked amount',
+        test: (value, context) => {
+          if (value === null || value === undefined) return false;
+          if (context.parent.lockedAmount === undefined) {
+            return true;
+          }
+          const uStxInput = stxToMicroStx(value);
+          return uStxInput.isGreaterThan(new BigNumber(context.parent.lockedAmount.toString()));
+        },
+      })
       .test(validateDelegatedStxAmount()),
-    lockPeriod: yup.number().defined(),
-    startBurnHt: yup.number().test({
-      name: 'test-future-start-burn-height',
-      message: 'Start burn height must be in the future.',
-      test: value => {
-        if (value === null || value === undefined) return false;
-        return value > currentBurnHt;
-      },
-    }),
-    stacker: yup.string().defined(),
+    stacker: stxPrincipalSchema(yup.string(), network),
     poxAddress: createBtcAddressSchema({
       network,
     }),
@@ -66,18 +62,21 @@ export function createHandleSubmit({
   setTxResult,
   network,
 }: CreateHandleSubmitArgs) {
-  return async function handleSubmit(values: DelegateStackStxFormValues) {
+  return async function handleSubmit(values: DelegateStackIncreaseFormValues) {
     if (values.amount === null) throw new Error('Expected a non-null amount to be submitted.');
+    const stackerClient = new StackingClient(values.stacker, network);
+    const balances = await stackerClient.getAccountExtendedBalances();
+    const increaseBy =
+      intToBigInt(stxToMicroStx(values.amount).toString(), false) -
+      intToBigInt(balances.stx.locked, false);
 
     // TODO: handle thrown errors
     const [stackingContract] = await Promise.all([client.getStackingContract()]);
-    const delegateStackStxOptions = client.getDelegateStackOptions({
+    const delegateStackStxOptions = client.getDelegateStackIncreaseOptions({
       contract: stackingContract,
       stacker: values.stacker,
-      amountMicroStx: stxToMicroStx(values.amount).toString(),
-      cycles: values.lockPeriod,
+      increaseBy: increaseBy.toString(),
       poxAddress: values.poxAddress,
-      burnBlockHeight: values.startBurnHt,
     });
 
     openContractCall({

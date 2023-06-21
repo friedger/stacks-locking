@@ -13,19 +13,21 @@ interface PoolAdminIntroProps {
   timeUntilNextCycle: number;
 
   /**
-   * Extimated amount of uSTX needed to start stacking.
+   * Estimated amount of uSTX needed to start stacking.
    */
   estimatedStackingMinimum: bigint;
+
+  /**
+   * Description text for the pool admin intro.
+   */
+  children: React.ReactNode;
 }
 export function PoolAdminIntro(props: PoolAdminIntroProps) {
-  const { timeUntilNextCycle, estimatedStackingMinimum } = props;
+  const { timeUntilNextCycle, estimatedStackingMinimum, children } = props;
   return (
     <>
       <Title>Manage your pool</Title>
-      <StackingDescription mt="base-loose">
-        You need to lock STX for your pool members for 1 or more cycles. You also need to finalized
-        each cycle.
-      </StackingDescription>
+      <StackingDescription mt="base-loose">{children}</StackingDescription>
       <Flex alignItems="baseline">
         <NextCycleStartTime timeUntilNextCycle={timeUntilNextCycle} mt="40px" />
         <EstimatedMinimumLabel

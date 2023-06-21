@@ -7,10 +7,10 @@ import { ErrorText } from '@components/error-text';
 import { useGetPoxInfoQuery } from '@components/stacking-client-provider/stacking-client-provider';
 
 import { Description, Step } from '../../components/stacking-form-step';
+import { Balances } from './balances';
 
 export function Amount() {
   const getPoxInfoQuery = useGetPoxInfoQuery();
-
   const [field, meta] = useField('amount');
 
   if (getPoxInfoQuery.isError || !getPoxInfoQuery.data) {
@@ -24,7 +24,9 @@ export function Amount() {
     <Step title="Choose amount">
       <Description>
         <Stack alignItems="flex-start" spacing="base">
-          <Text>Must be less than the delegated amount and the stacker&apos;s balance.</Text>
+          <Text>
+            Must be less than or equal to the delegated amount and the stacker&apos;s balance.
+          </Text>
         </Stack>
       </Description>
 
@@ -36,6 +38,7 @@ export function Amount() {
           </ErrorLabel>
         )}
       </Box>
+      <Balances />
     </Step>
   );
 }
