@@ -63,14 +63,14 @@ export function PoolInfo() {
         <>
           <Stack spacing="base" mt="extra-loose">
             <Button onClick={() => navigate(routes.DELEGATE_STACK_STX)}>Delegate Stack STX</Button>
-            <Button onClick={() => navigate(routes.STACK_AGGREGATION_COMMIT)}>
-              Stack Aggregation Commit
-            </Button>
             <Button onClick={() => navigate(routes.DELEGATE_STACK_EXTEND)}>
               Delegate Stack Extend
             </Button>
             <Button onClick={() => navigate(routes.DELEGATE_STACK_INCREASE)}>
               Delegate Stack Increase
+            </Button>
+            <Button onClick={() => navigate(routes.STACK_AGGREGATION_COMMIT)}>
+              Stack Aggregation Commit
             </Button>
           </Stack>
         </>
