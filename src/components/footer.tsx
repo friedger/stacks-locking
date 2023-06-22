@@ -1,9 +1,9 @@
 import { Flex } from '@stacks/ui';
+import { useGlobalContext } from 'src/context/use-app-context';
 
 import { figmaTheme } from '@constants/figma-theme';
-
 import { createSearch } from '@utils/networks';
-import { useGlobalContext } from 'src/context/use-app-context';
+
 import { OpenLinkInNewTab } from './open-link-in-new-tab';
 
 export function Footer() {
