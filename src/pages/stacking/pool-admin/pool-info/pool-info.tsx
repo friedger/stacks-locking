@@ -49,7 +49,12 @@ export function PoolInfo() {
           estimatedStackingMinimum={BigInt(getPoxInfoQuery.data.min_amount_ustx)}
           timeUntilNextCycle={getSecondsUntilNextCycleQuery.data}
         >
-          <></>
+          Managing a stacking pool usually happens directly through the pox-3 contract. For each
+          pool member, who delegated to your pool address, you have to stack their stack and later
+          extend and/or increase their locked tokens.
+          <br />
+          After locking your members&apos; STX, you have to finalized the cycle by calling stack
+          aggregation commit.
         </PoolAdminIntro>
       }
       poolAdminPanel={
