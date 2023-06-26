@@ -72,7 +72,8 @@ export function nextExtendWindow(burnBlockHeight: number, poxInfo: PoxInfo) {
   const blocksUntilNextExtendWindow =
     poxInfo.reward_cycle_length -
     ((burnBlockHeight - poxInfo.first_burnchain_block_height + halfTheCycle - 1) %
-      poxInfo.reward_cycle_length);
+      poxInfo.reward_cycle_length) -
+    poxInfo.prepare_cycle_length;
   const blocksUntilExtendWindowEnds = blocksUntilNextExtendWindow - halfTheCycle - 1;
   const tooEarly = blocksUntilNextExtendWindow < halfTheCycle;
   const tooLate = blocksUntilExtendWindowEnds <= 0;
