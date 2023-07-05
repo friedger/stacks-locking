@@ -6,10 +6,16 @@ export const IS_BROWSER = typeof document !== 'undefined';
 
 export const DEFAULT_V2_INFO_ENDPOINT = '/v2/info';
 
-export const APP_DETAILS = {
-  name: 'Stacking',
-  icon: `${window.location.origin}/logo.svg`,
-};
+export const APP_DETAILS =
+  typeof window !== 'undefined'
+    ? {
+        name: 'Stacking',
+        icon: `${window.location.origin}/logo.svg`,
+      }
+    : {
+        name: 'Stacking - Testing',
+        icon: `/logo.svg`,
+      };
 
 export const X_API_KEY = '';
 

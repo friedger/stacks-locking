@@ -60,6 +60,7 @@
     "use-latest": "1.2.1",
     "valid-url": "1.0.9",
     "vite-plugin-node-stdlib-browser": "0.2.1",
+    "vitest": "^0.32.4",
     "yup": "1.2.0"
   },
   "devDependencies": {
