@@ -92,7 +92,7 @@ function PooledStackingInfoLayout({ client }: CardLayoutProps) {
 
   const isExpired =
     delegationStatusQuery.data.delegated &&
-    delegationStatusQuery.data.details.until_burn_ht &&
+    delegationStatusQuery.data.details.until_burn_ht !== undefined &&
     !Number.isNaN(delegationStatusQuery.data.details.until_burn_ht) &&
     delegationStatusQuery.data.details.until_burn_ht < getCoreInfoQuery.data.burn_block_height;
 
