@@ -13,7 +13,9 @@ interface ChoosePoolingPoolProps {
 }
 export function ChoosePoolingPool({ onPoolChange }: ChoosePoolingPoolProps) {
   const [fieldPoolName, , helpersPoolName] = useField('poolName');
+  const [, , helpersDelegationDurationType] = useField('delegationDurationType');
   const onChange = (poolName: PoolName) => {
+    helpersDelegationDurationType.setValue(pools[poolName].duration > 0 ? 'indefinite' : 'limited');
     helpersPoolName.setValue(poolName);
     onPoolChange(poolName);
   };

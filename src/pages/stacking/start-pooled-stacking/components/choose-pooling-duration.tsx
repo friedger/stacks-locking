@@ -1,14 +1,18 @@
-import { Box, Flex, Stack, Text, color } from '@stacks/ui';
+import { useState } from 'react';
+
+import { Box, Button, Flex, Stack, Text, color } from '@stacks/ui';
 import { useField } from 'formik';
 
 import { ErrorLabel } from '@components/error-label';
 import { ErrorText } from '@components/error-text';
 
 import { Description, Step } from '../../components/stacking-form-step';
+import { PoolName } from '../types-preset-pools';
 import { DurationCyclesField } from './duration-cycles-field';
 import { DurationSelectItem } from './duration-select-item';
 import { IndefiniteStackingIcon } from './indefinite-stacking-icon';
 import { LimitedStackingIcon } from './limited-stacking-icon';
+import { pools } from './preset-pools';
 
 function RecommendedFor({ children }: { children?: React.ReactNode }) {
   return (
@@ -35,11 +39,39 @@ function RecommendedFor({ children }: { children?: React.ReactNode }) {
 }
 
 export function ChoosePoolingDuration() {
+  const [fieldPoolName] = useField<PoolName>('poolName');
   const [fieldNumberOfCycles] = useField('numberOfCycles');
   const [fieldDelegationDurationType, metaDelegationDurationType, helpersDelegationDurationType] =
     useField('delegationDurationType');
+  const [customDuration, setCustomDuration] = useState(false);
 
-  return (
+  const duration = pools[fieldPoolName.value]?.duration;
+  return !customDuration && duration > 0 ? (
+    <Step title="Duration">
+      <Description>
+        <Text>
+          The pool looks your STX for {duration} cycle{duration > 1 ? 's' : ''} at the time. You can
+          revoke the pool permission at any time and your STX will be unlocked after the end of the
+          next cycle.
+        </Text>
+        <Text>
+          By default, you will be part of the pool until you revoke (indefinite duration). You can
+          set a limit to leave the pool automatically{' '}
+          <Button
+            variant="link"
+            type="button"
+            onClick={() => {
+              helpersDelegationDurationType.setValue('limited');
+              setCustomDuration(true);
+            }}
+          >
+            here
+          </Button>
+          .
+        </Text>
+      </Description>
+    </Step>
+  ) : (
     <Step title="Duration">
       <Description>
         <Text>
@@ -82,6 +114,22 @@ export function ChoosePoolingDuration() {
             Users who want to guarantee funds are not locked beyond a certain period.
           </RecommendedFor>
         </DurationSelectItem>
+        {duration > 0 && (
+          <Text>
+            Reset to default indefinite duration{' '}
+            <Button
+              variant="link"
+              type="button"
+              onClick={() => {
+                helpersDelegationDurationType.setValue('indefinite');
+                setCustomDuration(false);
+              }}
+            >
+              here
+            </Button>
+            .
+          </Text>
+        )}
       </Stack>
 
       {metaDelegationDurationType.touched && metaDelegationDurationType.error && (
