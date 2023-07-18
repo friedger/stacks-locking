@@ -29,8 +29,8 @@ export function ChoosePoolingAmount() {
           in the future.
         </Text>
         <Text>
-          The pool may stack less than the delegated amount to leave some change to pay for transaction
-          fees.
+          The pool may stack less than the delegated amount to leave some change to pay for
+          transaction fees.
         </Text>
       </Description>
 
