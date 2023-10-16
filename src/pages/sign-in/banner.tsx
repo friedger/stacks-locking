@@ -1,6 +1,5 @@
 import { Box } from '@stacks/ui';
 
-import { OpenLinkInNewTab } from '@components/open-link-in-new-tab';
 import { figmaTheme } from '@constants/figma-theme';
 
 export function Banner() {
@@ -14,16 +13,7 @@ export function Banner() {
       py="8px"
     >
       This website provides the interface to connect with the Stacking protocol or delegate to a
-      Stacking pool provider directly. We don&apos;t provide the Stacking service ourselves. Read
-      our{' '}
-      <OpenLinkInNewTab display="inline" href="https://wallet.hiro.so/wallet/faq#stacking">
-        FAQs
-      </OpenLinkInNewTab>{' '}
-      and review our{' '}
-      <OpenLinkInNewTab display="inline" href="https://www.hiro.so/terms">
-        Terms
-      </OpenLinkInNewTab>{' '}
-      to learn more.
+      Stacking pool provider directly. We don&apos;t provide the Stacking service ourselves.
     </Box>
   );
 }

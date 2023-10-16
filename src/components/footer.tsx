@@ -20,30 +20,6 @@ export function Footer() {
         color={figmaTheme.text}
         fontWeight={500}
         sx={{ textDecoration: 'underline' }}
-        href={'https://www.hiro.so/terms'}
-      >
-        Terms of Use
-      </OpenLinkInNewTab>
-      <OpenLinkInNewTab
-        color={figmaTheme.text}
-        fontWeight={500}
-        sx={{ textDecoration: 'underline' }}
-        href={'https://wallet.hiro.so/wallet/faq#stacking'}
-      >
-        FAQ
-      </OpenLinkInNewTab>
-      <OpenLinkInNewTab
-        color={figmaTheme.text}
-        fontWeight={500}
-        sx={{ textDecoration: 'underline' }}
-        href={'https://github.com/hirosystems/lockstacks'}
-      >
-        Source Code
-      </OpenLinkInNewTab>
-      <OpenLinkInNewTab
-        color={figmaTheme.text}
-        fontWeight={500}
-        sx={{ textDecoration: 'underline' }}
         href={`${window.location.origin}/pool-admin${createSearch(activeNetwork)}`}
       >
         Use Hot Wallet
