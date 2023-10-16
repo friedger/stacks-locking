@@ -48,6 +48,7 @@ export function StackExtendLayout(props: StackExtendLayoutProps) {
   const onClose = () => {
     navigate(routes.DIRECT_STACKING_INFO);
   };
+  const end = details.first_reward_cycle + details.lock_period - 1 + field.value;
   return (
     <BaseDrawer title={title} isShowing={!poxDisabled} onClose={onClose}>
       <Flex alignItems="center" flexDirection="column" pb={['loose', '48px']} px="loose">
@@ -102,7 +103,7 @@ export function StackExtendLayout(props: StackExtendLayoutProps) {
               <Section>
                 <Row>
                   <Label explainer="STX will unlock after that cycle">End</Label>
-                  <Value>Cycle {details.first_reward_cycle + details.lock_period - 1} </Value>
+                  <Value>Cycle {end} </Value>
                 </Row>
                 <Row>
                   <Label>Bitcoin address</Label>
