@@ -30,11 +30,11 @@ dependencies:
     specifier: 6.8.1
     version: 6.8.1
   '@stacks/connect':
-    specifier: 7.4.0
-    version: 7.4.0
+    specifier: 7.4.1
+    version: 7.4.1
   '@stacks/connect-react':
-    specifier: 22.2.0
-    version: 22.2.0(react-dom@18.2.0)(react@18.2.0)
+    specifier: 22.2.1
+    version: 22.2.1(react-dom@18.2.0)(react@18.2.0)
   '@stacks/network':
     specifier: 6.8.1
     version: 6.8.1
@@ -2672,13 +2672,13 @@ packages:
       '@types/node': 18.16.19
     dev: false
 
-  /@stacks/connect-react@22.2.0(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-sH4yzndaTzQ+NrdNKYbpYFmBSeATYAwFJ6PZM81/m1iTh4DSQIVGR1nTIFpbuC0ynIMcLB45/hhyPO8O/fYr9Q==}
+  /@stacks/connect-react@22.2.1(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-xpbmCk/WyQ9sd5/1R8jGJYI89cPhN2PbSpCXWUMDRfoyztzyUBj/kamWlda/WqqeGZxUYjwNTTTiR2Zpy50byg==}
     peerDependencies:
       react: ^16.x || 17.x || 18.x
       react-dom: ^16.x || 17.x || 18.x
     dependencies:
-      '@stacks/connect': 7.4.0
+      '@stacks/connect': 7.4.1
       jsontokens: 4.0.1
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
@@ -2686,19 +2686,19 @@ packages:
       - encoding
     dev: false
 
-  /@stacks/connect-ui@6.1.1:
-    resolution: {integrity: sha512-iSo57djIynmqt0jGlFkRFu2nHY/Nk0LmXKdRf/Whw1w/YbZD+CQJweHRh77XQOtAVbXZ1+e/klszxABevcPtPg==}
+  /@stacks/connect-ui@6.1.2:
+    resolution: {integrity: sha512-V4gUINXRDB2MO6YHk/JZZeApSnANrMFvIRv9qLBaJPamKsgeiCOBkiC88T7ucLVCz+NvCmS93Ntg4wytDIqdOg==}
     dependencies:
       '@stencil/core': 2.22.3
     dev: false
 
-  /@stacks/connect@7.4.0:
-    resolution: {integrity: sha512-2jhTHL6Wi7Y/B1AwUuumUUE5F+/X7AvtbJ3BzsNVP7yB+yswmtjC3ZO3jYEohBcuAay5ysfNWUYdjfiXvp0NDQ==}
+  /@stacks/connect@7.4.1:
+    resolution: {integrity: sha512-kvF7Fnx8oMHNi/9At6UI6kThey+gYlYlbtsxhNL2VqflReXI8z3EndaMJ1WrD55ePIOoydAzV/Fx0rdNFjd4rQ==}
     dependencies:
       '@stacks/auth': 6.9.0
-      '@stacks/connect-ui': 6.1.1
+      '@stacks/connect-ui': 6.1.2
       '@stacks/network': 6.8.1
-      '@stacks/profile': 6.5.4
+      '@stacks/profile': 6.9.0
       '@stacks/transactions': 6.9.0
       jsontokens: 4.0.1
     transitivePeerDependencies:
@@ -2733,19 +2733,6 @@ packages:
     dependencies:
       prettier: 2.5.1
     dev: true
-
-  /@stacks/profile@6.5.4:
-    resolution: {integrity: sha512-YEnt2ACOuPFydNKpxYmZ2c/+UrcuusrNHTChePLyXKmU9u3cX3uBNSvdl1H13H6b2CW3G7inxMerRgssXDzTEA==}
-    dependencies:
-      '@stacks/common': 6.8.1
-      '@stacks/network': 6.8.1
-      '@stacks/transactions': 6.9.0
-      jsontokens: 4.0.1
-      schema-inspector: 2.0.3
-      zone-file: 2.0.0-beta.3
-    transitivePeerDependencies:
-      - encoding
-    dev: false
 
   /@stacks/profile@6.9.0:
     resolution: {integrity: sha512-sIR60DsAHi8C6zGqKqSe1r2hXTMHgwrJkX3fAaP3de40KeplZ2bkE+0B83yismEeU2baNc+AukyVvWJv0PfP0A==}
