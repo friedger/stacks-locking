@@ -2,7 +2,6 @@ import { NavigateFunction } from 'react-router-dom';
 
 import { ContractCallRegularOptions, openContractCall } from '@stacks/connect';
 import { StackingClient } from '@stacks/stacking';
-import { StackerInfoDetails } from 'src/types/stacking';
 import * as yup from 'yup';
 
 import routes from '@constants/routes';
@@ -13,13 +12,7 @@ export interface EditingFormValues {
   poxAddress: string;
 }
 
-export function createValidationSchema({
-  network,
-  stackerInfoDetails,
-}: {
-  network: string;
-  stackerInfoDetails: StackerInfoDetails;
-}) {
+export function createValidationSchema({ network }: { network: string }) {
   return yup.object().shape({
     extendCycles: yup
       .number()
@@ -28,7 +21,7 @@ export function createValidationSchema({
       .test({
         name: 'test-max-lock-period',
         message: "You can't lock for more than 12 cycles.",
-        test: value => value + stackerInfoDetails.lock_period <= 12,
+        test: value => value <= 12,
       }),
     poxAddress: createBtcAddressSchema({
       network,
