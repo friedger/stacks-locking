@@ -7,7 +7,7 @@ import { Tooltip } from './tooltip';
 export const LegalDisclaimerTooltip: FC<BoxProps> = props => (
   <Tooltip
     display="inherit"
-    text="This link will take you to an external third-party website."
+    text="This link will take you to an external third-party website that is not affiliated with lockstacks.com."
     {...props}
   />
 );
