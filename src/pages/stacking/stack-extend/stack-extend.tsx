@@ -63,7 +63,6 @@ export function StackExtend() {
     setIsContractCallExtensionPageOpen,
   });
   const validationSchema = createValidationSchema({
-    stackerInfoDetails,
     network: networkName,
   });
   return (
