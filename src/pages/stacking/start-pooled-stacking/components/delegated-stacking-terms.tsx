@@ -34,7 +34,7 @@ export function DelegatedStackingTerms({
       <StackingTermItem title="Research your pool" icon={<StepsIcon width="16px" height="16px" />}>
         <Text>
           Paying out rewards is at the discretion of the pool. Make sure you’ve researched and trust
-          the pool you’re using. All pools are unaffiliated with Hiro PBC.
+          the pool you’re using.
         </Text>
       </StackingTermItem>
       {showPoxWrapperTermItem && (
